@@ -27,15 +27,6 @@ now(function()
         filetype = "nu",
     }
 
-    parser_config.fish = {
-        install_info = {
-            url = "https://github.com/ram02z/tree-sitter-fish",
-            files = { "src/parser.c" },
-            branch = "main",
-        },
-        filetype = "fish",
-    }
-
     parser_config.blade = {
         install_info = {
             url = "https://github.com/EmranMR/tree-sitter-blade",
