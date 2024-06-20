@@ -17,7 +17,7 @@ gaps inner 10
 for_window [class="^.*"] border pixel 5
 
 client.focused          #cb6614 #fe8019 #ffffff #ebdbb2 #fe8019
-client.focused_inactive #3d3d3d #525252 #ffffff
+client.focused_inactive #3d3d3d #525252 #ffffff #3d3d3d
 client.unfocused        #3d3d3d #282828 #a89984
 client.urgent           #282828 #fb4934 #ffffff #fb4934
 
