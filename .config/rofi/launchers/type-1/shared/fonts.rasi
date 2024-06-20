@@ -8,5 +8,5 @@
  **/
 
 * {
-    font: "Cascadia Mono NF 14";
+    font: "Cascadia Mono NF 12";
 }
