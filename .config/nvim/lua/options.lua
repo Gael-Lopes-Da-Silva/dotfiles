@@ -9,8 +9,9 @@ now(function()
     vim.o.expandtab      = true
     vim.o.list           = false
     vim.o.relativenumber = true
+    vim.o.scrolloff      = 5
+    vim.o.shell          = "fish"
     vim.o.shiftwidth     = 4
     vim.o.tabstop        = 4
     vim.o.wrap           = true
-    vim.o.scrolloff      = 5
 end)

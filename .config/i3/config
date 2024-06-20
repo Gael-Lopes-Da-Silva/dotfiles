@@ -15,7 +15,21 @@ exec_always --no-startup-id feh --bg-scale $HOME/.config/i3/background.png
 
 gaps inner 10
 for_window [class="^.*"] border pixel 5
-client.focused #353439 #bd93f9 #7b9f35
+
+client.focused          #cb6614 #fe8019 #ffffff #ebdbb2 #fe8019
+client.focused_inactive #3d3d3d #525252 #ffffff
+client.unfocused        #3d3d3d #282828 #a89984
+client.urgent           #282828 #fb4934 #ffffff #fb4934
+
+client.background       #282828
+
+# client.focused          #4c7899 #285577 #ffffff #2e9ef4   #285577
+# client.focused_inactive #333333 #5f676a #ffffff #484e50   #5f676a
+# client.unfocused        #333333 #222222 #888888 #292d2e   #222222
+# client.urgent           #2f343a #900000 #ffffff #900000   #900000
+# client.placeholder      #000000 #0c0c0c #ffffff #000000   #0c0c0c
+#
+# client.background       #ffffff
 
 bindsym Print exec --no-startup-id maim "/home/$USER/Pictures/$(date)"
 bindsym $mod+Print exec --no-startup-id maim --window $(xdotool getactivewindow) "/home/$USER/Pictures/$(date)"
