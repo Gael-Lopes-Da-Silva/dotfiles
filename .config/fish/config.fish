@@ -4,6 +4,5 @@ end
 
 alias n="nvim"
 alias l="eza -al --icons"
-alias lt="eza -al --icons --tree --level=2 --long"
 
 zoxide init fish | source
