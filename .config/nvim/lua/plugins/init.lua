@@ -44,6 +44,16 @@ add({
 })
 require("plugins.mason-nvim-dap")
 
+-- linter
+add({
+    source = "rshkarin/mason-nvim-lint",
+    depends = {
+        "williamboman/mason.nvim",
+        "mfussenegger/nvim-lint",
+    },
+})
+require("plugins.mason-nvim-lint")
+
 -- conform
 add({
     source = "zapling/mason-conform.nvim",

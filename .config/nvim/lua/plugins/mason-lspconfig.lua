@@ -12,9 +12,8 @@ later(function()
                     require("lspconfig")[server_name].setup({
                         settings = {
                             Lua = {
-                                runtime = { version = "LuaJIT" },
-                                completion = {
-                                    callSnippet = "Replace",
+                                runtime = {
+                                    version = "LuaJIT",
                                 },
                                 workspace = {
                                     checkThirdParty = false,
@@ -38,32 +37,32 @@ later(function()
 
     -- set completion icons
     local icons = {
-        Class         = "󰠱 ",
-        Color         = " ",
-        Constant      = "󰏿 ",
-        Constructor   = " ",
-        Enum          = " ",
-        EnumMember    = " ",
-        Event         = " ",
-        Field         = " ",
-        File          = " ",
-        Folder        = " ",
-        Function      = "󰊕 ",
-        Interface     = " ",
-        Keyword       = "󰌋 ",
-        Method        = " ",
-        Module        = "󰏓 ",
-        Operator      = " ",
-        Property      = " ",
-        Reference     = " ",
-        Snippet       = "󰲋 ",
-        Struct        = "󰠱 ",
-        Text          = " ",
-        TypeParameter = "󰘦 ",
-        Unit          = " ",
-        Unknown       = "? ",
-        Value         = " ",
-        Variable      = " ",
+        Class         = " 󰠱 ",
+        Color         = "  ",
+        Constant      = " 󰏿 ",
+        Constructor   = "  ",
+        Enum          = "  ",
+        EnumMember    = "  ",
+        Event         = "  ",
+        Field         = "  ",
+        File          = "  ",
+        Folder        = "  ",
+        Function      = " 󰊕 ",
+        Interface     = "  ",
+        Keyword       = " 󰌋 ",
+        Method        = "  ",
+        Module        = " 󰏓 ",
+        Operator      = "  ",
+        Property      = "  ",
+        Reference     = "  ",
+        Snippet       = " 󰲋 ",
+        Struct        = " 󰠱 ",
+        Text          = "  ",
+        TypeParameter = " 󰘦 ",
+        Unit          = "  ",
+        Unknown       = " ? ",
+        Value         = "  ",
+        Variable      = "  ",
     }
     local kinds = vim.lsp.protocol.CompletionItemKind
     for i, kind in ipairs(kinds) do
@@ -85,16 +84,12 @@ later(function()
     vim.diagnostic.config({
         signs = true,
         update_in_insert = false,
-        virtual_text = false,
+        virtual_text = true,
         severity_sort = true,
         float = {
             border = "single",
         },
     })
-
-    -- show diagnostics on cursor hover
-    vim.o.updatetime = 450
-    vim.cmd([[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]])
 
     -- change diagnostics highlight ground
     vim.api.nvim_set_hl(0, "DiagnosticUnderlineError", { underline = false, undercurl = true })
