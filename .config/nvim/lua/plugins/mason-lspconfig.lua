@@ -91,10 +91,10 @@ later(function()
         },
     })
 
-    -- change diagnostics highlight ground
-    vim.api.nvim_set_hl(0, "DiagnosticUnderlineError", { underline = false, undercurl = true })
-    vim.api.nvim_set_hl(0, "DiagnosticUnderlineWarn", { underline = false, undercurl = true })
-    vim.api.nvim_set_hl(0, "DiagnosticUnderlineInfo", { underline = false, undercurl = true })
-    vim.api.nvim_set_hl(0, "DiagnosticUnderlineHint", { underline = false, undercurl = true })
-    vim.api.nvim_set_hl(0, "DiagnosticUnderlineOk", { underline = false, undercurl = true })
+    -- change diagnostics virtual text
+    vim.api.nvim_set_hl(0, "DiagnosticVirtualTextError", { fg = "#fb4934", bg = "#504945" })
+    vim.api.nvim_set_hl(0, "DiagnosticVirtualTextWarn", { fg = "#d3869b", bg = "#504945" })
+    vim.api.nvim_set_hl(0, "DiagnosticVirtualTextInfo", { fg = "#8ec07c", bg = "#504945" })
+    vim.api.nvim_set_hl(0, "DiagnosticVirtualTextHint", { fg = "#83a598", bg = "#504945" })
+    vim.api.nvim_set_hl(0, "DiagnosticVirtualTextOk", { fg = "#b8bb26", bg = "#504945" })
 end)
