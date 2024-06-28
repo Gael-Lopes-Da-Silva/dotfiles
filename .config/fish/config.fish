@@ -18,4 +18,9 @@ alias n="nvim"
 alias t="tmux"
 alias l="eza -al --icons"
 
+alias g="git"
+alias gc="git commit -m"
+alias ga="git add ."
+alias gp="git push"
+
 zoxide init fish | source
