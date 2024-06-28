@@ -14,13 +14,9 @@ set fish_cursor_insert line
 set fish_cursor_replace_one underscore
 
 alias c="clear"
+alias g="git"
 alias n="nvim"
 alias t="tmux"
 alias l="eza -al --icons"
-
-alias g="git"
-alias gc="git commit -m"
-alias ga="git add ."
-alias gp="git push"
 
 zoxide init fish | source
