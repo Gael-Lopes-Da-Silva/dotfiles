@@ -9,9 +9,9 @@ exec --no-startup-id dex --autostart --environment i3
 exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 exec --no-startup-id nm-applet
 
+exec_always --no-startup-id feh --bg-scale $HOME/.config/i3/background.png
 exec_always --no-startup-id picom
 exec_always --no-startup-id sh $HOME/.config/polybar/launch.sh
-exec_always --no-startup-id feh --bg-scale $HOME/.config/i3/background.png
 
 gaps inner 10
 for_window [class="^.*"] border pixel 5
@@ -75,6 +75,7 @@ bindsym $mod+Shift+space floating toggle
 bindsym $mod+space focus mode_toggle
 bindsym $mod+a focus parent
 #bindsym $mod+d focus child
+bindsym $mod+Shift+s exec --no-startup-id polybar-msg cmd toggle
 
 set $ws1 "1"
 set $ws2 "2"

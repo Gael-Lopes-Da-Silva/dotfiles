@@ -8,25 +8,30 @@ later(function()
         automatic_installation = false,
         handlers = {
             function(server_name)
-                if server_name == "lua_ls" then
-                    require("lspconfig")[server_name].setup({
-                        settings = {
-                            Lua = {
-                                runtime = {
-                                    version = "LuaJIT",
-                                },
-                                workspace = {
-                                    checkThirdParty = false,
-                                    library = vim.api.nvim_get_runtime_file("", true),
-                                },
-                                telemetry = { enable = false },
-                            },
-                        },
-                    })
-                    return
-                end
-
                 require("lspconfig")[server_name].setup({})
+            end,
+
+            lua_ls = function()
+                require('lspconfig').lua_ls.setup({
+                    settings = {
+                        Lua = {
+                            runtime = {
+                                version = "LuaJIT",
+                            },
+                            workspace = {
+                                checkThirdParty = false,
+                                library = {
+                                    vim.env.VIMRUNTIME,
+                                    vim.fn.stdpath('data') .. "/site/pack/deps/start",
+                                    -- vim.fn.stdpath('data') .. "/site/pack/deps/opt",
+
+                                    "${3rd}/luv/library",
+                                },
+                            },
+                            telemetry = { enable = false },
+                        },
+                    },
+                })
             end,
         },
     })
@@ -34,40 +39,6 @@ later(function()
     -- set border
     vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "single" })
     vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "single" })
-
-    -- set completion icons
-    local icons = {
-        Class         = " 󰠱 ",
-        Color         = "  ",
-        Constant      = " 󰏿 ",
-        Constructor   = "  ",
-        Enum          = "  ",
-        EnumMember    = "  ",
-        Event         = "  ",
-        Field         = "  ",
-        File          = "  ",
-        Folder        = "  ",
-        Function      = " 󰊕 ",
-        Interface     = "  ",
-        Keyword       = " 󰌋 ",
-        Method        = "  ",
-        Module        = " 󰏓 ",
-        Operator      = "  ",
-        Property      = "  ",
-        Reference     = "  ",
-        Snippet       = " 󰲋 ",
-        Struct        = " 󰠱 ",
-        Text          = "  ",
-        TypeParameter = " 󰘦 ",
-        Unit          = "  ",
-        Unknown       = " ? ",
-        Value         = "  ",
-        Variable      = "  ",
-    }
-    local kinds = vim.lsp.protocol.CompletionItemKind
-    for i, kind in ipairs(kinds) do
-        kinds[i] = icons[kind] or kind
-    end
 
     -- set diagnostics icons
     local signs = {
