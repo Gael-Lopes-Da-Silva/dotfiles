@@ -1,6 +1,4 @@
-local now, later = MiniDeps.now, MiniDeps.later
-
-now(function()
+MiniDeps.now(function()
     vim.g.mapleader      = " "
     vim.o.autoindent     = true
     vim.o.backup         = false

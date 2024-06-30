@@ -1,6 +1,4 @@
-local now, later = MiniDeps.now, MiniDeps.later
-
-later(function()
+MiniDeps.later(function()
     require("mini.completion").setup({
         window = {
             info = { border = "single" },

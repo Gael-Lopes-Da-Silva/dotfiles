@@ -1,5 +1,3 @@
-local now, later = MiniDeps.now, MiniDeps.later
-
-later(function()
-	require("nvim-web-devicons").setup({})
+MiniDeps.later(function()
+    require("nvim-web-devicons").setup({})
 end)

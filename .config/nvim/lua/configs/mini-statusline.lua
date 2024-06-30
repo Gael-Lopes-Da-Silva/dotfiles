@@ -1,6 +1,4 @@
-local now, later = MiniDeps.now, MiniDeps.later
-
-now(function()
+MiniDeps.now(function()
     require("mini.statusline").setup({
         content = {
             active = function()

@@ -1,6 +1,4 @@
-local now, later = MiniDeps.now, MiniDeps.later
-
-now(function()
+MiniDeps.now(function()
     require("mini.base16").setup({
         palette = {
             base00 = "#282828",

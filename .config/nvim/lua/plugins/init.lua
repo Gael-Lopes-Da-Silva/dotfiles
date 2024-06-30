@@ -65,5 +65,7 @@ add({
 require("plugins.mason-conform")
 
 -- nerd font icons
-add({ source = "nvim-tree/nvim-web-devicons" })
+add({
+    source = "nvim-tree/nvim-web-devicons",
+})
 require("plugins.nvim-web-devicons")

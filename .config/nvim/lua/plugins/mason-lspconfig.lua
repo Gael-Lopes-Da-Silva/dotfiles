@@ -1,6 +1,4 @@
-local now, later = MiniDeps.now, MiniDeps.later
-
-later(function()
+MiniDeps.later(function()
     require("mason-lspconfig").setup({
         ensure_installed = {
             "lua_ls",
@@ -12,7 +10,7 @@ later(function()
             end,
 
             lua_ls = function()
-                require('lspconfig').lua_ls.setup({
+                require("lspconfig").lua_ls.setup({
                     settings = {
                         Lua = {
                             runtime = {
@@ -22,8 +20,8 @@ later(function()
                                 checkThirdParty = false,
                                 library = {
                                     vim.env.VIMRUNTIME,
-                                    vim.fn.stdpath('data') .. "/site/pack/deps/start",
-                                    -- vim.fn.stdpath('data') .. "/site/pack/deps/opt",
+                                    vim.fn.stdpath("data") .. "/site/pack/deps/start",
+                                    vim.fn.stdpath("data") .. "/site/pack/deps/opt",
 
                                     "${3rd}/luv/library",
                                 },

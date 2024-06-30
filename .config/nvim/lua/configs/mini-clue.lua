@@ -1,6 +1,4 @@
-local now, later = MiniDeps.now, MiniDeps.later
-
-now(function()
+MiniDeps.now(function()
     local mini_clue = require("mini.clue")
     mini_clue.setup({
         triggers = {

@@ -1,6 +1,4 @@
-local now, later = MiniDeps.now, MiniDeps.later
-
-now(function()
+MiniDeps.now(function()
     require("nvim-treesitter.configs").setup({
         ensure_installed = {
             "lua",

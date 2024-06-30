@@ -1,5 +1,3 @@
-local now, later = MiniDeps.now, MiniDeps.later
-
-later(function()
-	require("mini.fuzzy").setup({})
+MiniDeps.later(function()
+    require("mini.fuzzy").setup({})
 end)

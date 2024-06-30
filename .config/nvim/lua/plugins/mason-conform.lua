@@ -1,11 +1,9 @@
-local now, later = MiniDeps.now, MiniDeps.later
-
-later(function()
-	require("conform").setup({
-		format_on_save = {
-			timeout_ms = 500,
-			lsp_fallback = true,
-		},
-	})
-	require("mason-conform").setup({})
+MiniDeps.later(function()
+    require("conform").setup({
+        format_on_save = {
+            timeout_ms = 500,
+            lsp_fallback = true,
+        },
+    })
+    require("mason-conform").setup({})
 end)
