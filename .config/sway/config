@@ -38,7 +38,6 @@ set $right l
 
     bindsym $mod+Shift+c reload
 
-
 #
 # Moving around:
 #
@@ -96,11 +95,8 @@ set $right l
     bindsym $mod+e layout toggle split
 
     bindsym $mod+f fullscreen
-
     bindsym $mod+Shift+space floating toggle
-
     bindsym $mod+space focus mode_toggle
-
     bindsym $mod+a focus parent
 
 #
@@ -131,7 +127,7 @@ bindsym $mod+r mode "resize"
 #
 # System control:
 #
-mode "system" {
+mode "power" {
     bindsym Shift+s exec shutdown now
     bindsym e exec swaymsg exit
     bindsym r exec reboot
@@ -140,7 +136,7 @@ mode "system" {
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
-bindsym $mod+Shift+e mode "system"
+bindsym $mod+Shift+e mode "power"
 
 #
 # Status Bar:
