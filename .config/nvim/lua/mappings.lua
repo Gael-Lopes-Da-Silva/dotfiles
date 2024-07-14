@@ -61,6 +61,7 @@ MiniDeps.now(function()
     set("i", "<S-Tab>", [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]], { expr = true })
 
     -- file
+    set("n", "<leader>fF", "<cmd> Format <cr>", { desc = "Format file" })
     set("n", "<leader>ff", "<cmd> lua MiniFiles.open() <cr>", { desc = "Open file explorer" })
     set("n", "<leader>fc", "<cmd> lua MiniFiles.close() <cr>", { desc = "Close file explorer" })
     set("n", "<leader>fr", "<cmd> lua MiniFiles.refresh() <cr>", { desc = "Refresh file explorer" })
