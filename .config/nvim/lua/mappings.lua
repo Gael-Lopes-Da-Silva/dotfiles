@@ -7,7 +7,6 @@ MiniDeps.now(function()
     set("n", "<TAB>", "<C-^>")
     set("t", "<C-q>", "<C-\\><C-n>")
     set("t", "jk", "<C-\\><C-n>")
-
     set("n", "<Esc>", function()
         require("mini.files").close()
         vim.cmd.nohlsearch()

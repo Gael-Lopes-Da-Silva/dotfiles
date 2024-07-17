@@ -1,5 +1,5 @@
 function fish_right_prompt
-    set -l date (set_color brgrey)(date "+%R")(set_color normal)
+    set -l time (set_color brgrey)(date "+%R")(set_color normal)
 
     set -l duration "$cmd_duration$CMD_DURATION"
     if test $duration -gt 100
@@ -9,5 +9,5 @@ function fish_right_prompt
     end
 
     set_color normal
-    string join " " -- $duration $date ""
+    string join " " -- $duration $time ""
 end
