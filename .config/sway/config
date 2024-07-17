@@ -1,5 +1,8 @@
 font pango: Cascadia Mono NF 14
 
+titlebar_border_thickness 0
+titlebar_padding 5 2
+
 exec swayidle -w \
      timeout 500 'swaylock -f -c 000000' \
      timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
