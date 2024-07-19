@@ -52,7 +52,7 @@ MiniDeps.later(function()
     end
     vim.diagnostic.config({
         signs = true,
-        update_in_insert = false,
+        update_in_insert = true,
         virtual_text = true,
         severity_sort = true,
         float = {
