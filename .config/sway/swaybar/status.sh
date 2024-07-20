@@ -3,7 +3,7 @@
 SEPARATOR_WIDTH=10
 
 current_time() {
-    local TIME=$(date +"%X")
+    local TIME=$(date +"%T")
     local ICON="󰥔"
 
     echo "{"
@@ -14,7 +14,7 @@ current_time() {
 }
 
 current_date() {
-    local DATE=$(date +"%x")
+    local DATE=$(date +"%d/%m/%Y")
     local ICON=""
 
     echo "{"
