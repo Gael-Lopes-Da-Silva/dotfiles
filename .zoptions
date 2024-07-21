@@ -1,0 +1,17 @@
+# set options
+setopt AUTOCD
+setopt INTERACTIVE_COMMENTS
+setopt SHARE_HISTORY
+setopt EXTENDEDGLOB
+setopt NOMATCH
+setopt MENUCOMPLETE
+stty stop undef
+
+# unset options
+unsetopt BEEP
+
+# set variables
+HISTFILE="$HOME/.zhistory"
+HISTSIZE=10000
+SAVEHIST=10000
+ZLE_RPROMPT_INDENT=0
