@@ -1,10 +1,2 @@
-left_prompt() {
-    echo "%B%F{#285577}%f%F{#FFFFFF}%K{#285577}%~%k%f%F{#285577}%f%b "
-}
-
-right_prompt() {
-    echo "%(?..%B%F{#FF0000}%f%F{#FFFFFF}%K{#FF0000}%?%k%f%F{#FF0000}%f%b)"
-}
-
-PROMPT=$(left_prompt)
-RPROMPT=$(right_prompt)
+PROMPT="%B%F{#285577}%f%F{#FFFFFF}%K{#285577}%~%k%f%F{#285577}%f%b "
+RPROMPT="%(?..%B%F{#FF0000}%f%F{#FFFFFF}%K{#FF0000}%?%k%f%F{#FF0000}%f%b)"
