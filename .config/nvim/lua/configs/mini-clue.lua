@@ -38,6 +38,7 @@ MiniDeps.now(function()
             { mode = "n", keys = "<Leader>f", desc = "File" },
             { mode = "n", keys = "<Leader>p", desc = "Pick" },
             { mode = "n", keys = "<Leader>b", desc = "Buffer" },
+            { mode = "n", keys = "<Leader>t", desc = "Terminal" },
             { mode = "n", keys = "<Leader>d", desc = "DAP" },
             { mode = "n", keys = "<Leader>g", desc = "Git" },
             mini_clue.gen_clues.builtin_completion(),
