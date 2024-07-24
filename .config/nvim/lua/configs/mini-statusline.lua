@@ -34,7 +34,7 @@ MiniDeps.now(function()
                     },
                     "%=",
                     {
-                        hl = "MiniStatuslineFileinfo",
+                        hl = "MiniStatuslineDevinfo",
                         strings = { git }
                     },
                     {
