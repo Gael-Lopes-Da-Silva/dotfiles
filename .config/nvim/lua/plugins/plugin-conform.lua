@@ -1,5 +1,13 @@
-require("conform").setup({})
-require("mason-conform").setup({})
+require("conform").setup({
+    formatters_by_ft = {
+        lua = { "stylua" },
+        php = { "phpcbf" },
+        css = { "prettier" },
+        html = { "prettier" },
+        json = { "prettier" },
+        javascript = { "prettier" },
+    },
+})
 
 vim.api.nvim_create_user_command("Format", function(args)
     local range = nil

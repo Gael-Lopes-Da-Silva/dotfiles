@@ -10,11 +10,11 @@ MiniDeps.later(function()
             end,
         },
     })
-    require("plugins.nvim-treesitter")
+    require("plugins.plugin-nvim-treesitter")
 end)
 
 -- mason
-MiniDeps.later(function()
+MiniDeps.now(function()
     MiniDeps.add({
         source = "williamboman/mason.nvim",
         hooks = {
@@ -23,7 +23,7 @@ MiniDeps.later(function()
             end,
         },
     })
-    require("plugins.mason")
+    require("plugins.plugin-mason")
 end)
 
 -- lspconfig
@@ -35,7 +35,7 @@ MiniDeps.later(function()
             "neovim/nvim-lspconfig",
         },
     })
-    require("plugins.mason-lspconfig")
+    require("plugins.plugin-mason-lspconfig")
 end)
 
 -- dap
@@ -47,7 +47,7 @@ MiniDeps.later(function()
             "mfussenegger/nvim-dap",
         },
     })
-    require("plugins.mason-nvim-dap")
+    require("plugins.plugin-mason-nvim-dap")
 end)
 
 -- linter
@@ -59,17 +59,17 @@ MiniDeps.later(function()
             "mfussenegger/nvim-lint",
         },
     })
-    require("plugins.mason-nvim-lint")
+    require("plugins.plugin-mason-nvim-lint")
 end)
 
--- conform
+-- linter
 MiniDeps.later(function()
     MiniDeps.add({
-        source = "zapling/mason-conform.nvim",
+        source = "stevearc/conform.nvim",
         depends = {
             "williamboman/mason.nvim",
-            "stevearc/conform.nvim",
+            "neovim/nvim-lspconfig",
         },
     })
-    require("plugins.mason-conform")
+    require("plugins.plugin-conform")
 end)

@@ -4,8 +4,8 @@ ZNAP_HOME="$HOME/.local/share/zsh/snap"
 source "$ZNAP_HOME/znap.zsh"
 
 # user config
-source "$HOME/.zplugins"
-source "$HOME/.zexports"
-source "$HOME/.zoptions"
-source "$HOME/.zaliases"
-source "$HOME/.zprompt"
+source "$HOME/.config/zsh/.zplugins"
+source "$HOME/.config/zsh/.zexports"
+source "$HOME/.config/zsh/.zoptions"
+source "$HOME/.config/zsh/.zaliases"
+source "$HOME/.config/zsh/.zprompt"
