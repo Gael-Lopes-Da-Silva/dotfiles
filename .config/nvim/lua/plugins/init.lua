@@ -44,6 +44,7 @@ MiniDeps.later(function()
         source = "jay-babu/mason-nvim-dap.nvim",
         depends = {
             "williamboman/mason.nvim",
+            "neovim/nvim-lspconfig",
             "mfussenegger/nvim-dap",
         },
     })
@@ -53,16 +54,16 @@ end)
 -- linter
 MiniDeps.later(function()
     MiniDeps.add({
-        source = "rshkarin/mason-nvim-lint",
+        source = "mfussenegger/nvim-lint",
         depends = {
             "williamboman/mason.nvim",
-            "mfussenegger/nvim-lint",
+            "neovim/nvim-lspconfig",
         },
     })
-    require("plugins.plugin-mason-nvim-lint")
+    require("plugins.plugin-nvim-lint")
 end)
 
--- linter
+-- formatter
 MiniDeps.later(function()
     MiniDeps.add({
         source = "stevearc/conform.nvim",
