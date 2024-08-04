@@ -5,11 +5,11 @@ MiniDeps.now(function()
                 local diagnostics = require("mini.statusline").section_diagnostics({
                     trunc_width = 75,
                     signs = {
-                        ERROR = "",
-                        WARN  = "",
-                        INFO  = "",
-                        HINT  = "",
-                        OK    = "",
+                        ERROR = " ",
+                        WARN  = " ",
+                        INFO  = " ",
+                        HINT  = " ",
+                        OK    = " ",
                     },
                 })
                 local filename = require("mini.statusline").section_filename({ trunc_width = 140 })

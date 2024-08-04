@@ -53,8 +53,7 @@ MiniDeps.now(function()
 
     -- terminal
     set("n", "<leader>tn", "<cmd> terminal <cr> cd expand('%:p:h') <cr>", { desc = "Open terminal" })
-    set("n", "<leader>th", "<cmd> horizontal terminal <cr> cd expand('%:p:h') <cr>",
-        { desc = "Open hotizontal terminal" })
+    set("n", "<leader>th", "<cmd> horizontal terminal <cr> cd expand('%:p:h') <cr>", { desc = "Open hotizontal terminal" })
     set("n", "<leader>tv", "<cmd> vertical terminal <cr> cd expand('%:p:h') <cr>", { desc = "Open vertical terminal" })
 
     -- completion
@@ -80,8 +79,7 @@ MiniDeps.now(function()
     set("n", "<leader>pd", "<cmd> lua MiniExtra.pickers.diagnostic() <cr>", { desc = "Pick diagnostics" })
     set("n", "<leader>pk", "<cmd> lua MiniExtra.pickers.keymaps() <cr>", { desc = "Pick keymaps" })
     set("n", "<leader>pc", "<cmd> lua MiniExtra.pickers.commands() <cr>", { desc = "Pick commands" })
-    set("n", "<leader>pl", "<cmd> lua MiniExtra.pickers.buf_lines({ scope = 'current' }) <cr>",
-        { desc = "Pick line in buffer" })
+    set("n", "<leader>pl", "<cmd> lua MiniExtra.pickers.buf_lines({ scope = 'current' }) <cr>", { desc = "Pick line in buffer" })
 
     -- git
     set("n", "<leader>gP", "<cmd> Git pull <cr>", { desc = "Pull" })
