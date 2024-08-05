@@ -1,0 +1,8 @@
+return {
+  ["/home/gael/.dotfiles/.config/sway"] = {
+    ["/home/gael/.dotfiles/.config/sway/config"] = {
+      count = 1,
+      latest = 1722864299
+    }
+  }
+}
