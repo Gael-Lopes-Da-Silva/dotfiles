@@ -1,22 +1,8 @@
 font pango: Cascadia Mono NF 14
 
-# titlebar_border_thickness 0
-# titlebar_padding 5 2
-
 smart_borders on
 workspace_layout tabbed
 title_align center
-
-# output HDMI-A-2 pos 0 1080
-# output DVI-D-1 pos 0 0
-# output eDP-1 pos 0 0
-
-# input type:touchpad {
-#     dwt enabled
-#     tap enabled
-#     natural_scroll enabled
-#     middle_emulation enabled
-# }
 
 client.focused          #4c7899 #285577 #ffffff #2e9ef4   #285577
 client.focused_inactive #333333 #5f676a #ffffff #484e50   #5f676a
