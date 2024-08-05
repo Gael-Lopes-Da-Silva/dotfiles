@@ -51,16 +51,18 @@ current_battery() {
 }
 
 current_brightness() {
-    local ACTUAL_BRIGHTNESS=$(brightnessctl g)
-    local MAX_BRIGHTNESS=$(brightnessctl m)
-    local BRIGHTNESS=$(( (100 * $ACTUAL_BRIGHTNESS) / $MAX_BRIGHTNESS ))
-    local ICON="󰃠"
+    if [ -d /sys/class/backlight/intel_backlight ]; then
+        local ACTUAL_BRIGHTNESS=$(cat /sys/class/backlight/intel_backlight/actual_brightness)
+        local MAX_BRIGHTNESS=$(cat /sys/class/backlight/intel_backlight/max_brightness)
+        local BRIGHTNESS=$(( (100 * $ACTUAL_BRIGHTNESS) / $MAX_BRIGHTNESS ))
+        local ICON="󰃠"
 
-    echo "{"
-    echo "'full_text': ' $ICON $BRIGHTNESS% ',"
-    echo "'name': 'id_brightness',"
-    echo "'separator_block_width': $SEPARATOR_WIDTH,"
-    echo "},"
+        echo "{"
+        echo "'full_text': ' $ICON $BRIGHTNESS% ',"
+        echo "'name': 'id_brightness',"
+        echo "'separator_block_width': $SEPARATOR_WIDTH,"
+        echo "},"
+    fi
 }
 
 current_volume() {
