@@ -34,8 +34,10 @@ set $right l
     bindsym $mod+d exec --no-startup-id $menu
 
     floating_modifier $mod
+    tiling_drag modifier titlebar
 
     bindsym $mod+Shift+c reload
+    bindsym $mod+Shift+r restart
 
 #
 # Moving around:
