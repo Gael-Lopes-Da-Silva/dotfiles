@@ -1,0 +1,11 @@
+[date]
+command=sh ./date.sh
+interval=1
+
+[time]
+command=sh ./time.sh
+interval=1
+
+[battery]
+command=sh ./battery.sh
+interval=5
