@@ -4,6 +4,8 @@ smart_borders on
 workspace_layout tabbed
 title_align center
 
+for_window [class="^.*"] border normal
+
 client.focused          #285577 #285577 #ffffff #2e9ef4 #285577
 client.focused_inactive #5f676a #5f676a #ffffff #484e50 #5f676a
 client.unfocused        #222222 #222222 #888888 #292d2e #222222
@@ -157,6 +159,7 @@ bindsym $mod+Shift+e mode "power"
 bar {
     position bottom
     status_command i3blocks
+    workspace_min_width 25
 
     colors {
         statusline #ffffff
