@@ -1,11 +1,14 @@
 [battery]
-command=sh ./battery.sh
+command=sh ./scripts/battery.sh
 interval=1
+ICON=󰁹
 
 [date]
-command=sh ./date.sh
+command=sh ./scripts/date.sh
 interval=1
+ICON=
 
 [time]
-command=sh ./time.sh
+command=sh ./scripts/time.sh
 interval=1
+ICON=󰥔
