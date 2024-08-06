@@ -5,7 +5,16 @@ general {
 }
 
 order += "time"
+order += "battery all"
 
 time {
     format = "%T"
+}
+
+battery all {
+  path=/sys/class/power_supply/%d/uevent
+  format = "BAT AGGR: %percentage"
+  last_full_capacity = true
+  threshold_type=percentage
+  low_threshold=10
 }

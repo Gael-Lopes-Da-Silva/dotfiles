@@ -17,6 +17,8 @@ set $mod Mod4
 set $term kitty
 set $menu dmenu_run -fn "Cascadia Mono NF-14" -l 5
 
+exec --no-startup-id xsetroot -solid "#474747"
+
 exec --no-startup-id dex --autostart --environment i3
 exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 exec --no-startup-id nm-applet
