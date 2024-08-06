@@ -1,3 +1,18 @@
+[mic]
+command=sh ./scripts/mic.sh
+interval=1
+ICON=
+
+[volume]
+command=sh ./scripts/volume.sh
+interval=1
+ICON=󰕾
+
+[brightness]
+command=sh ./scripts/brightness.sh
+interval=1
+ICON=󰃠
+
 [battery]
 command=sh ./scripts/battery.sh
 interval=1
