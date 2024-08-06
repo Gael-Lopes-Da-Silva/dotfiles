@@ -4,4 +4,8 @@ general {
     separator = "|"
 }
 
-order += ""
+order += "time"
+
+time {
+    format = "%T"
+}
