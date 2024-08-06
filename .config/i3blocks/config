@@ -1,3 +1,6 @@
+separator=true
+separator_block_width=5
+
 [mic]
 command=sh ./scripts/mic.sh
 interval=1
