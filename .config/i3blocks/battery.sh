@@ -9,8 +9,7 @@ BAT=$(acpi -b | grep -E -o '[0-9][0-9]?%')
 echo "Battery: $BAT"
 echo "BAT: $BAT"
 
-[ ${BAT%?} -le 5 ] && exit 33
-[ ${BAT%?} -le 53 ] && echo "#FF8000"
+[ ${BAT%?} -le 53 ] && exit 33
 
 # if [[ $BATTERY -eq "" ]]; then
 #     exit 1
