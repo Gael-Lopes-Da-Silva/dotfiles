@@ -1,6 +1,6 @@
 [battery]
 command=sh ./battery.sh
-interval=5
+interval=1
 
 [date]
 command=sh ./date.sh
