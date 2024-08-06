@@ -8,18 +8,22 @@ if [[ $BATTERY -eq "" ]]; then
 fi
 
 if [[ $STATUS = "Discharging," ]]; then
-    [[ $BATTERY -le 15 ]] && BACKGROUND="#FF0000" || BACKGROUND=""
+    [ ${BATTERY%?} -le 5 ] && BACKGROUND="#FF0000"
+    [ ${BATTERY%?} -le 15 ] && BACKGROUND="#FF8000"
 fi
 
 if [[ $STATUS = "Charging," ]]; then
-    [[ $BATTERY -ge 95 ]] && BACKGROUND="#00FF00" || BACKGROUND=""
+    [ ${BATTERY%?} -ge 95 ] && BACKGROUND="#00FF00"
 fi
 
 [[ $STATUS = "Charging," ]] && ICON="󱐋" || ICON="󰁹"
 
-echo " $ICON $BATTERY "
+echo " $ICON $BATTERY " # full text
+echo ""                 # short text
 
-[ ${BATTERY%?} -le 5 ] && exit 33
-[ ${BATTERY%?} -le 20 ] && echo "#FF8000"
+if [[ ! $BACKGROUND -eq "" ]]; then
+    echo "#FFFFFF"
+    echo "$BACKGROUND"
+fi
 
 exit 0
