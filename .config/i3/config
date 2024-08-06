@@ -111,12 +111,12 @@ set $right l
 #
 # Control keys:
 #
-    bindsym XF86AudioRaiseVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.10+
-    bindsym XF86AudioLowerVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.10-
-    bindsym XF86AudioMute exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
-    bindsym XF86AudioMicMute exec wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
-    bindsym XF86MonBrightnessUp exec brightnessctl set +10%
-    bindsym XF86MonBrightnessDown exec brightnessctl set 10%-
+    bindsym XF86AudioRaiseVolume exec --no-startup-id wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.10+
+    bindsym XF86AudioLowerVolume exec --no-startup-id wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.10-
+    bindsym XF86AudioMute exec wpctl --no-startup-id set-mute @DEFAULT_AUDIO_SINK@ toggle
+    bindsym XF86AudioMicMute exec wpctl --no-startup-id set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+    bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set +10%
+    bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 10%-
 
 #
 # Resizing containers:
@@ -142,7 +142,7 @@ bindsym $mod+r mode "resize"
 #
 mode "power" {
     bindsym Shift+s exec shutdown now
-    bindsym e exec swaymsg exit
+    bindsym e exec i3-msg exit
     bindsym r exec reboot
     bindsym s exec systemctl suspend
 
