@@ -3,7 +3,9 @@ BATTERY=$(acpi -b | grep -E -o '[0-9][0-9]?%')
 BACKGROUND=""
 ICON=""
 
-if [[ ! $BATTERY -eq "" ]] exit 1
+if [[ ! $BATTERY -eq "" ]]; then
+    exit 1
+fi
 
 if [[ $STATUS = "Discharging," ]]; then
     [[ $BATTERY -le 15 ]] && BACKGROUND="#FF0000" || BACKGROUND=""
