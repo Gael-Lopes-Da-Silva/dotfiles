@@ -3,7 +3,7 @@ BATTERY=$(acpi -b | grep -E -o '[0-9][0-9]?%')
 BACKGROUND=""
 ICON=""
 
-if [[ ! $BATTERY -eq "" ]]; then
+if [[ $BATTERY -eq "" ]]; then
     exit 1
 fi
 
