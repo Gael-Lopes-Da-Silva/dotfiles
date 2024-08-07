@@ -3,6 +3,8 @@
 DATE=$(date +"%d/%m/%Y")
 BIRTHDAY="19/06"
 
+[[ $DATE = "" ]] && exit 1
+
 [[ $(date +"%d/%m") = $BIRTHDAY ]] && ICON=""
 
 echo " $ICON $DATE "
