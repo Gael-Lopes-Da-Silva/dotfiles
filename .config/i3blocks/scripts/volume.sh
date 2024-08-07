@@ -10,7 +10,7 @@ BACKGROUND=""
 [[ $button -eq 4 ]] && wpctl set-volume @DEFAULT_AUDIO_SINK@ 10%+
 [[ $button -eq 5 ]] && wpctl set-volume @DEFAULT_AUDIO_SINK@ 10%-
 
-[[ $VOLUME > 0.00 ]] && ICON="󰕾" || ICON="󰖁"
+[[ ! $VOLUME > 0.00 ]] && ICON="󰖁"
 
 if [[ $MUTED = "[MUTED]" ]]; then
     VOLUME="MUTED"

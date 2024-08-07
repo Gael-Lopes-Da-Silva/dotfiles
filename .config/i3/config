@@ -1,29 +1,26 @@
 font pango:Cascadia Mono NF 14
 
+for_window [class="^.*"] border normal
+
 smart_borders on
 workspace_layout tabbed
 title_align center
-
-for_window [class="^.*"] border normal
 
 client.focused          #285577 #285577 #ffffff #2e9ef4 #285577
 client.focused_inactive #5f676a #5f676a #ffffff #484e50 #5f676a
 client.unfocused        #222222 #222222 #888888 #292d2e #222222
 client.urgent           #900000 #900000 #ffffff #900000 #900000
 client.placeholder      #0c0c0c #0c0c0c #ffffff #000000 #0c0c0c
-
 client.background       #ffffff
 
-set $mod Mod4
-
-set $term kitty
-set $menu dmenu_run -fn "Cascadia Mono NF-14" -l 5
-
 exec --no-startup-id xsetroot -solid "#474747"
-
 exec --no-startup-id dex --autostart --environment i3
 exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 exec --no-startup-id nm-applet
+
+set $mod Mod4
+set $term kitty
+set $menu dmenu_run -fn "Cascadia Mono NF-14" -l 5
 
 set $left h
 set $down j
@@ -115,8 +112,8 @@ set $right l
 #
     bindsym XF86AudioRaiseVolume exec --no-startup-id wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.10+
     bindsym XF86AudioLowerVolume exec --no-startup-id wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.10-
-    bindsym XF86AudioMute exec wpctl --no-startup-id set-mute @DEFAULT_AUDIO_SINK@ toggle
-    bindsym XF86AudioMicMute exec wpctl --no-startup-id set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+    bindsym XF86AudioMute exec --no-startup-id wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+    bindsym XF86AudioMicMute exec --no-startup-id wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
     bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set +10%
     bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 10%-
 
@@ -140,7 +137,7 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 #
-# System control:
+# Power control:
 #
 mode "power" {
     bindsym Shift+s exec shutdown now
