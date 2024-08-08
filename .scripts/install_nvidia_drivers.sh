@@ -1,24 +1,8 @@
 #!/bin/bash
 
-function install_yay() {
-    local YAY=$(pacman -Qq yay)
-
-    if [[ ! $YAY = "yay" ]]; then
-        sudo pacman -S --needed --noconfirm git base-devel
-        git clone https://aur.archlinux.org/yay.git
-        cd yay
-        makepkg -si --noconfirm
-        cd ~
-        rm -rf yay
-        echo "[+] Yay installed successfully"
-    else
-        echo "[+] Yay already installed"
-    fi
-}
-
 function install_nvidia_drivers() {
     sudo pacman -S --needed --noconfirm base-devel linux-headers
-    yay -S --noconfirm nvidia nvidia-utils nvidia-settings
+    sudo pacman -S --noconfirm nvidia nvidia-utils nvidia-settings
     echo "[+] Nvidia drivers installed successfully"
     echo ""
     echo "[?] To enable DRM kernel mode, in /etc/default/grub"
@@ -33,5 +17,4 @@ function install_nvidia_drivers() {
 
 cd ~
 
-install_yay
 install_nvidia_drivers

@@ -17,13 +17,13 @@ function install_yay() {
 }
 
 function install_packages() {
-    yay -S --noconfirm noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra \
+    sudo pacman -S --noconfirm noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra \
     kitty neovim zsh ripgrep stow man-db man-pages firefox discord
     echo "[+] Installed all packages successfully"
 }
 
 function install_i3packages() {
-    yay -S --noconfirm i3-wm i3blocks i3lock xclip xorg-xsetroot
+    sudo pacman -S --noconfirm i3-wm i3blocks i3lock xclip xorg-xsetroot
     echo "[+] Installed all i3 packages successfully"
 }
 
