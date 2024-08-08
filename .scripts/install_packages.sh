@@ -1,8 +1,10 @@
+#!/bin/bash
+
 function install_yay() {
     local YAY=$(pacman -Qq yay)
 
     if [[ ! $YAY = "yay" ]]; then
-        pacman -S --needed --noconfirm git base-devel
+        sudo pacman -S --needed --noconfirm git base-devel
         git clone https://aur.archlinux.org/yay.git
         cd yay
         makepkg -si --noconfirm
@@ -21,8 +23,7 @@ function install_packages() {
 }
 
 function install_i3packages() {
-    yay -S --noconfirm i3-wm i3blocks i3lock xclip xorg-xsetroot \
-    v4l2loopback-dkms v4l2loopback-utils
+    yay -S --noconfirm i3-wm i3blocks i3lock xclip xorg-xsetroot
     echo "[+] Installed all i3 packages successfully"
 }
 
