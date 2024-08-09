@@ -1,3 +1,1 @@
-require("lint").linters_by_ft = {
-    php = { "phpcs" },
-}
+require("lint").linters_by_ft = {}
