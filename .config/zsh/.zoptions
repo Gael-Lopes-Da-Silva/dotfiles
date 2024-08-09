@@ -1,3 +1,6 @@
+#
+# Options:
+#
 setopt AUTOCD
 setopt INTERACTIVE_COMMENTS
 setopt SHARE_HISTORY
@@ -5,7 +8,6 @@ setopt EXTENDEDGLOB
 setopt NOMATCH
 setopt MENUCOMPLETE
 stty stop undef
-
 unsetopt BEEP
 
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'

@@ -1,4 +1,6 @@
--- Install mini.nvim
+--
+-- Install mini.nvim:
+--
 local package_path = vim.fn.stdpath("data") .. "/site/"
 local snapshot_path = vim.fn.stdpath("data") .. "/snapshot/"
 local log_path = vim.fn.stdpath("data") .. "/logs/mini-deps.log"
@@ -10,12 +12,16 @@ if not vim.uv.fs_stat(mini_path) then
     vim.cmd('echo "Installed `mini.nvim`" | redraw')
 end
 
--- Configure mini.deps
+--
+-- Configure mini.deps:
+--
 local mini_deps = require("mini.deps")
 mini_deps.setup({ path = { package = package_path, snapshot = snapshot_path, log = log_path } })
 mini_deps.add("mini.nvim")
 
--- User defined config
+--
+-- User config:
+--
 require("configs.init")
 require("plugins.init")
 require("options")

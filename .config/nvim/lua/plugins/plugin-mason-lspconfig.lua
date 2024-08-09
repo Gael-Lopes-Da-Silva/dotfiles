@@ -33,11 +33,9 @@ require("mason-lspconfig").setup({
     },
 })
 
--- set border
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "single" })
 vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "single" })
 
--- set diagnostics icons
 local signs = {
     Error = " ",
     Warn  = " ",
@@ -59,7 +57,6 @@ vim.diagnostic.config({
     },
 })
 
--- change diagnostics virtual text
 vim.api.nvim_set_hl(0, "DiagnosticVirtualTextError", { fg = "#fb4934", bg = "#504945" })
 vim.api.nvim_set_hl(0, "DiagnosticVirtualTextWarn", { fg = "#d3869b", bg = "#504945" })
 vim.api.nvim_set_hl(0, "DiagnosticVirtualTextInfo", { fg = "#8ec07c", bg = "#504945" })

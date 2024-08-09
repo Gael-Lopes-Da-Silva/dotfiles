@@ -1,7 +1,9 @@
 MiniDeps.now(function()
     local set = vim.keymap.set
 
-    -- default
+    --
+    -- Default:
+    --
     set("i", "jk", "<ESC>")
     set("n", "U", "<C-r>")
     set("n", "<TAB>", "<C-^>")
@@ -13,7 +15,9 @@ MiniDeps.now(function()
         vim.cmd.echo()
     end, { noremap = true })
 
-    -- lsp
+    --
+    -- Lsp:
+    --
     set("n", "<leader>lD", vim.lsp.buf.declaration, { desc = "LSP Go to declaration" })
     set("n", "<leader>ld", vim.lsp.buf.definition, { desc = "LSP Go to definition" })
     set("n", "<leader>lk", vim.lsp.buf.hover, { desc = "LSP Hover" })
@@ -25,7 +29,9 @@ MiniDeps.now(function()
     set("n", "<leader>lR", vim.lsp.buf.references, { desc = "LSP Go to references" })
     set({ "n", "v" }, "<leader>lf", vim.lsp.buf.format, { desc = "LSP Format" })
 
-    -- dap
+    --
+    -- Dap:
+    --
     set("n", "<F5>", "<cmd> lua require('dap').continue() <cr>")
     set("n", "<F10>", "<cmd> lua require('dap').step_over() <cr>")
     set("n", "<F11>", "<cmd> lua require('dap').step_into() <cr>")
@@ -40,7 +46,9 @@ MiniDeps.now(function()
     set({ "n", "v" }, "<leader>dh", "<cmd> lua require('dap.ui.widgets').hover() <cr>", { desc = "DAP Hover" })
     set({ "n", "v" }, "<leader>dp", "<cmd> lua require('dap.ui.widgets').preview() <cr>", { desc = "DAP Preview" })
 
-    -- buffer
+    --
+    -- Buffer:
+    --
     set("n", "<leader>c", function()
         require("mini.files").close()
         require("mini.bufremove").delete()
@@ -51,16 +59,22 @@ MiniDeps.now(function()
     set("n", "<leader>bt", "<cmd> tabnew <cr>", { desc = "New tab" })
     set("n", "<leader>bT", "<cmd> tabclose <cr>", { desc = "Close tab" })
 
-    -- terminal
+    --
+    -- Terminal:
+    --
     set("n", "<leader>tn", "<cmd> terminal <cr> cd expand('%:p:h') <cr>", { desc = "Open terminal" })
     set("n", "<leader>th", "<cmd> horizontal terminal <cr> cd expand('%:p:h') <cr>", { desc = "Open hotizontal terminal" })
     set("n", "<leader>tv", "<cmd> vertical terminal <cr> cd expand('%:p:h') <cr>", { desc = "Open vertical terminal" })
 
-    -- completion
+    --
+    -- Completion:
+    --
     set("i", "<Tab>", [[pumvisible() ? "\<C-n>" : "\<Tab>"]], { expr = true })
     set("i", "<S-Tab>", [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]], { expr = true })
 
-    -- file
+    --
+    -- File:
+    --
     set("n", "<leader>fF", "<cmd> Format <cr>", { desc = "Format file" })
     set("n", "<leader>ff", "<cmd> lua MiniFiles.open() <cr>", { desc = "Open file explorer" })
     set("n", "<leader>fc", "<cmd> lua MiniFiles.close() <cr>", { desc = "Close file explorer" })
@@ -70,7 +84,9 @@ MiniDeps.now(function()
     set("n", "<leader>fs", "<cmd> lua MiniFiles.synchronize() <cr>", { desc = "Synchronize file explorer" })
     set("n", "<leader>fm", "<cmd> lua MiniMap.toggle() <cr>", { desc = "Toggle mini map" })
 
-    -- pick
+    --
+    -- Pick:
+    --
     set("n", "<leader>pf", "<cmd> lua MiniPick.builtin.files() <cr>", { desc = "Pick files" })
     set("n", "<leader>pb", "<cmd> lua MiniPick.builtin.buffers() <cr>", { desc = "Pick buffers" })
     set("n", "<leader>pg", "<cmd> lua MiniPick.builtin.grep() <cr>", { desc = "Pick grep" })
@@ -81,7 +97,9 @@ MiniDeps.now(function()
     set("n", "<leader>pc", "<cmd> lua MiniExtra.pickers.commands() <cr>", { desc = "Pick commands" })
     set("n", "<leader>pl", "<cmd> lua MiniExtra.pickers.buf_lines({ scope = 'current' }) <cr>", { desc = "Pick line in buffer" })
 
-    -- git
+    --
+    -- Git:
+    --
     set("n", "<leader>gP", "<cmd> Git pull <cr>", { desc = "Pull" })
     set("n", "<leader>gp", "<cmd> Git push <cr>", { desc = "Push" })
     set("n", "<leader>ga", "<cmd> Git add % <cr>", { desc = "Add" })

@@ -1,44 +1,52 @@
-font pango:Cascadia Mono NF 14
+#
+# Theme:
+#
+    font pango:Cascadia Mono NF 14
 
-for_window [class="^.*"] border normal
+    for_window [class="^.*"] border normal
 
-smart_borders on
-workspace_layout tabbed
-title_align center
+    smart_borders on
+    workspace_layout tabbed
+    title_align center
 
-client.focused          #285577 #285577 #ffffff #2e9ef4 #285577
-client.focused_inactive #5f676a #5f676a #ffffff #484e50 #5f676a
-client.unfocused        #222222 #222222 #888888 #292d2e #222222
-client.urgent           #900000 #900000 #ffffff #900000 #900000
-client.placeholder      #0c0c0c #0c0c0c #ffffff #000000 #0c0c0c
-client.background       #ffffff
+    client.focused          #285577 #285577 #ffffff #2e9ef4 #285577
+    client.focused_inactive #5f676a #5f676a #ffffff #484e50 #5f676a
+    client.unfocused        #222222 #222222 #888888 #292d2e #222222
+    client.urgent           #900000 #900000 #ffffff #900000 #900000
+    client.placeholder      #0c0c0c #0c0c0c #ffffff #000000 #0c0c0c
+    client.background       #ffffff
 
-exec --no-startup-id xsetroot -solid "#474747"
-exec --no-startup-id dex --autostart --environment i3
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
-exec --no-startup-id nm-applet
+#
+# Autostart:
+#
+    exec --no-startup-id xsetroot -solid "#474747"
+    exec --no-startup-id dex --autostart --environment i3
+    exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+    exec --no-startup-id nm-applet
 
-set $mod Mod4
-set $term kitty
-set $menu dmenu_run -fn "Cascadia Mono NF-14" -l 5
+#
+# Variables:
+#
+    set $mod Mod4
+    set $term kitty
+    set $menu dmenu_run -fn "Cascadia Mono NF-14" -l 5
 
-set $left h
-set $down j
-set $up k
-set $right l
+    set $left h
+    set $down j
+    set $up k
+    set $right l
 
 #
 # Basics:
 #
+    bindsym $mod+d exec --no-startup-id $menu
     bindsym $mod+Return exec $term
     bindsym $mod+Shift+q kill
-    bindsym $mod+d exec --no-startup-id $menu
+    bindsym $mod+Shift+c reload
+    bindsym $mod+Shift+r restart
 
     floating_modifier $mod
     tiling_drag modifier titlebar
-
-    bindsym $mod+Shift+c reload
-    bindsym $mod+Shift+r restart
 
 #
 # Moving around:
@@ -116,6 +124,13 @@ set $right l
     bindsym XF86AudioMicMute exec --no-startup-id wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
     bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set +10%
     bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 10%-
+
+#
+# Screenshot:
+#
+    bindsym Print exec --no-startup-id maim | xclip -selection clipboard -t image/png
+    bindsym $mod+Print exec --no-startup-id maim --window $(xdotool getactivewindow) | xclip -selection clipboard -t image/png
+    bindsym Shift+Print exec --no-startup-id maim --select | xclip -selection clipboard -t image/png
 
 #
 # Resizing containers:

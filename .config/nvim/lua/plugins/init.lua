@@ -1,4 +1,6 @@
--- treesitter
+--
+-- Treesitter:
+--
 MiniDeps.later(function()
     MiniDeps.add({
         source = "nvim-treesitter/nvim-treesitter",
@@ -13,7 +15,9 @@ MiniDeps.later(function()
     require("plugins.plugin-nvim-treesitter")
 end)
 
--- mason
+--
+-- Mason:
+--
 MiniDeps.now(function()
     MiniDeps.add({
         source = "williamboman/mason.nvim",
@@ -26,7 +30,9 @@ MiniDeps.now(function()
     require("plugins.plugin-mason")
 end)
 
--- lspconfig
+--
+-- Lspconfig:
+--
 MiniDeps.later(function()
     MiniDeps.add({
         source = "williamboman/mason-lspconfig.nvim",
@@ -38,7 +44,9 @@ MiniDeps.later(function()
     require("plugins.plugin-mason-lspconfig")
 end)
 
--- dap
+--
+-- Dap:
+--
 MiniDeps.later(function()
     MiniDeps.add({
         source = "jay-babu/mason-nvim-dap.nvim",
@@ -51,7 +59,9 @@ MiniDeps.later(function()
     require("plugins.plugin-mason-nvim-dap")
 end)
 
--- linter
+--
+-- Linter:
+--
 MiniDeps.later(function()
     MiniDeps.add({
         source = "mfussenegger/nvim-lint",
@@ -63,7 +73,9 @@ MiniDeps.later(function()
     require("plugins.plugin-nvim-lint")
 end)
 
--- formatter
+--
+-- Formatter:
+--
 MiniDeps.later(function()
     MiniDeps.add({
         source = "stevearc/conform.nvim",

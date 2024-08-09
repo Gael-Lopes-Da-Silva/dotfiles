@@ -8,7 +8,6 @@ require("mason-nvim-dap").setup({
     },
 })
 
--- change breakpoint icon
 vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "DiffDelete" })
 vim.fn.sign_define("DapBreakpointCondition", { text = "", texthl = "DiffAdd" })
 vim.fn.sign_define("DapBreakpointRejected", { text = "", texthl = "FoldColumn" })
