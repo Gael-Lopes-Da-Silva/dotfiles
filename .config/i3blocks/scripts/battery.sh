@@ -6,19 +6,23 @@ BACKGROUND=""
 
 [[ $BATTERY = "" ]] && exit 1
 
+[[ $STATUS = "Discharging," ]] && ICON="󰁹"
+[[ $STATUS = "Charging," ]] && ICON="󱐋"
+[[ $STATUS = "Full," ]] && ICON=""
+
+echo " $ICON $BATTERY "
+echo " $ICON $BATTERY "
+
 if [[ $STATUS = "Discharging," ]]; then
     [[ ${BATTERY%?} -le 15 ]] && BACKGROUND="#FF8000"
     [[ ${BATTERY%?} -le 5 ]] && BACKGROUND="#FF0000"
-    ICON="󰁹"
 fi
 
 if [[ $STATUS = "Charging," ]]; then
     [[ ${BATTERY%?} -ge 95 ]] && BACKGROUND="#00FF00"
-    ICON="󱐋"
 fi
 
-echo " $ICON $BATTERY "
-echo " $ICON $BATTERY "
+[[ $STATUS = "Full," ]] && BACKGROUND="#0000FF"
 
 if [[ ! $BACKGROUND = "" ]]; then
     echo "#FFFFFF"
