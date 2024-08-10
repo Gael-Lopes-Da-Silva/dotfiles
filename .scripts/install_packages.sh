@@ -23,7 +23,7 @@ function install_packages() {
 }
 
 function install_i3packages() {
-    sudo pacman -S --noconfirm i3-wm i3blocks i3lock xclip xorg-xsetroot
+    sudo pacman -S --noconfirm i3-wm i3blocks i3lock xclip xorg-xsetroot maim xdotool acpi
     echo "[+] Installed all i3 packages successfully"
 }
 
