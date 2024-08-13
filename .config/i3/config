@@ -29,6 +29,7 @@
 #
     set $mod Mod4
     set $term kitty
+    set $navigator firefox
     set $menu dmenu_run -fn "Cascadia Mono NF-14" -l 5
 
     set $left h
@@ -41,6 +42,7 @@
 #
     bindsym $mod+d exec --no-startup-id $menu
     bindsym $mod+Return exec $term
+    bindsym $mod+BackSpace exec $navigator
     bindsym $mod+Shift+q kill
     bindsym $mod+Shift+c reload
     bindsym $mod+Shift+r restart
