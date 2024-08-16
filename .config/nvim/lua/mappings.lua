@@ -60,13 +60,6 @@ MiniDeps.now(function()
     set("n", "<leader>bT", "<cmd> tabclose <cr>", { desc = "Close tab" })
 
     --
-    -- Terminal:
-    --
-    set("n", "<leader>tn", "<cmd> terminal <cr> cd expand('%:p:h') <cr>", { desc = "Open terminal" })
-    set("n", "<leader>th", "<cmd> horizontal terminal <cr> cd expand('%:p:h') <cr>", { desc = "Open hotizontal terminal" })
-    set("n", "<leader>tv", "<cmd> vertical terminal <cr> cd expand('%:p:h') <cr>", { desc = "Open vertical terminal" })
-
-    --
     -- Completion:
     --
     set("i", "<Tab>", [[pumvisible() ? "\<C-n>" : "\<Tab>"]], { expr = true })

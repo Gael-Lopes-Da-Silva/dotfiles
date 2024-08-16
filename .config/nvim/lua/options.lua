@@ -14,6 +14,4 @@ MiniDeps.now(function()
     vim.o.tabstop        = 4
     vim.o.termguicolors  = true
     vim.o.wrap           = true
-
-    vim.api.nvim_create_autocmd("TermOpen", { command = "setlocal nonumber norelativenumber" })
 end)
