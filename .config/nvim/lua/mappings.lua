@@ -5,10 +5,12 @@ MiniDeps.now(function()
     -- Default:
     --
     set("i", "jk", "<ESC>")
-    set("n", "U", "<C-r>")
-    set("n", "<TAB>", "<C-^>")
-    set("t", "<C-q>", "<C-\\><C-n>")
     set("t", "jk", "<C-\\><C-n>")
+
+    set("n", "U", "<C-r>")
+    set("t", "<C-q>", "<C-\\><C-n>")
+    set("n", "<TAB>", "<C-^>")
+
     set("n", "<Esc>", function()
         require("mini.files").close()
         vim.cmd.nohlsearch()

@@ -48,7 +48,10 @@ MiniDeps.now(function()
             mini_clue.gen_clues.z(),
         },
         window = {
-            delay = 300
+            config = {
+                width = "auto",
+            },
+            delay = 300,
         },
     })
 end)
