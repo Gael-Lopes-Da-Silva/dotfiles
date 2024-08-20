@@ -1,5 +1,2 @@
-#
-# Prompt:
-#
-PROMPT="%B%F{#285577}%f%F{#FFFFFF}%K{#285577}%~%k%f%F{#285577}%f%b "
-RPROMPT="%(?..%B%F{#FF0000}%f%F{#FFFFFF}%K{#FF0000}%?%k%f%F{#FF0000}%f%b)"
+PROMPT="%B%F{#458588}%f%F{#ebdbb2}%K{#458588}%~%k%f%F{#458588}%f%b "
+RPROMPT="%(?..%B%F{#cc241d}%f%F{#ebdbb2}%K{#cc241d}%?%k%f%F{#cc241d}%f%b)"

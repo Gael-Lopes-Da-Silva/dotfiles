@@ -1,16 +1,7 @@
-#
-# Install plugins:
-#
 znap source "marlonrichert/zsh-edit"
 znap source "zsh-users/zsh-syntax-highlighting"
 znap source "zsh-users/zsh-autosuggestions"
 
-#
-# Install completions:
-#
 znap install "zsh-users/zsh-completions"
 
-#
-# Plugins config:
-#
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)

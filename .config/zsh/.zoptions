@@ -1,6 +1,3 @@
-#
-# Options:
-#
 setopt AUTOCD
 setopt INTERACTIVE_COMMENTS
 setopt SHARE_HISTORY
