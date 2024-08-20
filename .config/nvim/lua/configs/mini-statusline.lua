@@ -3,7 +3,7 @@ MiniDeps.now(function()
 		content = {
 			active = function()
 				local diagnostics = require("mini.statusline").section_diagnostics({
-                    icon = " |",
+					icon = " ",
 					trunc_width = 75,
 					signs = {
 						ERROR = "",
@@ -19,13 +19,28 @@ MiniDeps.now(function()
 				local search = require("mini.statusline").section_searchcount({ trunc_width = 75 })
 
 				return require("mini.statusline").combine_groups({
-					{ hl = mode_hl, strings = { mode } },
-					{ hl = "MiniStatuslineDevinfo", strings = { diagnostics } },
+					{
+						hl = mode_hl,
+						strings = { mode },
+					},
+					{
+						hl = "MiniStatuslineDevinfo",
+						strings = { diagnostics },
+					},
 					"%<",
-					{ hl = "MiniStatuslineFilename", strings = { filename } },
+					{
+						hl = "MiniStatuslineFilename",
+						strings = { filename },
+					},
 					"%=",
-					{ hl = "MiniStatuslineDevinfo", strings = { git } },
-					{ hl = mode_hl, strings = { search, location } },
+					{
+						hl = "MiniStatuslineDevinfo",
+						strings = { git },
+					},
+					{
+						hl = mode_hl,
+						strings = { search, location },
+					},
 				})
 			end,
 		},

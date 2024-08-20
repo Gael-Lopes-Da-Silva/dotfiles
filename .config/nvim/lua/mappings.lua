@@ -29,7 +29,6 @@ MiniDeps.now(function()
     set("n", "<leader>lr", vim.lsp.buf.rename, { desc = "LSP Rename" })
     set("n", "<leader>lc", vim.lsp.buf.code_action, { desc = "LSP Code action" })
     set("n", "<leader>lR", vim.lsp.buf.references, { desc = "LSP Go to references" })
-    set({ "n", "v" }, "<leader>lf", vim.lsp.buf.format, { desc = "LSP Format" })
 
     --
     -- Dap:
@@ -70,7 +69,6 @@ MiniDeps.now(function()
     --
     -- File:
     --
-    set("n", "<leader>fF", "<cmd> Format <cr>", { desc = "Format file" })
     set("n", "<leader>ff", "<cmd> lua MiniFiles.open() <cr>", { desc = "Open file explorer" })
     set("n", "<leader>fc", "<cmd> lua MiniFiles.close() <cr>", { desc = "Close file explorer" })
     set("n", "<leader>fr", "<cmd> lua MiniFiles.refresh() <cr>", { desc = "Refresh file explorer" })
