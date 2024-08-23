@@ -5,11 +5,13 @@ MiniDeps.now(function()
     -- Default:
     --
     set("i", "jk", "<ESC>")
-    set("t", "jk", "<C-\\><C-n>")
-
     set("n", "U", "<C-r>")
     set("t", "<C-q>", "<C-\\><C-n>")
-    set("n", "<TAB>", "<C-^>")
+
+    set("n", "<Tab>", function()
+        require("mini.files").close()
+        require("mini.bracketed").buffer("forward")
+    end)
 
     set("n", "<Esc>", function()
         require("mini.files").close()

@@ -25,4 +25,11 @@ MiniDeps.now(function()
 			vim.cmd([[silent! normal! g`"]])
 		end,
 	})
+
+	-- vim.api.nvim_create_autocmd("BufWritePre", {
+	-- 	desc = "Format the buffer when saved",
+	-- 	callback = function()
+	-- 		vim.lsp.buf.format({ timeout_ms = 3000 })
+	-- 	end,
+	-- })
 end)
