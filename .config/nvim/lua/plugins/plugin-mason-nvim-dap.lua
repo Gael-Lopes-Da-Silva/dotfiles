@@ -1,11 +1,7 @@
 require("mason-nvim-dap").setup({
     ensure_installed = {},
     automatic_installation = false,
-    handlers = {
-        function(config)
-            require("mason-nvim-dap").default_setup(config)
-        end,
-    },
+    handlers = {},
 })
 
 vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "DiffDelete" })

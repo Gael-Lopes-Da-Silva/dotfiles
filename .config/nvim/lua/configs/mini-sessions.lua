@@ -1,3 +1,3 @@
-MiniDeps.now(function()
-    require("mini.sessions").setup({})
-end)
+-- MiniDeps.now(function()
+-- 	require("mini.sessions").setup({})
+-- end)

@@ -1,3 +1,3 @@
-MiniDeps.later(function()
-    require("mini.fuzzy").setup({})
-end)
+-- MiniDeps.later(function()
+-- 	require("mini.fuzzy").setup({})
+-- end)

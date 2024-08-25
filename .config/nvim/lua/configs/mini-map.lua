@@ -1,3 +1,3 @@
 MiniDeps.later(function()
-    require("mini.map").setup({})
+	require("mini.map").setup({})
 end)

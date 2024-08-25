@@ -1,7 +1,7 @@
 MiniDeps.later(function()
-    require("mini.diff").setup({
-        view = {
-            style = "number",
-        },
-    })
+	require("mini.diff").setup({
+		view = {
+			style = "number",
+		},
+	})
 end)

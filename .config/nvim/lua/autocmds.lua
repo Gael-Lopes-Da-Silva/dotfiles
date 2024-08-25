@@ -19,13 +19,6 @@ MiniDeps.now(function()
 		end,
 	})
 
-	vim.api.nvim_create_autocmd("BufReadPost", {
-		desc = "Open file at same location where it was closed last time",
-		callback = function()
-			vim.cmd([[silent! normal! g`"]])
-		end,
-	})
-
 	-- vim.api.nvim_create_autocmd("BufWritePre", {
 	-- 	desc = "Format the buffer when saved",
 	-- 	callback = function()

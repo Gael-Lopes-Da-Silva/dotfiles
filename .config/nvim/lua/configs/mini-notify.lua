@@ -1,4 +1,11 @@
 MiniDeps.now(function()
-    require("mini.notify").setup({})
-    vim.notify = require("mini.notify").make_notify()
+	local mini_notify = require("mini.notify")
+	mini_notify.setup({
+		window = {
+			config = {
+				border = "single",
+			},
+		},
+	})
+	vim.notify = mini_notify.make_notify()
 end)

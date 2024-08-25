@@ -1,3 +1,3 @@
 MiniDeps.later(function()
-    require("mini.ai").setup({})
+	require("mini.ai").setup({})
 end)

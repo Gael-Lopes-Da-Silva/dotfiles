@@ -1,5 +1,5 @@
 MiniDeps.later(function()
-    require("mini.indentscope").setup({
-        symbol = "|",
-    })
+	require("mini.indentscope").setup({
+		symbol = "|",
+	})
 end)
