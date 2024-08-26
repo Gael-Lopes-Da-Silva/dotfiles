@@ -12,16 +12,21 @@ MiniDeps.now(function()
 			{ mode = "n", keys = "g" },
 			{ mode = "x", keys = "g" },
 
+			{ mode = "n", keys = "m" },
+			{ mode = "x", keys = "m" },
+
 			{ mode = "n", keys = "[" },
 			{ mode = "n", keys = "]" },
 
 			{ mode = "n", keys = '"' },
-			{ mode = "n", keys = "`" },
 			{ mode = "x", keys = '"' },
+
+			{ mode = "n", keys = "'" },
+			{ mode = "x", keys = "'" },
+
+			{ mode = "n", keys = "`" },
 			{ mode = "x", keys = "`" },
 
-			{ mode = "n", keys = '"' },
-			{ mode = "x", keys = '"' },
 			{ mode = "i", keys = "<C-r>" },
 			{ mode = "c", keys = "<C-r>" },
 
@@ -34,13 +39,13 @@ MiniDeps.now(function()
 			{ mode = "x", keys = "s" },
 		},
 		clues = {
-			{ mode = "n", keys = "<Leader>l", desc = "+LSP" },
-			{ mode = "n", keys = "<Leader>f", desc = "+Files" },
-			{ mode = "n", keys = "<Leader>p", desc = "+Picks" },
 			{ mode = "n", keys = "<Leader>b", desc = "+Buffers" },
 			{ mode = "n", keys = "<Leader>d", desc = "+DAP" },
+			{ mode = "n", keys = "<Leader>f", desc = "+Files" },
 			{ mode = "n", keys = "<Leader>g", desc = "+Git" },
+			{ mode = "n", keys = "<Leader>l", desc = "+LSP" },
 			{ mode = "n", keys = "<Leader>n", desc = "+Notify" },
+			{ mode = "n", keys = "<Leader>p", desc = "+Picks" },
 			mini_clue.gen_clues.builtin_completion(),
 			mini_clue.gen_clues.g(),
 			mini_clue.gen_clues.marks(),
