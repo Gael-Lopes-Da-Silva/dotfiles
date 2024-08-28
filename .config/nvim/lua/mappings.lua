@@ -99,7 +99,7 @@ MiniDeps.now(function()
 	--
 	-- Git:
 	--
-    set("n", "<leader>gl", "<cmd> LazyGit <cr>", { desc = "Show lazygit" })
+    set("n", "<leader>gl", "<cmd> terminal lazygit <cr>", { desc = "Show lazygit" })
 	set("n", "<leader>gP", "<cmd> Git pull <cr>", { desc = "Pull" })
 	set("n", "<leader>gp", "<cmd> Git push <cr>", { desc = "Push" })
 	set("n", "<leader>ga", "<cmd> Git add % <cr>", { desc = "Add" })

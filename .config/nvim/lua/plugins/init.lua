@@ -72,16 +72,3 @@ MiniDeps.later(function()
 	})
 	require("plugins.plugin-mason-nvim-dap")
 end)
-
---
--- Lazygit:
---
-MiniDeps.later(function()
-	MiniDeps.add({
-		source = "kdheepak/lazygit.nvim",
-		depends = {
-			"nvim-lua/plenary.nvim",
-		},
-	})
-	require("plugins.plugin-lazygit")
-end)
