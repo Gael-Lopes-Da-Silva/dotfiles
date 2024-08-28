@@ -1,2 +1,7 @@
 gui:
+  mouseEvents: true
+  showRandomTip: false
+  showCommandLog: false
+  showBottomLine: true
+  nerdFontsVersion: "3"
   border: single
