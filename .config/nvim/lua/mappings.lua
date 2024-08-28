@@ -54,21 +54,9 @@ MiniDeps.now(function()
 	--
 	-- Buffer:
 	--
-	set("n", "<leader>c", function()
-		require("mini.files").close()
-		require("mini.bufremove").delete()
-	end, { desc = "Close buffer" })
-
-	set("n", "<S-Tab>", function()
-		require("mini.files").close()
-		require("mini.bracketed").buffer("backward")
-	end)
-
-	set("n", "<Tab>", function()
-		require("mini.files").close()
-		require("mini.bracketed").buffer("forward")
-	end)
-
+	set("n", "<S-Tab>", "<cmd> lua MiniBracketed.buffer('backward') <cr>")
+	set("n", "<Tab>", "<cmd> lua MiniBracketed.buffer('forward') <cr>")
+    set("n", "<leader>c", "<cmd> lua MiniBufremove.delete() <cr>", { desc = "Close buffer" })
 	set("n", "<leader>bn", "<cmd> enew <cr>", { desc = "New buffer" })
 	set("n", "<leader>bh", "<cmd> new <cr>", { desc = "New horizontal buffer" })
 	set("n", "<leader>bv", "<cmd> vnew <cr>", { desc = "New vertical buffer" })
