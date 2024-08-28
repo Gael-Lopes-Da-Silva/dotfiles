@@ -1,5 +1,5 @@
 require("null-ls").setup({
-    border = "single",
+	border = "single",
 	sources = {},
 })
 
@@ -22,3 +22,7 @@ vim.api.nvim_create_user_command("Format", function(args)
 	end
 	vim.lsp.buf.format({ range = range })
 end, { range = true })
+
+vim.api.nvim_create_user_command("AutoFormat", function()
+	vim.g.autoformat = not vim.g.autoformat
+end, {})

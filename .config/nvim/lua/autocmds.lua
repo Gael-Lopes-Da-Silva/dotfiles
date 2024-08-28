@@ -14,6 +14,13 @@ MiniDeps.now(function()
 		command = "setlocal signcolumn=no nonumber norelativenumber | setfiletype terminal",
 	})
 
+	vim.api.nvim_create_autocmd("TermClose", {
+		desc = "Close terminal when process finished",
+		group = group,
+		pattern = { "term://*" },
+		command = "bdelete",
+	})
+
 	vim.api.nvim_create_autocmd("VimResized", {
 		desc = "Resize splits if window got resized",
 		group = group,
@@ -24,11 +31,13 @@ MiniDeps.now(function()
 		end,
 	})
 
-	-- vim.api.nvim_create_autocmd("BufWritePre", {
-	-- 	desc = "Format the buffer when saved",
-	-- 	group = group,
-	-- 	callback = function()
-	-- 		vim.lsp.buf.format({ timeout_ms = 3000 })
-	-- 	end,
-	-- })
+	vim.api.nvim_create_autocmd("BufWritePre", {
+		desc = "Format the buffer when saved",
+		group = group,
+		callback = function()
+			if vim.g.autoformat then
+				vim.lsp.buf.format()
+			end
+		end,
+	})
 end)

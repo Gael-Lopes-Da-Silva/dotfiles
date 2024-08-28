@@ -1,4 +1,6 @@
 MiniDeps.now(function()
+	vim.g.autoformat = false
+
 	vim.o.autoindent = true
 	vim.o.autoread = true
 	vim.o.autowrite = true

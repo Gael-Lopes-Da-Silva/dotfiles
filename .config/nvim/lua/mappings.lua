@@ -5,7 +5,7 @@ MiniDeps.now(function()
 	-- Default:
 	--
 	set("n", "U", "<C-r>")
-	set("t", "<Esc>", "<C-\\><C-n>", { noremap = true })
+	set("t", "<C-q>", "<C-\\><C-n>")
 
 	set("n", "<Esc>", function()
 		if not require("mini.files").close() then
@@ -22,7 +22,12 @@ MiniDeps.now(function()
 	set("i", "<C-S-Space>", vim.lsp.buf.signature_help)
 
 	--
-	-- Lsp:
+	-- Toggles:
+	--
+	set("n", "\\a", "<cmd> AutoFormat <cr>", { desc = "Toggle 'autoformat'" })
+
+	--
+	-- LSP:
 	--
 	set("n", "<leader>lD", vim.lsp.buf.declaration, { desc = "LSP Go to declaration" })
 	set("n", "<leader>ld", vim.lsp.buf.definition, { desc = "LSP Go to definition" })
@@ -35,7 +40,7 @@ MiniDeps.now(function()
 	set("n", "<leader>lR", vim.lsp.buf.references, { desc = "LSP Go to references" })
 
 	--
-	-- Dap:
+	-- DAP:
 	--
 	set("n", "<F5>", "<cmd> lua require('dap').continue() <cr>")
 	set("n", "<F10>", "<cmd> lua require('dap').step_over() <cr>")
@@ -52,11 +57,11 @@ MiniDeps.now(function()
 	set({ "n", "v" }, "<leader>dp", "<cmd> lua require('dap.ui.widgets').preview() <cr>", { desc = "DAP Preview" })
 
 	--
-	-- Buffer:
+	-- Buffers:
 	--
 	set("n", "<S-Tab>", "<cmd> lua MiniBracketed.buffer('backward') <cr>")
 	set("n", "<Tab>", "<cmd> lua MiniBracketed.buffer('forward') <cr>")
-    set("n", "<leader>c", "<cmd> lua MiniBufremove.delete() <cr>", { desc = "Close buffer" })
+	set("n", "<leader>c", "<cmd> lua MiniBufremove.delete() <cr>", { desc = "Close buffer" })
 	set("n", "<leader>bn", "<cmd> enew <cr>", { desc = "New buffer" })
 	set("n", "<leader>bh", "<cmd> new <cr>", { desc = "New horizontal buffer" })
 	set("n", "<leader>bv", "<cmd> vnew <cr>", { desc = "New vertical buffer" })
@@ -64,7 +69,7 @@ MiniDeps.now(function()
 	set("n", "<leader>bT", "<cmd> tabclose <cr>", { desc = "Close tab" })
 
 	--
-	-- File:
+	-- Files:
 	--
 	set("n", "<leader>ff", "<cmd> lua MiniFiles.open() <cr>", { desc = "Open file explorer" })
 	set("n", "<leader>fc", "<cmd> lua MiniFiles.close() <cr>", { desc = "Close file explorer" })
@@ -99,7 +104,7 @@ MiniDeps.now(function()
 	--
 	-- Git:
 	--
-    set("n", "<leader>gl", "<cmd> terminal lazygit <cr>", { desc = "Show lazygit" })
+	set("n", "<leader>gl", "<cmd> terminal lazygit <cr>", { desc = "Show lazygit" })
 	set("n", "<leader>gP", "<cmd> Git pull <cr>", { desc = "Pull" })
 	set("n", "<leader>gp", "<cmd> Git push <cr>", { desc = "Push" })
 	set("n", "<leader>ga", "<cmd> Git add % <cr>", { desc = "Add" })
@@ -107,11 +112,8 @@ MiniDeps.now(function()
 	set("n", "<leader>gc", "<cmd> Git commit <cr>", { desc = "Commit" })
 	set("n", "<leader>gb", "<cmd> Git blame % <cr>", { desc = "Blame" })
 	set("n", "<leader>gs", "<cmd> Git status <cr>", { desc = "Status" })
-    set("n", "<leader>gS", "<cmd> lua MiniGit.show_at_cursor() <cr>", { desc = "Show at cursor" })
-    set("n", "<leader>gg", "<cmd> lua MiniGit.show_diff_source() <cr>", { desc = "Go to diff source" })
-    set("n", "<leader>gh", "<cmd> lua MiniGit.show_range_history() <cr>", { desc = "Show range history" })
-    set("n", "<leader>go", "<cmd> lua MiniDiff.toggle_overlay() <cr>", { desc = "Toggle diff overlay" })
-	set("n", "<leader>gC", "<cmd> lua MiniExtra.pickers.git_commits() <cr>", { desc = "Show commits" })
-	set("n", "<leader>gB", "<cmd> lua MiniExtra.pickers.git_branches() <cr>", { desc = "Show branches" })
-	set("n", "<leader>gH", "<cmd> lua MiniExtra.pickers.git_hunks() <cr>", { desc = "Show hunks" })
+	set("n", "<leader>gS", "<cmd> lua MiniGit.show_at_cursor() <cr>", { desc = "Show at cursor" })
+	set("n", "<leader>gg", "<cmd> lua MiniGit.show_diff_source() <cr>", { desc = "Go to diff source" })
+	set("n", "<leader>gh", "<cmd> lua MiniGit.show_range_history() <cr>", { desc = "Show range history" })
+	set("n", "<leader>go", "<cmd> lua MiniDiff.toggle_overlay() <cr>", { desc = "Toggle diff overlay" })
 end)
