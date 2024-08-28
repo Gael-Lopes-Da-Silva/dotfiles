@@ -1,5 +1,6 @@
 alias ls="ls -h -X --color --group-directories-first --hyperlink"
 alias ll="ls -lh -X --color --group-directories-first --hyperlink"
 alias la="ls -lh -AX --color --group-directories-first --hyperlink"
+alias lg="lazygit"
 
 alias vim="nvim"

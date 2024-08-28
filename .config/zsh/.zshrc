@@ -1,7 +1,7 @@
 #
 # Install znap:
 #
-ZNAP_HOME="$HOME/.local/share/zsh/snap"
+ZNAP_HOME="$HOME/.local/share/zsh/znap"
 [[ -r "$ZNAP_HOME/znap.zsh" ]] || git clone https://github.com/marlonrichert/zsh-snap "$ZNAP_HOME"
 source "$ZNAP_HOME/znap.zsh"
 
@@ -11,5 +11,6 @@ source "$ZNAP_HOME/znap.zsh"
 source "$HOME/.config/zsh/.zplugins"
 source "$HOME/.config/zsh/.zexports"
 source "$HOME/.config/zsh/.zoptions"
+source "$HOME/.config/zsh/.zkeymap"
 source "$HOME/.config/zsh/.zaliases"
 source "$HOME/.config/zsh/.zprompt"

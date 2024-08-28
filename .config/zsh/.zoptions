@@ -1,10 +1,20 @@
-setopt AUTOCD
-setopt INTERACTIVE_COMMENTS
-setopt SHARE_HISTORY
-setopt EXTENDEDGLOB
-setopt NOMATCH
-setopt MENUCOMPLETE
-stty stop undef
-unsetopt BEEP
+setopt autocd
+setopt interactive_comments
+setopt extended_history
+setopt hist_expire_dups_first
+setopt hist_ignore_dups
+setopt hist_verify
+setopt inc_append_history
+setopt share_history
+setopt extendedglob
+setopt nomatch
+setopt prompt_subst
+setopt always_to_end
+setopt complete_in_word
+setopt menu_complete
+
+unsetopt flowcontrol
+unsetopt beep
 
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+zstyle ':completion:*' menu select
