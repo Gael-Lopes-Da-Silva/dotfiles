@@ -22,8 +22,8 @@ mini_deps.add("mini.nvim")
 --
 -- User config:
 --
-require("configs.init")
-require("plugins.init")
+require("configs")
+require("plugins")
 require("autocmds")
 require("mappings")
 require("options")
