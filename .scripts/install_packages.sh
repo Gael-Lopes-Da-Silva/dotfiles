@@ -17,7 +17,8 @@ else
 fi
 
 sudo pacman -S --noconfirm noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra \
-kitty neovim zsh ripgrep stow man-db man-pages firefox discord ttf-cascadia-code
+kitty neovim zsh ripgrep stow man-db man-pages firefox discord ttf-cascadia-code feh nnn \
+btop
 
 echo "[+] Installed all packages successfully"
 
