@@ -30,7 +30,7 @@
     set $mod Mod4
     set $term kitty
     set $navigator zen-browser
-    set $menu dmenu_run -fn "Cascadia Mono NF-14" -l 5
+    set $menu dmenu_run -p "Run:" -fn "Cascadia Mono NF-14" -l 5
 
     set $left h
     set $down j
