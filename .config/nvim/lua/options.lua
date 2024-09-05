@@ -17,6 +17,12 @@ MiniDeps.now(function()
 	vim.o.shiftwidth = 4
 
 	--
+	-- Set encoding:
+	--
+	vim.o.encoding = "utf-8"
+	vim.o.fileencoding = "utf-8"
+
+	--
 	-- Enable auto read and write
 	--
 	vim.o.autoread = true
