@@ -186,3 +186,4 @@ bar {
         urgent_workspace   #900000 #900000 #ffffff
     }
 }
+bindsym $mod+t bar mode toggle
