@@ -1,5 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 
+ICON=󰁹
 BATTERY=$(acpi -b | grep -E -o '[0-9][0-9]?[0-9]?%')
 STATUS=$(acpi -b | awk '{print $3}')
 BACKGROUND=""

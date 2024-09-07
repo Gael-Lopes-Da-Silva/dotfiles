@@ -1,5 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 
+ICON=󰥔
 TIME=$(date +"%T")
 
 [[ $TIME = "" ]] && exit 1

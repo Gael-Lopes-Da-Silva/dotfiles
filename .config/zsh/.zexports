@@ -4,4 +4,3 @@ export EDITOR="nvim"
 export HISTFILE="$HOME/.zhistory"
 export HISTSIZE=10000
 export SAVEHIST=10000
-export ZLE_RPROMPT_INDENT=0

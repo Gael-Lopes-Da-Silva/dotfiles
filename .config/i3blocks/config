@@ -4,29 +4,23 @@ separator_block_width=5
 [mic]
 command=sh ./scripts/mic.sh
 interval=1
-ICON=
 
 [volume]
 command=sh ./scripts/volume.sh
 interval=1
-ICON=󰕾
 
 [brightness]
 command=sh ./scripts/brightness.sh
 interval=1
-ICON=󰃠
 
 [battery]
 command=sh ./scripts/battery.sh
 interval=1
-ICON=󰁹
 
 [date]
 command=sh ./scripts/date.sh
 interval=1
-ICON=
 
 [time]
 command=sh ./scripts/time.sh
 interval=1
-ICON=󰥔
