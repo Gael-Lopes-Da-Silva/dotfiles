@@ -1,4 +1,4 @@
-sh ./sudo.sh
-sh ./packages.sh
-sh ./ly.sh
-sh ./i3.sh
+sh ./common/sudo.sh
+sh ./common/packages.sh
+sh ./common/ly.sh
+sh ./common/i3.sh
