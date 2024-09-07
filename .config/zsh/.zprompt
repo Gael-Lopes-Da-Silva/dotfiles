@@ -1,2 +1,6 @@
+if [ "$PWD" != "$HOME" ] && [ "$PWD" -ef "$HOME" ]; then cd; fi
+if [ -x /usr/bin/resizewin ]; then /usr/bin/resizewin -z; fi
+if [ -x /usr/bin/forture ]; then /usr/bin/forture freebsd-tips; fi
+
 PROMPT="%B%F{#285577}%f%F{#ebdbb2}%K{#285577}%~%k%f%F{#285577}%f%b "
 RPROMPT="%(?..%B%F{#cc241d}%f%F{#ebdbb2}%K{#cc241d}%?%k%f%F{#cc241d}%f%b)"

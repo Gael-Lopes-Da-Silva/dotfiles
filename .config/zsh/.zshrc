@@ -14,10 +14,3 @@ source "$HOME/.config/zsh/.zoptions"
 source "$HOME/.config/zsh/.zkeymap"
 source "$HOME/.config/zsh/.zaliases"
 source "$HOME/.config/zsh/.zprompt"
-
-#
-# Logic:
-#
-if [ "$PWD" != "$HOME" ] && [ "$PWD" -ef "$HOME" ]; then cd; fi
-if [ -x /usr/bin/resizewin ]; then /usr/bin/resizewin -z; fi
-if [ -x /usr/bin/forture ]; then /usr/bin/forture freebsd-tips; fi
