@@ -1,6 +1,6 @@
 #!/bin/sh
 
-PKG="xorg i3 i3status i3blocks i3lock dwenu kitty xclip xdotool maim"
+PKG="xorg i3 i3status i3blocks i3lock dmenu kitty xclip xdotool maim"
 
 pkg install -y $PKG
 
