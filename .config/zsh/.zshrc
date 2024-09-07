@@ -14,3 +14,7 @@ source "$HOME/.config/zsh/.zoptions"
 source "$HOME/.config/zsh/.zkeymap"
 source "$HOME/.config/zsh/.zaliases"
 source "$HOME/.config/zsh/.zprompt"
+
+if [ "$PWD" != "$HOME" ] && [ "$PWD" -ef "$HOME" ]; then cd; fi
+if [ -x /usr/bin/resizewin ]; then /usr/bin/resizewin -z; fi
+if [ -x /usr/bin/fortune ]; then /usr/bin/fortune freebsd-tips; fi
