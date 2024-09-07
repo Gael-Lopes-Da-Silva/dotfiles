@@ -1,6 +1,7 @@
 #
 # Exports:
 #
+ENV=$home/.profile; export ENV
 PATH=$HOME/.cargo/bin:$PATH; export PATH
 HISTFILE=$HOME/.history; export HISTFILE
 
