@@ -48,4 +48,4 @@ bind ^[[6~ ed-move-to-end
 #
 # Prompt:
 #
-PS1="\e[0;31m\w "; export PS1
+PS1="\\e[0;31m\w "; export PS1
