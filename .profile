@@ -48,4 +48,7 @@ bind ^[[6~ ed-move-to-end
 #
 # Prompt:
 #
-PS1="\\e[0;31m\w "; export PS1
+RESET=$(tput me)
+BG_BLUE=$(tput AB 4)
+
+PS1="$BG_BLUE\w$RESET "; export PS1
