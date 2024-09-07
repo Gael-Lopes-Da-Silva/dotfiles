@@ -27,9 +27,9 @@ alias cp="cp -ip"
 alias mv="mv -i"
 alias rm="rm -i"
 
-# alias ls="ls -h -X --color --group-directories-first --hyperlink"
-# alias ll="ls -lh -X --color --group-directories-first --hyperlink"
-# alias la="ls -lh -AX --color --group-directories-first --hyperlink"
+alias ls="ls --color"
+alias ll="ls -l --color"
+alias la="ls -lA --color"
 alias lg="lazygit"
 alias vim="nvim"
 
