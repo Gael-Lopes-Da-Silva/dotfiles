@@ -10,9 +10,9 @@ PAGER=less;   export PAGER
 #
 # Logic:
 #
-if [ "$PWD" != "$HOME" ] && [ $PWD -ef "$HOME" ]; then cd; fi
-if [ -x /usr/bin/resizewin ]; then /usr/bin/resizewin -z; fi
-if [ -x /usr/bin/fortune ]; then /usr/bin/fortune freebsd-tips; fi
+# if [ "$PWD" != "$HOME" ] && [ $PWD -ef "$HOME" ]; then cd; fi
+# if [ -x /usr/bin/resizewin ]; then /usr/bin/resizewin -z; fi
+# if [ -x /usr/bin/fortune ]; then /usr/bin/fortune freebsd-tips; fi
 
 #
 # Alias:
