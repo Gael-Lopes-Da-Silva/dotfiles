@@ -1,6 +1,6 @@
 #!/bin/sh
 
-ICON=󰃠
+ICON="󰃠"
 BRIGHTNESS=$(brightnessctl -m | grep -E -o '[0-9][0-9]?[0-9]?%')
 
 [[ $BRIGHTNESS = "" ]] && exit 1

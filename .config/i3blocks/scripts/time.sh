@@ -1,9 +1,9 @@
 #!/bin/sh
 
-ICON=󰥔
+ICON="󰥔"
 TIME=$(date +"%T")
 
-[[ $TIME = "" ]] && exit 1
+[[ $TIME == "" ]] && exit 1
 
 [[ $(date +"%H") -eq 12 || $(date +"%H") -eq 19 ]] && ICON="󰩰"
 [[ $(date +"%H") -ge 00 && $(date +"%H") -le 07 ]] && ICON="󰖔"

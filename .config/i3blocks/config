@@ -2,25 +2,25 @@ separator=true
 separator_block_width=5
 
 [mic]
-command=sh ./scripts/mic.sh
+command=sh $HOME/.config/i3blocks/scripts/mic.sh
 interval=1
 
 [volume]
-command=sh ./scripts/volume.sh
+command=sh $HOME/.config/i3blocks/scripts/volume.sh
 interval=1
 
 [brightness]
-command=sh ./scripts/brightness.sh
+command=sh $HOME/.config/i3blocks/scripts/brightness.sh
 interval=1
 
 [battery]
-command=sh ./scripts/battery.sh
+command=sh $HOME/.config/i3blocks/scripts/battery.sh
 interval=1
 
 [date]
-command=sh ./scripts/date.sh
+command=sh $HOME/.config/i3blocks/scripts/date.sh
 interval=1
 
 [time]
-command=sh ./scripts/time.sh
+command=sh $HOME/.config/i3blocks/scripts/time.sh
 interval=1

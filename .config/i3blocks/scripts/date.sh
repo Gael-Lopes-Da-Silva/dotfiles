@@ -1,6 +1,6 @@
 #!/bin/sh
 
-ICON=
+ICON=""
 DATE=$(date +"%d/%m/%Y")
 BIRTHDAY="19/06"
 

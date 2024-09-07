@@ -1,6 +1,6 @@
 #!/bin/sh
 
-ICON=󰕾
+ICON="󰕾"
 VOLUME=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $2}')
 MUTED=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $3}')
 BACKGROUND=""
