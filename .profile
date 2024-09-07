@@ -48,7 +48,17 @@ bind ^[[6~ ed-move-to-end
 #
 # Prompt:
 #
-RESET=$(tput me)
-BG_BLUE=$(tput AB 4)
+# RESET=$(tput me)
+# BG_BLUE=$(tput AB 4)
+#
+# PS1="\w "; export PS1
+TC_NORM="$(tput me)"
+TC_RED="$(tput AF 1)"
+TC_GREEN="$(tput AF 2)"
+TC_YELLOW="$(tput AF 3)"
+TC_BLUE="$(tput AF 4)"
+TC_MAGENTA="$(tput AF 5)"
+TC_CYAN="$(tput AF 6)"
+TC_WHITE="$(tput AF 7)"
 
-PS1="$BG_BLUE\w$RESET "; export PS1
+PS1="${TC_CYAN}\u${TC_RED}@${TC_YELLOW}\h${TC_GREEN}%${TC_NORM} "
