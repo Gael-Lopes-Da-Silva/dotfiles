@@ -48,5 +48,4 @@ bind ^[[6~ ed-move-to-end
 #
 # Prompt:
 #
-FG_RED="\e[0;31m"
-PS1="$FG_RED\w "; export PS1
+PS1="\e[0;31m\w "; export PS1
