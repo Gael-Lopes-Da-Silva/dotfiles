@@ -20,8 +20,7 @@
 # Autostart:
 #
     exec --no-startup-id xsetroot -solid "#474747"
-    exec --no-startup-id dex --autostart --environment i3
-    exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+    exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork --color=474747
     exec --no-startup-id nm-applet
 
 #
@@ -29,7 +28,7 @@
 #
     set $mod Mod4
     set $term kitty
-    set $navigator zen-browser
+    set $navigator firefox
     set $menu dmenu_run -p "Run:" -fn "Cascadia Mono NF-14" -l 5
 
     set $left h
@@ -158,9 +157,9 @@ bindsym $mod+r mode "resize"
 #
 mode "power" {
     bindsym Shift+s exec shutdown now
+    bindsym s exec systemctl suspend
     bindsym e exec i3-msg exit
     bindsym r exec reboot
-    bindsym s exec systemctl suspend
 
     bindsym Return mode "default"
     bindsym Escape mode "default"

@@ -1,7 +1,5 @@
 #!/bin/sh
 
-PKG="stow neovim lazygit zsh noto cascadia-code feh firefox"
-
-pkg install -y $PKG
-
-chsh -s /usr/local/bin/zsh gael
+pacman -S --noconfirm "stow neovim lazygit zsh feh kitty firfox"
+pacman -S --noconfirm "noto-fonts noto-fonts-extra noto-fonts-emoji noto-fonts-cjk ttf-cascadia-code"
+pacman -S --noconfirm "papirus-icon-theme"
