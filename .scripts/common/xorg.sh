@@ -1,4 +1,4 @@
 #!/bin/sh
 
-pacman -S --noconfirm "xorg"
-pacman -S --noconfirm "xclip xss-lock maim"
+pacman -S --noconfirm "xorg xclip"
+pacman -S --noconfirm "xss-lock maim"
