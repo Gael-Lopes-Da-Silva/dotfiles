@@ -1,6 +1,6 @@
 #!/bin/sh
 
-pacman -S --noconfirm "nvidia nvidia-settings"
+pacman -S --noconfirm nvidia nvidia-settings
 
 modprobe nvidia_drm modeset=1
 modprobe nvidia_drm fbdev=1
