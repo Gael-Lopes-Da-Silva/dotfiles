@@ -1,3 +1,3 @@
 #!/bin/sh
 
-pacman -S --noconfirm "i3-wm i3blocks i3lock dmenu"
+pacman -S --noconfirm "xorg xss-lock xclip i3-wm i3blocks i3lock dmenu maim"
