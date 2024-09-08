@@ -6,9 +6,9 @@ alias cp="cp -ip"
 alias mv="mv -i"
 alias rm="rm -i"
 
-alias ls="ls --color"
-alias ll="ls -l --color"
-alias la="ls -lA --color"
+alias ls="ls -hX --color --group-directories-first"
+alias ll="ls -hlX --color --group-directories-first"
+alias la="ls -hlAX --color --group-directories-first"
 
 alias lg="lazygit"
 alias vim="nvim"
