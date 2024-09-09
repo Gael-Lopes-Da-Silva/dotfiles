@@ -1,11 +1,9 @@
 #!/bin/sh
 
-BATTERY=$(acpi | grep --color=never -E -o "[0-9]?[0-9]?[0-9]?%")
-STATUS=$(acpi | awk '{split($3, array, ","); print tolower(array[1])}')
+BATTERY=$(acpi | grep --color=never -E -o "[0-9]?[0-9]?[0-9]?%"); [ ! $? = 0 ] && exit 1
+STATUS=$(acpi | awk '{split($3, array, ","); print tolower(array[1])}'); [ ! $? = 0 ] && exit 1
 FOREGROUND="#FFFFFF"
 ICON="󰁹"
-
-[ $BATTERY = "" ] && exit 1
 
 [ $STATUS = "discharging" ] && ICON="󰁹"
 [ $STATUS = "charging" ] && ICON="󱐋"
