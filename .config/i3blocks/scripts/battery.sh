@@ -1,33 +1,30 @@
 #!/bin/sh
 
+BATTERY=$(acpi | grep --color=never -E -o "[0-9]?[0-9]?[0-9]?%")
+STATUS=$(acpi | awk '{split($3, array, ","); print tolower(array[1])}')
+FOREGROUND="#FFFFFF"
 ICON="󰁹"
-BATTERY=$(acpi -b | grep -E -o '[0-9][0-9]?[0-9]?%')
-STATUS=$(acpi -b | awk '{print $3}')
-BACKGROUND=""
 
-[[ $BATTERY = "" ]] && exit 1
+[ $BATTERY = "" ] && exit 1
 
-[[ $STATUS = "Discharging," ]] && ICON="󰁹"
-[[ $STATUS = "Charging," ]] && ICON="󱐋"
-[[ $STATUS = "Full," ]] && ICON=""
+[ $STATUS = "discharging" ] && ICON="󰁹"
+[ $STATUS = "charging" ] && ICON="󱐋"
+[ $STATUS = "full" ] && ICON=""
+
+if [ $STATUS = "discharging" ]; then
+    [ $BATTERY -le 15 ] && FOREGROUND="#FF8000"
+    [ $BATTERY -le 5 ] && FOREGROUND="#FF0000"
+fi
+
+if [ $STATUS = "discharging" ]; then
+    [ $BATTERY -ge 95 ] && FOREGROUND="#00FF00"
+fi
+
+[ $STATUS = "full" ] && FOREGROUND="#0000FF"
 
 echo " $ICON $BATTERY "
 echo " $ICON $BATTERY "
 
-if [[ $STATUS = "Discharging," ]]; then
-    [[ ${BATTERY%?} -le 15 ]] && BACKGROUND="#FF8000"
-    [[ ${BATTERY%?} -le 5 ]] && BACKGROUND="#FF0000"
-fi
-
-if [[ $STATUS = "Charging," ]]; then
-    [[ ${BATTERY%?} -ge 95 ]] && BACKGROUND="#00FF00"
-fi
-
-[[ $STATUS = "Full," ]] && BACKGROUND="#0000FF"
-
-if [[ ! $BACKGROUND = "" ]]; then
-    echo "#FFFFFF"
-    echo "$BACKGROUND"
-fi
+echo $FOREGROUND
 
 exit 0

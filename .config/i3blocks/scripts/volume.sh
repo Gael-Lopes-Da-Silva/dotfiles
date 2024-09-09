@@ -1,30 +1,22 @@
 #!/bin/sh
 
-ICON="󰕾"
 VOLUME=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $2}')
-MUTED=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $3}')
-BACKGROUND=""
+MUTED=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print length($3) != 0 ? 1 : 0}')
+FOREROUND="#FFFFFF"
+ICON="󰕾"
 
-[[ $VOLUME = "" ]] && exit 1
+[ $VOLUME = "" ] && exit 1
+[ $VOLUME = "0.00" ] && ICON="󰖁"
 
-[[ $button -eq 1 ]] && wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
-[[ $button -eq 4 ]] && wpctl set-volume @DEFAULT_AUDIO_SINK@ 10%+
-[[ $button -eq 5 ]] && wpctl set-volume @DEFAULT_AUDIO_SINK@ 10%-
-
-[[ ! $VOLUME > 0.00 ]] && ICON="󰖁"
-
-if [[ $MUTED = "[MUTED]" ]]; then
+if [ $MUTED = 1 ]; then
     VOLUME="MUTED"
-    BACKGROUND="#b9b9b9"
+    FOREROUND="#b9b9b9"
     ICON="󰖁"
 fi
 
 echo " $ICON $VOLUME "
 echo " $ICON $VOLUME "
 
-if [[ ! $BACKGROUND = "" ]]; then
-    echo "#FFFFFF"
-    echo "$BACKGROUND"
-fi
+echo $FOREROUND
 
 exit 0

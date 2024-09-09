@@ -1,16 +1,17 @@
 #!/bin/sh
 
-ICON=""
 DATE=$(date +"%d/%m/%Y")
 BIRTHDAY="19/06"
+FOREGROUND="#FFFFFF"
+ICON=""
 
-[[ $DATE = "" ]] && exit 1
+[ $DATE = "" ] && exit 1
 
-[[ $(date +"%d/%m") = $BIRTHDAY ]] && ICON=""
+[ $(date +"%d/%m") = $BIRTHDAY ] && ICON=""
 
 echo " $ICON $DATE "
 echo " $ICON $DATE "
 
-[[ $(date +"%d/%m") = $BIRTHDAY ]] && echo "#e00a97"
+echo $FOREGROUND
 
 exit 0
