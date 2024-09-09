@@ -1,6 +1,0 @@
-bindkey "^a" beginning-of-line
-bindkey "^e" end-of-line
-bindkey "^l" clear-screen
-
-bindkey "^[[A" history-substring-search-up
-bindkey "^[[B" history-substring-search-down
