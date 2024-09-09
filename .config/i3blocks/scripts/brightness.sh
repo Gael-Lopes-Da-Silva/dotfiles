@@ -2,14 +2,12 @@
 
 [ $(xbacklight -list | grep backlight) = "" ] && exit 1
 
-BRIGHTNESS="$(xbacklight -get)%"
+BRIGHTNESS=$(xbacklight -get); [ ! $? = 0 ] && exit 1
 FOREGROUND="#FFFFFF"
 ICON="󰃠"
 
-[ $BRIGHTNESS = "" ] && exit 1
-
-echo " $ICON $BRIGHTNESS "
-echo " $ICON $BRIGHTNESS "
+echo " $ICON $BRIGHTNESS% "
+echo " $ICON $BRIGHTNESS% "
 
 echo $FOREGROUND
 

@@ -1,11 +1,9 @@
 #!/bin/sh
 
-DATE=$(date +"%d/%m/%Y")
+DATE=$(date +"%d/%m/%Y"); [ ! $? = 0 ] && exit 1
 BIRTHDAY="19/06"
 FOREGROUND="#FFFFFF"
 ICON=""
-
-[ $DATE = "" ] && exit 1
 
 [ $(date +"%d/%m") = $BIRTHDAY ] && ICON=""
 
