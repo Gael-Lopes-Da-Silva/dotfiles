@@ -1,15 +1,18 @@
 #!/bin/bash
 
-TIME=$(date +"%T"); [ $? -ne 0 ] && exit
-FOREGROUND="#FFFFFF"
-ICON="󰥔"
+T=$(date +"%T" 2> /dev/null); [[ $? -ne 0 ]] || [[ $T == "" ]] && exit
+H=$(date +"%H" 2> /dev/null); [[ $? -ne 0 ]] || [[ $H == "" ]] && exit
+F="#FFFFFF"
+I="󰥔"
 
-[ $(date +"%H") -eq 12 ] || [ $(date +"%H") -eq 19 ] && ICON="󰩰"
-[ $(date +"%H") -ge 00 ] && [ $(date +"%H") -le 07 ] && ICON="󰖔"
+{
+    [[ $H -eq 12 ]] || [[ $H -eq 19 ]] && I="󰩰"
+    [[ $H -ge 00 ]] || [[ $H -le 07 ]] && I="󰖔"
+}
 
-echo " $ICON $TIME "
-echo " $ICON $TIME "
+echo " $I $T "
+echo " $I $T "
 
-echo $FOREGROUND
+echo $F
 
-exit
+exit 0

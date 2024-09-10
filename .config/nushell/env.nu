@@ -13,20 +13,20 @@ def create_left_prompt [] {
 }
 
 def create_right_prompt [] {
-    let time_segment = ([
-        (ansi reset)
-        (ansi magenta)
-        (date now | format date '%x %T')
-    ] | str join | str replace --regex --all "([/:])" $"(ansi green)${1}(ansi magenta)" |
-        str replace --regex --all "([AP]M)" $"(ansi magenta_underline)${1}")
+    let time_segment = ([(ansi magenta) (date now | format date '%T') (ansi reset)]
+        | str join
+        | str replace --regex --all "([/:])" $"(ansi green)${1}(ansi magenta)"
+        | str replace --regex --all "([AP]M)" $"(ansi magenta_underline)${1}")
 
-    let last_exit_code = if ($env.LAST_EXIT_CODE != 0) {([
-        (ansi rb)
-        ($env.LAST_EXIT_CODE)
-    ] | str join)
-    } else { "" }
+    let last_exit_code = if ($env.LAST_EXIT_CODE != 0) {
+        ([(ansi red_bold) ($env.LAST_EXIT_CODE) (ansi reset)] | str join)
+    } else {
+        ""
+    }
 
-    ([$last_exit_code, (char space), $time_segment] | str join)
+    let duration = ([(ansi yellow) $"(($env.CMD_DURATION_MS | into int) / 1000)s" (ansi reset)] | str join)
+
+    ([$last_exit_code, (char space), $duration, (char space), $time_segment] | str join)
 }
 
 $env.PROMPT_COMMAND = {|| create_left_prompt }

@@ -1,14 +1,18 @@
 #!/bin/bash
 
-[ "$(brightnessctl -m | grep backlight)" = "" ] && exit 1
+B=$(brightnessctl -m 2> /dev/null | grep backlight | awk '{split($1, a, ","); print a[4]}' | sed "s|%||g"); [[ $? -ne 0 ]] || [[ $B == "" ]] && exit
+F="#FFFFFF"
+I="󰃠"
 
-BRIGHTNESS=$(brightnessctl -m | awk '{split($1, array, ","); print array[4]}'); [ ! $? = 0 ] && exit 1
-FOREGROUND="#FFFFFF"
-ICON="󰃠"
+{
+    [[ $B -le 50 ]] && I="󰃞"
+}
 
-echo " $ICON $BRIGHTNESS "
-echo " $ICON $BRIGHTNESS "
+B="$B%"
 
-echo $FOREGROUND
+echo " $I $B "
+echo " $I $B "
+
+echo $F
 
 exit 0

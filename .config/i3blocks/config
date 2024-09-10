@@ -1,8 +1,8 @@
 separator=true
 separator_block_width=5
 
-[mic]
-command=$HOME/.config/i3blocks/scripts/mic.sh
+[rec]
+command=$HOME/.config/i3blocks/scripts/rec.sh
 interval=1
 
 [volume]

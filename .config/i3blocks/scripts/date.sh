@@ -1,15 +1,18 @@
 #!/bin/bash
 
-DATE=$(date +"%d/%m/%Y"); [ ! $? = 0 ] && exit 1
-BIRTHDAY="19/06"
-FOREGROUND="#FFFFFF"
-ICON=""
+D=$(date +"%d/%m/%Y" 2> /dev/null); [[ $? -ne 0 ]] || [[ $D == "" ]] && exit
+T=$(date +"%d/%m" 2> /dev/null); [[ $? -ne 0 ]] || [[ $T == "" ]] && exit
+B="19/06"
+F="#FFFFFF"
+I=""
 
-[ $(date +"%d/%m") = $BIRTHDAY ] && ICON=""
+{
+    [[ $T == $D ]] && I=""
+}
 
-echo " $ICON $DATE "
-echo " $ICON $DATE "
+echo " $I $D "
+echo " $I $D "
 
-echo $FOREGROUND
+echo $F
 
 exit 0

@@ -1,29 +1,30 @@
 #!/bin/bash
 
-# upower -i $(upower -e | grep /battery) | grep --color=never -E "state|percentage"
-BATTERY=$(acpi | grep --color=never -E -o "[0-9]?[0-9]?[0-9]?%") || exit; [ $? -ne 0 ] && exit 1
-STATUS=$(acpi | awk '{split($3, array, ","); print tolower(array[1])}') || exit; [ $? -ne 0 ] && exit 1
-FOREGROUND="#FFFFFF"
-ICON="󰁹"
+B=$(upower -i $(upower -e 2> /dev/null | grep /battery) 2> /dev/null | grep percentage | awk '{print $2}' | sed "s|%||g"); [[ $? -ne 0 ]] || [[ $B == "" ]] && exit
+S=$(upower -i $(upower -e 2> /dev/null | grep /battery) 2> /dev/null | grep state | awk '{print $2}'); [[ $? -ne 0 ]] || [[ $S == "" ]] && exit
+F="#FFFFFF"
+I="󰁹"
 
-[ $STATUS = "discharging" ] && ICON="󰁹"
-[ $STATUS = "charging" ] && ICON="󱐋"
-[ $STATUS = "full" ] && ICON=""
+{
+    [[ $S == "charging" ]] && I="󱐋"
 
-if [ $STATUS = "discharging" ]; then
-    [ $BATTERY -le 15 ] && FOREGROUND="#FF8000"
-    [ $BATTERY -le 5 ] && FOREGROUND="#FF0000"
-fi
+    if [[ $S == "discharging" ]]; then
+        [[ $B -le 15 ]] && F="#FF8000"
+        [[ $B -le 5 ]] && F="#FF0000"
+    fi
 
-if [ $STATUS = "discharging" ]; then
-    [ $BATTERY -ge 95 ] && FOREGROUND="#00FF00"
-fi
+    if [[ $S == "charging" ]]; then
+        [[ $B -ge 95 ]] && F="#00FF00"
+    fi
 
-[ $STATUS = "full" ] && FOREGROUND="#0000FF"
+    [[ $B -eq 100 ]] && F="#0000FF" && I=""
+}
 
-echo " $ICON $BATTERY "
-echo " $ICON $BATTERY "
+B="$B%"
 
-echo $FOREGROUND
+echo " $I $B "
+echo " $I $B "
+
+echo $F
 
 exit 0

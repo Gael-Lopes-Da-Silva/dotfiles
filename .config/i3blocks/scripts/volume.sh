@@ -1,21 +1,19 @@
 #!/bin/bash
 
-VOLUME=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $2}'); [ ! $? = 0 ] && exit 0
-MUTED=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print length($3) != 0 ? 1 : 0}'); [ ! $? = 0 ] && exit 0
-FOREROUND="#FFFFFF"
-ICON="󰕾"
+V=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ 2> /dev/null | awk '{print $2}'); [[ $? -ne 0 ]] || [[ $V == "" ]] && exit
+M=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ 2> /dev/null | awk '{print length($3) != 0}'); [[ $? -ne 0 ]] || [[ $M == "" ]] && exit
+F="#FFFFFF"
+I="󰕾"
 
-[ $VOLUME = "0.00" ] && ICON="󰖁"
+{
+    [[ $V == "0.00" ]] && I="󰖁"
 
-if [ $MUTED = 1 ]; then
-    VOLUME="MUTED"
-    FOREROUND="#b9b9b9"
-    ICON="󰖁"
-fi
+    [[ $M -eq 1 ]] && V="MUTED" && F="#b9b9b9" && I="󰖁"
+}
 
-echo " $ICON $VOLUME "
-echo " $ICON $VOLUME "
+echo " $I $V "
+echo " $I $V "
 
-echo $FOREROUND
+echo $F
 
 exit 0
