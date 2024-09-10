@@ -1,5 +1,5 @@
 #!/bin/bash
 
-apache.sh
-mariadb.sh
-php.sh
+bash apache.sh
+bash mariadb.sh
+bash php.sh
