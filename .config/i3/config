@@ -29,7 +29,7 @@
     set $mod Mod4
     set $term kitty
     set $navigator firefox
-    set $menu SHELL=/bin/sh dmenu_run -p "Run:" -fn "Cascadia Mono NF-14" -l 5
+    set $menu SHELL=/bin/bash dmenu_run -p "Run:" -fn "Cascadia Mono NF-14" -l 5
 
     set $left h
     set $down j

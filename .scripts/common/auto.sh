@@ -1,5 +1,5 @@
-#!/bin/sh
+#!/bin/bash
 
-sh ly.sh
-sh i3.sh
-sh packages.sh
+ly.sh
+i3.sh
+packages.sh

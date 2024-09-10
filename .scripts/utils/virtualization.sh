@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 pacman -S --noconfirm virtualbox virtualbox-guest-iso virtualbox-host-modules-arch
 

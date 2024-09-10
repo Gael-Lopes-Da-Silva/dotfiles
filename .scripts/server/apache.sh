@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 pacman -S --noconfirm apache
 
