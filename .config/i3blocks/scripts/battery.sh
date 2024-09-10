@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # upower -i $(upower -e | grep /battery) | grep --color=never -E "state|percentage"
 BATTERY=$(acpi | grep --color=never -E -o "[0-9]?[0-9]?[0-9]?%") || exit; [ $? -ne 0 ] && exit 1

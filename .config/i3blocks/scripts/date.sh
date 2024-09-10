@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 DATE=$(date +"%d/%m/%Y"); [ ! $? = 0 ] && exit 1
 BIRTHDAY="19/06"

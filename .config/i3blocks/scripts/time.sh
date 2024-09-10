@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 TIME=$(date +"%T"); [ $? -ne 0 ] && exit
 FOREGROUND="#FFFFFF"

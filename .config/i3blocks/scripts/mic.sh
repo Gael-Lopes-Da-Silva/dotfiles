@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 MIC=$(wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | awk '{print $2}'); [ ! $? = 0 ] && exit 1
 MUTED=$(wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | awk '{print length($3) != 0 ? 1 : 0}'); [ ! $? = 0 ] && exit 1

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 [ "$(brightnessctl -m | grep backlight)" = "" ] && exit 1
 
