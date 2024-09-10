@@ -1,7 +1,8 @@
 #!/bin/sh
 
-BATTERY=$(acpi | grep --color=never -E -o "[0-9]?[0-9]?[0-9]?%"); [ ! $? = 0 ] && exit 1
-STATUS=$(acpi | awk '{split($3, array, ","); print tolower(array[1])}'); [ ! $? = 0 ] && exit 1
+# upower -i $(upower -e | grep /battery) | grep --color=never -E "state|percentage"
+BATTERY=$(acpi | grep --color=never -E -o "[0-9]?[0-9]?[0-9]?%") || exit; [ $? -ne 0 ] && exit 1
+STATUS=$(acpi | awk '{split($3, array, ","); print tolower(array[1])}') || exit; [ $? -ne 0 ] && exit 1
 FOREGROUND="#FFFFFF"
 ICON="󰁹"
 
