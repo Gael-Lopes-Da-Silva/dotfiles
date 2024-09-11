@@ -9,4 +9,6 @@ echo -e "[Trigger]\nOperation=Install\nOperation=Upgrade\nOperation=Remove\nType
 
 nvidia-xconfig
 
+echo -e "options nvidia_drm modeset=1 fbdev=1" >> /etc/modprobe.d/nvidia.conf
+
 mkinitcpio -P
