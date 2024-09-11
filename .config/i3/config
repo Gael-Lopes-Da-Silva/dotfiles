@@ -3,6 +3,9 @@
 #
     font pango:Cascadia Mono NF 14
 
+    default_border normal 4
+    default_floating_border normal 4
+
     for_window [class="^.*"] border normal 4
 
     smart_borders on
