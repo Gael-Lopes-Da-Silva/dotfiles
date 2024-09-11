@@ -179,6 +179,7 @@ bar {
     workspace_min_width 25
     tray_output primary
 
+
     colors {
         statusline #ffffff
         background #323232
