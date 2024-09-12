@@ -77,9 +77,9 @@ static const char *mic_mute[]  = { "wpctl", "set-mute", "@DEFAULT_AUDIO_SOURCE@"
 static const char *bri_plus[]  = { "brightnessctl", "set", "+10%", NULL };
 static const char *bri_minus[] = { "brightnessctl", "set", "10%-", NULL };
 
-static const char *scrsht    = { "maim | xclip -selection clipboard -t image/png", NULL };
-static const char *scrsht_cp = { "maim --window $(xdotool getactivewindow) | xclip -selection clipboard -t image/png", NULL };
-static const char *scrsht_sv = { "maim --select | xclip -selection clipboard -t image/png", NULL };
+static const char scrsht[]    = { "maim | xclip -selection clipboard -t image/png", NULL };
+static const char scrsht_cp[] = { "maim --window $(xdotool getactivewindow) | xclip -selection clipboard -t image/png", NULL };
+static const char scrsht_sv[] = { "maim --select | xclip -selection clipboard -t image/png", NULL };
 
 static const Key keys[] = {
 /*   modifier            key                         function          argument */
