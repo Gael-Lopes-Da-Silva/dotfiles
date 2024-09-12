@@ -1,1 +1,15 @@
 .config/nushell/history.txt
+
+.config/dmenu/dmenu
+.config/dmenu/stest
+.config/dmenu/dmenu.o
+.config/dmenu/drw.o
+.config/dmenu/stest.o
+.config/dmenu/util.o
+
+.config/dwm/drw.o
+.config/dwm/dwm.o
+.config/dwm/util.o
+.config/dwm/dwm
+
+.config/dwmblocks/dwmblocks
