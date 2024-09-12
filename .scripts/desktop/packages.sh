@@ -7,5 +7,5 @@ pacman -S --noconfirm papirus-icon-theme
 
 chsh -s /usr/bin/nu
 
-cd $HOME/.dotfiles
+cd /home/gael/.dotfiles
 stow .

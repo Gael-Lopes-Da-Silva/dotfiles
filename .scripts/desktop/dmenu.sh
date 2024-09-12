@@ -1,4 +1,4 @@
 #!/bin/bash
 
-cd ../../.config/dmenu
+cd /home/gael/.config/dmenu
 make clean install
