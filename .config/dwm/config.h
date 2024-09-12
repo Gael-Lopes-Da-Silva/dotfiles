@@ -77,9 +77,9 @@ static const char *mic_mute[]  = { "wpctl", "set-mute", "@DEFAULT_AUDIO_SOURCE@"
 static const char *bri_plus[]  = { "brightnessctl", "set", "+10%", NULL };
 static const char *bri_minus[] = { "brightnessctl", "set", "10%-", NULL };
 
-static const char *scrsht[]    = { "maim", "|", "xclip", "-selection", "clipboard", "-t", "image/png", NULL };
-static const char *scrsht_cp[] = { "maim", "--window", "$(xdotool getactivewindow)", "|", "xclip", "-selection", "clipboard", "-t", "image/png", NULL };
-static const char *scrsht_sv[] = { "maim", "--select", "|", "xclip", "-selection", "clipboard", "-t", "image/png", NULL };
+static const char *scrsht    = { "maim | xclip -selection clipboard -t image/png", NULL };
+static const char *scrsht_cp = { "maim --window $(xdotool getactivewindow) | xclip -selection clipboard -t image/png", NULL };
+static const char *scrsht_sv = { "maim --select | xclip -selection clipboard -t image/png", NULL };
 
 static const Key keys[] = {
 /*   modifier            key                         function          argument */
@@ -109,9 +109,9 @@ static const Key keys[] = {
     {MODKEY|ShiftMask,   XK_comma,                   tagmon,           {.i = -1} },
     {MODKEY|ShiftMask,   XK_period,                  tagmon,           {.i = +1} },
     {MODKEY|ShiftMask,   XK_q,                       quit,             {0} },
-    {0,                  XK_Print,                   spawn,            {.v = scrsht} },
-    {MODKEY,             XK_Print,                   spawn,            {.v = scrsht_cp} },
-    {ShiftMask,          XK_Print,                   spawn,            {.v = scrsht_sv} },
+    {MODKEY,             XK_o,                       spawn,            {.v = SHCMD(scrsht_cp)} },
+    {MODKEY|ShiftMask,   XK_o,                       spawn,            {.v = SHCMD(scrsht)} },
+    {MODKEY|ControlMask, XK_o,                       spawn,            {.v = SHCMD(scrsht_sv)} },
     {0,                  XF86XK_AudioRaiseVolume,    spawn,            {.v = vol_plus} },
     {0,                  XF86XK_AudioLowerVolume,    spawn,            {.v = vol_minus} },
     {0,                  XF86XK_AudioMute,           spawn,            {.v = vol_mute} },
