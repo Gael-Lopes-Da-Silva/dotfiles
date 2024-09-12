@@ -2,7 +2,7 @@
 
 /* appearance */
 static const unsigned int borderpx       = 4;       /* border pixel of windows */
-static const unsigned int snap           = 10;      /* snap pixel */
+static const unsigned int snap           = 20;      /* snap pixel */
 static const unsigned int systraypinning = 0;       /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayonleft  = 0;       /* 0: systray in the right corner, >0: systray on left of status text */
 static const unsigned int systrayspacing = 2;       /* systray spacing */
@@ -59,9 +59,6 @@ static const Layout layouts[] = {
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
-#include <X11/XF86keysym.h>
-
-/* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 
 static const char *dmenucmd[]  = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
@@ -75,8 +72,10 @@ static const char *mic_mute[]  = { "wpctl", "set-mute", "@DEFAULT_AUDIO_SOURCE@"
 static const char *bri_plus[]  = { "brightnessctl", "set", "+10%", NULL };
 static const char *bri_minus[] = { "brightnessctl", "set", "10%-", NULL };
 
-static const char scrsht[] = "maim --select | xclip -selection clipboard -t image/png";
-static const char scrsht_all[]    = "maim | xclip -selection clipboard -t image/png";
+static const char scrsht[]     = "maim --select | xclip -selection clipboard -t image/png";
+static const char scrsht_all[] = "maim | xclip -selection clipboard -t image/png";
+
+#include <X11/XF86keysym.h>
 
 static const Key keys[] = {
 /*   modifier            key                         function          argument */
