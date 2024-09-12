@@ -12,5 +12,5 @@ make clean install
 cd /home/gael/.config/dwmblocks
 make clean install
 
-echo -e "xsetroot -solid \"#474747\"\nbash nm-applet &\nbash dwmblocks &\nexec dwm" >> /home/gael/.xinitrc
+echo -e "xsetroot -solid \"#474747\"\nbash -c \"nm-applet\" &\nbash -c \"dwmblocks\" &\nexec dwm" >> /home/gael/.xinitrc
 chmod 755 /home/gael/.xinitrc
