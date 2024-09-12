@@ -23,7 +23,6 @@
 # Autostart:
 #
     exec --no-startup-id xsetroot -solid "#474747"
-    exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork --color=474747
     exec --no-startup-id nm-applet
 
 #

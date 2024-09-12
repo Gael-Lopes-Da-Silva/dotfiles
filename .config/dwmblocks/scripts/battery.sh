@@ -2,29 +2,15 @@
 
 B=$(upower -i $(upower -e 2> /dev/null | grep /battery) 2> /dev/null | grep percentage | awk '{print $2}' | sed "s|%||g"); [[ $? -ne 0 ]] || [[ $B == "" ]] && exit
 S=$(upower -i $(upower -e 2> /dev/null | grep /battery) 2> /dev/null | grep state | awk '{print $2}'); [[ $? -ne 0 ]] || [[ $S == "" ]] && exit
-F="#FFFFFF"
 I="󰁹"
 
 {
     [[ $S == "charging" ]] && I="󱐋"
-
-    if [[ $S == "discharging" ]]; then
-        [[ $B -le 15 ]] && F="#FF8000"
-        [[ $B -le 5 ]] && F="#FF0000"
-    fi
-
-    if [[ $S == "charging" ]]; then
-        [[ $B -ge 95 ]] && F="#00FF00"
-    fi
-
-    [[ $B -eq 100 ]] && F="#0000FF" && I=""
+    [[ $B -eq 100 ]] && I=""
 }
 
 B="$B%"
 
 echo " $I $B "
-echo " $I $B "
-
-echo $F
 
 exit 0

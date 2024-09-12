@@ -1,7 +1,6 @@
 #!/bin/bash
 
 D=$(date +"%d/%m/%Y" 2> /dev/null); [[ $? -ne 0 ]] || [[ $D == "" ]] && exit
-F="#FFFFFF"
 I=""
 
 {
@@ -15,8 +14,5 @@ I=""
 }
 
 echo " $I $D "
-echo " $I $D "
-
-echo $F
 
 exit 0
