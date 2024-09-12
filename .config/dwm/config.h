@@ -69,6 +69,17 @@ static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont,
 static const char *termcmd[]  = { "kitty", NULL };
 static const char *browser[]  = { "firefox", NULL };
 
+static const char *vol_plus[]  = { "wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", "0.10+", NULL };
+static const char *vol_minus[]  = { "wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", "0.10-", NULL };
+static const char *vol_mute[]  = { "wpctl", "set-mute", "@DEFAULT_AUDIO_SINK@", "toggle", NULL };
+static const char *mic_mute[]  = { "wpctl", "set-mute", "@DEFAULT_AUDIO_SOURCE@", "toggle", NULL };
+static const char *bri_plus[]  = { "brightnessctl", "set", "+10%", NULL };
+static const char *bri_minus[]  = { "brightnessctl", "set", "10%-", NULL };
+
+static const char *scrsht[]  = { "maim", "|", "xclip", "-selection", "clipboard", "-t", "image/png", NULL };
+static const char *scrsht_cp[]  = { "maim", "--window", "$(xdotool getactivewindow)", "|", "xclip", "-selection", "clipboard", "-t", "image/png", NULL };
+static const char *scrsht_sv[]  = { "maim", "--select", "|", "xclip", "-selection", "clipboard", "-t", "image/png", NULL };
+
 static const Key keys[] = {
 	/*         modifier            key                         function          argument */
     {          MODKEY,             XK_p,                       spawn,            {.v = dmenucmd} },
@@ -96,12 +107,15 @@ static const Key keys[] = {
     {          MODKEY|ShiftMask,   XK_comma,                   tagmon,           {.i = -1} },
     {          MODKEY|ShiftMask,   XK_period,                  tagmon,           {.i = +1} },
     {          MODKEY|ShiftMask,   XK_q,                       quit,             {0} },
-    {          0,                  XF86XK_AudioLowerVolume,    spawn,            {.v = downvol} },
-    {          0,                  XF86XK_AudioRaiseVolume,    spawn,            {.v = upvol} },
-    {          0,                  XF86XK_AudioMute,           spawn,            {.v = mutevol} },
-    {          0,                  XF86XK_AudioMicMute,        spawn,            {.v = mutevol} },
-    {          0,                  XF86XK_MonBrightnessUp,     spawn,            {.v = light_up} },
-    {          0,                  XF86XK_MonBrightnessDown,   spawn,            {.v = light_down} },
+    {          0,                  XK_Print,                   spawn,            {.v = scrsht} },
+    {          MODKEY,             XK_Print,                   spawn,            {.v = scrsht_cp} },
+    {          ShiftMask,          XK_Print,                   spawn,            {.v = scrsht_sv} },
+    {          0,                  XF86XK_AudioLowerVolume,    spawn,            {.v = vol_plus} },
+    {          0,                  XF86XK_AudioRaiseVolume,    spawn,            {.v = vol_minus} },
+    {          0,                  XF86XK_AudioMute,           spawn,            {.v = vol_mute} },
+    {          0,                  XF86XK_AudioMicMute,        spawn,            {.v = mic_mute} },
+    {          0,                  XF86XK_MonBrightnessUp,     spawn,            {.v = bri_plus} },
+    {          0,                  XF86XK_MonBrightnessDown,   spawn,            {.v = bri_minus} },
 
     TAGKEYS(XK_1, 0)
     TAGKEYS(XK_2, 1)
@@ -121,7 +135,7 @@ static const Button buttons[] = {
 	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
 	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
-	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
+	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd} },
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
 	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
 	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
