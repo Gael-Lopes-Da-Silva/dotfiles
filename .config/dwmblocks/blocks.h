@@ -7,6 +7,8 @@ static const Block blocks[] = {
 	{"",      "$HOME/.config/dwmblocks/scripts/battery.sh",     1,                   0},
 	{"",      "$HOME/.config/dwmblocks/scripts/date.sh",        1,                   0},
 	{"",      "$HOME/.config/dwmblocks/scripts/time.sh",        1,                   0},
+
+	{"",      "bash $HOME/.config/dwmblocks/scripts/time.sh",   1,                   0},
 };
 
 //sets delimiter between status commands. NULL character ('\0') means no delimiter.
