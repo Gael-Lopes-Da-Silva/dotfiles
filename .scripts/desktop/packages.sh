@@ -6,3 +6,6 @@ pacman -S --noconfirm noto-fonts noto-fonts-extra noto-fonts-emoji noto-fonts-cj
 pacman -S --noconfirm papirus-icon-theme
 
 chsh -s /usr/bin/nu
+
+cd /home/gael/.dotfiles
+stow .

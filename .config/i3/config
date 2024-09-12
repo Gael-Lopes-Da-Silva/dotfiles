@@ -176,8 +176,8 @@ bindsym $mod+Shift+e mode "power"
 bar {
     position bottom
     status_command i3blocks
-    tray_padding 4
     workspace_min_width 25
+    tray_output primary
 
     colors {
         statusline #ffffff
