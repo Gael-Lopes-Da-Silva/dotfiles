@@ -3,24 +3,30 @@
 B=$(upower -i $(upower -e 2> /dev/null | grep /battery) 2> /dev/null | grep percentage | awk '{print $2}' | sed "s|%||g"); [[ $? -ne 0 ]] || [[ $B == "" ]] && exit
 S=$(upower -i $(upower -e 2> /dev/null | grep /battery) 2> /dev/null | grep state | awk '{print $2}'); [[ $? -ne 0 ]] || [[ $S == "" ]] && exit
 I="󰁹"
+F=""
+K=""
 
 {
     [[ $S == "charging" ]] && I="󱐋"
 
     if [[ $S == "charging" ]]; then
-        [[ $B -ge 95 ]] && B="<span foreground='#00FF00'>$B</span>"
+        [[ $B -ge 95 ]] && F="#00FF00"
     fi
 
     if [[ $S == "discharging" ]]; then
-        [[ $B -le 15 ]] && B="<span foreground='#FF8000'>$B</span>"
-        [[ $B -le 5 ]] && B="<span foreground='#FF0000'>$B</span>"
+        [[ $B -le 20 ]] && F="#FF8000"
+        [[ $B -le 10 ]] && K="#FF0000"
     fi
 
-    [[ $B -eq 100 ]] && I="" && B="<span foreground='#0000FF'>$B</span>"
+    [[ $B -eq 100 ]] && I="" && K="#0000FF"
 }
 
-B="$B%"
+[[ $F != "" ]] && B="<span foreground='$F'>$B%</span>" || B="$B%"
 
-echo " $I $B "
+if [[ $K != "" ]]; then
+    echo "<span background='$K'> $I $B </span>"
+else
+    echo " $I $B "
+fi
 
 exit 0
