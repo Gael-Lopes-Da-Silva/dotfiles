@@ -6,7 +6,17 @@ I="󰁹"
 
 {
     [[ $S == "charging" ]] && I="󱐋"
-    [[ $B -eq 100 ]] && I=""
+
+    if [[ $S == "charging" ]]; then
+        [[ $B -ge 95 ]] && B="<span foreground='#00FF00'>$B</span>"
+    fi
+
+    if [[ $S == "discharging" ]]; then
+        [[ $B -le 15 ]] && B="<span foreground='#FF8000'>$B</span>"
+        [[ $B -le 5 ]] && B="<span foreground='#FF0000'>$B</span>"
+    fi
+
+    [[ $B -eq 100 ]] && I="" && B="<span foreground='#0000FF'>$B</span>"
 }
 
 B="$B%"
