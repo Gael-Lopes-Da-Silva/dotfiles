@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pacman -S --noconfirm nvidia nvidia-settings
+pacman -S --noconfirm nvidia nvidia-settings lib32-nvidia-utils
 
 sed -i "s|MODULES=()|MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm asus_wmi)|" /etc/mkinitcpio.conf
 
