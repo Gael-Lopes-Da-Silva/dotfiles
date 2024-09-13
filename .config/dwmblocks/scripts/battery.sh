@@ -21,10 +21,12 @@ K=""
     [[ $B -eq 100 ]] && I="" && K="#0000FF"
 }
 
-[[ $F != "" ]] && B="<span foreground='$F'>$B%</span>" || B="$B%"
+B="$B%"
 
 if [[ $K != "" ]]; then
     echo "<span background='$K'> $I $B </span>"
+elif [[ $F != "" ]]; then
+    echo "<span foreground='$F'> $I $B </span>"
 else
     echo " $I $B "
 fi
