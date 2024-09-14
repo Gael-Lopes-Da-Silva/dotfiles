@@ -1,0 +1,1275 @@
+sudo nvidia-settings
+la
+wpctl
+clear
+wpctl status
+wpctl set-default 55
+wpctl status
+wpctl set-default 56
+clear
+wpctl status
+wpctl set-volume 56 1.40
+wpctl set-volume 54 1.40
+wpctl set-volume 55 0
+wpctl set-volume 57 0
+clear
+wpctl status
+wpctl set-volume 56 1.50
+wpctl set-volume 54 1.50
+la
+clear
+la
+la | sort-by name
+la | sort-by type
+la | sort-by name type
+la | sort-by name | sort-by type
+la | sort-by name | revese | sort-by type
+la | sort-by name | reverse | sort-by type
+clear
+lsblk
+lsblk -f
+fdisk -l /dev/sda
+sudo fdisk -l /dev/sda
+wipefs -a /dev/sda
+sudo wipefs -a /dev/sda
+sudo fdisk -l /dev/sda
+clear
+lsblk -f
+fdisk /dev/sda
+sudo fdisk /dev/sda
+lsblk -f
+sudo fdisk /dev/sda
+clear
+lsblk -f
+sudo mkfs.ext4 /dev/sda1
+clear
+lsblk -f
+lsblk
+lsblk -f
+ls /
+ls /mnt/
+cd /mnt/
+ls
+sudo mkdir sda
+ls
+clear
+cd
+clear
+nvim
+clear
+sudo -E nvim /etc/fstab
+clear
+reboot
+sudo nvidia-settings
+reboot
+cd .dotfiles/
+nvim
+clear
+ls
+clear
+la
+ll
+clear
+nvim
+clear
+cd
+clear
+nvim
+clear
+nvim .bash_profile
+clear
+cd .dotfiles/
+cd .config/i3/
+nvim config
+clear
+nvim config
+sudo nvidia-settings
+clear
+cd
+clear
+ls
+la
+la .local/
+clear
+ll .local/
+ll .local/state/
+ll .local/state/nvim/
+rm .local/state/nvim/swap/
+rm .local/state/nvim/undo/
+rm -r .local/state/nvim/undo/
+rm -fr .local/state/nvim/undo/
+sudo rm -fr .local/state/nvim/undo/
+ll .local/state/nvim/
+clear
+cd .dotfiles/
+nvim
+git status
+git add .
+git commit
+git config --global user.email "gael.lopes-da-silva@outlook.fr"
+git config --global user.name "gael-lopes-da-silva"
+clear
+git commit
+clear
+lg
+clear
+git status
+git push
+git config credential.helper store
+git config --global credential.helper store
+clear
+lg
+nvim
+clear
+lsblk
+cd /mnt/
+la
+sudo chmod -R 777 sda/
+cd /mnt/sda/
+la
+la SteamLibrary/
+la SteamLibrary/steamapps/
+ls lost+found/
+rm -rf lost+found/
+la
+clear
+cd Downloads/
+la
+man tar
+clear
+tar -xvf mmc-develop-lin64.tar.gz
+la
+rm mmc-develop-lin64.tar.gz
+clear
+la
+clear
+cd MultiMC/
+la
+la bin/
+clear
+sudo chmod 755 MultiMC
+la
+./MultiMC
+clear
+la
+cd
+clear
+la
+la .cache/
+la .config/
+c
+clear
+la
+clearclear
+clear
+cd Downloads/
+cd MultiMC/
+la
+la bin/
+clear
+pacman -Ss java
+clear
+pacman -Ss java | grep /java
+clear
+la
+pacman -Ss jre
+sudo pacman -S jre21-openjdk
+clear
+./MultiMC
+./MultiMC &
+./MultiMC | &
+bash -c "./MultiMC &"
+la
+clear
+la .config/
+clear
+la
+la .config/
+clear
+la .cache/
+la .cache/JNA/
+clear
+la
+la .cache/
+rm -rf .cache/JNA/
+clear
+la .cache/
+clear
+la
+la .config/
+clear
+la .local/
+la .local/share/
+la .local/state/
+clear
+la
+clear
+la
+mkdir .vms
+la
+clear
+ls
+la
+clear
+cd .vms
+la
+rm -rf Windows/
+cd Downloads/
+la
+rm archlinux-x86_64.iso
+la
+clear
+btop
+htop
+clear
+la
+clear
+fdisk
+fdisk -l
+clear
+sudo fdisk -l
+cd .dotfiles/
+nvim
+clear
+paru -Ss xorg-init
+pacman -Ss xorg-init
+pacman -Ss xorg-xinit
+startx
+nvim
+cd .config/
+la
+git clone https://git.suckless.com/dwm
+git clone https://git.suckless.org/dwm
+clear
+git clone https://git.suckless.org/dmenu
+clear
+la
+cd dwm/
+la
+cp config.def.h config.h
+ls
+clear
+cd ..
+cd dmenu/
+cp config.def.h config.h
+la
+clear
+cd ..
+la
+clear
+cd dw
+clear
+cd dwm/
+nvim
+ckear
+clear
+cd
+cd .dotfiles/
+clear
+nvim
+clear
+git status
+nvim
+cd .scripts/
+la
+cd desktop/
+ll
+chmod 775 dmenu.sh
+chmod 775 dwm.sh
+la
+clear
+cd ..
+ls
+ll driver/
+ll server/
+ll utils/
+clear
+..
+bash
+;a
+clear
+la
+sudo pacman -S xorg-xinit
+clear
+nvim
+clear
+git status
+git add .
+git status
+git rm -rf --cached .config/dmenu
+git status
+git rm -rf --cached .config/dwm
+git status
+clear
+cd .dow
+clear
+cd .dotfiles/
+la
+clear
+git status
+git rm -rf --cached .config/dwm
+git rm -rf --cached .config/dmenu
+ls
+clear
+git status
+git add .
+git status
+clear
+cd .config/
+la
+cd dmenu/
+la
+rm -rf .git
+cd ..
+cd dwm/
+rm -rf .git
+clear
+cd
+clear
+cd .dotfiles/
+nvim
+cd .vms/
+la
+cd .dotfiles/
+ls
+clear
+lg
+cd .vms/
+ls
+cd
+clear
+la
+la .vms/
+nvim
+cd .dotfiles/
+la
+clear
+git status
+clear
+lg
+nvim
+clear
+la
+clear
+nvim
+clear
+nvim
+clear
+cd .config/
+la
+clear
+git clone https://git.suckless.org/dwm
+git clone https://git.suckless.org/dmenu
+clear
+cd dwm/
+rm -rf .git
+..
+cd demnu
+cd dmenu/
+rm -rf .git
+clear
+..
+cd dwm/
+cp config.def.h config.h
+..
+cd dmenu/
+cp 
+cp config.def.h config.h
+clear
+cd
+clear
+cd .dotfiles/
+clear
+cd .vms/
+ls
+clear
+cd .vms/
+la
+clear
+la Arch/
+clear
+cd .dotfiles/
+la
+cd .config/
+la
+cd dwm/
+la
+clear
+nvim
+clear
+cd
+cd .dotfiles/
+nvim
+nvim
+clear
+la
+nvim
+clear
+nvim
+clear
+cd .config/
+cd dwm/
+la
+clear
+git apply patches/dwm-systray.diff
+clear
+lg
+patch
+which patch
+clear
+patch -p1 < ./patches/dwm-systray.diff
+clear
+lg
+la
+lg
+rm <.orig
+rm <.rej
+clear
+la
+clear
+nvim
+git apply patches/dwm-systray.diff
+cp patches/dwm-systray.diff ./
+git apply dwm-systray.diff
+rm dwm-systray.diff
+clear
+lg
+git am ./patches/dwm-systray.diff
+la
+clear
+lg
+clear
+cd
+clear
+cd .dotfiles/
+la
+clear
+nvim
+clear
+cd .config/
+la
+git clone https://github.com/torrinfail/dwmblocks
+clear
+la
+cd dwmblocks/
+la
+rm -rf .git
+rm -rf .gitignore
+clear
+cd
+cd .dotfiles/
+nvim
+clear
+cd .config/dwm/la
+cd .config/dwm/
+la
+clear
+sudo patch -p1 < patches/dwm-alwayscenter.diff
+la
+rm -rf <.orig
+clear
+la
+clear
+man git applay
+clear
+la
+git apply patches/dwm-alwayscenter.diff
+git apply patches/dwm-statuscolors.diff
+git apply patches/dwm-systray.diff
+clear
+lg
+clear
+la
+clear
+patch -i patches/dwm-alwayscenter.diff
+patch -i patches/dwm-statuscolors.diff
+patch -i patches/dwm-systray.diff
+clear
+patch -i patches/dwm-systray.diff
+la
+nvim
+patch -i patches/dwm-statuscolors.diff
+nvim
+clear
+la
+clear
+la patches/
+clear
+nvim
+clear
+patch -i patches/dwm-statuscolors.diff
+clear
+la
+clear
+la
+rm Win10_22H2_EnglishInternational_x64v1.iso
+clear
+la
+cat dwm-5.2-colorstatus.xinitrc
+rm dwm-5.2-colorstatus.xinitrc
+clear
+la
+clear
+nvim
+patch -i patches/dwm-colorstatus.diff
+la
+clear
+la
+la patches/
+rm patches/dwm-colorstatus.diff
+clear
+patch -i patches/dwm-alwayscenter.diff
+patch -i patches/dwm-systray.diff
+clear
+la
+mv patches/ ../
+la
+clear
+cd ..
+la
+rm -r dwm/
+la
+git clone https://git.suckless.org/dwm
+mv patches/ dwm/
+la
+clear
+cd dwm/la
+cd dwm/
+la
+la patches/
+clear
+patch -i patches/dwm-alwayscenter.diff
+patch -i patches/dwm-systray.diff
+clear
+rm -rf .git/
+la
+clear
+la
+clear
+la
+clear
+cd
+clear
+cd .dotfiles/
+nvim
+cd
+clear
+cd Downloads/
+la
+git clone https://git.suckless.org/dwm
+cd dwm/
+nvim
+patch -i dwm-statuscolors-20220322-bece862.diff
+nvim
+patch -i dwm-alwayscenter-20200625-f04cac6.diff
+nvim
+clear
+patch -i dwm-systray-20230922-9f88553.diff
+nvim
+patch -i dwm-systray-20230922-9f88553.diff
+clear
+nvim
+patch -i dwm-systray-20230922-9f88553.diff
+clear
+la
+clear
+cd ..
+la
+rm -rf dwm/
+la
+clear
+la
+clear
+cd
+cd .dotfiles/
+la
+clear
+nvim
+clear
+nvim
+cd .config/dwm/
+la
+patch -i patches/dwm-actualfullscreen.diff
+clear
+sudo pacman -Rns xss-lock i3lock
+la
+clear
+nvim
+clear
+la
+clear
+chmod +x .xinitrc
+la
+clear
+ll
+clear
+sudo pacman -Rns dmenu 
+clear
+cd .dotfiles/
+stow .
+cd .config/
+clear
+cd dwm/
+sudo make clean install
+clear
+cd ..
+cd dwmblocks/
+sudo make clean install
+cd ..
+cd dmenu/
+sudo make clean install
+clear
+cd
+clear
+la
+clear
+nvim
+sudo pacman -Rns i3-wm i3blocks
+clear
+la
+clear
+pacman -Qe
+clear
+la
+clear
+cd .dotfiles/
+nvim
+clear
+cd .config/dwm/
+sudo make clean install
+clear
+cd .dotfiles/
+nvim
+cd .config/dwm/
+sudo make clean install
+clear
+cd -
+nvim
+clear
+cd .dotfiles/
+nvim
+lg
+cd .config/dwm/
+sudo make clean install
+clear
+cd .dotfiles/
+la
+clear
+la
+clear
+pacman -Ss flameshot
+sudo pacman -Ss flameshot
+flameshot
+clear
+sudo pacman -Ss flameshot
+sudo pacman -S flameshot
+clear
+flameshot
+sudo pacman -Rns flameshot
+clear
+cd .dotfiles/
+nvim
+cd .config/dwm/
+sudo pacman -Rns flameshot
+sudo make clean install
+clear
+cd .dotfiles/
+nvim
+lg
+cd .config/dwm/
+sudo make clean install
+nvim
+lg
+sudo make clean install
+nvim
+sudo make clean install
+nvim
+sudo make clean install
+nvim
+cd .dotfiles/
+cd .config/dwm/
+nvim
+sudo make clean install
+cd .dotfiles/
+nvim
+cd .config/dwm/
+sudo make clean install
+clear
+nvim
+cd .dotfiles/
+cd .config/
+cd dwm/
+nvim
+sudo make clean install
+cd .dotfiles/
+cd .config/dwm/
+nvim
+sudo make clean install
+cd .dotfiles/
+cd .config/dwm/
+nvim
+sudo make clean install
+clear
+ka
+clear
+nvim
+clear
+cd .dotfiles/
+cd .config/dwm/
+nvim
+clear
+lg
+sudo make clean install
+cd .dotfiles/
+cd .config/dwm/
+nvim
+cd ..
+cd dwmblocks/
+sudo make clean install
+clear
+cd ..
+cd demnu
+cd dmenu/
+nvim
+cd ..
+cd dwm/
+pacman -Qe
+sudo pacman -Rns jre21-openjdk
+clearclear
+clear
+la
+rm -r Desktop/
+rm -r Documents/
+rm -r Music/
+rm -r Pictures/
+rm -r Public/
+rm -r Templates/
+rm -r Videos/
+clear
+la
+la /mnt/sda/
+la
+cd .dotfiles/
+la
+clear
+nvim
+cd .config/
+cd dwm/
+sudo make clean install
+..
+cd dmenu/
+sudo make clean install
+..
+cd dwmblocks/
+sudo make clean install
+clear
+cd .dotfiles/
+notify-send
+notify-send terst
+notify-send "test"\
+notify-send "test"
+man notify-send
+notify-send "Battery full"
+notify-send "$(echo test)"
+cd .dotfiles/
+cd .config/dwm/
+nvim
+patch -i patches/dwm-doublepressquit.diff
+clear
+la
+nvim
+..
+cd dmenu/
+clear
+patch -i patches/dmenu-caseinsensitive.diff
+clear
+nvim
+patch -i patches/dmenu-fuzzymatch.diff
+clear
+nvim
+patch -i patches/dmenu-fuzzymatch.diff
+clear
+nvim
+patch -i patches/dmenu-caseinsensitive.diff
+nvim
+patch -i patches/dmenu-fuzzymatch.diff
+clear
+nvim
+patch -i patches/dmenu-caseinsensitive.diff
+clear
+nvim
+patch -i patches/dmenu-prefixcompletion.diff
+nvim
+clear
+patch -i patches/dmenu-rejectnomatch.diff
+y
+clear
+nvim
+patch -i patches/dmenu-pipeout.diff
+clear
+nvim
+sudo make clean install
+nvim
+cd ..
+rm -rf dmenu/
+git clone https://git.suckless.org/dmenu
+clear
+cd dmenu/
+rm -rf .git/
+nvim
+patch -i patches/dmenu-caseinsensitive.diff
+clear
+sudo make clean install
+clear
+nvim
+patch -i patches/dmenu-numbers.diff
+clear
+sudo make clean install
+clear
+nvim
+sudo make clean install
+clear
+la
+nvim
+clear
+ls
+clear
+la
+clear
+ls
+la
+clear
+cd .dotfiles/
+la
+cd .config/dwm/
+la
+sudo make clean install
+nvim
+clear
+git clone https://git.suckless.org/dwm
+la
+clear
+la
+clear
+..
+la
+cd .dotfiles/
+cd .config/
+la
+git clone https://git.suckless.org/dwm
+rm -rf dwm/.git/
+nvim
+cd dwm/
+patch -i patches/dwm-actualfullscreen.diff
+patch -i patches/dwm-alwayscenter.diff
+patch -i patches/dwm-doublepressquit.diff
+patch -i patches/dwm-systray.diff
+clear
+sudo make clean install
+nvim
+sudo make clean install
+nvim
+clear
+nvim
+la
+cd ..
+la
+cd dwmblocks/
+cd .dotfiles/
+lg
+clear
+la
+clear
+nvim
+lg
+cd ..
+la
+clear
+nvim
+clear
+cd .dotfiles/
+la
+nvim
+cd
+cd .config/
+la
+rm QtProject.conf
+la
+ll
+rm i3
+rm i3blocks
+clear
+la
+clear
+cd .local/share/Steam/
+la
+cd steamapps/
+cd compatdata/
+la
+clear
+la
+clear
+sudo pacman -S wine
+wine
+clear
+sudo pacman -Rns steam
+clear
+la
+rm -rf .steam/
+rm -rf .steampath
+rm -rf .steampid
+clear
+la
+rm -rf .local/share/Steam/
+rm -rf /mnt/sda/SteamLibrary/
+la .cache/
+rm -rf .cache/mesa_shader_cache/
+rm -rf .cache/mesa_shader_cache_db/
+clear
+sudo pacman -S steam
+la
+clear
+clear
+la
+sudo pacman -Rns wine
+clear
+cd .dotfiles/
+pacman -Ss nvidia | grep nvidia-utils
+nvim
+clear
+la
+la .cache/
+la .config/
+clear
+la 
+clear
+cd .local/share/
+la
+la flatpak/
+la flatpak/db/
+la
+clear
+pacman -Qe
+clear
+sudo pacman -Qdtq | sudo pacman -Rns -
+bash -c "sudo pacman -Qdtq | sudo pacman -Rns -"
+bash
+clear
+sudo pacman -Qdtq
+clear
+cd .dotfiles/
+la
+sudo -E ls -as /root
+sudo -E ls -al /root
+sudo -E ls -al /root/.local
+sudo -E ls -al /root/.local/share
+sudo -E ls -al /root/.local/state
+sudo -E rm -rf /root/.local/
+sudo -E ls -al /root/
+clear
+ls
+clear
+la
+nvim
+clear
+cd /srv/
+la
+ll
+cd http/
+ll
+nvim
+sudo touch test.php
+sudo chmod 777 ./test.php
+nvim
+rm test.php
+sudo rm test.php
+la
+clear
+..
+ll
+la
+cd ftp/
+la
+clear
+..
+la
+cd http/
+la
+clear
+nvim
+clear
+cd
+celar
+clear
+cd .local/
+cd share/
+cd nvim/
+ll
+..
+cd state/
+cd nvim/
+ll
+cat lsp.log
+clear
+cd
+clear
+la .config/
+clear
+cd .dotfiles/
+cd .config/dwm/
+nvim
+patch -i patches/dwm-attachbelow.diff
+sudo make clean install
+clear
+la
+nvim
+patch -i patches/dwm-attachabove.diff
+clear
+nvim
+patch -i patches/dwm-attachaside.diff
+sudo make clean install
+clear
+nvim
+patch -i patches/dwm-statuscolors.diff
+sudo make clean install
+clear
+nvim
+patch -i patches/dwm-statuscolors.diff
+clear
+patch -i patches/dwm-statuscolors.diff
+clear
+nvim
+sudo make clean install
+nvim
+patch -i patches/dwm-statuscolors.diff
+clear
+nvim
+clear
+sudo make clean install
+nvim
+ll
+clear
+nvim
+clear
+lg
+cd .dotfiles/
+cd .config/dwm/
+nvim
+:q
+clear
+patch -i patches/dwm-pango.diff
+clear
+nvim
+lg
+la
+nvim
+clear
+lg
+la
+clear
+nvim
+sudo make clean install
+clear
+nvim
+cd .dotfiles/.config/dwm/
+cd
+cd .dotfiles/.config/dwmblocks/
+clear
+dwmblocks
+clear
+dwmblocks
+sdf
+clear
+wpctl status
+wpctl set-mute 54 toggle
+sudo pacman -Ss pango
+clear
+which pango.h
+clear
+la /usr/include/
+la /usr/include/ | grep pango
+la /usr/include/ | grep pang
+clear
+la /usr/X
+la /usr/
+clear
+la /usr/include/ | grep pang
+clear
+wpctl set-mute 54 toggle
+nvim
+clear
+..
+sudo pacman -Ss boxes
+sudo pacman -Ss botles
+sudo pacman -Ss bottles
+sudo pacman -Ss bottle
+sudo pacman -Ss botle
+clear
+l;a
+clear
+la
+clear
+sudo pacman -S btop
+clear
+btop
+clear
+la
+clear
+la
+clear
+la .config/
+clear
+la
+la /
+la /lost+found/
+sudo la /lost+found/
+sudo ls -as /lost+found/
+la
+clear
+la
+la /
+clear
+cd .dotfiles/
+la
+nvim
+clear
+;a
+clear
+cd
+clear
+la
+clear
+la
+clear
+cd .dotfiles/
+la
+nvim
+la
+cd .dotfiles/
+la
+nvim
+lg
+clear
+sudo pacman -Ss jre
+sudo pacman -Ss jdk21-openjdk
+sudo pacman -S jdk21-openjdk
+clear
+cd Downloads/
+la
+rm Releve_de_Notes_194710657800003.pdf
+cd MultiMC/
+la
+bash -c "./MultiMC &"
+la
+clear
+sudo pacman -Ss
+sudo pacman -Syu
+clear
+nvim
+clear
+la
+clear
+la
+clear
+la
+clear
+cd .dotfiles/
+la
+nvim
+la
+clear
+bash
+clear
+la
+clear
+cd ..
+la
+la .config/
+clear
+la
+clear
+cd .dotfiles/
+la
+clear
+bash install.sh
+clear
+bash install.sh
+c;ear
+clear
+bash install.sh
+clear
+bash install.sh
+clear
+bash install.sh
+clear
+bash install.sh
+clear
+bash install.sh
+clear
+bash install.sh
+clear
+bash install.sh
+clear
+bash install.sh
+clear
+bash install.sh
+clear
+bash install.sh
+clear
+nvim
+nvim /etc/pacman.conf
+bash install.sh
+clear
+bash install.sh
+clear
+pacman -S "feh neovim"
+sudo pacman -S "feh neovim"
+clear
+bash
+nvim /etc/ly/config.ini
+which systemctl
+cat /etc/X11/xinit/xinitrc
+clear
+nvim /etc/X11/xinit/xinitrc
+la /etc/X11/xinit/xinitrc.d/
+cat /etc/X11/xinit/xinitrc.d/50-systemd-user.sh
+clear
+nvim .xinitrc
+clear
+cd Downloads/
+la
+echo -e "#!/bin/bash\nxsetroot -solid '#474747'\n\nnm-applet &\ndwmblocks &\nexec dwm" >> ./test.txt
+bash
+la
+clear
+cd Downloads/
+la
+nvim
+la
+bash test.sh
+la
+cat test.sh
+cat oskour.sh
+nvim
+clear
+nvim .xinitrc
+la
+clear
+nvim /etc/default/grub
+la /boot/grub/
+sudo rm /boot/grub/grub.cfn.new
+la /boot/grub/
+la /boot/grub/fonts/
+clear
+sudo -E nvim /etc/default/grub
+clear
+sudo grub-mkfont -s 32 -o /boot/grub/fonts/cascadia_mono_nf.pf2 /usr/share/fonts/TTF/CascadiaMonoNF.ttf
+sudo grub-mkconfig -o /boot/grub/grub.cfg
+clear
+sudo grub-mkfont -s 24 -o /boot/grub/fonts/cascadia_mono.pf2 /usr/share/fonts/TTF/CascadiaMono.ttf
+clear
+sudo -E nvim /etc/default/grub
+clear
+sudo grub-mkconfig -o /boot/grub/grub.cfg
+clear
+man mkdir
