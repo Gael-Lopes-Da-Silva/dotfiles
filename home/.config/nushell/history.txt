@@ -1273,3 +1273,9 @@ clear
 sudo grub-mkconfig -o /boot/grub/grub.cfg
 clear
 man mkdir
+clear
+la
+clear
+nvim
+clear
+git status
