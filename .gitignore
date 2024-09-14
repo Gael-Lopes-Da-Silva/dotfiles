@@ -1,15 +1,13 @@
-.config/nushell/history.txt
+home/.config/nushell/history.txt
 
-.config/dmenu/dmenu
-.config/dmenu/dmenu.o
-.config/dmenu/stest
-.config/dmenu/stest.o
-.config/dmenu/drw.o
-.config/dmenu/util.o
-
-.config/dwm/util.o
-.config/dwm/drw.o
-.config/dwm/dwm.o
-.config/dwm/dwm
-
-.config/dwmblocks/dwmblocks
+home/.config/dmenu/dmenu
+home/.config/dmenu/dmenu.o
+home/.config/dmenu/stest
+home/.config/dmenu/stest.o
+home/.config/dmenu/drw.o
+home/.config/dmenu/util.o
+home/.config/dwm/util.o
+home/.config/dwm/drw.o
+home/.config/dwm/dwm.o
+home/.config/dwm/dwm
+home/.config/dwmblocks/dwmblocks

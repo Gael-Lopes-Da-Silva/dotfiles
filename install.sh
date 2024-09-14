@@ -1,15 +1,24 @@
 #!/bin/bash
 
-echo "1 - packages"
-echo "2 - desktop"
-echo "3 - server"
-echo "4 - drivers"
-echo "5 - other"
-echo ""
-echo "9 - auto"
+FG_RESET="\033[0m"
+FG_RED="\033[1;31m"
+FG_GREEN="\033[1;32m"
+FG_BLUE="\033[1;34m"
+FG_GREY="\033[1;37m"
 
-echo -n ": "
+echo -e "${FG_RED}1${FG_RESET} - ${FG_GREY}packages${FG_RESET}  ${FG_GREEN}Install my packages and stow config into user home${FG_RESET}"
+echo -e "${FG_RED}2${FG_RESET} - ${FG_GREY}desktop${FG_RESET}   ${FG_GREEN}Install my desktop and greeter${FG_RESET}"
+echo -e "${FG_RED}3${FG_RESET} - ${FG_GREY}server${FG_RESET}    ${FG_GREEN}Install and setup a server with php and mariadb${FG_RESET}"
+echo -e "${FG_RED}4${FG_RESET} - ${FG_GREY}drivers${FG_RESET}   ${FG_GREEN}List drivers to install${FG_RESET}"
+echo -e "${FG_RED}5${FG_RESET} - ${FG_GREY}other${FG_RESET}     ${FG_GREEN}List other install options${FG_RESET}"
+echo "  -"
+echo -e "${FG_RED}8${FG_RESET} - ${FG_GREY}stow${FG_RESET}      ${FG_GREEN}Only stow config into user home${FG_RESET}"
+echo -e "${FG_RED}9${FG_RESET} - ${FG_GREY}auto${FG_RESET}      ${FG_GREEN}Automatic installation and setup${FG_RESET}"
+
+echo -en "${FG_BLUE}:${FG_RESET} "
 read INPUT
+
+[[ ${INPUT,,} == "quit" ]] || [[ ${INPUT,,} == "q" ]] && exit
 
 if [[ ! $INPUT =~ ^[0-9]+$ ]]; then
     echo "ERROR: select valid number"
@@ -32,11 +41,13 @@ case $INPUT in
         ;;
 
     4)
-        echo "1 - intel"
-        echo "2 - nvidia"
+        echo -e "${FG_RED}1${FG_RESET} - ${FG_GREY}intel${FG_RESET}   ${FG_GREEN}Install intel graphics dsh rivers${FG_RESET}"
+        echo -e "${FG_RED}2${FG_RESET} - ${FG_GREY}nvidia${FG_RESET}  ${FG_GREEN}Install nvidia proprietary graphics drivers${FG_RESET}"
 
-        echo -n ": "
+        echo -en "${FG_BLUE}:${FG_RESET} "
         read INPUT
+
+        [[ ${INPUT,,} == "quit" ]] || [[ ${INPUT,,} == "q" ]] && exit
 
         if [[ ! $INPUT =~ ^[0-9]+$ ]]; then
             echo "ERROR: select valid number"
@@ -64,14 +75,16 @@ case $INPUT in
         ;;
 
     5)
-        echo "1 - pacman"
-        echo "2 - grub"
-        echo "3 - steam"
-        echo "4 - v4l2loopback"
-        echo "5 - virtualization"
+        echo -e "${FG_RED}1${FG_RESET} - ${FG_GREY}pacman${FG_RESET}          ${FG_GREEN}Setup pacman to be more usable${FG_RESET}"
+        echo -e "${FG_RED}2${FG_RESET} - ${FG_GREY}grub${FG_RESET}            ${FG_GREEN}Setup grub font${FG_RESET}"
+        echo -e "${FG_RED}3${FG_RESET} - ${FG_GREY}steam${FG_RESET}           ${FG_GREEN}Install and setup steam${FG_RESET}"
+        echo -e "${FG_RED}4${FG_RESET} - ${FG_GREY}v4l2loopback${FG_RESET}    ${FG_GREEN}Install and setup v4l2loopback${FG_RESET}"
+        echo -e "${FG_RED}5${FG_RESET} - ${FG_GREY}virtualization${FG_RESET}  ${FG_GREEN}Install and setup virtualbox${FG_RESET}"
 
-        echo -n ": "
+        echo -en "${FG_BLUE}:${FG_RESET} "
         read INPUT
+
+        [[ ${INPUT,,} == "quit" ]] || [[ ${INPUT,,} == "q" ]] && exit
 
         if [[ ! $INPUT =~ ^[0-9]+$ ]]; then
             echo "ERROR: select valid number"
@@ -109,6 +122,10 @@ case $INPUT in
         esac
         ;;
 
+    8)
+        stow /home/gael/.dotfiles/home/
+        ;;
+
     9)
         setup_pacman
         install_packages
@@ -135,8 +152,6 @@ install_desktop () {
     make clean install
     cd /home/gael/.dotfiles/home/.config/dmenu
     make clean install
-    echo -e "#!/bin/bash\n\nnm-applet &\ndwmblocks &\n\nxsetroot -solid '#474747'\n\nexec dwm" > /home/gael/.xinitrc
-    chmod +x /home/gael/.xinitrc
 }
 
 install_server () {
