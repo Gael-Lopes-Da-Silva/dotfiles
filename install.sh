@@ -6,6 +6,8 @@ FG_GREEN="\033[1;32m"
 FG_GREY="\033[1;37m"
 FG_BLACK="\033[1;30m"
 
+DIR=$(pwd)
+
 write_line () {
     echo -e "${FG_RED}$1${FG_RESET} - ${FG_GREY}$2${FG_RESET} ${FG_BLACK}$3${FG_RESET}"
 }
@@ -17,22 +19,22 @@ write_prompt () {
 install_packages () {
     pacman -S --noconfirm noto-fonts noto-fonts-extra noto-fonts-emoji noto-fonts-cjk ttf-cascadia-code papirus-icon-theme unzip unrar p7zip stow neovim lazygit nushell feh kitty firefox chromium discord
     chsh -s /usr/bin/nu gael
-    cd $(pwd)
+    cd $DIR
     stow home
 }
 
 install_desktop () {
     pacman -S --noconfirm lemurs terminus-font xorg xorg-xinit xclip maim upower brightnessctl network-manager-applet
     systemctl enable lemurs.service
-    echo -e "#!/bin/sh\n\nnm-applet &\ndwmblocks &\n\nxsetroot -solid '#474747'\n\nexec dwm" >> /etc/lemurs/wms/dwm
+    echo -e "#!/bin/sh\n\nnm-applet &\ndwmblocks &\n\nxsetroot -solid '#474747'\n\nexec dwm" > /etc/lemurs/wms/dwm
     chmod +x /etc/lemurs/wms/dwm
     setfont ter-132n
     echo -e "FONT=ter-132n" >> /etc/vconsole.conf
-    cd $(pwd)/home/.config/dwm
+    cd $DIR/home/.config/dwm
     make clean install
-    cd $(pwd)/home/.config/dwmblocks
+    cd $DIR/home/.config/dwmblocks
     make clean install
-    cd $(pwd)/home/.config/dmenu
+    cd $DIR/home/.config/dmenu
     make clean install
 }
 
@@ -179,7 +181,7 @@ main () {
             ;;
 
         8)
-            cd $(pwd)
+            cd $DIR
             stow home
             ;;
 
