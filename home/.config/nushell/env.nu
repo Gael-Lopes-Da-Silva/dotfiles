@@ -1,3 +1,6 @@
+$env.EDITOR = "nvim"
+$env.VISUAL = "nvim"
+
 def create_left_prompt [] {
     let dir = match (do --ignore-shell-errors { $env.PWD | path relative-to $nu.home-path }) {
         null => $env.PWD
@@ -37,12 +40,12 @@ $env.PROMPT_INDICATOR_VI_INSERT = {|| ": " }
 $env.PROMPT_INDICATOR_VI_NORMAL = {|| "> " }
 $env.PROMPT_MULTILINE_INDICATOR = {|| "::: " }
 
-# $env.TRANSIENT_PROMPT_COMMAND = {|| "🚀 " }
-# $env.TRANSIENT_PROMPT_INDICATOR = {|| "" }
-# $env.TRANSIENT_PROMPT_INDICATOR_VI_INSERT = {|| "" }
-# $env.TRANSIENT_PROMPT_INDICATOR_VI_NORMAL = {|| "" }
-# $env.TRANSIENT_PROMPT_MULTILINE_INDICATOR = {|| "" }
-# $env.TRANSIENT_PROMPT_COMMAND_RIGHT = {|| "" }
+$env.TRANSIENT_PROMPT_COMMAND = {|| ": " }
+$env.TRANSIENT_PROMPT_INDICATOR = {|| "" }
+$env.TRANSIENT_PROMPT_INDICATOR_VI_INSERT = {|| "" }
+$env.TRANSIENT_PROMPT_INDICATOR_VI_NORMAL = {|| "" }
+$env.TRANSIENT_PROMPT_MULTILINE_INDICATOR = {|| "" }
+$env.TRANSIENT_PROMPT_COMMAND_RIGHT = {|| "" }
 
 $env.ENV_CONVERSIONS = {
     "PATH": {
