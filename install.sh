@@ -178,7 +178,8 @@ main () {
             ;;
 
         8)
-            stow $(pwd)/home
+            cd $(pwd)
+            stow home
             ;;
 
         9)
