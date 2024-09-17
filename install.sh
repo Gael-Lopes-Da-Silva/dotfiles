@@ -129,9 +129,9 @@ main () {
                     pacman -S --noconfirm nvidia nvidia-settings lib32-nvidia-utils
                     sed -i "s|MODULES=()|MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm asus_wmi)|" /etc/mkinitcpio.conf
                     mkdir -p /etc/pacman.d/hooks/
-                    echo -e "[Trigger]\nOperation=Install\nOperation=Upgrade\nOperation=Remove\nType=Package\nTarget=nvidia\nTarget=linux\n[Action]\nDescription=Updating NVIDIA module in initcpio\nDepends=mkinitcpio\nWhen=PostTransaction\nNeedsTargets\nExec=/bin/sh -c 'while read -r trg; do case \$trg in linux*) exit 0; esac; done; /usr/bin/mkinitcpio -P'\n" >> /etc/pacman.d/hooks/nvidia.hook
+                    echo -e "[Trigger]\nOperation=Install\nOperation=Upgrade\nOperation=Remove\nType=Package\nTarget=nvidia\nTarget=linux\n[Action]\nDescription=Updating NVIDIA module in initcpio\nDepends=mkinitcpio\nWhen=PostTransaction\nNeedsTargets\nExec=/bin/sh -c 'while read -r trg; do case \$trg in linux*) exit 0; esac; done; /usr/bin/mkinitcpio -P'\n" > /etc/pacman.d/hooks/nvidia.hook
                     nvidia-xconfig
-                    echo -e "options nvidia_drm modeset=1 fbdev=1" >> /etc/modprobe.d/nvidia.conf
+                    echo -e "options nvidia_drm modeset=1 fbdev=1" > /etc/modprobe.d/nvidia.conf
                     mkinitcpio -P
                     ;;
             esac
