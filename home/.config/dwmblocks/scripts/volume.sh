@@ -7,7 +7,7 @@ I="󰕾"
 {
     [[ $V == "0.00" ]] && I="󰖁"
 
-    [[ $M -eq 1 ]] && V="<span foreground='#494949'>MUTED</span>" && I="󰖁"
+    [[ $M -eq 1 ]] && V="^c#474747^MUTED^d^" && I="󰖁"
 }
 
 echo " $I $V "
