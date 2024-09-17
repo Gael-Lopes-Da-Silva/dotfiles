@@ -17,7 +17,8 @@ write_prompt () {
 install_packages () {
     pacman -S --noconfirm noto-fonts noto-fonts-extra noto-fonts-emoji noto-fonts-cjk ttf-cascadia-code papirus-icon-theme unzip unrar p7zip stow neovim lazygit nushell feh kitty firefox chromium discord
     chsh -s /usr/bin/nu gael
-    stow $(pwd)/home
+    cd $(pwd)
+    stow home
 }
 
 install_desktop () {
@@ -27,11 +28,11 @@ install_desktop () {
     chmod +x /etc/lemurs/wms/dwm
     setfont ter-132n
     echo -e "FONT=ter-132n" >> /etc/vconsole.conf
-    cd /home/gael/.dotfiles/home/.config/dwm
+    cd $(pwd)/home/.config/dwm
     make clean install
-    cd /home/gael/.dotfiles/home/.config/dwmblocks
+    cd $(pwd)/home/.config/dwmblocks
     make clean install
-    cd /home/gael/.dotfiles/home/.config/dmenu
+    cd $(pwd)/home/.config/dmenu
     make clean install
 }
 
