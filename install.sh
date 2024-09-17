@@ -17,7 +17,7 @@ write_prompt () {
 install_packages () {
     pacman -S --noconfirm noto-fonts noto-fonts-extra noto-fonts-emoji noto-fonts-cjk ttf-cascadia-code papirus-icon-theme unzip unrar p7zip stow neovim lazygit nushell feh kitty firefox chromium discord
     chsh -s /usr/bin/nu gael
-    stow $0/home/
+    stow $(pwd)/home/
 }
 
 install_desktop () {
@@ -178,7 +178,7 @@ main () {
             ;;
 
         8)
-            stow $0/home/
+            stow $(pwd)/home/
             ;;
 
         9)
