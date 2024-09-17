@@ -141,9 +141,10 @@ install_packages () {
 }
 
 install_desktop () {
-    pacman -S --noconfirm ly terminus-font xorg xorg-xinit xclip maim upower brightnessctl network-manager-applet
-    systemctl enable ly.service
-    sed -i "s|sleep_cmd = null|sleep_cmd = /sbin/systemctl suspend|" /etc/ly/config.ini
+    pacman -S --noconfirm lemurs terminus-font xorg xorg-xinit xclip maim upower brightnessctl network-manager-applet
+    systemctl enable lemurs.service
+    echo -e "#!/bin/sh\n\nnm-applet &\ndwmblocks &\n\nxsetroot -solid '#474747'\n\nexec dwm" >> /etc/lemurs/wms/dwm
+    chmod +x /etc/lemurs/wms/dwm
     setfont ter-132n
     echo -e "FONT=ter-132n" >> /etc/vconsole.conf
     cd /home/gael/.dotfiles/home/.config/dwm
