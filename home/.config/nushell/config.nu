@@ -101,7 +101,7 @@ $env.config = {
         reset_application_mode: true
     }
     render_right_prompt_on_last_line: false
-    use_kitty_protocol: true
+    use_kitty_protocol: false
     highlight_resolved_externals: true
     recursion_limit: 50
 
