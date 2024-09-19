@@ -14,13 +14,6 @@ MiniDeps.now(function()
 		command = "setlocal signcolumn=no nonumber norelativenumber | setfiletype terminal",
 	})
 
-	vim.api.nvim_create_autocmd("TermClose", {
-		desc = "Close terminal when process finished",
-		group = group,
-		pattern = { "term://*" },
-		command = "bdelete",
-	})
-
 	vim.api.nvim_create_autocmd("VimResized", {
 		desc = "Resize splits if window got resized",
 		group = group,
