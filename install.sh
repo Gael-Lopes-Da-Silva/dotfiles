@@ -26,17 +26,17 @@ install_packages () {
 install_desktop () {
     pacman -S --noconfirm lemurs terminus-font xorg xorg-xinit xclip maim upower brightnessctl network-manager-applet
     systemctl enable lemurs.service
-    echo -e "#!/bin/sh\n\nnm-applet &\ndwmblocks &\n\nxsetroot -solid '#474747'\n\nexec dwm" > /etc/lemurs/wms/dwm
+    echo -e "#!/bin/sh\n\nnm-applet 2>&1 >/dev/null &&\ndwmstatus 2>&1 >/dev/null &\n\nxsetroot -solid \"#474747\"\n\nexec dwm" > /etc/lemurs/wms/dwm
     chmod +x /etc/lemurs/wms/dwm
     setfont ter-132n
     echo -e "FONT=ter-132n" >> /etc/vconsole.conf
-    cd $DIR/home/.config/dwm
+    cd $DIR/home/.config/suckless/dwm
     make clean install
-    cd $DIR/home/.config/dwmblocks
+    cd $DIR/home/.config/suckless/dwmstatus
     make clean install
-    cd $DIR/home/.config/dmenu
+    cd $DIR/home/.config/suckless/dmenu
     make clean install
-    cd $DIR/home/.config/st
+    cd $DIR/home/.config/suckless/st
     make clean install
 }
 
