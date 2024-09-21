@@ -5,8 +5,6 @@ alias lg = lazygit
 alias vim = nvim
 alias vi = nvim
 
-alias clear = clear -a
-
 $env.config = {
     show_banner: false
 
@@ -34,6 +32,11 @@ $env.config = {
     }
 
     error_style: "fancy" # fancy, plain
+
+    display_errors: {
+        exit_code: false
+        termination_signal: true
+    }
 
     datetime_format: {
         # normal: '%a, %d %b %Y %H:%M:%S %z'
@@ -84,7 +87,6 @@ $env.config = {
         vi_normal: underscore
     }
 
-    use_grid_icons: true
     footer_mode: 25 # always, never, number_of_rows, auto
     float_precision: 2
     buffer_editor: null
@@ -691,13 +693,13 @@ $env.config = {
             event: { edit: cutselection }
             # event: { edit: cutselectionsystem }
         }
-        {
-            name: paste_system
-            modifier: control_shift
-            keycode: char_v
-            mode: emacs
-            event: { edit: pastesystem }
-        }
+        # {
+        #     name: paste_system
+        #     modifier: control_shift
+        #     keycode: char_v
+        #     mode: emacs
+        #     event: { edit: pastesystem }
+        # }
         {
             name: select_all
             modifier: control_shift
