@@ -1,6 +1,6 @@
 //Modify this file to change what commands output to your statusbar, and recompile using the make command.
 static const Block blocks[] = {
-	/*Icon*/  /*Command*/		                                /*Update Interval*/  /*Update Signal*/
+	/*Icon*/  /*Command*/		                                         /*Update Interval*/  /*Update Signal*/
 	{"",      "$HOME/.config/suckless/dwmblocks/scripts/rec.sh",         1,                   0},
 	{"",      "$HOME/.config/suckless/dwmblocks/scripts/volume.sh",      1,                   0},
 	{"",      "$HOME/.config/suckless/dwmblocks/scripts/brightness.sh",  1,                   0},

@@ -6,6 +6,7 @@
 #ifndef NO_X
 #include<X11/Xlib.h>
 #endif
+
 #ifdef __OpenBSD__
 #define SIGPLUS			SIGUSR1+1
 #define SIGMINUS		SIGUSR1-1
@@ -24,6 +25,7 @@ typedef struct {
 	unsigned int interval;
 	unsigned int signal;
 } Block;
+
 #ifndef __OpenBSD__
 void dummysighandler(int num);
 #endif
@@ -47,7 +49,6 @@ static Window root;
 static void (*writestatus) () = pstdout;
 #endif
 
-
 #include "config.h"
 
 static char statusbar[LENGTH(blocks)][CMDLENGTH] = {0};
@@ -55,7 +56,8 @@ static char statusstr[2][STATUSLENGTH];
 static int statusContinue = 1;
 
 //opens process *cmd and stores output in *output
-void getcmd(const Block *block, char *output)
+void
+getcmd(const Block *block, char *output)
 {
 	//make sure status is same until output is ready
 	char tempstatus[CMDLENGTH] = {0};
@@ -80,7 +82,8 @@ void getcmd(const Block *block, char *output)
 	pclose(cmdf);
 }
 
-void getcmds(int time)
+void
+getcmds(int time)
 {
 	const Block* current;
 	for (unsigned int i = 0; i < LENGTH(blocks); i++) {
@@ -90,7 +93,8 @@ void getcmds(int time)
 	}
 }
 
-void getsigcmds(unsigned int signal)
+void
+getsigcmds(unsigned int signal)
 {
 	const Block *current;
 	for (unsigned int i = 0; i < LENGTH(blocks); i++) {
@@ -100,7 +104,8 @@ void getsigcmds(unsigned int signal)
 	}
 }
 
-void setupsignals()
+void
+setupsignals()
 {
 #ifndef __OpenBSD__
 	    /* initialize all real time signals with dummy handler */
@@ -115,7 +120,8 @@ void setupsignals()
 
 }
 
-int getstatus(char *str, char *last)
+int
+getstatus(char *str, char *last)
 {
 	strcpy(last, str);
 	str[0] = '\0';
@@ -126,7 +132,8 @@ int getstatus(char *str, char *last)
 }
 
 #ifndef NO_X
-void setroot()
+void
+setroot()
 {
 	if (!getstatus(statusstr[0], statusstr[1]))//Only set root if text has changed.
 		return;
@@ -134,7 +141,8 @@ void setroot()
 	XFlush(dpy);
 }
 
-int setupX()
+int
+setupX()
 {
 	dpy = XOpenDisplay(NULL);
 	if (!dpy) {
@@ -147,7 +155,8 @@ int setupX()
 }
 #endif
 
-void pstdout()
+void
+pstdout()
 {
 	if (!getstatus(statusstr[0], statusstr[1]))//Only write out if text has changed.
 		return;
@@ -156,7 +165,8 @@ void pstdout()
 }
 
 
-void statusloop()
+void
+statusloop()
 {
 	setupsignals();
 	int i = 0;
@@ -172,24 +182,28 @@ void statusloop()
 
 #ifndef __OpenBSD__
 /* this signal handler should do nothing */
-void dummysighandler(int signum)
+void
+dummysighandler(int signum)
 {
     return;
 }
 #endif
 
-void sighandler(int signum)
+void
+sighandler(int signum)
 {
 	getsigcmds(signum-SIGPLUS);
 	writestatus();
 }
 
-void termhandler()
+void
+termhandler()
 {
 	statusContinue = 0;
 }
 
-int main(int argc, char** argv)
+int
+main(int argc, char** argv)
 {
 	for (int i = 0; i < argc; i++) {//Handle command line arguments
 		if (!strcmp("-d",argv[i]))
