@@ -33,8 +33,8 @@ enum glyph_attribute {
 	ATTR_WRAP       = 1 << 8,
 	ATTR_WIDE       = 1 << 9,
 	ATTR_WDUMMY     = 1 << 10,
+    ATTR_URL	    = 1 << 14,
 	ATTR_BOLD_FAINT = ATTR_BOLD | ATTR_FAINT,
-	ATTR_URL	= 1 << 14,
 };
 
 enum selection_mode {

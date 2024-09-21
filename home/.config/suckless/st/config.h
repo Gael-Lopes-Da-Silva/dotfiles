@@ -225,6 +225,7 @@ static MouseShortcut mshortcuts[] = {
 	/* mask                 button   function        argument       release */
 	{ XK_NO_MOD,            Button4, kscrollup,      {.i = 2} },
 	{ XK_NO_MOD,            Button5, kscrolldown,    {.i = 2} },
+
 	{ ShiftMask,            Button4, ttysend,        {.s = "\033[5;2~"} },
 	{ XK_ANY_MOD,           Button4, ttysend,        {.s = "\031"} },
 	{ ShiftMask,            Button5, ttysend,        {.s = "\033[6;2~"} },
