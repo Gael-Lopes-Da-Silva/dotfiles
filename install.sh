@@ -17,7 +17,7 @@ write_prompt () {
 }
 
 install_packages () {
-    pacman -S --noconfirm noto-fonts noto-fonts-extra noto-fonts-emoji noto-fonts-cjk ttf-cascadia-code papirus-icon-theme unzip unrar p7zip stow neovim lazygit nushell feh firefox chromium discord
+    pacman -S --noconfirm noto-fonts noto-fonts-extra noto-fonts-emoji noto-fonts-cjk ttf-cascadia-code papirus-icon-theme unzip unrar p7zip stow neovim lazygit nushell kitty feh firefox chromium discord
     chsh -s /usr/bin/nu gael
     cd $DIR
     stow home
@@ -35,8 +35,6 @@ install_desktop () {
     cd $DIR/home/.config/suckless/dwmblocks
     make clean install
     cd $DIR/home/.config/suckless/dmenu
-    make clean install
-    cd $DIR/home/.config/suckless/st
     make clean install
 }
 
