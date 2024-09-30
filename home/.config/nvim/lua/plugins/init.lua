@@ -1,6 +1,3 @@
---
--- Treesitter:
---
 MiniDeps.later(function()
 	MiniDeps.add({
 		source = "nvim-treesitter/nvim-treesitter",
@@ -13,9 +10,6 @@ MiniDeps.later(function()
 	require("plugins.plugin-nvim-treesitter")
 end)
 
---
--- Mason:
---
 MiniDeps.later(function()
 	MiniDeps.add({
 		source = "williamboman/mason.nvim",
@@ -25,50 +19,19 @@ MiniDeps.later(function()
 			end,
 		},
 	})
-	require("plugins.plugin-mason")
+	require("plugins.plugin-nvim-mason")
 end)
 
---
--- Lspconfig:
---
 MiniDeps.later(function()
 	MiniDeps.add({
-		source = "williamboman/mason-lspconfig.nvim",
-		depends = {
-			"williamboman/mason.nvim",
-			"neovim/nvim-lspconfig",
-			"nvim-lua/plenary.nvim",
-		},
+		source = "neovim/nvim-lspconfig",
 	})
-	require("plugins.plugin-mason-lspconfig")
+	require("plugins.plugin-nvim-lspconfig")
 end)
 
---
--- Null-ls:
---
 MiniDeps.later(function()
 	MiniDeps.add({
-		source = "jay-babu/mason-null-ls.nvim",
-		depends = {
-			"williamboman/mason.nvim",
-			"nvimtools/none-ls.nvim",
-			"nvim-lua/plenary.nvim",
-		},
+		source = "mfussenegger/nvim-dap",
 	})
-	require("plugins.plugin-mason-null-ls")
-end)
-
---
--- Dap:
---
-MiniDeps.later(function()
-	MiniDeps.add({
-		source = "jay-babu/mason-nvim-dap.nvim",
-		depends = {
-			"williamboman/mason.nvim",
-			"mfussenegger/nvim-dap",
-			"nvim-lua/plenary.nvim",
-		},
-	})
-	require("plugins.plugin-mason-nvim-dap")
+	require("plugins.plugin-nvim-dap")
 end)
