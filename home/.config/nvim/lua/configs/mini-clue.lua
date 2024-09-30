@@ -40,7 +40,6 @@ MiniDeps.now(function()
 		},
 		clues = {
 			{ mode = "n", keys = "<Leader>b", desc = "+Buffers" },
-			{ mode = "n", keys = "<Leader>d", desc = "+DAP" },
 			{ mode = "n", keys = "<Leader>f", desc = "+Files" },
 			{ mode = "n", keys = "<Leader>g", desc = "+Git" },
 			{ mode = "n", keys = "<Leader>l", desc = "+LSP" },

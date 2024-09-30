@@ -40,23 +40,6 @@ MiniDeps.now(function()
 	set("n", "<leader>lR", vim.lsp.buf.references, { desc = "LSP Go to references" })
 
 	--
-	-- DAP:
-	--
-	set("n", "<F5>", "<cmd> lua require('dap').continue() <cr>")
-	set("n", "<F10>", "<cmd> lua require('dap').step_over() <cr>")
-	set("n", "<F11>", "<cmd> lua require('dap').step_into() <cr>")
-	set("n", "<F12>", "<cmd> lua require('dap').step_out() <cr>")
-	set("n", "<leader>ds", "<cmd> lua require('dap').continue() <cr>", { desc = "DAP Start/Continue" })
-	set("n", "<leader>do", "<cmd> lua require('dap').step_over() <cr>", { desc = "DAP Step over" })
-	set("n", "<leader>di", "<cmd> lua require('dap').step_into() <cr>", { desc = "DAP Step into" })
-	set("n", "<leader>dO", "<cmd> lua require('dap').step_out() <cr>", { desc = "DAP Step out" })
-	set("n", "<leader>db", "<cmd> lua require('dap').toggle_breakpoint() <cr>", { desc = "DAP Toggle breakpoint" })
-	set("n", "<leader>dr", "<cmd> lua require('dap').repl.open() <cr>", { desc = "DAP Open REPL" })
-	set("n", "<leader>dR", "<cmd> lua require('dap').run_last() <cr>", { desc = "DAP Run last" })
-	set({ "n", "v" }, "<leader>dh", "<cmd> lua require('dap.ui.widgets').hover() <cr>", { desc = "DAP Hover" })
-	set({ "n", "v" }, "<leader>dp", "<cmd> lua require('dap.ui.widgets').preview() <cr>", { desc = "DAP Preview" })
-
-	--
 	-- Buffers:
 	--
 	set("n", "<S-Tab>", "<cmd> lua MiniBracketed.buffer('backward') <cr>")

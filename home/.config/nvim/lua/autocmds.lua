@@ -14,16 +14,6 @@ MiniDeps.now(function()
 		command = "setlocal signcolumn=no nonumber norelativenumber | setfiletype terminal",
 	})
 
-	vim.api.nvim_create_autocmd("VimResized", {
-		desc = "Resize splits if window got resized",
-		group = group,
-		callback = function()
-			local current_tab = vim.fn.tabpagenr()
-			vim.cmd("tabdo wincmd =")
-			vim.cmd("tabnext " .. current_tab)
-		end,
-	})
-
 	vim.api.nvim_create_autocmd("BufWritePre", {
 		desc = "Format the buffer when saved",
 		group = group,
