@@ -1,33 +1,37 @@
-require("lspconfig").lua_ls.setup {
-    on_init = function(client)
-        if client.workspace_folders then
-            local path = client.workspace_folders[1].name
-            if vim.loop.fs_stat(path .. "/.luarc.json") or vim.loop.fs_stat(path .. "/.luarc.jsonc") then
-                return
-            end
-        end
+require("mason-lspconfig").setup({
+	ensure_installed = {
+		"lua_ls",
+	},
+	automatic_installation = false,
+	handlers = {
+		function(server_name)
+			require("lspconfig")[server_name].setup({})
+		end,
 
-        client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
-            runtime = {
-                version = "LuaJIT",
-            },
-            workspace = {
-                checkThirdParty = false,
-                library = {
-                    vim.env.VIMRUNTIME,
-                    vim.fn.stdpath("data") .. "/site/pack/deps/start",
-                    vim.fn.stdpath("data") .. "/site/pack/deps/opt",
+		lua_ls = function()
+			require("lspconfig").lua_ls.setup({
+				settings = {
+					Lua = {
+						runtime = {
+							version = "LuaJIT",
+						},
+						workspace = {
+							checkThirdParty = false,
+							library = {
+								vim.env.VIMRUNTIME,
+								vim.fn.stdpath("data") .. "/site/pack/deps/start",
+								vim.fn.stdpath("data") .. "/site/pack/deps/opt",
 
-                    "${3rd}/luv/library",
-                },
-            },
-            telemetry = { enable = false },
-        })
-    end,
-    settings = {
-        Lua = {}
-    }
-}
+								"${3rd}/luv/library",
+							},
+						},
+						telemetry = { enable = false },
+					},
+				},
+			})
+		end,
+	},
+})
 
 vim.api.nvim_create_user_command("Format", function(args)
 	local range = nil
@@ -40,6 +44,7 @@ vim.api.nvim_create_user_command("Format", function(args)
 	end
 	vim.lsp.buf.format({ range = range })
 end, { range = true })
+
 vim.api.nvim_create_user_command("AutoFormat", function()
 	vim.g.autoformat = not vim.g.autoformat
 end, {})
