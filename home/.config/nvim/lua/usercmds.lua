@@ -28,6 +28,6 @@ MiniDeps.now(function()
         }
 
         local command = commands[vim.bo.filetype]
-        vim.cmd(command ~= nil and "!" .. command or "echo 'Configuration not set for current file'")
+        vim.cmd(command ~= nil and "new +resize10 term://" .. command or "echo 'Configuration not set for current file'")
     end, {})
 end)
