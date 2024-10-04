@@ -1,21 +1,15 @@
 MiniDeps.now(function()
 	local group = vim.api.nvim_create_augroup("UserConfig", { clear = true })
 
-	vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
-		desc = "Check if we need to reload the file when it changed",
-		group = group,
-		command = "checktime",
-	})
-
 	vim.api.nvim_create_autocmd("TermOpen", {
-		desc = "Don't show any numbers inside terminals",
+		desc = "Remove number or relative number from terminal",
 		pattern = { "term://*" },
 		group = group,
 		command = "setlocal signcolumn=no nonumber norelativenumber | setfiletype terminal",
 	})
 
 	vim.api.nvim_create_autocmd("BufWritePre", {
-		desc = "Format the buffer when saved",
+		desc = "Format the buffer on save",
 		group = group,
 		callback = function()
 			if vim.g.autoformat then

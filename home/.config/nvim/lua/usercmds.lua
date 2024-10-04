@@ -1,4 +1,9 @@
 MiniDeps.now(function()
+    vim.api.nvim_create_user_command("AutoFormat", function()
+        vim.g.autoformat = not vim.g.autoformat
+        vim.cmd("echo 'Auto formating " .. (vim.g.autoformat and "enabled" or "disabled") .. "'")
+    end, {})
+
     vim.api.nvim_create_user_command("Format", function(args)
         local range = nil
         if args.count ~= -1 then
@@ -10,10 +15,6 @@ MiniDeps.now(function()
         end
         vim.lsp.buf.format({ range = range })
     end, { range = true })
-
-    vim.api.nvim_create_user_command("AutoFormat", function()
-        vim.g.autoformat = not vim.g.autoformat
-    end, {})
 
     vim.api.nvim_create_user_command("Compile", function()
         local commands = {
