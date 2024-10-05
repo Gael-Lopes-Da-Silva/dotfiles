@@ -46,7 +46,7 @@ MiniDeps.now(function()
 	--
 	-- Set status line height
 	--
-	vim.o.cmdheight = 1
+	vim.o.cmdheight = 0
 
 	--
 	-- Better folds
@@ -65,11 +65,6 @@ MiniDeps.now(function()
 	vim.o.ignorecase = true
 	vim.o.incsearch = true
 	vim.o.smartcase = true
-
-	--
-	-- Enable preview of commands effetc
-	--
-	vim.o.inccommand = "split"
 
 	--
 	-- Disable drawing of spaces and tabs

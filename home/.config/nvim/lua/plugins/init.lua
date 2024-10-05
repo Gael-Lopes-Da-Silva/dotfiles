@@ -7,7 +7,7 @@ MiniDeps.later(function()
             end,
         },
     })
-    require("plugins.plugin-nvim-treesitter")
+    require("plugins.plugin-treesitter")
 end)
 
 MiniDeps.later(function()
@@ -19,7 +19,7 @@ MiniDeps.later(function()
             end,
         },
     })
-    require("plugins.plugin-nvim-mason")
+    require("plugins.plugin-mason")
 end)
 
 MiniDeps.later(function()
@@ -29,5 +29,19 @@ MiniDeps.later(function()
             "neovim/nvim-lspconfig",
         },
     })
-    require("plugins.plugin-nvim-lspconfig")
+    require("plugins.plugin-lspconfig")
+end)
+
+MiniDeps.later(function()
+    MiniDeps.add({
+        source = "stevearc/dressing.nvim",
+    })
+    require("plugins.plugin-dressing")
+end)
+
+MiniDeps.later(function()
+    MiniDeps.add({
+        source = "hachy/cmdpalette.nvim",
+    })
+    require("plugins.plugin-cmdpalette")
 end)

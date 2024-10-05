@@ -22,7 +22,7 @@ MiniDeps.now(function()
             go = "go run .",
             javascript = "node %",
             lua = "lua %",
-            nim = "nim c -r %",
+            nim = "nimble run",
             python = "python %",
             rust = "cargo run",
             sh = "sh %",

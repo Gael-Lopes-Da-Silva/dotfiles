@@ -14,9 +14,12 @@ MiniDeps.now(function()
         end
     end, { noremap = true })
 
+    set({"n", "v"}, ":", "<cmd> Cmdpalette <cr>")
+
     --
     -- Completion:
     --
+    set("i", "<Return>", [[pumvisible() ? "\<C-y>" : "\<Return>"]], { expr = true })
     set("i", "<Tab>", [[pumvisible() ? "\<C-n>" : "\<Tab>"]], { expr = true })
     set("i", "<S-Tab>", [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]], { expr = true })
     set("i", "<C-S-Space>", vim.lsp.buf.signature_help)
