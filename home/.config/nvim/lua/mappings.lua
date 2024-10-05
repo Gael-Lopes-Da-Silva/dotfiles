@@ -14,8 +14,6 @@ MiniDeps.now(function()
         end
     end, { noremap = true })
 
-    set({"n", "v"}, ":", "<cmd> Cmdpalette <cr>")
-
     --
     -- Completion:
     --
