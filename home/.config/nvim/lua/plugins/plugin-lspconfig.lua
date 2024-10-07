@@ -65,3 +65,9 @@ vim.api.nvim_set_hl(0, "DiagnosticVirtualTextWarn", { fg = "#d3869b", bg = "#504
 vim.api.nvim_set_hl(0, "DiagnosticVirtualTextInfo", { fg = "#8ec07c", bg = "#504945" })
 vim.api.nvim_set_hl(0, "DiagnosticVirtualTextHint", { fg = "#83a598", bg = "#504945" })
 vim.api.nvim_set_hl(0, "DiagnosticVirtualTextOk", { fg = "#b8bb26", bg = "#504945" })
+
+vim.api.nvim_set_hl(0, "Pmenu", { fg = "#fbf1c7", bg = "#504945" })
+vim.api.nvim_set_hl(0, "PmenuKind", { fg = "#fbf1c7", bg = "#504945", bold = true })
+vim.api.nvim_set_hl(0, "PmenuExtra", { fg = "#fbf1c7", bg = "#504945", bold = true })
+vim.api.nvim_set_hl(0, "PmenuMatch", { fg = "#fbf1c7", bg = "#504945", bold = true })
+vim.api.nvim_set_hl(0, "PmenuSbar", { fg = "#fbf1c7", bg = "#665c54" })
