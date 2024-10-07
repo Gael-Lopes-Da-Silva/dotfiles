@@ -46,7 +46,7 @@ MiniDeps.now(function()
 	--
 	-- Set status line height
 	--
-	vim.o.cmdheight = 0
+	vim.o.cmdheight = 1
 
 	--
 	-- Better folds

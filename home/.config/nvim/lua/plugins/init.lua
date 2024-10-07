@@ -34,14 +34,10 @@ end)
 
 MiniDeps.later(function()
     MiniDeps.add({
-        source = "stevearc/dressing.nvim",
+        source = "folke/noice.nvim",
+        depends = {
+            "MunifTanjim/nui.nvim",
+        },
     })
-    require("plugins.plugin-dressing")
-end)
-
-MiniDeps.later(function()
-    MiniDeps.add({
-        source = "hachy/cmdpalette.nvim",
-    })
-    require("plugins.plugin-cmdpalette")
+    require("plugins.plugin-noice")
 end)
