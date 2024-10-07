@@ -41,3 +41,10 @@ MiniDeps.later(function()
     })
     require("plugins.plugin-noice")
 end)
+
+MiniDeps.later(function()
+    MiniDeps.add({
+        source = "stevearc/dressing.nvim",
+    })
+    require("plugins.plugin-dressing")
+end)
