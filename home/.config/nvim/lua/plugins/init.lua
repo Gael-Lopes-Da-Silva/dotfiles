@@ -31,20 +31,3 @@ MiniDeps.later(function()
     })
     require("plugins.plugin-lspconfig")
 end)
-
-MiniDeps.later(function()
-    MiniDeps.add({
-        source = "folke/noice.nvim",
-        depends = {
-            "MunifTanjim/nui.nvim",
-        },
-    })
-    require("plugins.plugin-noice")
-end)
-
-MiniDeps.later(function()
-    MiniDeps.add({
-        source = "stevearc/dressing.nvim",
-    })
-    require("plugins.plugin-dressing")
-end)
