@@ -10,7 +10,7 @@ $env.config = {
 
     ls: {
         use_ls_colors: true
-        clickable_links: true
+        clickable_links: false
     }
 
     rm: {
