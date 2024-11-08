@@ -17,25 +17,10 @@ write_prompt () {
 }
 
 install_packages () {
-    pacman -S --noconfirm noto-fonts noto-fonts-extra noto-fonts-emoji noto-fonts-cjk ttf-cascadia-code papirus-icon-theme unzip unrar p7zip stow neovim lazygit nushell kitty feh firefox chromium discord
+    pacman -S --noconfirm noto-fonts noto-fonts-extra noto-fonts-emoji noto-fonts-cjk ttf-cascadia-code papirus-icon-theme unzip unrar p7zip stow nushell firefox chromium discord
     chsh -s /usr/bin/nu gael
     cd $DIR
     stow home
-}
-
-install_desktop () {
-    pacman -S --noconfirm lemurs terminus-font xorg xorg-xinit xclip maim upower brightnessctl network-manager-applet
-    systemctl enable lemurs.service
-    echo -e "#!/bin/sh\n\nnm-applet 2>&1 >/dev/null &&\ndwmblocks 2>&1 >/dev/null &\n\nxsetroot -solid \"#474747\"\n\nexec dwm" > /etc/lemurs/wms/dwm
-    chmod +x /etc/lemurs/wms/dwm
-    setfont ter-132n
-    echo -e "FONT=ter-132n" >> /etc/vconsole.conf
-    cd $DIR/home/.config/suckless/dwm
-    make clean install
-    cd $DIR/home/.config/suckless/dwmblocks
-    make clean install
-    cd $DIR/home/.config/suckless/dmenu
-    make clean install
 }
 
 install_server () {
@@ -70,13 +55,12 @@ setup_pacman () {
 
 main () {
     write_line 1 "packages" "Install my packages and stow config into user home"
-    write_line 2 "desktop"  "Install my desktop and greeter"
-    write_line 3 "server"   "Install and setup a server with php and mariadb"
-    write_line 4 "drivers"  "List drivers to install"
-    write_line 5 "other"    "List other install options"
+    write_line 2 "server"   "Install and setup a server with php and mariadb"
+    write_line 3 "drivers"  "List drivers to install"
+    write_line 4 "other"    "List other install options"
     echo ""
-    write_line 8 "stow"     "Only stow config into user home"
-    write_line 9 "auto"     "Automatic installation and setup"
+    write_line 5 "stow"     "Only stow config into user home"
+    write_line 6 "auto"     "Automatic installation and setup"
     write_prompt ":"
 
     read INPUT
@@ -96,14 +80,10 @@ main () {
             ;;
 
         2)
-            install_desktop
-            ;;
-
-        3)
             install_server
             ;;
 
-        4)
+        3)
             write_line 1 "intel" "Install intel graphics dsh rivers"
             write_line 2 "nvidia" "Install nvidia proprietary graphics drivers"
             write_prompt ":"
@@ -127,7 +107,7 @@ main () {
 
                 2)
                     pacman -S --noconfirm nvidia nvidia-settings lib32-nvidia-utils
-                    sed -i "s|MODULES=()|MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm asus_wmi)|" /etc/mkinitcpio.conf
+                    sed -i "s|MODULES=(btrfs)|MODULES=(btrfs nvidia nvidia_modeset nvidia_uvm nvidia_drm asus_wmi)|" /etc/mkinitcpio.conf
                     mkdir -p /etc/pacman.d/hooks/
                     echo -e "[Trigger]\nOperation=Install\nOperation=Upgrade\nOperation=Remove\nType=Package\nTarget=nvidia\nTarget=linux\n[Action]\nDescription=Updating NVIDIA module in initcpio\nDepends=mkinitcpio\nWhen=PostTransaction\nNeedsTargets\nExec=/bin/sh -c 'while read -r trg; do case \$trg in linux*) exit 0; esac; done; /usr/bin/mkinitcpio -P'\n" > /etc/pacman.d/hooks/nvidia.hook
                     nvidia-xconfig
@@ -137,7 +117,7 @@ main () {
             esac
             ;;
 
-        5)
+        4)
             write_line 1 "pacman" "Setup pacman to be more usable"
             write_line 2 "steam" "Install and setup steam"
             write_line 3 "v4l2loopback" "Install and setup v4l2loopback"
@@ -161,7 +141,7 @@ main () {
                     ;;
 
                 2)
-                    pacman -S --noconfirm steam xdg-desktop-portal xdg-desktop-portal-gtk ttf-liberation
+                    pacman -S --noconfirm steam
                     ;;
 
                 3)
@@ -180,15 +160,14 @@ main () {
             esac
             ;;
 
-        8)
+        4)
             cd $DIR
             stow home
             ;;
 
-        9)
+        5)
             setup_pacman
             install_packages
-            install_desktop
             ;;
     esac
 }
