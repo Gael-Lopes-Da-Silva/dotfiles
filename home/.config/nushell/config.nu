@@ -77,7 +77,7 @@ $env.config = {
     }
 
     filesize: {
-        metric: true
+        metric: false
         format: "auto"
     }
 
