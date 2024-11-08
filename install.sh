@@ -160,12 +160,12 @@ main () {
             esac
             ;;
 
-        4)
+        5)
             cd $DIR
             stow home
             ;;
 
-        5)
+        6)
             setup_pacman
             install_packages
             ;;
