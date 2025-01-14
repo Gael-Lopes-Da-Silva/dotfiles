@@ -33,16 +33,16 @@ sudo modprobe v4l2loopback
 # Desktop
 sudo pacman -S --noconfirm lemurs terminus-font xorg xorg-xinit xclip maim upower brightnessctl network-manager-applet
 sudo systemctl enable lemurs.service
-sudo echo -e "#!/bin/sh\n\nnm-applet 2>&1 >/dev/null &&\ndwmblocks 2>&1 >/dev/null &\n\nxsetroot -solid \"#474747\"\n\nexec dwm" > /etc/lemurs/wms/dwm
+echo -e "#!/bin/sh\n\nnm-applet 2>&1 >/dev/null &&\ndwmblocks 2>&1 >/dev/null &\n\nxsetroot -solid \"#474747\"\n\nexec dwm" | sudo tee -a /etc/lemurs/wms/dwm
 sudo chmod +x /etc/lemurs/wms/dwm
 setfont ter-132n
 echo -e "FONT=ter-132n" | sudo tee -a /etc/vconsole.conf
 cd $(pwd)/home/.config/suckless/dwm
-make clean install
+sudo make clean install
 cd $(pwd)/home/.config/suckless/dwmblocks
-make clean install
+sudo make clean install
 cd $(pwd)/home/.config/suckless/dmenu
-make clean install
+sudo make clean install
 
 # Server
 sudo pacman -S --noconfirm apache mariadb php php-apache
