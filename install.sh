@@ -40,9 +40,9 @@ setfont ter-132n
 echo -e "FONT=ter-132n" | sudo tee -a /etc/vconsole.conf
 cd $(pwd)/home/.config/suckless/dwm
 sudo make clean install
-cd $(pwd)/home/.config/suckless/dwmblocks
+cd ../dwmblocks
 sudo make clean install
-cd $(pwd)/home/.config/suckless/dmenu
+cd ../dmenu
 sudo make clean install
 
 # Server
