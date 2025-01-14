@@ -36,7 +36,7 @@ sudo systemctl enable lemurs.service
 sudo echo -e "#!/bin/sh\n\nnm-applet 2>&1 >/dev/null &&\ndwmblocks 2>&1 >/dev/null &\n\nxsetroot -solid \"#474747\"\n\nexec dwm" > /etc/lemurs/wms/dwm
 sudo chmod +x /etc/lemurs/wms/dwm
 setfont ter-132n
-sudo echo -e "FONT=ter-132n" >> /etc/vconsole.conf
+echo -e "FONT=ter-132n" | sudo tee -a /etc/vconsole.conf
 cd $(pwd)/home/.config/suckless/dwm
 make clean install
 cd $(pwd)/home/.config/suckless/dwmblocks
@@ -57,7 +57,7 @@ sudo systemctl start mariadb.service
 sudo mariadb-secure-installation
 sudo sed -i "s|LoadModule mpm_event_module modules/mod_mpm_event.so|#LoadModule mpm_event_module modules/mod_mpm_event.so|" /etc/httpd/conf/httpd.conf
 sudo sed -i "s|#LoadModule mpm_prefork_module modules/mod_mpm_prefork.so|LoadModule mpm_prefork_module modules/mod_mpm_prefork.so|" /etc/httpd/conf/httpd.conf
-sudo echo -e "LoadModule php_module modules/libphp.so\nAddHandler php-script .php\nInclude conf/extra/php_module.conf" >> /etc/httpd/conf/httpd.conf
+echo -e "LoadModule php_module modules/libphp.so\nAddHandler php-script .php\nInclude conf/extra/php_module.conf" | sudo tee -a /etc/httpd/conf/httpd.conf
 sudo sed -i "s|;extension=mysqli|extension=mysqli|" /etc/php/php.ini
 sudo sed -i "s|;extension=pdo_mysql|extension=pdo_mysql|" /etc/php/php.ini
 sudo sed -i "s|;extension=exif|extension=exif|" /etc/php/php.ini
