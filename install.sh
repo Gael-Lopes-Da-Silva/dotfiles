@@ -8,7 +8,6 @@ sed -i "s|#ParallelDownloads = 5|ParallelDownloads = 5|" /etc/pacman.conf
 sed -i "s|#VerbosePkgLists|VerbosePkgLists|" /etc/pacman.conf
 
 # Paru
-mkdir /home/$USER/Downloads && cd $_
 git clone https://aur.archlinux.org/paru.git
 cd paru
 makepkg -si
@@ -73,7 +72,7 @@ systemctl restart httpd.service
 systemctl restart mysql.service
 
 # Android SDK
-pacman -S --noconfirm sdkmanager
+paru -S --noconfirm sdkmanager
 sdkmanager --install "tools"
 sdkmanager --install "platform-tools"
 sdkmanager --install "build-tools;34.0.0"
