@@ -1,8 +1,8 @@
-$env.EDITOR = "nvim"
-$env.VISUAL = "nvim"
+$env.EDITOR = "zeditor"
+$env.VISUAL = "zeditor"
 
 def create_left_prompt [] {
-    let dir = match (do --ignore-shell-errors { $env.PWD | path relative-to $nu.home-path }) {
+    let dir = match (do -i { $env.PWD | path relative-to $nu.home-path }) {
         null => $env.PWD
         '' => '~'
         $relative_pwd => ([~ $relative_pwd] | path join)
@@ -68,11 +68,5 @@ $env.NU_PLUGIN_DIRS = [
 ]
 
 # $env.PATH = ($env.PATH | split row (char esep) | prepend '/some/path')
-
-# $env.PATH = ($env.PATH | split row (char esep))
-# path add /some/path
-# path add ($env.CARGO_HOME | path join "bin")
-# path add ($env.HOME | path join ".local" "bin")
-# $env.PATH = ($env.PATH | uniq)
 
 # source ($nu.default-config-dir | path join 'custom.nu')

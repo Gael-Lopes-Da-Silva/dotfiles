@@ -1,0 +1,116 @@
+{
+    "assistant": {
+        "button": false,
+        "enabled": false,
+        "version": "2"
+    },
+    "autosave": "on_focus_change",
+    "buffer_font_family": "Cascadia Mono NF",
+    "buffer_font_size": 22,
+    "buffer_line_height": "standard",
+    "chat_panel": {
+        "button": "never"
+    },
+    "collaboration_panel": {
+        "button": false
+    },
+    "cursor_blink": false,
+    "cursor_shape": "bar",
+    "diagnostics": {
+        "include_warnings": true
+    },
+    "ensure_final_newline_on_save": false,
+    "features": {
+        "copilot": false,
+        "inline_completion_provider": "none"
+    },
+    "file_finder": {
+        "modal_max_width": "medium"
+    },
+    "file_scan_inclusions": [
+        "!node_modules",
+        "!bower_components"
+    ],
+    "format_on_save": "off",
+    "formatter": "language_server",
+    "gutter": {
+        "code_actions": false,
+        "line_numbers": false,
+        "runnables": false
+    },
+    "indent_guides": {
+        "active_line_width": 2,
+        "enabled": true,
+        "line_width": 2
+    },
+    "languages": {
+        "PHP": {
+            "language_servers": [
+                "intelephense",
+                "!phpactor",
+                "..."
+            ]
+        },
+        "Dart": {
+            "tab_size": 2
+        }
+    },
+    "linked_edits": false,
+    "middle_click_paste": false,
+    "notification_panel": {
+        "button": false
+    },
+    "outline_panel": {
+        "button": false
+    },
+    "preview_tabs": {
+        "enabled": false
+    },
+    "project_panel": {
+        "auto_fold_dirs": false,
+        "auto_reveal_entries": false
+    },
+    "remove_trailing_whitespace_on_save": false,
+    "restore_on_startup": "none",
+    "scroll_beyond_last_line": "off",
+    "scrollbar": {
+        "axes": {
+            "horizontal": false
+        },
+        "cursors": false,
+        "selected_symbol": false,
+        "show": "always"
+    },
+    "show_signature_help_after_edits": true,
+    "show_user_picture": false,
+    "show_whitespaces": "none",
+    "show_wrap_guides": false,
+    "soft_wrap": "editor_width",
+    "tab_bar": {
+        "show": false
+    },
+    "tab_size": 4,
+    "telemetry": {
+        "diagnostics": false,
+        "metrics": false
+    },
+    "terminal": {
+        "blinking": "terminal_controlled",
+        "font_family": "Cascadia Code NF",
+        "line_height": "standard",
+        "toolbar": {
+            "breadcrumbs": false
+        }
+    },
+    "theme": "Yellowed",
+    "toolbar": {
+        "breadcrumbs": false,
+        "quick_actions": false,
+        "selections_menu": false
+    },
+    "ui_font_family": "Cascadia Code NF",
+    "ui_font_size": 24,
+    "unnecessary_code_fade": 0.7,
+    "vertical_scroll_margin": 5,
+    "when_closing_with_no_tabs": "keep_window_open"
+}

@@ -1,16 +1,14 @@
 alias la = ls -a
 alias ll = ls -al
-
-alias lg = lazygit
-alias vim = nvim
-alias vi = nvim
+alias lz = lazygit
+alias zed = zeditor
 
 $env.config = {
     show_banner: false
 
     ls: {
         use_ls_colors: true
-        clickable_links: true
+        clickable_links: false
     }
 
     rm: {
@@ -82,7 +80,7 @@ $env.config = {
     }
 
     cursor_shape: {
-        emacs: line
+        emacs: block
         vi_insert: block
         vi_normal: underscore
     }
