@@ -32,10 +32,10 @@ sudo pacman -S --noconfirm v4l2loopback-dkms v4l2loopback-utils linux-headers
 sudo modprobe v4l2loopback
 
 # Desktop
-sudo pacman -S --noconfirm lemurs terminus-font xorg xorg-xinit xclip maim upower brightnessctl network-manager-applet
+sudo pacman -S --noconfirm terminus-font xorg xorg-xinit xclip maim upower brightnessctl network-manager-applet
 setfont ter-132n
 echo -e "FONT=ter-132n" | sudo tee -a /etc/vconsole.conf
-cd $(pwd)/home/.config/suckless/dwm
+cd /home/$USER/.dotfiles/home/.config/suckless/dwm
 sudo make clean install
 cd ../dwmblocks
 sudo make clean install
