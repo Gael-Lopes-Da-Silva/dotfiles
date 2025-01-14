@@ -3,6 +3,10 @@ alias ll = ls -al
 alias lz = lazygit
 alias zed = zeditor
 
+if (tty) == "/dev/tty1" {
+    exec startx
+}
+
 $env.config = {
     show_banner: false
 

@@ -33,9 +33,6 @@ sudo modprobe v4l2loopback
 
 # Desktop
 sudo pacman -S --noconfirm lemurs terminus-font xorg xorg-xinit xclip maim upower brightnessctl network-manager-applet
-sudo systemctl enable lemurs.service
-echo -e "#!/bin/sh\n\nnm-applet 2>&1 >/dev/null &\ndwmblocks 2>&1 >/dev/null &\n\nudiskie --automount --notify --tray &\n\nxsetroot -solid \"#474747\"\n\nexec dbus-run-session dwm" | sudo tee -a /etc/lemurs/wms/dwm
-sudo chmod +x /etc/lemurs/wms/dwm
 setfont ter-132n
 echo -e "FONT=ter-132n" | sudo tee -a /etc/vconsole.conf
 cd $(pwd)/home/.config/suckless/dwm
