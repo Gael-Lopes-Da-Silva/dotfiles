@@ -33,7 +33,7 @@ sudo modprobe v4l2loopback
 # Desktop
 sudo pacman -S --noconfirm lemurs terminus-font xorg xorg-xinit xclip maim upower brightnessctl network-manager-applet
 sudo systemctl enable lemurs.service
-echo -e "#!/bin/sh\n\nnm-applet 2>&1 >/dev/null &\ndwmblocks 2>&1 >/dev/null &\ndevmon --sync --exec-on-drive \"notify-send -t 9000 --urgency=normal \"%l\" \"Connected device\"\" &\n\nxsetroot -solid \"#474747\"\n\nexec dbus-run-session dwm" | sudo tee -a /etc/lemurs/wms/dwm
+echo -e "#!/bin/sh\n\nnm-applet 2>&1 >/dev/null &\ndwmblocks 2>&1 >/dev/null &\n\nudiskie --automount --notify --tray &\n\nxsetroot -solid \"#474747\"\n\nexec dbus-run-session dwm" | sudo tee -a /etc/lemurs/wms/dwm
 sudo chmod +x /etc/lemurs/wms/dwm
 setfont ter-132n
 echo -e "FONT=ter-132n" | sudo tee -a /etc/vconsole.conf
@@ -78,9 +78,6 @@ sudo sdkmanager --install "platform-tools"
 sudo sdkmanager --install "build-tools;34.0.0"
 sudo sdkmanager --install "platforms;android-35"
 sudo sdkmanager --licenses
-
-# Auto disk mount
-paru -S --noconfirm udevil
 
 # Stow
 cd /home/$USER/.dotfiles/
