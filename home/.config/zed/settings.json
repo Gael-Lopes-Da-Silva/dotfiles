@@ -61,6 +61,11 @@
             "settings": {
                 "lineLength": 140
             }
+        },
+        "intelephense": {
+            "initialization_options": {
+                "globalStoragePath": ".cache/intelephense"
+            }
         }
     },
     "middle_click_paste": false,
