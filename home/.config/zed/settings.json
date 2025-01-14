@@ -56,6 +56,13 @@
         }
     },
     "linked_edits": false,
+    "lsp": {
+        "dart": {
+            "settings": {
+                "lineLength": 140
+            }
+        }
+    },
     "middle_click_paste": false,
     "notification_panel": {
         "button": false
