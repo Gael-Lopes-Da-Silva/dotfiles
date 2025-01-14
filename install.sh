@@ -10,7 +10,7 @@ sudo sed -i "s|#VerbosePkgLists|VerbosePkgLists|" /etc/pacman.conf
 # Paru
 git clone https://aur.archlinux.org/paru.git
 cd paru
-makepkg -si
+makepkg -si --noconfirm
 cd ..
 rm -rf ./paru/
 
