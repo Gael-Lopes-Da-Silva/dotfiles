@@ -3,6 +3,10 @@ alias ll = ls -al
 alias lz = lazygit
 alias zed = zeditor
 
+if (tty | str starts-with "/dev/tty") {
+    setfont ter-132n
+}
+
 if (tty) == "/dev/tty1" {
     exec startx
 }
