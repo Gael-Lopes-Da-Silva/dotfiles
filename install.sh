@@ -15,8 +15,9 @@ cd ..
 rm -rf ./paru/
 
 # Packages
-sudo pacman -S --noconfirm noto-fonts noto-fonts-extra noto-fonts-emoji noto-fonts-cjk ttf-cascadia-code unzip unrar 7zip stow nushell firefox chromium lazygit zed pinta zed neovim kitty dunst feh xdg-desktop-portal xdg-desktop-portal-gtk ttf-liberation
+sudo pacman -S --noconfirm noto-fonts noto-fonts-extra noto-fonts-emoji noto-fonts-cjk ttf-cascadia-code unzip unrar 7zip stow nushell firefox chromium lazygit zed pinta zed neovim kitty dunst feh docker docker-compose xdg-desktop-portal xdg-desktop-portal-gtk ttf-liberation
 sudo chsh -s /usr/bin/nu $USER
+sudo systemctl enable docker.service
 
 # Virtualization
 sudo pacman -S --noconfirm virtualbox virtualbox-guest-iso virtualbox-host-modules-arch
