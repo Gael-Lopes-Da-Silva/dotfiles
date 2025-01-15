@@ -1,5 +1,5 @@
-$env.EDITOR = "zeditor"
-$env.VISUAL = "zeditor"
+$env.EDITOR = "nvim"
+$env.VISUAL = "nvim"
 
 def create_left_prompt [] {
     let dir = match (do -i { $env.PWD | path relative-to $nu.home-path }) {

@@ -1,0 +1,12 @@
+[
+    {
+        "label": "Gitu",
+        "command": "gitu",
+        "use_new_terminal": false,
+        "allow_concurrent_runs": false,
+        "reveal": "always",
+        "reveal_target": "dock",
+        "hide": "always",
+        "shell": "system"
+    }
+]
