@@ -1,0 +1,12 @@
+[user]
+	name = gael-lopes-da-silva
+	email = gael.lopes-da-silva@outlook.fr
+[credential]
+	helper = store
+[pull]
+	rebase = true
+[rebase]
+	autoStash = true
+[core]
+	fileMode = false
+	editor = zeditor --wait
