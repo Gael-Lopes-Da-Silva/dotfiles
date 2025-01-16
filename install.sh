@@ -15,7 +15,7 @@ cd ..
 rm -rf ./paru/
 
 # Packages
-sudo pacman -S --noconfirm noto-fonts noto-fonts-extra noto-fonts-emoji noto-fonts-cjk ttf-cascadia-code unzip unrar 7zip stow nushell firefox chromium gitu gitui zed pinta zed neovim kitty udiskie dunst feh docker docker-compose xdg-desktop-portal xdg-desktop-portal-gtk ttf-liberation
+sudo pacman -S --noconfirm noto-fonts noto-fonts-extra noto-fonts-emoji noto-fonts-cjk ttf-cascadia-code unzip unrar 7zip stow nushell firefox chromium gitu gitui zed pinta zed neovim kitty udiskie dunst feh docker docker-compose xdg-desktop-portal xdg-desktop-portal-gtk ttf-liberation papirus-icon-theme
 sudo chsh -s /usr/bin/nu $USER
 sudo systemctl enable docker.service
 
