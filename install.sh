@@ -46,7 +46,7 @@ sudo make clean install
 sudo pacman -S --noconfirm apache mariadb php php-apache
 sudo sed -i "s|#LoadModule unique_id_module modules/mod_unique_id.so|LoadModule unique_id_module modules/mod_unique_id.so|" /etc/httpd/conf/httpd.conf
 sudo sed -i "s|#LoadModule rewrite_module modules/mod_rewrite.so|LoadModule rewrite_module modules/mod_rewrite.so|" /etc/httpd/conf/httpd.conf
-sudo sed -i "s|#\nAllowOverride None|#\nAllowOverride All|" /etc/httpd/conf/httpd.conf
+sudo sed -i "s|AllowOverride None|AllowOverride All|" /etc/httpd/conf/httpd.conf
 sudo systemctl enable httpd.service
 sudo systemctl start httpd.service
 sudo mariadb-install-db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
@@ -64,6 +64,7 @@ sudo sed -i "s|;extension=bcmath|extension=bcmath|" /etc/php/php.ini
 sudo sed -i "s|;extension=curl|extension=curl|" /etc/php/php.ini
 sudo sed -i "s|display_errors = Off|display_errors = On|" /etc/php/php.ini
 sudo sed -i "s|display_startup_errors = Off|display_startup_errors = On|" /etc/php/php.ini
+sudo sed -i "s|;html_errors = On|html_errors = On|" /etc/php/php.ini
 sudo sed -i "s|;error_prepend_string = \"<span style='color: #ff0000'>\"|error_prepend_string = \"<span style='color: #ff0000'>\"|" /etc/php/php.ini
 sudo sed -i "s|;error_append_string = \"</span>\"|error_append_string = \"</span>\"|" /etc/php/php.ini
 sudo systemctl restart httpd.service
