@@ -8,7 +8,6 @@
 [rebase]
 	autoStash = true
 [core]
-	fileMode = false
 	editor = zeditor --wait
 [feature]
 	manyFiles = true
