@@ -3,7 +3,8 @@
         "bindings": {
             "shift shift": "command_palette::Toggle",
             "ctrl-shift-e": "project_panel::ToggleFocus",
-            "ctrl-shift-g": ["task::Spawn", { "task_name": "Gitu" }]
+            "ctrl-shift-g": ["task::Spawn", { "task_name": "Gitu" }],
+            "ctrl-shift-alt-g": ["task::Spawn", { "task_name": "Gitui" }]
         }
     },
     {

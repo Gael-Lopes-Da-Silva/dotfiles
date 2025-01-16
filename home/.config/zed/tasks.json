@@ -8,5 +8,15 @@
         "reveal_target": "center",
         "hide": "always",
         "shell": "system"
+    },
+    {
+        "label": "Gitui",
+        "command": "gitui",
+        "use_new_terminal": false,
+        "allow_concurrent_runs": false,
+        "reveal": "always",
+        "reveal_target": "center",
+        "hide": "always",
+        "shell": "system"
     }
 ]
