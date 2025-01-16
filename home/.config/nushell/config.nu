@@ -1,6 +1,5 @@
 alias la = ls -a
 alias ll = ls -al
-alias lz = lazygit
 alias zed = zeditor
 
 if (tty | str starts-with "/dev/tty") {
