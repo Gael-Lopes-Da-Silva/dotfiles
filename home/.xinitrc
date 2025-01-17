@@ -1,10 +1,11 @@
-eval $(nm-applet &)
-eval $(dwmblocks &)
-eval $(dunst &)
-eval $(udiskie --automount --notify --tray)
-eval $(gnome-keyring-daemon --start)
-eval $(dbus-launch --sh-syntax --exit-with-session)
+#!/bin/bash
+
+nm-applet &
+dwmblocks &
+dunst &
+udiskie --automount --notify --tray &
+gnome-keyring-daemon --start &
 
 xsetroot -solid "#474747"
 
-exec dwm
+exec dbus-launch --sh-syntax --exit-with-session dwm
