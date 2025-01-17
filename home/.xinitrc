@@ -1,11 +1,18 @@
 #!/bin/bash
 
-nm-applet &
-dwmblocks &
-dunst &
-udiskie --automount --notify --tray &
-gnome-keyring-daemon --start &
+pgrep -x nm-applet || nm-applet &
+pgrep -x dwmblocks || dwmblocks &
+pgrep -x dunst || dunst &
+pgrep -x udiskie || udiskie --automount --notify --tray &
+
+eval "$(gnome-keyring-daemon --start)"
+export SSH_AUTH_SOCK
+
+dbus-update-activation-environment --systemd DISPLAY XAUTHORITY &
 
 xsetroot -solid "#474747"
+xsetroot -cursor_name left_ptr
+xset r rate 250 40
+xset s off -dpms
 
-exec dbus-launch --sh-syntax --exit-with-session dwm
+exec dwm
