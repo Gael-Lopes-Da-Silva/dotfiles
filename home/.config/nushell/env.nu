@@ -1,6 +1,3 @@
-$env.EDITOR = "zeditor"
-$env.VISUAL = "zeditor"
-
 def create_left_prompt [] {
     let dir = match (do -i { $env.PWD | path relative-to $nu.home-path }) {
         null => $env.PWD
@@ -31,6 +28,9 @@ def create_right_prompt [] {
 
     ([$last_exit_code, (char space), $duration, (char space), $time_segment] | str join)
 }
+
+$env.EDITOR = "zeditor"
+$env.VISUAL = "zeditor"
 
 $env.PROMPT_COMMAND = {|| create_left_prompt }
 $env.PROMPT_COMMAND_RIGHT = {|| create_right_prompt }
@@ -67,6 +67,4 @@ $env.NU_PLUGIN_DIRS = [
     ($nu.default-config-dir | path join 'plugins') # add <nushell-config-dir>/plugins
 ]
 
-# $env.PATH = ($env.PATH | split row (char esep) | prepend '/some/path')
-
-# source ($nu.default-config-dir | path join 'custom.nu')
+# $env.PATH = ($env.PATH | split row (char esep) | prepend ['/some/path' '/another/path'])

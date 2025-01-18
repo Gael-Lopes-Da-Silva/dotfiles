@@ -1,14 +1,5 @@
-alias la = ls -a
-alias ll = ls -al
-alias zed = zeditor
-
-if (tty | str starts-with "/dev/tty") {
-    setfont ter-132n
-}
-
-if (tty) == "/dev/tty1" {
-    exec startx
-}
+source alias.nu
+source tty.nu
 
 $env.config = {
     show_banner: false
@@ -24,7 +15,7 @@ $env.config = {
 
     table: {
         mode: rounded # basic, compact, compact_double, light, thin, with_love, rounded, reinforced, heavy, none
-        index_mode: always # always, never, auto
+        index_mode: never # always, never, auto
         show_empty: true
         padding: { left: 1, right: 1 }
         trim: {
@@ -32,15 +23,15 @@ $env.config = {
             wrapping_try_keep_words: true
             truncating_suffix: "..."
         }
-        header_on_separator: false
+        header_on_separator: true
         # abbreviated_row_count: 10
     }
 
     error_style: "fancy" # fancy, plain
 
     display_errors: {
-        exit_code: false
-        termination_signal: true
+        exit_code: true
+        termination_signal: false
     }
 
     datetime_format: {
@@ -87,7 +78,7 @@ $env.config = {
     }
 
     cursor_shape: {
-        emacs: block
+        emacs: line
         vi_insert: block
         vi_normal: underscore
     }
