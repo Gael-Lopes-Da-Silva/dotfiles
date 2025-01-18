@@ -1,10 +1,23 @@
 alias la = ls -a
 alias ll = ls -al
+alias rm = rm -rfI
+alias cp = cp -pri
+alias mv = mv -pi
 
 alias zed = zeditor
 
-def install [package: string] {
-    paru -S $package
+alias decompress = ouch decompress
+alias compress = ouch compress
+
+alias shutdown = sudo shutdown now
+alias reboot = sudo reboot
+alias poweroff = sudo poweroff
+alias lock = loginctl lock-session
+alias suspend = systemctl suspend
+alias hibernate = systemctl hibernate
+
+def install [...package: string] {
+    paru -S ...$package
 }
 
 def search [package: string] {
@@ -18,8 +31,8 @@ def update [package?: string] {
     }
 }
 
-def remove [package: string] {
-    paru -Rns $package
+def remove [...package: string] {
+    paru -Rns ...$package
 }
 
 def infos [package?: string] {
