@@ -30,8 +30,8 @@ $env.config = {
     error_style: "fancy" # fancy, plain
 
     display_errors: {
-        exit_code: true
-        termination_signal: false
+        exit_code: false
+        termination_signal: true
     }
 
     datetime_format: {
