@@ -1,7 +1,6 @@
 [global]
 monitor = 0
-follow = mouse
-geometry = "280x50-10+44"
+origin = bottom-center
 indicate_hidden = yes
 shrink = no
 separator_height = 4
@@ -14,14 +13,13 @@ idle_threshold = 120
 font = Cascadia Mono NF
 line_height = 4
 markup = full
-format = %s\n%b
+format = <b>%s</b>\n%b
 alignment = left
 show_age_threshold = 60
 word_wrap = yes
 ignore_newline = no
 stack_duplicates = false
 hide_duplicate_count = yes
-show_indicators = no
 icon_position = left
 max_icon_size = 48
 sticky_history = yes
