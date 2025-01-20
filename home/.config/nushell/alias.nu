@@ -61,5 +61,5 @@ def files [package?: string] {
 }
 
 def clean [] {
-    paru -Rns (paru -Qdtq)
+    paru -Qdtq | paru -Rns -
 }
