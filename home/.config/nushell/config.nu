@@ -1,5 +1,6 @@
 source alias.nu
-source tty.nu
+
+if (tty) == "/dev/tty1" { exec startx }
 
 $env.config = {
     show_banner: false
