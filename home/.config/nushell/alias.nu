@@ -9,10 +9,8 @@ alias zed = zeditor
 alias decompress = ouch decompress
 alias compress = ouch compress
 
-alias shutdown = sudo shutdown now
-alias reboot = sudo reboot
-alias poweroff = sudo poweroff
-alias lock = loginctl lock-session
+alias shutdown = systemctl poweroff
+alias reboot = systemctl reboot
 alias suspend = systemctl suspend
 alias hibernate = systemctl hibernate
 
