@@ -20,7 +20,7 @@ sudo chsh -s /usr/bin/nu $USER
 sudo systemctl enable docker.service
 
 # Virtualization
-sudo pacman -S --noconfirm libvirt qemu-full virt-manager virt-viewer
+sudo pacman -S --noconfirm libvirt dnsmasq qemu-full virt-manager virt-viewer
 sudo usermod -aG libvirt gael
 sudo systemctl enable libvirtd.service
 
