@@ -15,8 +15,7 @@ def create_left_prompt [] {
 def create_right_prompt [] {
     let time_segment = ([(ansi magenta) (date now | format date '%T') (ansi reset)]
         | str join
-        | str replace --regex --all "([/:])" $"(ansi green)${1}(ansi magenta)"
-        | str replace --regex --all "([AP]M)" $"(ansi magenta_underline)${1}")
+        | str replace --regex --all "([/:])" $"(ansi green)${1}(ansi magenta)")
 
     let last_exit_code = if ($env.LAST_EXIT_CODE != 0) {
         ([(ansi red_bold) ($env.LAST_EXIT_CODE) (ansi reset)] | str join)
