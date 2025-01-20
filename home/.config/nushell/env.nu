@@ -19,8 +19,6 @@ def create_right_prompt [] {
 
     let last_exit_code = if ($env.LAST_EXIT_CODE != 0) {
         ([(ansi red_bold) ($env.LAST_EXIT_CODE) (ansi reset)] | str join)
-    } else {
-        ""
     }
 
     let duration = ([(ansi yellow) $"(($env.CMD_DURATION_MS | into int) / 1000)s" (ansi reset)] | str join)
