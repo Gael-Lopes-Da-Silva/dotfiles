@@ -1,19 +1,60 @@
 [user]
-	name = gael-lopes-da-silva
-	email = gael.lopes-da-silva@outlook.fr
+name = gael-lopes-da-silva
+email = gael.lopes-da-silva@outlook.fr
+
 [credential]
-	helper = store
+helper = store
+
+[push]
+default = simple
+followTags = true
+
+[fetch]
+recurseSubmodules = on-demand
+
 [pull]
-	rebase = true
+rebase = true
+
 [rebase]
-	autoStash = true
-[core]
-	editor = zeditor --wait
-[feature]
-	manyFiles = true
-[rerere]
-	enabled = true
-[column]
-	ui = auto
+autoStash = true
+
 [branch]
-	sort = -committerdate
+sort = -committerdate
+
+[status]
+submoduleSummary = true
+showUntrackedFiles = all
+
+[log]
+abbrevCommit = true
+follow = true
+decorate = false
+
+[core]
+editor = zeditor --wait
+pager = less
+whitespace = -trailing-space
+
+[diff]
+mnemonicPrefix = true
+renames = true
+submodule = log
+
+[grep]
+break = true
+heading = true
+lineNumber = true
+
+[rerere]
+autoupdate = true
+enabled = true
+
+[column]
+ui = auto
+
+[color]
+ui = auto
+
+[alias]
+prune = fetch --prune
+undo = reset --soft HEAD^
