@@ -11,3 +11,9 @@
 	editor = zeditor --wait
 [feature]
 	manyFiles = true
+[rerere]
+	enabled = true
+[column]
+	ui = auto
+[branch]
+	sort = -committerdate
