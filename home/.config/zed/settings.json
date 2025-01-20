@@ -57,11 +57,6 @@
     },
     "linked_edits": false,
     "lsp": {
-        "dart": {
-            "settings": {
-                "lineLength": 140
-            }
-        },
         "intelephense": {
             "initialization_options": {
                 "globalStoragePath": ".cache/intelephense"
