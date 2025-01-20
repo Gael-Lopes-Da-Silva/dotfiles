@@ -20,12 +20,9 @@ sudo chsh -s /usr/bin/nu $USER
 sudo systemctl enable docker.service
 
 # Virtualization
-sudo pacman -S --noconfirm virtualbox virtualbox-guest-iso virtualbox-host-modules-arch
-sudo modprobe virtio
-sudo modprobe vboxdrv
-sudo modprobe vboxnetadp
-sudo modprobe vboxnetflt
-sudo usermod -aG vboxusers gael
+sudo pacman -S --noconfirm libvirt qemu-full virt-manager
+sudo usermod -aG libvirt gael
+sudo systemctl enable libvirtd.service
 
 # Loopback
 sudo pacman -S --noconfirm v4l2loopback-dkms v4l2loopback-utils linux-headers
