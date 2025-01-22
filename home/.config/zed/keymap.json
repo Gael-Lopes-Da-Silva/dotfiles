@@ -2,7 +2,9 @@
     {
         "bindings": {
             "shift shift": "command_palette::Toggle",
-            "ctrl-shift-e": "project_panel::ToggleFocus"
+            "ctrl-shift-e": "project_panel::ToggleFocus",
+            "ctrl-{": "editor::Fold",
+            "ctrl-}": "editor::UnfoldLines"
         }
     },
     {
