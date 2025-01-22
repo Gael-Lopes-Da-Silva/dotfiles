@@ -64,7 +64,7 @@ main(void)
     } else if (type == 1) {
         printf(" %s ^c%s^%d%%^d^ ", icon, color, battery);
     } else if (type == 2) {
-        printf("^b%s^ %s %d%% ^d^ ", color, icon, battery);
+        printf("^b%s^ %s %d%% ^d^", color, icon, battery);
     }
     
     return 0;
