@@ -76,7 +76,8 @@
     },
     "project_panel": {
         "auto_fold_dirs": false,
-        "auto_reveal_entries": false
+        "auto_reveal_entries": false,
+        "entry_spacing": "standard"
     },
     "remove_trailing_whitespace_on_save": false,
     "restore_on_startup": "none",
