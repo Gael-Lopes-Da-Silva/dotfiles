@@ -29,7 +29,8 @@
     },
     "file_scan_inclusions": [
         "!node_modules",
-        "!bower_components"
+        "!bower_components",
+        "!target"
     ],
     "format_on_save": "off",
     "formatter": "language_server",
@@ -43,6 +44,9 @@
         "active_line_width": 2,
         "enabled": true,
         "line_width": 2
+    },
+    "code_actions_on_format": {
+        "source.organizeImports": true
     },
     "languages": {
         "PHP": {
