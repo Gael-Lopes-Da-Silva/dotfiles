@@ -18,10 +18,8 @@ rm -rf ./paru/
 sudo pacman -S --noconfirm noto-fonts noto-fonts-extra noto-fonts-emoji noto-fonts-cjk ttf-cascadia-code ouch stow nushell firefox chromium gitu gitui zed pinta zed neovim kitty udiskie dunst feh xdg-desktop-portal xdg-desktop-portal-gtk ttf-liberation papirus-icon-theme
 sudo chsh -s /usr/bin/nu $USER
 
-# Docker
-sudo pacman -S --noconfirm docker
-sudo usermod -aG docker $USER
-sudo systemctl enable docker.service
+# Podman
+sudo pacman -S --noconfirm podman podman-compose
 
 # Virtualization
 sudo pacman -S --noconfirm libvirt dnsmasq qemu-full virt-manager virt-viewer
