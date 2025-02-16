@@ -41,9 +41,9 @@
         "runnables": false
     },
     "indent_guides": {
-        "active_line_width": 2,
+        "active_line_width": 3,
         "enabled": true,
-        "line_width": 2
+        "line_width": 3
     },
     "code_actions_on_format": {
         "source.organizeImports": true
