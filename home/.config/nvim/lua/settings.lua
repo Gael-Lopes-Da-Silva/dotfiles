@@ -25,7 +25,7 @@ MiniDeps.now(function()
     --
     -- Set shell:
     --
-    vim.o.shell = "bash"
+    vim.o.shell = "nu"
 
 	--
 	-- Enable auto read and write
