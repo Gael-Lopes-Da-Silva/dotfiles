@@ -1,9 +1,9 @@
 MiniDeps.later(function()
-    local gen_loader = require('mini.snippets').gen_loader
-	require("mini.snippets").setup({
+    local mini_snippets = require('mini.snippets')
+	mini_snippets.setup({
         snippets = {
-            gen_loader.from_file('~/.config/nvim/snippets/global.json'),
-            gen_loader.from_lang()
+            mini_snippets.gen_loader.from_file('~/.config/nvim/lua/snippets/global.json'),
+            mini_snippets.gen_loader.from_lang()
         }
     })
 end)

@@ -17,13 +17,13 @@ MiniDeps.now(function()
 	vim.o.shiftwidth = 4
 
 	--
-	-- Set encoding:
+	-- Set encoding
 	--
 	vim.o.encoding = "utf-8"
 	vim.o.fileencoding = "utf-8"
 
     --
-    -- Set shell:
+    -- Set shell
     --
     vim.o.shell = "nu"
 

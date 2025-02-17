@@ -1,9 +1,7 @@
 MiniDeps.later(function()
 	require("mini.pairs").setup({
 		modes = {
-			insert = true,
-			command = true,
-			terminal = false,
-		},
+			command = true
+		}
 	})
 end)

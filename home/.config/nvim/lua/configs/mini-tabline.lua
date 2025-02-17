@@ -1,5 +1,3 @@
 MiniDeps.later(function()
-	require("mini.tabline").setup({
-		show_icons = true,
-	})
+	require("mini.tabline").setup({})
 end)
