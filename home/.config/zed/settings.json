@@ -22,7 +22,7 @@
     "ensure_final_newline_on_save": false,
     "features": {
         "copilot": false,
-        "inline_completion_provider": "none"
+        "edit_prediction_provider": "none"
     },
     "file_finder": {
         "modal_max_width": "medium"
