@@ -31,3 +31,23 @@ MiniDeps.later(function()
     })
     require("plugins.plugin-lspconfig")
 end)
+
+MiniDeps.later(function()
+    MiniDeps.add({
+        source = "jay-babu/mason-nvim-dap.nvim",
+        depends = {
+            "mfussenegger/nvim-dap",
+        },
+    })
+    require("plugins.plugin-nvim-dap")
+end)
+
+MiniDeps.later(function()
+    MiniDeps.add({
+        source = "jay-babu/mason-null-ls.nvim",
+        depends = {
+            "nvimtools/none-ls.nvim",
+        },
+    })
+    require("plugins.plugin-null-ls")
+end)
