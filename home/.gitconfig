@@ -31,7 +31,7 @@ follow = true
 decorate = false
 
 [core]
-editor = zeditor --wait
+editor = nvim
 pager = less
 whitespace = -trailing-space
 
@@ -48,9 +48,6 @@ lineNumber = true
 [rerere]
 autoupdate = true
 enabled = true
-
-[column]
-ui = auto
 
 [color]
 ui = auto
