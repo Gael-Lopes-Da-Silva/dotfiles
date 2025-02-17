@@ -24,6 +24,12 @@ end)
 
 MiniDeps.later(function()
     MiniDeps.add({
+        source = "nvim-lua/plenary.nvim",
+    })
+end)
+
+MiniDeps.later(function()
+    MiniDeps.add({
         source = "williamboman/mason-lspconfig.nvim",
         depends = {
             "neovim/nvim-lspconfig",
