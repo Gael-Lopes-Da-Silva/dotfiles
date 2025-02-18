@@ -1,111 +1,74 @@
 MiniDeps.now(function()
 	vim.g.autoformat = false
+    vim.g.markdown_folding = 1
 
-	--
-	-- Better indents
-	--
-	vim.o.autoindent = true
-	vim.o.breakindent = true
-	vim.o.expandtab = true
-	vim.o.smartindent = true
+	-- Indentation settings
+    vim.opt.autoindent = true
+    vim.opt.smartindent = true
+    vim.opt.breakindent = true
+    vim.opt.expandtab = true
+    vim.opt.smarttab = true
+    vim.opt.tabstop = 4
+    vim.opt.softtabstop = 4
+    vim.opt.shiftwidth = 4
 
-	--
-	-- Set indents level
-	--
-	vim.o.softtabstop = 4
-	vim.o.tabstop = 4
-	vim.o.shiftwidth = 4
+    -- Encoding
+    vim.opt.encoding = "utf-8"
+    vim.bo.fileencoding = "utf-8"
 
-	--
-	-- Set encoding
-	--
-	vim.o.encoding = "utf-8"
-	vim.o.fileencoding = "utf-8"
+    -- Shell
+    vim.opt.shell = "nu"
+    vim.opt.shellcmdflag = "-c"
 
-    --
-    -- Set shell
-    --
-    vim.o.shell = "nu"
+    -- Auto read/write
+    vim.opt.autoread = true
+    vim.opt.autowrite = true
 
-	--
-	-- Enable auto read and write
-	--
-	vim.o.autoread = true
-	vim.o.autowrite = true
+    -- Disable backup files
+    vim.opt.backup = false
+    vim.opt.writebackup = false
 
-	--
-	-- Disable backup files
-	--
-	vim.o.backup = false
+    -- Clipboard
+	vim.opt.clipboard = "unnamed,unnamedplus"
 
-	--
-	-- Better clipboard
-	--
-	vim.o.clipboard = "unnamed,unnamedplus"
+    -- UI & usability improvements
+    vim.opt.cmdheight = 1
+    vim.opt.list = false
+    vim.opt.mouse = "a"
+    vim.opt.pumblend = 0
+    vim.opt.winblend = 0
+    vim.opt.scrolloff = 5
 
-	--
-	-- Set status line height
-	--
-	vim.o.cmdheight = 1
+    -- Status line and numbering
+    vim.wo.relativenumber = true
+    vim.wo.number = false
 
-	--
-	-- Better folds
-	--
-	vim.o.foldcolumn = "0"
-	vim.o.foldenable = true
-	vim.o.foldexpr = "nvim_treesitter#foldexpr()"
-	vim.o.foldlevel = 99
-	vim.o.foldlevelstart = 99
-	vim.o.foldmethod = "expr"
+    -- Folding
+    vim.opt.foldcolumn = "0"
+    vim.opt.foldenable = true
+    vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+    vim.opt.foldlevel = 99
+    vim.opt.foldlevelstart = 99
+    vim.opt.foldmethod = "expr"
+    vim.opt.foldtext = ""
 
-	--
-	-- Better search
-	--
-	vim.o.hlsearch = true
-	vim.o.ignorecase = true
-	vim.o.incsearch = true
-	vim.o.smartcase = true
+    -- Searching
+	vim.opt.hlsearch = true
+	vim.opt.ignorecase = true
+	vim.opt.incsearch = true
+	vim.opt.smartcase = true
 
-	--
-	-- Disable drawing of spaces and tabs
-	--
-	vim.o.list = false
+    -- Performance optimizations
+    vim.opt.redrawtime = 100
+    vim.opt.updatetime = 250
 
-	--
-	-- Enable mouse use everywhere
-	--
-	vim.o.mouse = "a"
+    -- Undo options
+    vim.opt.undofile = true
+    vim.opt.undolevels = 1000
 
-	--
-	-- Enable relative line number
-	--
-	vim.o.relativenumber = true
-	vim.o.number = false
+    -- Wrapping
+    vim.opt.wrap = true
 
-	--
-	-- Disable popup and windows transparency
-	--
-	vim.o.pumblend = 0
-	vim.o.winblend = 0
-
-	--
-	-- Better update and redraw times
-	--
-	vim.o.redrawtime = 100
-	vim.o.updatetime = 250
-
-	--
-	-- Better scrolloff
-	--
-	vim.o.scrolloff = 5
-
-	--
-	-- More undo levels
-	--
-	vim.o.undolevels = 1000
-
-	--
-	-- Enable warp
-	--
-	vim.o.wrap = true
+    -- Disable intro screen
+    vim.opt.shortmess = "ItToOCF"
 end)

@@ -26,4 +26,14 @@ MiniDeps.now(function()
             end
         end,
     })
+
+    vim.api.nvim_create_autocmd({ "BufAdd", "BufEnter" }, {
+        desc = "Hide empty buffers from the tabline",
+        group = group,
+        callback = function(args)
+            if vim.bo[args.buf].buftype == "" and vim.api.nvim_buf_get_name(args.buf) == "" then
+                vim.bo[args.buf].buflisted = false
+            end
+        end,
+    })
 end)

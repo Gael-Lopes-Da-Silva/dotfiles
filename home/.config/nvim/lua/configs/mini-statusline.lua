@@ -3,7 +3,7 @@ MiniDeps.now(function()
         content = {
             active = function()
                 local diagnostics = require("mini.statusline").section_diagnostics({
-                    icon = " ",
+                    icon = "",
                     trunc_width = 75,
                     signs = {
                         ERROR = "",

@@ -6,5 +6,7 @@ require("mason").setup({
 			package_pending = "",
 			package_uninstalled = "",
 		},
+        width = 0.5,
+        height = 0.5,
 	},
 })
