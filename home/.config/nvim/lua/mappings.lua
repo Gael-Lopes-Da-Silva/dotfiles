@@ -11,11 +11,7 @@ MiniDeps.now(function()
         end
     end, { noremap = true })
 
-    -- Compile
-    set("n", "<F5>", "<cmd> Compile <cr>", { desc = "Run file" })
-
     -- Completion
-    set("i", "<Return>", [[pumvisible() ? "\<C-y>" : "\<Return>"]], { expr = true })
     set("i", "<Tab>", [[pumvisible() ? "\<C-n>" : "\<Tab>"]], { expr = true })
     set("i", "<S-Tab>", [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]], { expr = true })
 

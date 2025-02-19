@@ -18,7 +18,7 @@ MiniDeps.now(function()
     })
 
     vim.api.nvim_create_autocmd("BufWritePre", {
-        desc = "Format the buffer on save",
+        desc = "Format the current buffer on save",
         group = group,
         callback = function()
             if vim.g.autoformat then

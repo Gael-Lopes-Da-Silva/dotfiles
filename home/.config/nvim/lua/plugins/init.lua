@@ -7,6 +7,9 @@ MiniDeps.later(function()
             end,
         },
     })
+    MiniDeps.add({
+        source = "nvim-treesitter/nvim-treesitter-textobjects",
+    })
     require("plugins.plugin-treesitter")
 end)
 
@@ -22,11 +25,9 @@ MiniDeps.later(function()
     require("plugins.plugin-mason")
 end)
 
-MiniDeps.later(function()
-    MiniDeps.add({
-        source = "nvim-lua/plenary.nvim",
-    })
-end)
+MiniDeps.add({
+    source = "nvim-lua/plenary.nvim",
+})
 
 MiniDeps.later(function()
     MiniDeps.add({
