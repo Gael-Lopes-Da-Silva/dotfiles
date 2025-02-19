@@ -29,7 +29,7 @@ MiniDeps.now(function()
     -- Buffers
     set("n", "<S-Tab>", "<cmd> lua MiniBracketed.buffer('backward') <cr>")
     set("n", "<Tab>", "<cmd> lua MiniBracketed.buffer('forward') <cr>")
-    set("n", "<leader>c", "<cmd> lua MiniBufremove.delete() <cr>", { desc = "Close buffer" })
+    set("n", "<leader>d", "<cmd> lua MiniBufremove.delete() <cr>", { desc = "Delete buffer" })
     set("n", "<leader>bd", "<cmd> lua MiniBufremove.delete() <cr>", { desc = "Delete" })
     set("n", "<leader>bD", "<cmd> lua MiniBufremove.delete(0, true) <cr>", { desc = "Delete!" })
     set("n", "<leader>bw", "<cmd> lua MiniBufremove.wipeout() <cr>", { desc = "Wipeout" })
@@ -73,4 +73,9 @@ MiniDeps.now(function()
     set("n", "<leader>gs", "<cmd> Git status <cr>", { desc = "Status" })
     set("n", "<leader>gl", "<cmd> Git log <cr>", { desc = "Log" })
     set("n", "<leader>go", "<cmd> lua MiniDiff.toggle_overlay() <cr>", { desc = "Diff overlay" })
+
+    -- Settings
+    set("n", "<leader>sm", "<cmd> Mason <cr>", { desc = "Mason" })
+    set("n", "<leader>sl", "<cmd> LspInfo <cr>", { desc = "Lsp" })
+    set("n", "<leader>sn", "<cmd> NullLsInfo <cr>", { desc = "NullLs" })
 end)

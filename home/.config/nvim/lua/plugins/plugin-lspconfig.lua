@@ -13,7 +13,10 @@ require("mason-lspconfig").setup({
                 settings = {
                     Lua = {
                         runtime = { version = "LuaJIT" },
-                        diagnostics = { workspaceDelay = -1 },
+                        diagnostics = {
+                            workspaceDelay = -1,
+                            disable = { 'missing-fields' }
+                        },
                         workspace = {
                             checkThirdParty = false,
                             library = vim.api.nvim_get_runtime_file("", true),
