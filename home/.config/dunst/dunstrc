@@ -1,7 +1,8 @@
 [global]
 monitor = 0
-origin = bottom-center
+origin = bottom-right
 indicate_hidden = yes
+offset = 20x20
 shrink = no
 separator_height = 4
 separator_color = auto
