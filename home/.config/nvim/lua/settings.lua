@@ -16,10 +16,6 @@ MiniDeps.now(function()
     vim.opt.encoding = "utf-8"
     vim.bo.fileencoding = "utf-8"
 
-    -- Shell
-    vim.opt.shell = "nu"
-    vim.opt.shellcmdflag = "-c"
-
     -- Auto read/write
     vim.opt.autoread = true
     vim.opt.autowrite = true
