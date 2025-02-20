@@ -18,11 +18,11 @@ main(void)
     const char *icon = ICON_BATTERY;
     const char *color = "";
     int type = 0;
-    
+
     if ((fp = popen(CMD_GET_BATTERY, "r")) == NULL) {
         return 1;
     }
-    
+
     while (fgets(output, sizeof(output), fp)) {
         if (strstr(output, "percentage")) {
             sscanf(output, " percentage: %d%%", &battery);
@@ -31,11 +31,11 @@ main(void)
         }
     }
     pclose(fp);
-    
+
     if (battery < 0 || strlen(state) == 0) {
         return 1;
     }
-    
+
     if (strcmp(state, "charging") == 0) {
         icon = ICON_CHARGING;
         if (battery >= 95) {
@@ -52,13 +52,13 @@ main(void)
             type = 2;
         }
     }
-    
+
     if (battery == 100) {
         icon = ICON_FULL;
         color = "#0000FF";
         type = 2;
     }
-    
+
     if (type == 0) {
         printf(" %s %d%% ", icon, battery);
     } else if (type == 1) {
@@ -66,6 +66,6 @@ main(void)
     } else if (type == 2) {
         printf("^b%s^ %s %d%% ^d^", color, icon, battery);
     }
-    
+
     return 0;
 }

@@ -14,11 +14,11 @@ main(void)
     char output[128];
     int brightness = -1;
     const char *icon = ICON_BRIGHT;
-    
+
     if ((fp = popen(CMD_GET_BRIGHTNESS, "r")) == NULL) {
         return 1;
     }
-    
+
     if (fgets(output, sizeof(output), fp)) {
         char *token = strtok(output, ",");
         for (int i = 0; i < 3 && token != NULL; i++) {
@@ -29,16 +29,16 @@ main(void)
         }
     }
     pclose(fp);
-    
+
     if (brightness < 0) {
         return 1;
     }
-    
+
     if (brightness <= 50) {
         icon = ICON_DIM;
     }
-    
+
     printf(" %s %d%% ", icon, brightness);
-    
+
     return 0;
 }
