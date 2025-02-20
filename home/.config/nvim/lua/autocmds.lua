@@ -9,10 +9,11 @@ MiniDeps.now(function()
     })
 
     vim.api.nvim_create_autocmd("BufWritePost", {
-        desc = "Auto source neovim configuration on change",
+        desc = "Hot reload neovim configuration on save",
         pattern = "*/.config/nvim/**.lua",
         group = group,
         callback = function()
+            vim.cmd("Reload")
             vim.cmd("source " .. vim.fn.expand("<afile>"))
         end,
     })

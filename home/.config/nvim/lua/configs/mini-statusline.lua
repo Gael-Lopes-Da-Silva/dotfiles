@@ -1,23 +1,15 @@
 MiniDeps.now(function()
-    require("mini.statusline").setup({
+    local mini_statusline = require("mini.statusline")
+    mini_statusline.setup({
         content = {
             active = function()
-                local diagnostics = require("mini.statusline").section_diagnostics({
-                    icon = "",
-                    trunc_width = 75,
-                    signs = {
-                        ERROR = "",
-                        WARN = "",
-                        INFO = "",
-                        HINT = "",
-                    },
-                })
-                local filename = require("mini.statusline").section_filename({ trunc_width = 140 })
-                local location = require("mini.statusline").section_location({ trunc_width = 75 })
-                local mode, mode_hl = require("mini.statusline").section_mode({ trunc_width = 120 })
-                local search = require("mini.statusline").section_searchcount({ trunc_width = 75 })
+                local mode, mode_hl = mini_statusline.section_mode({ trunc_width = 120 })
+                local filename = mini_statusline.section_filename({ trunc_width = 140 })
+                local location = mini_statusline.section_location({ trunc_width = 75 })
+                local search = mini_statusline.section_searchcount({ trunc_width = 75 })
+                local fileinfo = mini_statusline.section_fileinfo({ trunc_width = 999 })
 
-                return require("mini.statusline").combine_groups({
+                return mini_statusline.combine_groups({
                     {
                         hl = mode_hl,
                         strings = { mode },
@@ -29,8 +21,8 @@ MiniDeps.now(function()
                     },
                     "%=",
                     {
-                        hl = "MiniStatuslineDevinfo",
-                        strings = { diagnostics },
+                        hl = "MiniStatuslineFileinfo",
+                        strings = { fileinfo },
                     },
                     {
                         hl = mode_hl,

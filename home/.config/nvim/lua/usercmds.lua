@@ -10,4 +10,14 @@ MiniDeps.now(function()
         end
         vim.lsp.buf.format({ range = range })
     end, { range = true })
+
+    vim.api.nvim_create_user_command("Reload", function()
+        for name, _ in pairs(package.loaded) do
+            if name:match('^cnull') then
+                package.loaded[name] = nil
+            end
+        end
+
+        dofile(vim.env.MYVIMRC)
+    end, {})
 end)
