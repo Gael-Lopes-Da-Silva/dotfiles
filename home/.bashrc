@@ -51,7 +51,7 @@ shopt -s globstar
 shopt -s extglob
 
 RESET=$(tput sgr0)
-GREEN=$(tput setaf 35)
+GREEN=$(tput setaf 2)
 BOLD=$(tput bold)
 
 export PS1='(${GREEN}${BOLD}\w${RESET}) '
