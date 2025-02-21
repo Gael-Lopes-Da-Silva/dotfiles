@@ -51,7 +51,14 @@ shopt -s globstar
 shopt -s extglob
 
 RESET=$(tput sgr0)
+RED=$(tput setaf 1)
 GREEN=$(tput setaf 2)
 BOLD=$(tput bold)
 
-export PS1='(${GREEN}${BOLD}\w${RESET}) '
+PROMPT_COMMAND='
+    LAST_STATUS=$?
+    COLOR=$([[ $LAST_STATUS -eq 0 ]] && echo -ne "${GREEN}" || echo -ne "${RED}")
+'
+
+export PS1='(${COLOR}${BOLD}\w${RESET}) '
+export PS2=':::'
