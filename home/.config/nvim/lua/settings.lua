@@ -1,8 +1,8 @@
 MiniDeps.now(function()
-	vim.g.autoformat = false
+    vim.g.autoformat = false
     vim.g.markdown_folding = 1
 
-	-- Indentation settings
+    -- Indentation settings
     vim.opt.autoindent = true
     vim.opt.smartindent = true
     vim.opt.breakindent = true
@@ -25,19 +25,19 @@ MiniDeps.now(function()
     vim.opt.writebackup = false
 
     -- Clipboard
-	vim.opt.clipboard = "unnamed,unnamedplus"
+    vim.opt.clipboard = "unnamed,unnamedplus"
 
     -- UI & usability improvements
     vim.opt.cmdheight = 1
-    vim.opt.list = false
     vim.opt.mouse = "a"
     vim.opt.pumblend = 0
     vim.opt.winblend = 0
     vim.opt.scrolloff = 5
+    vim.opt.cursorlineopt = 'screenline,number'
 
     -- Status line and numbering
     vim.wo.relativenumber = true
-    vim.wo.number = false
+    vim.wo.number = true
 
     -- Folding
     vim.opt.foldcolumn = "0"
@@ -49,10 +49,10 @@ MiniDeps.now(function()
     vim.opt.foldtext = ""
 
     -- Searching
-	vim.opt.hlsearch = true
-	vim.opt.ignorecase = true
-	vim.opt.incsearch = true
-	vim.opt.smartcase = true
+    vim.opt.hlsearch = true
+    vim.opt.ignorecase = true
+    vim.opt.incsearch = true
+    vim.opt.smartcase = true
 
     -- Performance optimizations
     vim.opt.redrawtime = 100
@@ -64,7 +64,19 @@ MiniDeps.now(function()
 
     -- Wrapping
     vim.opt.wrap = true
+    vim.opt.showbreak = '󱞶 '
 
     -- Disable intro screen
     vim.opt.shortmess = "ItToOCF"
+
+    -- Special characters
+    vim.opt.list = true
+    vim.opt.breakindentopt = 'list:-1'
+    vim.opt.listchars = table.concat({
+        'tab: ',
+        'nbsp:␣',
+        'conceal:*',
+        'extends:…',
+        'precedes:…',
+    }, ',')
 end)

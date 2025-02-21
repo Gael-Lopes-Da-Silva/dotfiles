@@ -31,7 +31,13 @@ require("mason-lspconfig").setup({
     },
 })
 
-for type, icon in pairs({ Error = "", Warn = "", Info = "", Hint = "", Ok = "" }) do
+for type, icon in pairs({
+    Error = "",
+    Warn = "",
+    Info = "",
+    Hint = "",
+    Ok = "",
+}) do
     local hl = "DiagnosticSign" .. type
     vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 end
@@ -52,11 +58,8 @@ vim.diagnostic.config({
     },
 })
 
-require("lspconfig.ui.windows").default_options = { border = "single" }
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "single" })
 vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "single" })
-
-vim.api.nvim_set_hl(0, "LspInfoBorder", { link = "FloatBorder" })
 
 vim.api.nvim_set_hl(0, "DiagnosticVirtualTextError", { fg = "#fb4934", bg = "#504945" })
 vim.api.nvim_set_hl(0, "DiagnosticVirtualTextWarn", { fg = "#d3869b", bg = "#504945" })

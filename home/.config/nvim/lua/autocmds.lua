@@ -32,7 +32,7 @@ MiniDeps.now(function()
         desc = "Hide empty buffers from the tabline",
         group = group,
         callback = function(args)
-            if vim.bo[args.buf].buftype == "" and vim.api.nvim_buf_get_name(args.buf) == "" then
+            if (vim.bo[args.buf].buftype == "" or vim.bo[args.buf].buftype == "nofile") and vim.api.nvim_buf_get_name(args.buf) == "" then
                 vim.bo[args.buf].buflisted = false
             end
         end,
