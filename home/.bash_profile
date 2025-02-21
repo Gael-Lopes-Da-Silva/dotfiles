@@ -11,4 +11,6 @@ export TERMINAL='st'
 export COLORTERM='truecolor'
 export PAGER='less -r'
 
+bash ~/.scripts/soundboard.sh
+
 [[ $(tty) == "/dev/tty1" ]] && exec startx
