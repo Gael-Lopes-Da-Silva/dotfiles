@@ -36,6 +36,7 @@ bind 'set show-all-if-ambiguous on'
 bind 'set mark-symlinked-directories on'
 bind 'set completion-ignore-case on'
 bind 'set colored-stats on'
+bind 'set enable-bracketed-paste off'
 
 bind 'TAB:menu-complete'
 bind '"\e[A":history-search-backward'
