@@ -2,6 +2,11 @@
 
 USER="gael"
 
+# Terminal
+sudo pacman -S --noconfirm terminus-font
+setfont ter-132n
+echo -e "FONT=ter-132n" | sudo tee -a /etc/vconsole.conf
+
 # Pacman
 sudo sed -i "s|#Color|Color|" /etc/pacman.conf
 sudo sed -i "s|#ParallelDownloads = 5|ParallelDownloads = 5|" /etc/pacman.conf
@@ -15,35 +20,29 @@ cd ..
 rm -rf ./paru/
 
 # Packages
-sudo pacman -S --noconfirm noto-fonts noto-fonts-extra noto-fonts-emoji noto-fonts-cjk ttf-cascadia-code ouch stow bash-completion firefox chromium pinta neovim ripgrep udiskie dunst feh xdg-desktop-portal xdg-desktop-portal-gtk ttf-liberation papirus-icon-theme
+sudo pacman -S --noconfirm noto-fonts noto-fonts-extra noto-fonts-emoji noto-fonts-cjk ttf-cascadia-code ouch stow bash-completion firefox chromium pinta neovim ripgrep udiskie dunst feh xdg-desktop-portal xdg-desktop-portal-gtk ttf-liberation papirus-icon-theme linux-headers
 
-# Docker
-sudo pacman -S --noconfirm docker
-sudo usermod -aG docker $USER
-sudo systemctl enable docker.service
-
-# Virtualization
-sudo pacman -S --noconfirm libvirt dnsmasq qemu-full virt-manager virt-viewer
-sudo usermod -aG libvirt gael
-sudo systemctl enable libvirtd.service
-
-# Loopback
-sudo pacman -S --noconfirm v4l2loopback-dkms v4l2loopback-utils linux-headers
-sudo modprobe v4l2loopback
+# Stow
+cd /home/$USER/.dotfiles/
+stow home
 
 # Desktop
-sudo pacman -S --noconfirm terminus-font xorg xorg-xinit xclip maim upower brightnessctl network-manager-applet
-setfont ter-132n
-echo -e "FONT=ter-132n" | sudo tee -a /etc/vconsole.conf
-cd /home/$USER/.dotfiles/home/.config/suckless/dwm
+sudo pacman -S --noconfirm xorg xorg-xinit xclip maim upower brightnessctl network-manager-applet
+cd /home/$USER/.config/suckless/dwm
 sudo make clean install
-cd ../dwmblocks
+cd /home/$USER/.config/suckless/dwmblocks
 sudo make clean install
-cd ../dmenu
+cd /home/$USER/.config/suckless/dmenu
+sudo make clean install
+cd /home/$USER/.config/suckless/st
 sudo make clean install
 
+# Loopback
+sudo pacman -S --noconfirm v4l2loopback-dkms v4l2loopback-utils
+sudo modprobe v4l2loopback
+
 # Server
-sudo pacman -S --noconfirm apache mariadb php php-apache
+sudo pacman -S --noconfirm apache mariadb php php-apache php-gd
 sudo sed -i "s|#LoadModule unique_id_module modules/mod_unique_id.so|LoadModule unique_id_module modules/mod_unique_id.so|" /etc/httpd/conf/httpd.conf
 sudo sed -i "s|#LoadModule rewrite_module modules/mod_rewrite.so|LoadModule rewrite_module modules/mod_rewrite.so|" /etc/httpd/conf/httpd.conf
 sudo sed -i "s|AllowOverride None|AllowOverride All|" /etc/httpd/conf/httpd.conf
@@ -70,6 +69,16 @@ sudo sed -i "s|;error_append_string = \"</span>\"|error_append_string = \"</span
 sudo systemctl restart httpd.service
 sudo systemctl restart mysql.service
 
+# Docker
+sudo pacman -S --noconfirm docker
+sudo usermod -aG docker $USER
+sudo systemctl enable docker.service
+
+# Virtualization
+sudo pacman -S --noconfirm libvirt dnsmasq qemu-full virt-manager virt-viewer
+sudo usermod -aG libvirt $USER
+sudo systemctl enable libvirtd.service
+
 # Android SDK
 paru -S --noconfirm sdkmanager
 sudo sdkmanager --install "tools"
@@ -77,7 +86,3 @@ sudo sdkmanager --install "platform-tools"
 sudo sdkmanager --install "build-tools;34.0.0"
 sudo sdkmanager --install "platforms;android-35"
 sudo sdkmanager --licenses
-
-# Stow
-cd /home/$USER/.dotfiles/
-stow home
