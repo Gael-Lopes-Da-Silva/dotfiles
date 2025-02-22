@@ -51,15 +51,6 @@ shopt -s cmdhist
 shopt -s globstar
 shopt -s extglob
 
-RESET=$(tput sgr0)
-RED=$(tput setaf 1)
-GREEN=$(tput setaf 2)
-BOLD=$(tput bold)
-
-PROMPT_COMMAND='
-    LAST_STATUS=$?
-    COLOR=$([[ $LAST_STATUS -eq 0 ]] && echo -ne "${GREEN}" || echo -ne "${RED}")
-'
-
-export PS1='(${COLOR}${BOLD}\w${RESET}) '
-export PS2=':::'
+PS0='\[\e[93;1m\](\[\e[97;1m\]\[\e[4m\]\t\[\e[0m\]\[\e[93;1m\])\[\e[0m\]\n'
+PS1='\[\e[93;1m\](\[\e[97;1m\]\[\e[4m\]\w\[\e[0m\]\[\e[93;1m\])\[\e[0m\] '
+PS2=':::'
