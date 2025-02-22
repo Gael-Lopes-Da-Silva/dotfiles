@@ -1,5 +1,5 @@
 MiniDeps.now(function()
-	require("mini.starter").setup({
+    require("mini.starter").setup({
         autoopen = false,
     })
 end)

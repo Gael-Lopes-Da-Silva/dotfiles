@@ -1,3 +1,3 @@
 MiniDeps.later(function()
-	require("mini.trailspace").setup({})
+    require("mini.trailspace").setup({})
 end)
