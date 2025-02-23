@@ -53,6 +53,10 @@ shopt -s cmdhist
 shopt -s globstar
 shopt -s extglob
 
+HISTCONTROL=ignoredups:erasedups
+HISTSIZE=1000
+HISTFILESIZE=2000
+
 PS0='\[\e[93;1m\](\[\e[97;1m\]\[\e[4m\]\t\[\e[0m\]\[\e[93;1m\])\[\e[0m\]\n'
 PS1='\[\e[93;1m\](\[\e[97;1m\]\[\e[4m\]\w\[\e[0m\]\[\e[93;1m\])\[\e[0m\] '
 PS2=':::'
