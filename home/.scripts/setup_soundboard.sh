@@ -1,5 +1,9 @@
 #!/bin/bash
 
+while [[ -z $(pactl get-default-source) || -z $(pactl get-default-sink) ]]; do
+    sleep 1
+done
+
 SINK_NAME=SoundboardInput
 SOURCE_NAME=SoundboardOutput
 MIC_SOURCE=$(pactl get-default-source)
