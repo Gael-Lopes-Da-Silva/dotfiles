@@ -8,8 +8,6 @@ pgrep -x udiskie || udiskie --automount --notify --tray &
 eval "$(gnome-keyring-daemon --start)"
 export SSH_AUTH_SOCK
 
-export GTK2_RC_FILES=~/.config/gtk-2.0/settings.ini
-
 dbus-update-activation-environment --systemd DISPLAY XAUTHORITY &
 
 xsetroot -solid "#474747"
