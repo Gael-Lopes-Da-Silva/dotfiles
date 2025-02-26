@@ -11,7 +11,7 @@ export TERMINAL='st'
 export COLORTERM='truecolor'
 export PAGER='less -r'
 
-export GTK2_RC_FILES=~/.config/gtk-2.0/settings.ini
-export GTK_THEME=Adwaita-dark
+export GTK_THEME=Adwaita:dark
+export QT_STYLE_OVERRIDE=Adwaita-Dark
 
 [[ $(tty) == "/dev/tty1" ]] && exec startx
