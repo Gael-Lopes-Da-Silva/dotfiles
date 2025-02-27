@@ -39,7 +39,7 @@ main(void)
     if (strcmp(state, "charging") == 0) {
         icon = ICON_CHARGING;
         if (battery >= 95) {
-            color = "#50DF00";
+            color = "#50BF00";
             type = 1;
         }
     } else if (strcmp(state, "discharging") == 0) {
@@ -49,13 +49,13 @@ main(void)
         }
         if (battery <= 10) {
             color = "#FF0000";
-            type = 2;
+            type = 1;
         }
     }
 
     if (battery == 100) {
         icon = ICON_FULL;
-        color = "#FFD000";
+        color = "#005577";
         type = 2;
     }
 
