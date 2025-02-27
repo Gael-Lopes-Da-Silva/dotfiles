@@ -8,13 +8,7 @@ LDFLAGS := -lX11
 # # OpenBSD (uncomment)
 #LDFLAGS += -L/usr/X11R6/lib -I/usr/X11R6/include
 
-all: options dwmblocks
-
-options:
-	@echo dwmblocks build options:
-	@echo "CFLAGS  = ${CFLAGS}"
-	@echo "LDFLAGS = ${LDFLAGS}"
-	@echo "CC      = ${CC}"
+all: dwmblocks
 
 dwmblocks: dwmblocks.c config.def.h config.h
 	${CC} -o dwmblocks dwmblocks.c ${CFLAGS} ${LDFLAGS}
