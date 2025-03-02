@@ -9,6 +9,4 @@ MiniDeps.now(function()
         },
     })
     vim.notify = mini_notify.make_notify()
-
-    vim.api.nvim_set_hl(0, "MiniNotifyTitle", { fg = "#83a598", bg = "#3c3836" })
 end)
