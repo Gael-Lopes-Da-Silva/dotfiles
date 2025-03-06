@@ -27,6 +27,12 @@ require("mason-lspconfig").setup({
                     },
                 },
             })
+
+            require("lspconfig").intelephense.setup({
+                init_options = {
+                    globalStoragePath = os.getenv('HOME') .. "/.cache/intelephense"
+                },
+            })
         end,
     },
 })
