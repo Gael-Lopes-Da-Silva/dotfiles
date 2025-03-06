@@ -6,6 +6,8 @@
 
 export PATH=$PATH:~/.scripts/:~/.cargo/bin
 
+xset r rate 250 40
+
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
