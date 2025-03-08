@@ -13,5 +13,6 @@ export PAGER='less -r'
 
 export GTK_THEME=Adwaita:dark
 export QT_STYLE_OVERRIDE=Adwaita-Dark
+export VDPAU_DRIVER=va_gl
 
 [[ $(tty) == "/dev/tty1" ]] && exec startx
