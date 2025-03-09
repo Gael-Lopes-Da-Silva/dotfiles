@@ -10,6 +10,7 @@ export VISUAL='nvim'
 export TERMINAL='st'
 export COLORTERM='truecolor'
 export PAGER='less -r'
+export SUDO_PROMPT=" "
 
 export GTK_THEME=Adwaita:dark
 export QT_STYLE_OVERRIDE=Adwaita-Dark
