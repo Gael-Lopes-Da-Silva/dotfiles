@@ -36,7 +36,8 @@ require("mason-lspconfig").setup({
                     intelephense = {
                         initialization_options = {
                             globalStoragePath = os.getenv('HOME') .. "/.cache/intelephense"
-                        }
+                        },
+                        telemetry = { enabled = false },
                     }
                 }
             })
