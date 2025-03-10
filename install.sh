@@ -86,3 +86,7 @@ sudo sdkmanager --install "platform-tools"
 sudo sdkmanager --install "build-tools;34.0.0"
 sudo sdkmanager --install "platforms;android-35"
 sudo sdkmanager --licenses
+
+# Soundboard
+systemctl --user enable soundboard.service
+systemctl --user start soundboard.service
