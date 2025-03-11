@@ -9,7 +9,7 @@ require("mason-lspconfig").setup({
         end,
 
         lua_ls = function()
-            require("lspconfig").lua_ls.setup({
+            require("lspconfig").lua_ls.setup(vim.fn.getcwd():match('/%.config/nvim/?') ~= nil and {
                 settings = {
                     Lua = {
                         runtime = { version = "LuaJIT" },
@@ -26,8 +26,17 @@ require("mason-lspconfig").setup({
                         telemetry = { enable = false },
                     },
                 },
+            } or {
+                settings = {
+                    Lua = {
+                        runtime = { version = "LuaJIT" },
+                        telemetry = { enable = false },
+                    },
+                },
             })
+        end,
 
+        intelephense = function()
             require("lspconfig").intelephense.setup({
                 init_options = {
                     globalStoragePath = os.getenv('HOME') .. "/.cache/intelephense"
@@ -41,7 +50,7 @@ require("mason-lspconfig").setup({
                     }
                 }
             })
-        end,
+        end
     },
 })
 
