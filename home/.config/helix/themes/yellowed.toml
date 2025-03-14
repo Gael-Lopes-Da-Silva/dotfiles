@@ -60,7 +60,7 @@
 "ui.background"                   = { bg = "gray", fg = "white" }
 "ui.background.separator"         = { fg = "white" }
 "ui.bufferline"                   = { fg = "light_gray" }
-"ui.bufferline.active"            = { fg = "white", modifiers = ["bold"] }
+"ui.bufferline.active"            = { fg = "white", bg = "gray", modifiers = ["bold"] }
 "ui.bufferline.background"        = { bg = "dark_gray" }
 "ui.cursor"                       = { bg = "yellow", fg = "black" }
 "ui.cursor.insert"                = { bg = "yellow", fg = "black" }
@@ -109,7 +109,7 @@
 "ui.virtual.ruler"                = { bg = "light_gray" }
 "ui.virtual.whitespace"           = { fg = "light_gray" }
 "ui.virtual.wrap"                 = { fg = "light_gray" }
-"ui.window"                       = { fg = "white" }
+"ui.window"                       = { fg = "light_gray" }
 
 "warning"                         = { fg = "warning", modifiers = ["bold"] }
 "error"                           = { fg = "error", modifiers = ["bold"] }
