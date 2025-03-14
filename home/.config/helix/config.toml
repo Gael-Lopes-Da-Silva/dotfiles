@@ -1,0 +1,66 @@
+theme = "yellowed"
+
+[editor]
+scrolloff = 5
+mouse = true
+middle-click-paste = false
+line-number = "relative"
+cursorline = true
+continue-comments = true
+auto-completion = true
+path-completion = true
+auto-format = false
+preview-completion-insert = true
+true-color = true
+undercurl = true
+rulers = []
+bufferline = "multiple"
+color-modes = true
+insert-final-newline = false
+popup-border = "all"
+end-of-line-diagnostics = "hint"
+
+[editor.statusline]
+left = ["mode", "file-name", "read-only-indicator"]
+center = []
+right = ["diagnostics", "spinner", "file-type", "position", "total-line-numbers"]
+separator = "│"
+mode.normal = "NORMAL"
+mode.insert = "INSERT"
+mode.select = "SELECT"
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
+
+[editor.file-picker]
+hidden = false
+
+[editor.auto-save]
+focus-lost = true
+
+[editor.whitespace.render]
+space = "none"
+tab = "all"
+nbsp = "all"
+nnbsp = "all"
+newline = "none"
+
+[editor.whitespace.characters]
+space = "·"
+nbsp = "␣"
+nnbsp = "␣"
+tab = ""
+newline = "⏎"
+tabpad = "·"
+
+[editor.indent-guides]
+render = true
+
+[editor.soft-wrap]
+enable = true
+wrap-indicator = "󱞶"
+
+[editor.inline-diagnostics]
+cursor-line = "warning"
