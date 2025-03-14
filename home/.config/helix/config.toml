@@ -14,7 +14,7 @@ preview-completion-insert = true
 true-color = true
 undercurl = true
 rulers = []
-bufferline = "multiple"
+bufferline = "always"
 color-modes = true
 insert-final-newline = false
 popup-border = "all"
@@ -61,9 +61,6 @@ render = true
 [editor.soft-wrap]
 enable = true
 wrap-indicator = "󱞶"
-
-[editor.inline-diagnostics]
-cursor-line = "warning"
 
 [keys.normal.space]
 f = "file_picker_in_current_directory"
