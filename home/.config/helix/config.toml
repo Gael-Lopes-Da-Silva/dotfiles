@@ -64,3 +64,7 @@ wrap-indicator = "󱞶"
 
 [editor.inline-diagnostics]
 cursor-line = "warning"
+
+[keys.normal.space]
+f = "file_picker_in_current_directory"
+F = "file_picker_in_current_buffer_directory"
