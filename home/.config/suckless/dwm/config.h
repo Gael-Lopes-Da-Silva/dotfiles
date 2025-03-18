@@ -18,9 +18,9 @@ static const char col_gray3[]            = "#bbbbbb";
 static const char col_gray4[]            = "#eeeeee";
 static const char col_cyan[]             = "#005577";
 static const char *colors[][3]           = {
-	/*               fg         bg         border   */
-	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
+    /*               fg         bg         border   */
+    [SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
+    [SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
 };
 
 /* tagging */
@@ -30,12 +30,12 @@ static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 static char lockfile[] = "/tmp/dwm.lock";
 
 static const Rule rules[] = {
-	/* xprop(1):
-	 *	WM_CLASS(STRING) = instance, class
-	 *	WM_NAME(STRING) = title
-	 */
-	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "*",        NULL,       NULL,       0,            0,           -1 },
+    /* xprop(1):
+     *    WM_CLASS(STRING) = instance, class
+     *    WM_NAME(STRING) = title
+     */
+    /* class      instance    title       tags mask     isfloating   monitor */
+    { "*",        NULL,       NULL,       0,            0,           -1 },
 };
 
 /* layout(s) */
@@ -45,10 +45,10 @@ static const int resizehints    = 1;    /* 1 means respect size hints in tiled r
 static const int lockfullscreen = 1;    /* 1 will force focus on the fullscreen window */
 
 static const Layout layouts[] = {
-	/* symbol     arrange function */
+    /* symbol     arrange function */
     { "[M]",      monocle },
-	{ "[]=",      tile },    /* first entry is default */
-	{ "[]|",      NULL },    /* no layout function means floating behavior */
+    { "[]=",      tile },    /* first entry is default */
+    { "[]|",      NULL },    /* no layout function means floating behavior */
 };
 
 /* key definitions */
@@ -65,9 +65,9 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 
 static const char *dmenucmd[]  = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
-static const char *termcmd[]   = { "kitty", NULL };
-static const char *browser1[]   = { "firefox", NULL };
-static const char *browser2[]   = { "chromium", NULL };
+static const char *termcmd[]   = { "st", NULL };
+static const char *browser1[]  = { "firefox", NULL };
+static const char *browser2[]  = { "chromium", NULL };
 
 static const char *vol_plus[]  = { "wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", "0.10+", NULL };
 static const char *vol_minus[] = { "wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", "0.10-", NULL };
@@ -77,7 +77,7 @@ static const char *bri_plus[]  = { "brightnessctl", "set", "+10%", NULL };
 static const char *bri_minus[] = { "brightnessctl", "set", "10%-", NULL };
 
 static const char scrsht[]     = "maim --select | xclip -selection clipboard -t image/png";
-static const char scrsht_all[] = "maim | xclip -selection clipboard -t image/png";
+static const char scrsht_all[] = "maim -i $(xdotool getactivewindow) | xclip -selection clipboard -t image/png";
 
 #include <X11/XF86keysym.h>
 
@@ -102,7 +102,7 @@ static const Key keys[] = {
     {MODKEY,             XK_m,                       setlayout,        {.v = &layouts[0]} },
     {MODKEY,             XK_space,                   setlayout,        {0} },
     {MODKEY|ShiftMask,   XK_space,                   togglefloating,   {0} },
-	{MODKEY|ShiftMask,   XK_f,                       togglefullscr,    {0} },
+    {MODKEY|ShiftMask,   XK_f,                       togglefullscr,    {0} },
     {MODKEY,             XK_0,                       view,             {.ui = ~0} },
     {MODKEY|ShiftMask,   XK_0,                       tag,              {.ui = ~0} },
     {MODKEY,             XK_comma,                   focusmon,         {.i = -1} },
@@ -133,17 +133,17 @@ static const Key keys[] = {
 /* button definitions */
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 static const Button buttons[] = {
-	/* click                event mask      button          function        argument */
-	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
-	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
-	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
-	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd} },
-	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
-	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
-	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
-	{ ClkTagBar,            0,              Button1,        view,           {0} },
-	{ ClkTagBar,            0,              Button3,        toggleview,     {0} },
-	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
-	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
+    /* click                event mask      button          function        argument */
+    { ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
+    { ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
+    { ClkWinTitle,          0,              Button2,        zoom,           {0} },
+    { ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd} },
+    { ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
+    { ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
+    { ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
+    { ClkTagBar,            0,              Button1,        view,           {0} },
+    { ClkTagBar,            0,              Button3,        toggleview,     {0} },
+    { ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
+    { ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
 };
 
