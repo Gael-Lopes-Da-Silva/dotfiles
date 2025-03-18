@@ -34,8 +34,6 @@ cd /home/$USER/.config/suckless/dwmblocks
 sudo make clean install
 cd /home/$USER/.config/suckless/dmenu
 sudo make clean install
-cd /home/$USER/.config/suckless/st
-sudo make clean install
 
 # Loopback
 sudo pacman -S --noconfirm v4l2loopback-dkms v4l2loopback-utils
