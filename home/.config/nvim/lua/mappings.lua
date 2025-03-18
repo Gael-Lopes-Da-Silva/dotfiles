@@ -2,7 +2,6 @@ MiniDeps.now(function()
     local set = vim.keymap.set
 
     -- Default
-    set("n", "U", "<C-r>")
     set("t", "<C-q>", "<C-\\><C-n>")
     set("n", "<Esc>", function()
         if not require("mini.files").close() then
@@ -54,6 +53,7 @@ MiniDeps.now(function()
     set("n", "<leader>po", "<cmd>lua MiniExtra.pickers.options()<cr>", { desc = "Options" })
     set("n", "<leader>pr", "<cmd>lua MiniExtra.pickers.registers()<cr>", { desc = "Registers" })
     set("n", "<leader>pt", "<cmd>lua MiniExtra.pickers.hipatterns()<cr>", { desc = "Todos" })
+    set("n", "<leader>pc", "<cmd>lua MiniExtra.pickers.hl_groups()<cr>", { desc = "Colors" })
 
     -- Notifications
     set("n", "<leader>nc", "<cmd>lua MiniNotify.clear()<cr>", { desc = "Clear" })

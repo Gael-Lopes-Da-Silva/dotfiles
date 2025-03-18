@@ -44,7 +44,7 @@ MiniDeps.now(function()
             { mode = "n", keys = "<Leader>g", desc = "+Git" },
             { mode = "n", keys = "<Leader>l", desc = "+LSP" },
             { mode = "n", keys = "<Leader>n", desc = "+Notifications" },
-            { mode = "n", keys = "<Leader>p", desc = "+Finders" },
+            { mode = "n", keys = "<Leader>p", desc = "+Picks" },
             { mode = "n", keys = "<Leader>s", desc = "+Settings" },
             mini_clue.gen_clues.builtin_completion(),
             mini_clue.gen_clues.g(),

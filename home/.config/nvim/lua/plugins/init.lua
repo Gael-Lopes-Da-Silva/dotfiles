@@ -1,4 +1,4 @@
-MiniDeps.later(function()
+MiniDeps.later(function() -- treesitter
     MiniDeps.add({
         source = "nvim-treesitter/nvim-treesitter",
         hooks = {
@@ -10,7 +10,7 @@ MiniDeps.later(function()
     require("plugins.plugin-treesitter")
 end)
 
-MiniDeps.later(function()
+MiniDeps.later(function() -- mason
     MiniDeps.add({
         source = "williamboman/mason.nvim",
         hooks = {
@@ -22,7 +22,7 @@ MiniDeps.later(function()
     require("plugins.plugin-mason")
 end)
 
-MiniDeps.later(function()
+MiniDeps.later(function() -- lspconfig
     MiniDeps.add({
         source = "williamboman/mason-lspconfig.nvim",
         depends = {
@@ -34,7 +34,7 @@ MiniDeps.later(function()
     require("plugins.plugin-lspconfig")
 end)
 
-MiniDeps.later(function()
+MiniDeps.later(function() -- nvim-dap
     MiniDeps.add({
         source = "jay-babu/mason-nvim-dap.nvim",
         depends = {
@@ -46,7 +46,7 @@ MiniDeps.later(function()
     require("plugins.plugin-nvim-dap")
 end)
 
-MiniDeps.later(function()
+MiniDeps.later(function() -- null-ls
     MiniDeps.add({
         source = "jay-babu/mason-null-ls.nvim",
         depends = {

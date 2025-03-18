@@ -1,6 +1,5 @@
 MiniDeps.now(function()
     vim.g.autoformat = false
-    vim.g.markdown_folding = 1
 
     -- Indentation settings
     vim.opt.autoindent = true
@@ -28,7 +27,7 @@ MiniDeps.now(function()
     vim.opt.clipboard = "unnamed,unnamedplus"
 
     -- UI & usability improvements
-    vim.opt.cmdheight = 1
+    vim.opt.cmdheight = 0
     vim.opt.mouse = "a"
     vim.opt.pumblend = 0
     vim.opt.winblend = 0
