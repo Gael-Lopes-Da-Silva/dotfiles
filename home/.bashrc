@@ -59,6 +59,5 @@ HISTCONTROL=ignoredups:erasedups
 HISTSIZE=1000
 HISTFILESIZE=2000
 
-PS0='\[\e[93;1m\](\[\e[97;1m\]\t\[\e[93;1m\])\[\e[0m\]\n'
-PS1='\[\e[93;1m\](\[\e[97;1m\]\w\[\e[93;1m\])\[\e[0m\] '
-PS2=':::'
+PS1='\[\e[96;1m\]\w\[\e[0m\] \[\e[38;5;237;1m\]$?\n\[\e[22m\]\[\e[0m\] '
+PS2='\[\e[38;5;237m\]\[\e[0m\] '

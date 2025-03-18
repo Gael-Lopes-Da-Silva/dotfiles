@@ -31,7 +31,7 @@ follow = true
 decorate = false
 
 [core]
-editor = helix
+editor = nvim
 pager = less
 whitespace = -trailing-space
 
