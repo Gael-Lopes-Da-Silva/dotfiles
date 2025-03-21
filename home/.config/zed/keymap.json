@@ -1,0 +1,92 @@
+[
+    {
+        "bindings": {
+            "shift shift": "command_palette::Toggle"
+        }
+    },
+    {
+        "context": "EmptyPane || SharedScreen",
+        "bindings": {
+            // File
+            "space f f": "project_panel::ToggleFocus",
+
+            // Pick
+            "space p f": "file_finder::Toggle",
+            "space p p": "projects::OpenRecent"
+        }
+    },
+    {
+        "context": "Editor && (vim_mode == normal || vim_mode == visual || vim_mode) && !VimWaiting && !menu",
+        "bindings": {
+            // File
+            "space f f": "project_panel::ToggleFocus",
+
+            // Pick
+            "space p f": "file_finder::Toggle",
+            "space p p": "projects::OpenRecent",
+            
+            "tab": "pane::ActivatePreviousItem",
+            "shift-tab": "pane::ActivateNextItem",
+
+            "alt-j": "editor::MoveLineDown",
+            "alt-k": "editor::MoveLineUp",
+            "alt-l": "editor::Indent",
+            "alt-h": "editor::Outdent",
+            "g c": "editor::ToggleComments",
+            "s a": "vim::PushAddSurrounds",
+            "s d": "vim::PushDeleteSurrounds",
+            "s r": "vim::PushChangeSurrounds"
+        }
+    },
+    {
+        "context": "Editor && (vim_mode == normal) && !VimWaiting && !menu",
+        "bindings": {
+            "space d": "pane::CloseActiveItem",
+
+            // Lsp
+            "space l d": "editor::GoToDefinition",
+            "space l D": "editor::GoToDeclaration",
+            "space l H": "editor::ShowSignatureHelp",
+            "space l R": "editor::FindAllReferences",
+            "space l c": "editor::ToggleCodeActions",
+            "space l h": "editor::Hover",
+            "space l i": "editor::GoToImplementation",
+            "space l r": "editor::Rename",
+            "space l t": "editor::GoToTypeDefinition",
+
+            "] d": "editor::GoToDiagnostic",
+            "[ d": "editor::GoToPreviousDiagnostic",
+            "] h": "editor::GoToHunk",
+            "[ h": "editor::GoToPreviousHunk"
+        }
+    },
+    {
+        "context": "ProjectPanel && not_editing",
+        "bindings": {
+            "a": "project_panel::NewFile",
+            "A": "project_panel::NewDirectory",
+            "r": "project_panel::Rename",
+            "d": "project_panel::Delete",
+            "x": "project_panel::Cut",
+            "c": "project_panel::Copy",
+            "p": "project_panel::Paste",
+            
+            "q": "workspace::ToggleLeftDock",
+            "espace": "workspace::ToggleLeftDock"
+        }
+    },
+    {
+        "context": "Picker > Editor",
+        "bindings": {
+            "tab": "menu::SelectNext",
+            "shift-tab": "menu::SelectPrevious"
+        }
+    },
+    {
+        "context": "Editor && (showing_code_actions || showing_completions)",
+        "bindings": {
+            "tab": "editor::ContextMenuNext",
+            "shift-tab": "editor::ContextMenuPrevious"
+        }
+    }
+]
