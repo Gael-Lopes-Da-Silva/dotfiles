@@ -6,9 +6,7 @@ MiniDeps.now(function()
                 local mode, mode_hl = mini_statusline.section_mode({ trunc_width = 100 })
                 local filename = mini_statusline.section_filename({ trunc_width = 100 })
                 local fileinfo = mini_statusline.section_fileinfo({ trunc_width = 999 })
-
                 local location = mini_statusline.is_truncated(100) and '%2l│%-2v' or '%2l/%-2L│%2v/%-2{virtcol("$") - 1}'
-                local macro = vim.g.ministatuslinemacro
 
                 return mini_statusline.combine_groups({
                     {
@@ -23,7 +21,7 @@ MiniDeps.now(function()
                     "%=",
                     {
                         hl = "MiniStatuslineFileinfo",
-                        strings = { macro, fileinfo },
+                        strings = { fileinfo },
                     },
                     {
                         hl = mode_hl,
@@ -32,19 +30,5 @@ MiniDeps.now(function()
                 })
             end,
         },
-    })
-
-    vim.api.nvim_create_autocmd("RecordingEnter", {
-        pattern = "*",
-        callback = function()
-            vim.g.ministatuslinemacro = "󰑋 " .. vim.fn.reg_recording()
-        end,
-    })
-
-    vim.api.nvim_create_autocmd("RecordingLeave", {
-        pattern = "*",
-        callback = function()
-            vim.g.ministatuslinemacro = ""
-        end,
     })
 end)

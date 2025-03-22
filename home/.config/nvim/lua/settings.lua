@@ -27,7 +27,7 @@ MiniDeps.now(function()
     vim.opt.clipboard = "unnamed,unnamedplus"
 
     -- UI & usability improvements
-    vim.opt.cmdheight = 0
+    vim.opt.cmdheight = 1
     vim.opt.mouse = "a"
     vim.opt.pumblend = 0
     vim.opt.winblend = 0
@@ -35,16 +35,16 @@ MiniDeps.now(function()
     vim.opt.cursorlineopt = 'screenline,number'
 
     -- Status line and numbering
-    vim.wo.relativenumber = true
-    vim.wo.number = true
+    vim.wo.relativenumber = false
+    vim.wo.number = false
 
     -- Folding
-    vim.opt.foldcolumn = "0"
     vim.opt.foldenable = true
-    vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+    vim.opt.foldmethod = "expr"
+    vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
     vim.opt.foldlevel = 99
     vim.opt.foldlevelstart = 99
-    vim.opt.foldmethod = "expr"
+    vim.opt.foldcolumn = "0"
     vim.opt.foldtext = ""
 
     -- Searching
@@ -68,9 +68,16 @@ MiniDeps.now(function()
     -- Disable intro screen
     vim.opt.shortmess = "ItToOCF"
 
+    -- Sign column
+    vim.opt.signcolumn = "yes:1"
+
     -- Special characters
     vim.opt.list = true
     vim.opt.breakindentopt = 'list:-1'
+    vim.opt.fillchars = table.concat({
+        'fold:╌',
+        'eob: ',
+    }, ',')
     vim.opt.listchars = table.concat({
         'tab: ',
         'nbsp:␣',

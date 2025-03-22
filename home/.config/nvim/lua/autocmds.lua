@@ -37,13 +37,4 @@ MiniDeps.now(function()
             end
         end,
     })
-
-    vim.api.nvim_create_autocmd("ModeChanged", {
-        desc = "Set statusline height if in command mode",
-        group = group,
-        callback = function()
-            local is_command_mode = vim.api.nvim_get_mode().mode == 'c'
-            vim.opt.cmdheight = is_command_mode and 1 or 0
-        end,
-    })
 end)

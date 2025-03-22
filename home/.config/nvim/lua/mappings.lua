@@ -13,6 +13,8 @@ MiniDeps.now(function()
     -- Completion
     set("i", "<Tab>", [[pumvisible() ? "\<C-n>" : "\<Tab>"]], { expr = true })
     set("i", "<S-Tab>", [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]], { expr = true })
+    set("i", "<C-Space>", "<cmd>lua MiniCompletion.complete_twostage()<cr>", { desc = "Signature help" })
+    set("i", "<C-S-Space>", "<cmd>lua vim.lsp.buf.signature_help()<cr>", { desc = "Signature help" })
 
     -- LSP
     set("n", "<leader>lD", "<cmd>lua vim.lsp.buf.declaration()<cr>", { desc = "Declaration" })
@@ -75,8 +77,11 @@ MiniDeps.now(function()
     set("n", "<leader>sm", "<cmd>Mason<cr>", { desc = "Mason" })
     set("n", "<leader>sl", "<cmd>checkhealth lspconfig<cr>", { desc = "Lsp" })
     set("n", "<leader>sn", "<cmd>checkhealth null-ls<cr>", { desc = "Null-ls" })
+    set("n", "<leader>sd", "<cmd>checkhealth dap<cr>", { desc = "Dap" })
 
     -- Toggles
     set("n", "\\m", "<cmd>lua MiniMap.toggle()<cr>", { desc = "Toggle 'minimap'" })
     set("n", "\\z", "<cmd>lua MiniMisc.zoom()<cr>", { desc = "Toggle 'zoom'" })
+    set("n", "\\d", "<cmd>lua MiniBasics.toggle_diagnostic()<cr>", { desc = "Toggle 'diagnostics'" })
+    set("n", "\\h", "<cmd>set hlsearch!<cr>", { desc = "Toggle 'search highlight'" })
 end)
