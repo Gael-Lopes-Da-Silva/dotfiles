@@ -34,6 +34,7 @@ local servers = {
         },
     },
     html = {
+        capabilities = vim.lsp.protocol.make_client_capabilities(),
         filetypes = {
             "html",
             "templ",
