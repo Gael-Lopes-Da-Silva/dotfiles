@@ -22,7 +22,7 @@ local servers = {
     },
     intelephense = {
         init_options = {
-            globalStoragePath = os.getenv('HOME') .. "/.cache/intelephense"
+            globalStoragePath = os.getenv('HOME') .. "/.cache/intelephense",
         },
         settings = {
             intelephense = {
@@ -33,10 +33,38 @@ local servers = {
             },
         },
     },
+    html = {
+        filetypes = {
+            "html",
+            "php",
+            "templ",
+            "twig",
+        },
+    },
+    emmet_ls = {
+        filetypes = {
+            "astro",
+            "css",
+            "eruby",
+            "html",
+            "htmldjango",
+            "javascriptreact",
+            "less",
+            "pug",
+            "php",
+            "sass",
+            "scss",
+            "svelte",
+            "typescriptreact",
+            "twig",
+            "vue",
+            "htmlangular",
+        },
+    },
     cssls = {},
-    html = {},
     ts_ls = {},
-    emmet_ls = {},
+    jsonls = {},
+    serve_d = {},
 }
 
 for name, config in pairs(servers) do
