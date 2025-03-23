@@ -42,6 +42,13 @@ local servers = {
         },
     },
     emmet_ls = {
+        init_options = {
+            html = {
+                options = {
+                    ["bem.enable"] = true,
+                },
+            },
+        },
         filetypes = {
             "astro",
             "css",
