@@ -36,36 +36,8 @@ local servers = {
     html = {
         filetypes = {
             "html",
-            "php",
             "templ",
             "twig",
-        },
-    },
-    emmet_ls = {
-        init_options = {
-            html = {
-                options = {
-                    ["bem.enable"] = true,
-                },
-            },
-        },
-        filetypes = {
-            "astro",
-            "css",
-            "eruby",
-            "html",
-            "htmldjango",
-            "javascriptreact",
-            "less",
-            "pug",
-            "php",
-            "sass",
-            "scss",
-            "svelte",
-            "typescriptreact",
-            "twig",
-            "vue",
-            "htmlangular",
         },
     },
     cssls = {},
