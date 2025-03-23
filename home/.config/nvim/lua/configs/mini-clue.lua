@@ -39,11 +39,9 @@ MiniDeps.now(function()
             { mode = "x", keys = "s" },
         },
         clues = {
-            { mode = "n", keys = "<Leader>b", desc = "+Buffers" },
             { mode = "n", keys = "<Leader>f", desc = "+Files" },
             { mode = "n", keys = "<Leader>g", desc = "+Git" },
-            { mode = "n", keys = "<Leader>l", desc = "+LSP" },
-            { mode = "n", keys = "<Leader>n", desc = "+Notifications" },
+            { mode = "n", keys = "<Leader>l", desc = "+Lsp" },
             { mode = "n", keys = "<Leader>p", desc = "+Picks" },
             mini_clue.gen_clues.builtin_completion(),
             mini_clue.gen_clues.g(),

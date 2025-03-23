@@ -31,10 +31,6 @@ MiniDeps.now(function()
     set("n", "<S-Tab>", "<cmd>lua MiniBracketed.buffer('backward')<cr>")
     set("n", "<Tab>", "<cmd>lua MiniBracketed.buffer('forward')<cr>")
     set("n", "<leader>d", "<cmd>lua MiniBufremove.delete()<cr>", { desc = "Delete buffer" })
-    set("n", "<leader>bd", "<cmd>lua MiniBufremove.delete()<cr>", { desc = "Delete" })
-    set("n", "<leader>bD", "<cmd>lua MiniBufremove.delete(0, true)<cr>", { desc = "Delete!" })
-    set("n", "<leader>bw", "<cmd>lua MiniBufremove.wipeout()<cr>", { desc = "Wipeout" })
-    set("n", "<leader>bW", "<cmd>lua MiniBufremove.wipeout(0, true)<cr>", { desc = "Wipeout!" })
 
     -- Files
     set("n", "<leader>ff", "<cmd>lua MiniFiles.open()<cr>", { desc = "Files" })
@@ -56,10 +52,6 @@ MiniDeps.now(function()
     set("n", "<leader>pr", "<cmd>lua MiniExtra.pickers.registers()<cr>", { desc = "Registers" })
     set("n", "<leader>pt", "<cmd>lua MiniExtra.pickers.hipatterns()<cr>", { desc = "Todos" })
     set("n", "<leader>pc", "<cmd>lua MiniExtra.pickers.hl_groups()<cr>", { desc = "Colors" })
-
-    -- Notifications
-    set("n", "<leader>nc", "<cmd>lua MiniNotify.clear()<cr>", { desc = "Clear" })
-    set("n", "<leader>nh", "<cmd>lua MiniNotify.show_history()<cr>", { desc = "History" })
 
     -- Git
     set("n", "<leader>gA", "<cmd>Git add .<cr>", { desc = "Add all" })

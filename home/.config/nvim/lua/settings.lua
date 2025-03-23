@@ -48,9 +48,6 @@ MiniDeps.now(function()
     vim.opt.foldcolumn = "0"
     vim.opt.foldtext = ""
 
-    -- Formatting
-    vim.opt.formatexpr = "v:lua.require('conform').formatexpr()"
-
     -- Searching
     vim.opt.hlsearch = true
     vim.opt.ignorecase = true
