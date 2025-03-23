@@ -40,6 +40,7 @@ local servers = {
         capabilities = capabilities,
         filetypes = {
             "html",
+            "php",
             "templ",
             "twig",
         },
