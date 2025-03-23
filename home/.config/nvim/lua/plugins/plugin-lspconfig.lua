@@ -1,58 +1,47 @@
-require("mason-lspconfig").setup({
-    ensure_installed = {
-        "lua_ls",
-    },
-    automatic_installation = false,
-    handlers = {
-        function(server_name)
-            require("lspconfig")[server_name].setup({})
-        end,
-
-        lua_ls = function()
-            require("lspconfig").lua_ls.setup(vim.fn.getcwd():match('/%.config/nvim/?') ~= nil and {
-                settings = {
-                    Lua = {
-                        runtime = { version = "LuaJIT" },
-                        diagnostics = {
-                            workspaceDelay = -1,
-                            disable = { 'missing-fields' }
-                        },
-                        workspace = {
-                            checkThirdParty = false,
-                            library = vim.api.nvim_get_runtime_file("", true),
-                            lazy_load = true,
-                            ignoreSubmodules = true,
-                        },
-                        telemetry = { enable = false },
-                    },
+local servers = {
+    lua_ls = {
+        settings = {
+            Lua = vim.fn.getcwd():match('/%.config/nvim/?') ~= nil and {
+                runtime = { version = "LuaJIT" },
+                diagnostics = {
+                    workspaceDelay = -1,
+                    disable = { 'missing-fields' },
                 },
+                workspace = {
+                    checkThirdParty = false,
+                    library = vim.api.nvim_get_runtime_file("", true),
+                    lazy_load = true,
+                    ignoreSubmodules = true,
+                },
+                telemetry = { enable = false },
             } or {
-                settings = {
-                    Lua = {
-                        runtime = { version = "LuaJIT" },
-                        telemetry = { enable = false },
-                    },
-                },
-            })
-        end,
-
-        intelephense = function()
-            require("lspconfig").intelephense.setup({
-                init_options = {
-                    globalStoragePath = os.getenv('HOME') .. "/.cache/intelephense"
-                },
-                settings = {
-                    intelephense = {
-                        initialization_options = {
-                            globalStoragePath = os.getenv('HOME') .. "/.cache/intelephense"
-                        },
-                        telemetry = { enabled = false },
-                    }
-                }
-            })
-        end
+                runtime = { version = "LuaJIT" },
+                telemetry = { enable = false },
+            },
+        },
     },
-})
+    intelephense = {
+        init_options = {
+            globalStoragePath = os.getenv('HOME') .. "/.cache/intelephense"
+        },
+        settings = {
+            intelephense = {
+                initialization_options = {
+                    globalStoragePath = os.getenv('HOME') .. "/.cache/intelephense",
+                },
+                telemetry = { enabled = false },
+            },
+        },
+    },
+    cssls = {},
+    html = {},
+    ts_ls = {},
+    emmet_ls = {},
+}
+
+for name, config in pairs(servers) do
+    require("lspconfig")[name].setup(config)
+end
 
 for type, icon in pairs({
     Error = "",
@@ -87,6 +76,7 @@ vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
     title_pos = "left",
     focusable = false,
 })
+
 vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
     border = "single",
     title = "Signature",

@@ -73,12 +73,6 @@ MiniDeps.now(function()
     set("n", "<leader>gs", "<cmd>Git status<cr>", { desc = "Status" })
     set("n", "<leader>go", "<cmd>lua MiniDiff.toggle_overlay()<cr>", { desc = "Diff overlay" })
 
-    -- Settings
-    set("n", "<leader>sm", "<cmd>Mason<cr>", { desc = "Mason" })
-    set("n", "<leader>sl", "<cmd>checkhealth lspconfig<cr>", { desc = "Lsp" })
-    set("n", "<leader>sn", "<cmd>checkhealth null-ls<cr>", { desc = "Null-ls" })
-    set("n", "<leader>sd", "<cmd>checkhealth dap<cr>", { desc = "Dap" })
-
     -- Toggles
     set("n", "\\m", "<cmd>lua MiniMap.toggle()<cr>", { desc = "Toggle 'minimap'" })
     set("n", "\\z", "<cmd>lua MiniMisc.zoom()<cr>", { desc = "Toggle 'zoom'" })

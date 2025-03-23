@@ -1,5 +1,6 @@
 MiniDeps.now(function()
     vim.g.autoformat = false
+    vim.g.autosource = true
 
     -- Indentation settings
     vim.opt.autoindent = true
@@ -46,6 +47,9 @@ MiniDeps.now(function()
     vim.opt.foldlevelstart = 99
     vim.opt.foldcolumn = "0"
     vim.opt.foldtext = ""
+
+    -- Formatting
+    vim.opt.formatexpr = "v:lua.require('conform').formatexpr()"
 
     -- Searching
     vim.opt.hlsearch = true

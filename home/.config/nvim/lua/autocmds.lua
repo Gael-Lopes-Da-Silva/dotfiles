@@ -13,8 +13,10 @@ MiniDeps.now(function()
         pattern = "*/.config/nvim/**.lua",
         group = group,
         callback = function()
-            vim.cmd("Reload")
-            vim.cmd("source " .. vim.fn.expand("<afile>"))
+            if vim.g.autosource then
+                vim.cmd("Reload")
+                vim.cmd("source " .. vim.fn.expand("<afile>"))
+            end
         end,
     })
 
