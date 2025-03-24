@@ -17,10 +17,5 @@ mini_deps.setup({ path = { package = package_path, snapshot = snapshot_path, log
 mini_deps.add("mini.nvim")
 
 -- User config
-require("settings")
-require("configs")
 require("plugins")
-require("hlgroups")
-require("mappings")
-require("autocmds")
-require("usercmds")
+require("configs")

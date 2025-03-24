@@ -16,6 +16,11 @@ MiniDeps.now(function()
     set("i", "<C-Space>", "<cmd>lua MiniCompletion.complete_twostage()<cr>", { desc = "Signature help" })
     set("i", "<C-S-Space>", "<cmd>lua vim.lsp.buf.signature_help()<cr>", { desc = "Signature help" })
 
+    -- Buffers
+    set("n", "<S-Tab>", "<cmd>lua MiniBracketed.buffer('backward')<cr>")
+    set("n", "<Tab>", "<cmd>lua MiniBracketed.buffer('forward')<cr>")
+    set("n", "<leader>d", "<cmd>lua MiniBufremove.delete()<cr>", { desc = "Delete buffer" })
+
     -- LSP
     set("n", "<leader>lD", "<cmd>lua vim.lsp.buf.declaration()<cr>", { desc = "Declaration" })
     set("n", "<leader>lH", "<cmd>lua vim.lsp.buf.signature_help()<cr>", { desc = "Signature help" })
@@ -26,11 +31,6 @@ MiniDeps.now(function()
     set("n", "<leader>li", "<cmd>lua vim.lsp.buf.implementation()<cr>", { desc = "Implementation" })
     set("n", "<leader>lr", "<cmd>lua vim.lsp.buf.rename()<cr>", { desc = "Rename" })
     set("n", "<leader>lt", "<cmd>lua vim.lsp.buf.type_definition()<cr>", { desc = "Type definition" })
-
-    -- Buffers
-    set("n", "<S-Tab>", "<cmd>lua MiniBracketed.buffer('backward')<cr>")
-    set("n", "<Tab>", "<cmd>lua MiniBracketed.buffer('forward')<cr>")
-    set("n", "<leader>d", "<cmd>lua MiniBufremove.delete()<cr>", { desc = "Delete buffer" })
 
     -- Files
     set("n", "<leader>ff", "<cmd>lua MiniFiles.open()<cr>", { desc = "Files" })
