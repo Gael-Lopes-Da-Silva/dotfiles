@@ -4,17 +4,17 @@ MiniDeps.now(function()
     -- Default
     set("t", "<C-q>", "<C-\\><C-n>")
     set("n", "<Esc>", function()
-        if not require("mini.files").close() then
-            vim.cmd.nohlsearch()
-            vim.cmd.echo()
-        end
+        if require("mini.files").close() then return end
+
+        vim.cmd.nohlsearch()
+        vim.cmd.echo()
     end, { noremap = true })
 
     -- Completion
     set("i", "<Tab>", [[pumvisible() ? "\<C-n>" : "\<Tab>"]], { expr = true })
     set("i", "<S-Tab>", [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]], { expr = true })
-    set("i", "<C-Space>", "<cmd>lua MiniCompletion.complete_twostage()<cr>", { desc = "Signature help" })
-    set("i", "<C-S-Space>", "<cmd>lua vim.lsp.buf.signature_help()<cr>", { desc = "Signature help" })
+    set("i", "<C-Space>", "<cmd>lua MiniCompletion.complete_twostage()<cr>")
+    set("i", "<C-S-Space>", "<cmd>lua vim.lsp.buf.signature_help()<cr>")
 
     -- Buffers
     set("n", "<S-Tab>", "<cmd>lua MiniBracketed.buffer('backward')<cr>")
