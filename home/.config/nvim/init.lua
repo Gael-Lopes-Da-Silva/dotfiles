@@ -1,6 +1,6 @@
 -- Install mini.nvim
 local package_path = vim.fn.stdpath("data") .. "/site/"
-local snapshot_path = vim.fn.stdpath("config") .. "/snapshot/"
+local snapshot_path = vim.fn.stdpath("data") .. "/snapshot/"
 local log_path = vim.fn.stdpath("data") .. "/logs/mini-deps.log"
 local mini_path = package_path .. "pack/deps/start/mini.nvim"
 

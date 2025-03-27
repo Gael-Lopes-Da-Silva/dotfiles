@@ -1,14 +1,27 @@
 MiniDeps.now(function()
-    local group = vim.api.nvim_create_augroup("UserConfig", { clear = true })
+    local create_augroup = vim.api.nvim_create_augroup
+    local create_autocmd = vim.api.nvim_create_autocmd
 
-    vim.api.nvim_create_autocmd("TermOpen", {
-        desc = "Remove number or relative number from terminal",
+    local group = create_augroup("UserConfig", { clear = true })
+
+    create_autocmd("TermOpen", {
+        desc = "Hide numbers on terminal",
         pattern = { "term://*" },
         group = group,
         command = "setlocal signcolumn=no nonumber norelativenumber | setfiletype terminal",
     })
 
-    vim.api.nvim_create_autocmd({ "BufAdd", "BufEnter" }, {
+    create_autocmd("BufWritePre", {
+        desc = "Format the current buffer on save",
+        group = group,
+        callback = function()
+            if vim.g.autoformat then
+                vim.lsp.buf.format()
+            end
+        end,
+    })
+
+    create_autocmd({ "BufAdd", "BufEnter" }, {
         desc = "Hide empty buffers from the tabline",
         group = group,
         callback = function(args)
@@ -17,28 +30,6 @@ MiniDeps.now(function()
 
             if (buftype == "" or buftype == "nofile") and bufname == "" then
                 vim.bo[args.buf].buflisted = false
-            end
-        end,
-    })
-
-    vim.api.nvim_create_autocmd("BufWritePost", {
-        desc = "Hot reload neovim configuration on save",
-        pattern = "*/.config/nvim/**.lua",
-        group = group,
-        callback = function()
-            if vim.g.autosource then
-                vim.cmd("Reload")
-                vim.cmd("source " .. vim.fn.expand("<afile>"))
-            end
-        end,
-    })
-
-    vim.api.nvim_create_autocmd("BufWritePre", {
-        desc = "Format the current buffer on save",
-        group = group,
-        callback = function()
-            if vim.g.autoformat then
-                vim.lsp.buf.format()
             end
         end,
     })

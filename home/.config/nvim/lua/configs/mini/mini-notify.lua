@@ -3,6 +3,7 @@ MiniDeps.now(function()
     mini_notify.setup({
         window = {
             config = {
+                title = "",
                 border = "single",
             },
             winblend = 0,

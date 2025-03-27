@@ -9,10 +9,3 @@ MiniDeps.later(function() -- treesitter
     })
     require("plugins.plugin-treesitter")
 end)
-
-MiniDeps.later(function() -- lspconfig
-    MiniDeps.add({
-        source = "neovim/nvim-lspconfig",
-    })
-    require("plugins.plugin-lspconfig")
-end)
