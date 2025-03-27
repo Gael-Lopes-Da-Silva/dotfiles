@@ -2,6 +2,7 @@ MiniDeps.now(function()
     local opt = vim.opt
 
     vim.g.autoformat = false
+    vim.g.foldimports = true
 
     -- Indentation settings
     opt.autoindent = true

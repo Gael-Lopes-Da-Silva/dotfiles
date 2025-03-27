@@ -33,4 +33,16 @@ MiniDeps.now(function()
             end
         end,
     })
+
+    create_autocmd('LspNotify', {
+        desc = "Fold imports when openning a file",
+        group = group,
+        callback = function(args)
+            if vim.g.foldimports then
+                if args.data.method == 'textDocument/didOpen' then
+                    vim.lsp.foldclose('imports', vim.fn.bufwinid(args.buf))
+                end
+            end
+        end,
+    })
 end)

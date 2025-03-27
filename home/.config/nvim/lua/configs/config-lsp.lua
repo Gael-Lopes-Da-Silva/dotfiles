@@ -76,6 +76,7 @@ MiniDeps.now(function()
         cmd = { "vscode-html-language-server", "--stdio" },
         filetypes = { "html", "templ", "twig" },
         single_file_support = true,
+        root_markers = { 'package.json', '.git' },
         init_options = {
             configurationSection = { "html", "css", "javascript" },
             embeddedLanguages = {
@@ -113,6 +114,7 @@ MiniDeps.now(function()
         cmd = { "typescript-language-server", "--stdio" },
         filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" },
         single_file_support = true,
+        root_markers = { 'tsconfig.json', 'jsconfig.json', 'package.json', '.git' },
         init_options = {
             hostInfo = "neovim"
         },
@@ -133,6 +135,7 @@ MiniDeps.now(function()
         cmd = { "serve-d" },
         filetypes = { "d" },
         single_file_support = true,
+        root_markers = { 'dub.json', 'dub.sdl', '.git' },
     }
     vim.lsp.enable("serve_d")
 end)
