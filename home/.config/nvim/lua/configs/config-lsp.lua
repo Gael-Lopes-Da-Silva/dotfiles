@@ -58,6 +58,7 @@ MiniDeps.now(function()
         cmd = { "intelephense", "--stdio" },
         filetypes = { "php" },
         single_file_support = true,
+        root_markers = { 'composer.json', '.git' },
         init_options = {
             globalStoragePath = os.getenv('HOME') .. "/.cache/intelephense",
         },
