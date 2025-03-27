@@ -5,7 +5,6 @@ MiniDeps.now(function()
     set("t", "<C-q>", "<C-\\><C-n>")
     set("n", "<Esc>", function()
         if require("mini.files").close() then return end
-
         vim.cmd.nohlsearch()
         vim.cmd.echo()
     end, { noremap = true })
