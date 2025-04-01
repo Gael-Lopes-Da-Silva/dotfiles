@@ -1,9 +1,6 @@
 MiniDeps.now(function()
     local opt = vim.opt
 
-    vim.g.autoformat = false
-    vim.g.foldimports = true
-
     -- Indentation settings
     opt.autoindent = true
     opt.smartindent = true
@@ -44,7 +41,7 @@ MiniDeps.now(function()
     -- Folding
     opt.foldenable = true
     opt.foldmethod = "expr"
-    opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+    opt.foldexpr = "nvim_treesitter#foldexpr()"
     opt.foldlevel = 99
     opt.foldlevelstart = 99
     opt.foldcolumn = "0"
@@ -66,7 +63,6 @@ MiniDeps.now(function()
 
     -- Wrapping
     opt.wrap = true
-    opt.showbreak = '󱞶 '
 
     -- Disable intro screen
     opt.shortmess = "ItToOcCF"

@@ -1,5 +1,6 @@
 MiniDeps.later(function()
     local mini_extra = require("mini.extra")
+
     require("mini.ai").setup({
         custom_textobjects = {
             B = mini_extra.gen_ai_spec.buffer(),

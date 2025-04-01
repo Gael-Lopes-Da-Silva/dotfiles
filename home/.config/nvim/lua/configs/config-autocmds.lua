@@ -5,20 +5,10 @@ MiniDeps.now(function()
     local group = create_augroup("UserConfig", { clear = true })
 
     create_autocmd("TermOpen", {
-        desc = "Hide numbers on terminal",
+        desc = "Hide numbers in integrated terminal",
         pattern = { "term://*" },
         group = group,
         command = "setlocal signcolumn=no nonumber norelativenumber | setfiletype terminal",
-    })
-
-    create_autocmd("BufWritePre", {
-        desc = "Format the current buffer on save",
-        group = group,
-        callback = function()
-            if vim.g.autoformat then
-                vim.lsp.buf.format()
-            end
-        end,
     })
 
     create_autocmd({ "BufAdd", "BufEnter" }, {
@@ -30,18 +20,6 @@ MiniDeps.now(function()
 
             if (buftype == "" or buftype == "nofile") and bufname == "" then
                 vim.bo[args.buf].buflisted = false
-            end
-        end,
-    })
-
-    create_autocmd('LspNotify', {
-        desc = "Fold imports when openning a file",
-        group = group,
-        callback = function(args)
-            if vim.g.foldimports then
-                if args.data.method == 'textDocument/didOpen' then
-                    vim.lsp.foldclose('imports', vim.fn.bufwinid(args.buf))
-                end
             end
         end,
     })
