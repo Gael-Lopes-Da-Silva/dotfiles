@@ -1,10 +1,10 @@
 {
-   "checksum": "8bc7a8b02d1cc37a8b6a4a3b295a59db",
+   "checksum": "4d0f9e60f88285e5d6fdbbff4e2de853",
    "roots": {
       "bookmark_bar": {
          "children": [ {
             "date_added": "13219532322000000",
-            "date_last_used": "0",
+            "date_last_used": "13388266032939690",
             "guid": "8c64395b-ea6c-4d87-a943-e6a851c2435f",
             "id": "7",
             "name": "Youtube",
@@ -12,7 +12,7 @@
             "url": "https://www.youtube.com/"
          }, {
             "date_added": "13313274247000000",
-            "date_last_used": "0",
+            "date_last_used": "13388270734218175",
             "guid": "bb40122e-d76e-4af2-bca7-2fda166adf71",
             "id": "8",
             "name": "Twitch",
@@ -94,7 +94,7 @@
                "url": "https://gitlab.com/gael-lopes-da-silva"
             }, {
                "date_added": "13318206619000000",
-               "date_last_used": "0",
+               "date_last_used": "13388263224570878",
                "guid": "d50cf2c2-010f-4c1d-8435-d2af04e470f9",
                "id": "19",
                "name": "ChatGPT",
@@ -235,7 +235,7 @@
          }, {
             "children": [ {
                "date_added": "13259420162000000",
-               "date_last_used": "0",
+               "date_last_used": "13388271817801902",
                "guid": "96722a29-3397-4d19-8a6d-397918c26db4",
                "id": "36",
                "name": "Outlook",
@@ -271,17 +271,28 @@
                "date_last_used": "0",
                "guid": "fabff5e7-53f1-4083-a566-d910311fb098",
                "id": "40",
-               "name": "GoogleAccount",
+               "name": "Account",
                "type": "url",
                "url": "https://myaccount.google.com/"
             }, {
+               "date_added": "13388270870880698",
+               "date_last_used": "13388271096174583",
+               "guid": "4714bfb1-0567-4617-85ef-6acfdbe3acfd",
+               "id": "69",
+               "meta_info": {
+                  "power_bookmark_meta": ""
+               },
+               "name": "Gmail",
+               "type": "url",
+               "url": "https://mail.google.com/"
+            }, {
                "date_added": "13232641732000000",
-               "date_last_used": "0",
+               "date_last_used": "13388270889288042",
                "guid": "2266d884-3d23-4b5f-ab6f-b483c7286950",
                "id": "41",
-               "name": "GoogleDrive",
+               "name": "Drive",
                "type": "url",
-               "url": "https://drive.google.com/drive/u/0/home"
+               "url": "https://drive.google.com/"
             }, {
                "date_added": "13339952377000000",
                "date_last_used": "0",
@@ -293,7 +304,7 @@
             } ],
             "date_added": "13388259696904939",
             "date_last_used": "0",
-            "date_modified": "0",
+            "date_modified": "13388271092570023",
             "guid": "b0aef1e4-02eb-4ff3-bbc4-ef9a141f9a83",
             "id": "39",
             "name": "GOOGLE",
