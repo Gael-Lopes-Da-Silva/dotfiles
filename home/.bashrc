@@ -55,5 +55,5 @@ HISTCONTROL=ignoredups:erasedups
 HISTSIZE=1000
 HISTFILESIZE=2000
 
-PS1='\[\e[96;1m\]\w\[\e[0m\] \[\e[38;5;237;1m\]$?\n\[\e[22m\]\[\e[0m\] '
-PS2='\[\e[38;5;237m\]\[\e[0m\] '
+PS1='\[\e[92;1m\]\w\[\e[0m\]\n$(exit_code=$?; if [[ $exit_code -ne 0 ]]; then printf "\[\e[91;1m\]\[\e[0m\]"; else printf "\[\e[90;1m\]\[\e[0m\]"; fi) '
+PS2='\[\e[90;1m\]\[\e[0m\] '
