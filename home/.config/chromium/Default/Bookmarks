@@ -1,10 +1,10 @@
 {
-   "checksum": "4d0f9e60f88285e5d6fdbbff4e2de853",
+   "checksum": "89f957fff71faf0323d52bdaf921ffd6",
    "roots": {
       "bookmark_bar": {
          "children": [ {
             "date_added": "13219532322000000",
-            "date_last_used": "13388326626871442",
+            "date_last_used": "13388370555048207",
             "guid": "8c64395b-ea6c-4d87-a943-e6a851c2435f",
             "id": "7",
             "name": "Youtube",
@@ -12,7 +12,7 @@
             "url": "https://www.youtube.com/"
          }, {
             "date_added": "13313274247000000",
-            "date_last_used": "13388270734218175",
+            "date_last_used": "13388370601267719",
             "guid": "bb40122e-d76e-4af2-bca7-2fda166adf71",
             "id": "8",
             "name": "Twitch",
@@ -20,7 +20,7 @@
             "url": "https://www.twitch.tv/"
          }, {
             "date_added": "13296437191000000",
-            "date_last_used": "13388323984948604",
+            "date_last_used": "13388370417932403",
             "guid": "7e6259c3-fb92-4eeb-97e7-f082f6abab46",
             "id": "9",
             "name": "Discord",
@@ -78,7 +78,7 @@
                "type": "folder"
             }, {
                "date_added": "13280850873000000",
-               "date_last_used": "13388326741430715",
+               "date_last_used": "13388370400145328",
                "guid": "5bd72619-49ac-4359-9de3-d2819e482efb",
                "id": "17",
                "name": "Github",
@@ -94,20 +94,12 @@
                "url": "https://gitlab.com/gael-lopes-da-silva"
             }, {
                "date_added": "13318206619000000",
-               "date_last_used": "13388263224570878",
+               "date_last_used": "13388370632339852",
                "guid": "d50cf2c2-010f-4c1d-8435-d2af04e470f9",
                "id": "19",
                "name": "ChatGPT",
                "type": "url",
                "url": "https://chatgpt.com/"
-            }, {
-               "date_added": "13384520114000000",
-               "date_last_used": "13388326744028924",
-               "guid": "575a1b7a-d3b2-4b7c-87b1-d7eb8fefaf63",
-               "id": "20",
-               "name": "Mistral",
-               "type": "url",
-               "url": "https://chat.mistral.ai/chat"
             } ],
             "date_added": "13388259696904542",
             "date_last_used": "0",
@@ -210,7 +202,7 @@
          }, {
             "children": [ {
                "date_added": "13252884304000000",
-               "date_last_used": "13388316755167706",
+               "date_last_used": "13388369835372269",
                "guid": "16907d84-6581-46bc-b27e-a757d1ed8acc",
                "id": "33",
                "name": "Amazon",
@@ -235,7 +227,7 @@
          }, {
             "children": [ {
                "date_added": "13259420162000000",
-               "date_last_used": "13388271817801902",
+               "date_last_used": "13388369847260203",
                "guid": "96722a29-3397-4d19-8a6d-397918c26db4",
                "id": "36",
                "name": "Outlook",
@@ -370,7 +362,7 @@
                "url": "https://www.notion.com/"
             }, {
                "date_added": "13260215666000000",
-               "date_last_used": "0",
+               "date_last_used": "13388369869882777",
                "guid": "6b047f2e-ab09-4f85-b0d0-ea3f942f506f",
                "id": "51",
                "name": "Openclassrooms",
@@ -445,7 +437,7 @@
          }, {
             "children": [ {
                "date_added": "13365972770000000",
-               "date_last_used": "0",
+               "date_last_used": "13388355052558088",
                "guid": "c82287fe-6299-4c6e-9bc7-98ba88b1e125",
                "id": "60",
                "name": "Kenmei",

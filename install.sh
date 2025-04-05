@@ -20,14 +20,14 @@ cd ..
 rm -rf ./paru/
 
 # Packages
-sudo pacman -S --noconfirm noto-fonts noto-fonts-extra noto-fonts-emoji noto-fonts-cjk ttf-cascadia-code ouch stow bash-completion chromium neovim ripgrep udiskie dunst feh xdg-desktop-portal xdg-desktop-portal-gtk ttf-liberation papirus-icon-theme linux-headers
+sudo paru -S --noconfirm noto-fonts noto-fonts-extra noto-fonts-emoji noto-fonts-cjk ttf-cascadia-code ouch stow bash-completion chromium neovim ripgrep udiskie dunst feh xdg-desktop-portal xdg-desktop-portal-gtk ttf-liberation papirus-icon-theme linux-headers
 
 # Stow
 cd /home/$USER/.dotfiles/
 stow home
 
 # Desktop
-sudo pacman -S --noconfirm xorg xorg-xinit xclip maim upower brightnessctl network-manager-applet
+sudo paru -S --noconfirm xorg xorg-xinit xclip maim upower brightnessctl network-manager-applet
 cd /home/$USER/.config/suckless/dwm
 sudo make clean install
 cd /home/$USER/.config/suckless/dwmblocks
@@ -36,16 +36,16 @@ cd /home/$USER/.config/suckless/dmenu
 sudo make clean install
 
 # Loopback
-sudo pacman -S --noconfirm v4l2loopback-dkms v4l2loopback-utils
+sudo paru -S --noconfirm v4l2loopback-dkms v4l2loopback-utils
 sudo modprobe v4l2loopback
 
 # Docker
-sudo pacman -S --noconfirm docker
+sudo paru -S --noconfirm docker
 sudo usermod -aG docker $USER
 sudo systemctl enable docker.service
 
 # Virtualization
-sudo pacman -S --noconfirm libvirt dnsmasq qemu-full virt-manager virt-viewer
+sudo paru -S --noconfirm libvirt dnsmasq qemu-full virt-manager virt-viewer
 sudo usermod -aG libvirt $USER
 sudo systemctl enable libvirtd.service
 
