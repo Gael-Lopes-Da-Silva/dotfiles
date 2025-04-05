@@ -4,7 +4,7 @@
       "bookmark_bar": {
          "children": [ {
             "date_added": "13219532322000000",
-            "date_last_used": "13388266032939690",
+            "date_last_used": "13388326626871442",
             "guid": "8c64395b-ea6c-4d87-a943-e6a851c2435f",
             "id": "7",
             "name": "Youtube",
@@ -20,7 +20,7 @@
             "url": "https://www.twitch.tv/"
          }, {
             "date_added": "13296437191000000",
-            "date_last_used": "0",
+            "date_last_used": "13388323984948604",
             "guid": "7e6259c3-fb92-4eeb-97e7-f082f6abab46",
             "id": "9",
             "name": "Discord",
@@ -78,7 +78,7 @@
                "type": "folder"
             }, {
                "date_added": "13280850873000000",
-               "date_last_used": "13388261775925958",
+               "date_last_used": "13388326741430715",
                "guid": "5bd72619-49ac-4359-9de3-d2819e482efb",
                "id": "17",
                "name": "Github",
@@ -102,7 +102,7 @@
                "url": "https://chatgpt.com/"
             }, {
                "date_added": "13384520114000000",
-               "date_last_used": "0",
+               "date_last_used": "13388326744028924",
                "guid": "575a1b7a-d3b2-4b7c-87b1-d7eb8fefaf63",
                "id": "20",
                "name": "Mistral",
@@ -210,7 +210,7 @@
          }, {
             "children": [ {
                "date_added": "13252884304000000",
-               "date_last_used": "0",
+               "date_last_used": "13388316755167706",
                "guid": "16907d84-6581-46bc-b27e-a757d1ed8acc",
                "id": "33",
                "name": "Amazon",
@@ -295,7 +295,7 @@
                "url": "https://drive.google.com/"
             }, {
                "date_added": "13339952377000000",
-               "date_last_used": "0",
+               "date_last_used": "13388272599092765",
                "guid": "1f500cac-28a9-4b5a-834e-d5d79b96abf0",
                "id": "42",
                "name": "Gemini",
