@@ -1,5 +1,7 @@
 #!/bin/bash
 
+[[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
+
 pgrep -x nm-applet || nm-applet &
 pgrep -x dwmblocks || dwmblocks &
 pgrep -x dunst || dunst &
