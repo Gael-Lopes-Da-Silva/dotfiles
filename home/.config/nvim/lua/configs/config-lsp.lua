@@ -29,9 +29,12 @@ MiniDeps.now(function()
 
     vim.lsp.config.lua_ls = {
         cmd = { "lua-language-server" },
-        root_markers = { 'compile_commands.json', 'compile_flags.txt' },
         filetypes = { "lua" },
+        root_markers = { ".luarc.json", ".luarc.jsonc" },
         single_file_support = true,
+        formatters = {
+            ignoreComments = false,
+        },
         settings = {
             Lua = vim.fn.getcwd():match('/%.config/nvim/?') ~= nil and {
                 runtime = { version = "LuaJIT" },
@@ -58,7 +61,7 @@ MiniDeps.now(function()
         cmd = { "intelephense", "--stdio" },
         filetypes = { "php" },
         single_file_support = true,
-        root_markers = { 'composer.json', '.git' },
+        root_markers = { 'composer.json' },
         init_options = {
             globalStoragePath = os.getenv('HOME') .. "/.cache/intelephense",
         },
@@ -77,7 +80,7 @@ MiniDeps.now(function()
         cmd = { "vscode-html-language-server", "--stdio" },
         filetypes = { "html", "templ", "twig" },
         single_file_support = true,
-        root_markers = { 'package.json', '.git' },
+        root_markers = { 'package.json' },
         init_options = {
             configurationSection = { "html", "css", "javascript" },
             embeddedLanguages = {
@@ -115,7 +118,7 @@ MiniDeps.now(function()
         cmd = { "typescript-language-server", "--stdio" },
         filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" },
         single_file_support = true,
-        root_markers = { 'tsconfig.json', 'jsconfig.json', 'package.json', '.git' },
+        root_markers = { 'tsconfig.json', 'jsconfig.json', 'package.json' },
         init_options = {
             hostInfo = "neovim"
         },
@@ -136,7 +139,7 @@ MiniDeps.now(function()
         cmd = { "serve-d" },
         filetypes = { "d" },
         single_file_support = true,
-        root_markers = { 'dub.json', 'dub.sdl', '.git' },
+        root_markers = { 'dub.json', 'dub.sdl' },
     }
     vim.lsp.enable("serve_d")
 end)
