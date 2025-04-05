@@ -11,7 +11,6 @@ export BROWSER='chromium'
 export COLORTERM='truecolor'
 export PAGER='less -r'
 export GTK_THEME=Adwaita:dark
-export GTK2_RC_FILES=/usr/share/themes/Adwaita-dark/gtk-2.0/gtkrc
 export QT_STYLE_OVERRIDE=Adwaita-Dark
 export VDPAU_DRIVER=va_gl
 
