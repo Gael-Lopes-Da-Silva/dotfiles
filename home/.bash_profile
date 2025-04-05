@@ -13,6 +13,7 @@ export PAGER='less -r'
 export GTK_THEME=Adwaita:dark
 export QT_STYLE_OVERRIDE=Adwaita-Dark
 export VDPAU_DRIVER=va_gl
+export CHROMIUM_FLAGS="--enable-features=WebUIDarkMode"
 
 export PATH=$PATH:~/.scripts/:~/.cargo/bin
 
