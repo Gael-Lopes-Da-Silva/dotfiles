@@ -35,6 +35,9 @@ sudo make clean install
 cd /home/$USER/.config/suckless/dmenu
 sudo make clean install
 
+# Dark Mode
+dconf write /org/gnome/desktop/interface/color-scheme \'prefer-dark\'
+
 # Loopback
 sudo paru -S --noconfirm v4l2loopback-dkms v4l2loopback-utils
 sudo modprobe v4l2loopback
