@@ -25,15 +25,16 @@ sudo paru -S --noconfirm noto-fonts noto-fonts-extra noto-fonts-emoji noto-fonts
 
 # Stow
 cd /home/$USER/.dotfiles/
-stow home
+stow home --adopt
+git restore .
 
 # Desktop
 sudo paru -S --noconfirm xorg xorg-xinit xclip maim upower brightnessctl network-manager-applet
-cd /home/$USER/.config/suckless/dwm
+cd /home/$USER/.dotfiles/home/.config/suckless/dwm
 sudo make clean install
-cd /home/$USER/.config/suckless/dwmblocks
+cd /home/$USER/.dotfiles/home/.config/suckless/dwmblocks
 sudo make clean install
-cd /home/$USER/.config/suckless/dmenu
+cd /home/$USER/.dotfiles/home/.config/suckless/dmenu
 sudo make clean install
 
 # Dark Mode
