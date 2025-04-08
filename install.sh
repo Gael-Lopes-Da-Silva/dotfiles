@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -ex
+
 USER="gael"
 
 # Terminal
@@ -47,24 +49,7 @@ if lspci | grep -i vga | grep -iq nvidia; then
     sudo mkinitcpio -P
     sudo nvidia-xconfig
     sudo mkdir /etc/pacman.d/hooks
-    sudo tee /etc/pacman.d/hooks/nvidia.hook > /dev/null << 'EOF'
-    [Trigger]
-    Operation=Install
-    Operation=Upgrade
-    Operation=Remove
-    Type=Package
-    Target=nvidia
-    Target=nvidia-open
-    Target=nvidia-lts
-    Target=linux
-
-    [Action]
-    Description=Updating NVIDIA module in initcpio
-    Depends=mkinitcpio
-    When=PostTransaction
-    NeedsTargets
-    Exec=/bin/sh -c 'while read -r trg; do case \$trg in linux*) exit 0; esac; done; /usr/bin/mkinitcpio -P'
-    EOF
+    echo -e "[Trigger]\nOperation=Install\nOperation=Upgrade\nOperation=Remove\nType=Package\nTarget=nvidia\nTarget=nvidia-open\nTarget=nvidia-lts\nTarget=linux\n\n[Action]\nDescription=Updating NVIDIA module in initcpio\nDepends=mkinitcpio\nWhen=PostTransaction\nNeedsTargets\nExec=/bin/sh -c 'while read -r trg; do case \$trg in linux*) exit 0; esac; done; /usr/bin/mkinitcpio -P'" | sudo tee /etc/pacman.d/hooks/nvidia.hook > /dev/null
 fi
 
 if lspci | grep -i vga | grep -iq intel; then
