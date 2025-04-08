@@ -24,7 +24,7 @@ cd ..
 rm -rf ./paru/
 
 # Packages
-sudo paru -S --noconfirm noto-fonts noto-fonts-extra noto-fonts-emoji noto-fonts-cjk ttf-cascadia-code ouch stow bash-completion chromium neovim ripgrep udiskie dunst feh xdg-desktop-portal xdg-desktop-portal-gtk ttf-liberation papirus-icon-theme linux-headers
+sudo paru -S --noconfirm noto-fonts noto-fonts-extra noto-fonts-emoji noto-fonts-cjk ttf-cascadia-code ttf-liberation papirus-icon-theme bash-completion ouch stow chromium neovim ripgrep udiskie dunst feh kitty
 
 # Stow
 cd /home/$USER/.dotfiles/
@@ -32,7 +32,7 @@ stow home --adopt
 git restore .
 
 # Desktop
-sudo paru -S --noconfirm xorg xorg-xinit xclip maim upower brightnessctl network-manager-applet
+sudo paru -S --noconfirm xorg xorg-xinit xclip xdg-desktop-portal xdg-desktop-portal-gtk maim upower brightnessctl network-manager-applet
 cd /home/$USER/.dotfiles/home/.config/suckless/dwm
 sudo make clean install
 cd /home/$USER/.dotfiles/home/.config/suckless/dwmblocks
