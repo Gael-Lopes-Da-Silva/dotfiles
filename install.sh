@@ -11,6 +11,7 @@ echo -e "FONT=ter-132n" | sudo tee -a /etc/vconsole.conf
 sudo sed -i "s|#Color|Color|" /etc/pacman.conf
 sudo sed -i "s|#ParallelDownloads = 5|ParallelDownloads = 5|" /etc/pacman.conf
 sudo sed -i "s|#VerbosePkgLists|VerbosePkgLists|" /etc/pacman.conf
+sudo sed -i "s|#HookDir|HookDir|" /etc/pacman.conf
 
 # Paru
 git clone https://aur.archlinux.org/paru.git
@@ -37,6 +38,37 @@ sudo make clean install
 
 # Dark Mode
 dconf write /org/gnome/desktop/interface/color-scheme \'prefer-dark\'
+
+# Gpu Drivers
+if lspci | grep -i vga | grep -iq nvidia; then
+    sudo paru -S --noconfirm nvidia
+    sudo sed -i '/^MODULES=/ s/)/ nvidia nvidia_modeset nvidia_uvm nvidia_drm)/' /etc/mkinitcpio.conf
+    sudo mkinitcpio -P
+    sudo nvidia-xconfig
+    sudo mkdir /etc/pacman.d/hooks
+    sudo tee /etc/pacman.d/hooks/nvidia.hook > /dev/null << 'EOF'
+    [Trigger]
+    Operation=Install
+    Operation=Upgrade
+    Operation=Remove
+    Type=Package
+    Target=nvidia
+    Target=nvidia-open
+    Target=nvidia-lts
+    Target=linux
+
+    [Action]
+    Description=Updating NVIDIA module in initcpio
+    Depends=mkinitcpio
+    When=PostTransaction
+    NeedsTargets
+    Exec=/bin/sh -c 'while read -r trg; do case \$trg in linux*) exit 0; esac; done; /usr/bin/mkinitcpio -P'
+    EOF
+fi
+
+if lspci | grep -i vga | grep -iq intel; then
+    sudo paru -S --noconfirm mesa vulkan-intel
+fi
 
 # Loopback
 sudo paru -S --noconfirm v4l2loopback-dkms v4l2loopback-utils
