@@ -66,7 +66,7 @@ sudo usermod -aG docker $USER
 sudo systemctl enable docker.service
 
 # Virtualization
-sudo pacman -S --noconfirm libvirt dnsmasq qemu-full virt-manager virt-viewer
+sudo pacman -S --noconfirm libvirt dmidecode dnsmasq qemu-full virt-manager virt-viewer
 sudo usermod -aG libvirt $USER
 sudo systemctl enable libvirtd.service
 
