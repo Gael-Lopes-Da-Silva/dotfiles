@@ -3,6 +3,7 @@
 set -ex
 
 USER="gael"
+sudo -v
 
 # Terminal
 sudo pacman -S --noconfirm terminus-font
