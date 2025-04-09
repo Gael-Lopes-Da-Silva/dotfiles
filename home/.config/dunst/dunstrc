@@ -40,18 +40,18 @@ context = ctrl+shift+period
 
 [urgency_low]
 timeout = 2
-background = "#282828"
-foreground = "#ebdbb2"
-frame_color = "#ebdbb2"
+background = "#444444"
+foreground = "#eeeeee"
+frame_color = "#005577"
 
 [urgency_normal]
 timeout = 5
-background = "#282828"
-foreground = "#fbf1c7"
-frame_color = "#fbf1c7"
+background = "#444444"
+foreground = "#eeeeee"
+frame_color = "#005577"
 
 [urgency_critical]
 timeout = 0
-background = "#212B30"
+background = "#444444"
 foreground = "#fb4934"
 frame_color = "#fb4934"
