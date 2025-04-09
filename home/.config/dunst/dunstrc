@@ -23,6 +23,7 @@ stack_duplicates = false
 hide_duplicate_count = yes
 icon_position = left
 max_icon_size = 48
+icon_corner_radius = 5
 sticky_history = yes
 history_length = 20
 browser = firefox
@@ -31,12 +32,6 @@ title = Dunst
 class = Dunst
 corner_radius = 0
 corners = all
-
-[shortcuts]
-close = ctrl+shift+space
-close_all = ctrl+shift+space
-history = ctrl+grave
-context = ctrl+shift+period
 
 [urgency_low]
 timeout = 2
