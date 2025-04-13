@@ -10,9 +10,6 @@ vim.diagnostic.config({
     update_in_insert = false,
     virtual_text = true,
     severity_sort = true,
-    float = {
-        border = "single",
-    },
 })
 
 -- Configuration for each lsp:
@@ -125,11 +122,3 @@ vim.lsp.config.jsonls = {
     },
 }
 vim.lsp.enable("jsonls")
-
-vim.lsp.config.serve_d = {
-    cmd = { "serve-d" },
-    filetypes = { "d" },
-    single_file_support = true,
-    root_markers = { 'dub.json', 'dub.sdl' },
-}
-vim.lsp.enable("serve_d")
