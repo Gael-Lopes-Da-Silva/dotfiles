@@ -1,3 +1,6 @@
+-- Documentation for each lsp
+-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
+
 vim.diagnostic.config({
     signs = {
         text = {
@@ -12,10 +15,8 @@ vim.diagnostic.config({
     severity_sort = true,
 })
 
--- Configuration for each lsp:
--- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
-
-vim.lsp.config.lua_ls = {
+vim.lsp.enable("lua_ls")
+vim.lsp.config("lua_ls", {
     cmd = { "lua-language-server" },
     filetypes = { "lua" },
     root_markers = { ".luarc.json", ".luarc.jsonc" },
@@ -42,10 +43,10 @@ vim.lsp.config.lua_ls = {
             telemetry = { enable = false },
         },
     },
-}
-vim.lsp.enable("lua_ls")
+})
 
-vim.lsp.config.intelephense = {
+vim.lsp.enable("intelephense")
+vim.lsp.config("intelephense", {
     cmd = { "intelephense", "--stdio" },
     filetypes = { "php" },
     single_file_support = true,
@@ -61,10 +62,10 @@ vim.lsp.config.intelephense = {
             telemetry = { enabled = false },
         },
     },
-}
-vim.lsp.enable("intelephense")
+})
 
-vim.lsp.config.html = {
+vim.lsp.enable("html")
+vim.lsp.config("html", {
     cmd = { "vscode-html-language-server", "--stdio" },
     filetypes = { "html", "templ", "twig" },
     single_file_support = true,
@@ -78,10 +79,10 @@ vim.lsp.config.html = {
         provideFormatter = true,
     },
     settings = {},
-}
-vim.lsp.enable("html")
+})
 
-vim.lsp.config.cssls = {
+vim.lsp.enable("cssls")
+vim.lsp.config("cssls", {
     cmd = { "vscode-css-language-server", "--stdio" },
     filetypes = { "css", "scss", "less" },
     single_file_support = true,
@@ -99,10 +100,10 @@ vim.lsp.config.cssls = {
             validate = true,
         },
     },
-}
-vim.lsp.enable("cssls")
+})
 
-vim.lsp.config.ts_ls = {
+vim.lsp.enable("ts_ls")
+vim.lsp.config("ts_ls", {
     cmd = { "typescript-language-server", "--stdio" },
     filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" },
     single_file_support = true,
@@ -110,15 +111,16 @@ vim.lsp.config.ts_ls = {
     init_options = {
         hostInfo = "neovim"
     },
-}
-vim.lsp.enable("ts_ls")
+})
 
-vim.lsp.config.jsonls = {
+vim.lsp.enable("jsonls")
+vim.lsp.config("jsonls", {
     cmd = { "vscode-json-language-server", "--stdio" },
     filetypes = { "json", "jsonc" },
     single_file_support = true,
     init_options = {
         provideFormatter = true
     },
-}
-vim.lsp.enable("jsonls")
+})
+
+vim.lsp.config('*', { capabilities = require("mini.completion").get_lsp_capabilities() })

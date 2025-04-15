@@ -1,6 +1,5 @@
 local set = vim.keymap.set
 
--- Default
 set("t", "<C-q>", "<C-\\><C-n>")
 set("n", "<Esc>", function()
     if require("mini.files").close() then return end
@@ -8,18 +7,40 @@ set("n", "<Esc>", function()
     vim.cmd.echo()
 end, { noremap = true })
 
--- Completion
 set("i", "<Tab>", [[pumvisible() ? "\<C-n>" : "\<Tab>"]], { expr = true })
 set("i", "<S-Tab>", [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]], { expr = true })
 set("i", "<C-Space>", "<cmd>lua MiniCompletion.complete_twostage()<cr>")
 set("i", "<C-S-Space>", "<cmd>lua vim.lsp.buf.signature_help()<cr>")
-
--- Buffers
 set("n", "<S-Tab>", "<cmd>lua MiniBracketed.buffer('backward')<cr>")
 set("n", "<Tab>", "<cmd>lua MiniBracketed.buffer('forward')<cr>")
+
+-- Toggles
+set("n", "\\m", "<cmd>lua MiniMap.toggle()<cr>", { desc = "Toggle 'minimap'" })
+set("n", "\\z", "<cmd>lua MiniMisc.zoom()<cr>", { desc = "Toggle 'zoom'" })
+set("n", "\\d", "<cmd>lua MiniBasics.toggle_diagnostic()<cr>", { desc = "Toggle 'diagnostics'" })
+set("n", "\\h", "<cmd>set hlsearch!<cr>", { desc = "Toggle 'search highlight'" })
+
+-- Leader
 set("n", "<leader>d", "<cmd>lua MiniBufremove.delete()<cr>", { desc = "Delete buffer" })
 
--- LSP
+-- Leader + Files
+set("n", "<leader>ff", "<cmd>lua MiniFiles.open()<cr>", { desc = "Files" })
+set("n", "<leader>ft", "<cmd>lua MiniTrailspace.trim()<cr>", { desc = "Trim whitespace" })
+set("n", "<leader>fT", "<cmd>lua MiniTrailspace.trim_last_lines()<cr>", { desc = "Trim last line" })
+
+-- Leader + Git
+set("n", "<leader>gA", "<cmd>Git add .<cr>", { desc = "Add all" })
+set("n", "<leader>gC", "<cmd>Git commit --amend<cr>", { desc = "Commit amend" })
+set("n", "<leader>gP", "<cmd>Git pull<cr>", { desc = "Pull" })
+set("n", "<leader>ga", "<cmd>Git add %<cr>", { desc = "Add" })
+set("n", "<leader>gb", "<cmd>Git blame %<cr>", { desc = "Blame" })
+set("n", "<leader>gc", "<cmd>Git commit<cr>", { desc = "Commit" })
+set("n", "<leader>gl", "<cmd>Git log<cr>", { desc = "Log" })
+set("n", "<leader>gp", "<cmd>Git push<cr>", { desc = "Push" })
+set("n", "<leader>gs", "<cmd>Git status<cr>", { desc = "Status" })
+set("n", "<leader>go", "<cmd>lua MiniDiff.toggle_overlay()<cr>", { desc = "Diff overlay" })
+
+-- Leader + Lsp
 set("n", "<leader>lD", "<cmd>lua vim.lsp.buf.declaration()<cr>", { desc = "Declaration" })
 set("n", "<leader>lH", "<cmd>lua vim.lsp.buf.signature_help()<cr>", { desc = "Signature help" })
 set("n", "<leader>lR", "<cmd>lua vim.lsp.buf.references()<cr>", { desc = "References" })
@@ -30,12 +51,7 @@ set("n", "<leader>li", "<cmd>lua vim.lsp.buf.implementation()<cr>", { desc = "Im
 set("n", "<leader>lr", "<cmd>lua vim.lsp.buf.rename()<cr>", { desc = "Rename" })
 set("n", "<leader>lt", "<cmd>lua vim.lsp.buf.type_definition()<cr>", { desc = "Type definition" })
 
--- Files
-set("n", "<leader>ff", "<cmd>lua MiniFiles.open()<cr>", { desc = "Files" })
-set("n", "<leader>ft", "<cmd>lua MiniTrailspace.trim()<cr>", { desc = "Trim whitespace" })
-set("n", "<leader>fT", "<cmd>lua MiniTrailspace.trim_last_lines()<cr>", { desc = "Trim last line" })
-
--- Pickers
+-- Leader + Picks
 set("n", "<leader>pG", "<cmd>lua MiniPick.builtin.grep_live()<cr>", { desc = "Grep live" })
 set("n", "<leader>pb", "<cmd>lua MiniPick.builtin.buffers()<cr>", { desc = "Buffers" })
 set("n", "<leader>pf", "<cmd>lua MiniPick.builtin.files()<cr>", { desc = "Files" })
@@ -50,21 +66,3 @@ set("n", "<leader>po", "<cmd>lua MiniExtra.pickers.options()<cr>", { desc = "Opt
 set("n", "<leader>pr", "<cmd>lua MiniExtra.pickers.registers()<cr>", { desc = "Registers" })
 set("n", "<leader>pt", "<cmd>lua MiniExtra.pickers.hipatterns()<cr>", { desc = "Todos" })
 set("n", "<leader>pc", "<cmd>lua MiniExtra.pickers.hl_groups()<cr>", { desc = "Colors" })
-
--- Git
-set("n", "<leader>gA", "<cmd>Git add .<cr>", { desc = "Add all" })
-set("n", "<leader>gC", "<cmd>Git commit --amend<cr>", { desc = "Commit amend" })
-set("n", "<leader>gP", "<cmd>Git pull<cr>", { desc = "Pull" })
-set("n", "<leader>ga", "<cmd>Git add %<cr>", { desc = "Add" })
-set("n", "<leader>gb", "<cmd>Git blame %<cr>", { desc = "Blame" })
-set("n", "<leader>gc", "<cmd>Git commit<cr>", { desc = "Commit" })
-set("n", "<leader>gl", "<cmd>Git log<cr>", { desc = "Log" })
-set("n", "<leader>gp", "<cmd>Git push<cr>", { desc = "Push" })
-set("n", "<leader>gs", "<cmd>Git status<cr>", { desc = "Status" })
-set("n", "<leader>go", "<cmd>lua MiniDiff.toggle_overlay()<cr>", { desc = "Diff overlay" })
-
--- Toggles
-set("n", "\\m", "<cmd>lua MiniMap.toggle()<cr>", { desc = "Toggle 'minimap'" })
-set("n", "\\z", "<cmd>lua MiniMisc.zoom()<cr>", { desc = "Toggle 'zoom'" })
-set("n", "\\d", "<cmd>lua MiniBasics.toggle_diagnostic()<cr>", { desc = "Toggle 'diagnostics'" })
-set("n", "\\h", "<cmd>set hlsearch!<cr>", { desc = "Toggle 'search highlight'" })
