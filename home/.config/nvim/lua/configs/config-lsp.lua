@@ -131,4 +131,4 @@ vim.lsp.config("zls", {
     single_file_support = true,
 })
 
--- vim.lsp.config('*', { capabilities = require("mini.completion").get_lsp_capabilities() })
+vim.lsp.config('*', { capabilities = require("mini.completion").get_lsp_capabilities() })
