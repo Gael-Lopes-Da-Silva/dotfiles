@@ -123,4 +123,12 @@ vim.lsp.config("jsonls", {
     },
 })
 
-vim.lsp.config('*', { capabilities = require("mini.completion").get_lsp_capabilities() })
+vim.lsp.enable("zls")
+vim.lsp.config("zls", {
+    cmd = { "zls" },
+    root_markers = { 'zls.json' },
+    filetypes = { "zig", "zir" },
+    single_file_support = true,
+})
+
+-- vim.lsp.config('*', { capabilities = require("mini.completion").get_lsp_capabilities() })
