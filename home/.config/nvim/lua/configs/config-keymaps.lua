@@ -13,7 +13,7 @@ set("i", "<C-Space>", "<cmd>lua MiniCompletion.complete_twostage()<cr>")
 set("i", "<C-S-Space>", "<cmd>lua vim.lsp.buf.signature_help()<cr>")
 set("n", "<S-Tab>", "<cmd>lua MiniBracketed.buffer('backward')<cr>")
 set("n", "<Tab>", "<cmd>lua MiniBracketed.buffer('forward')<cr>")
-set("n", "gqq", "<cmd>lua vim.lsp.buf.format()<cr>")
+set("n", "gqq", "<cmd>lua vim.lsp.buf.format()<cr>", { desc = "Format buffer" })
 
 -- Toggles
 set("n", "\\m", "<cmd>lua MiniMap.toggle()<cr>", { desc = "Toggle 'minimap'" })
