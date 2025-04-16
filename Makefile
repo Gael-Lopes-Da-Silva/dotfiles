@@ -1,8 +1,8 @@
-.PHONY: all terminal pacman paru packages stow desktop drivers v4l2loopback docker virtmanager soundboard
+.PHONY: all terminal pacman paru packages stow desktop drivers v4l2loopback docker virtualbox soundboard
 
 USER := gael
 
-all: terminal pacman paru packages stow desktop drivers v4l2loopback docker virtmanager soundboard
+all: terminal pacman paru packages stow desktop drivers v4l2loopback docker virtualbox soundboard
 
 terminal:
 	pacman -S --noconfirm terminus-font
@@ -58,10 +58,9 @@ docker:
 	usermod -aG docker $(USER)
 	systemctl enable docker.service
 
-virtmanager:
-	pacman -S --noconfirm libvirt dmidecode dnsmasq qemu-full virt-manager virt-viewer
-	usermod -aG libvirt $(USER)
-	systemctl enable libvirtd.service
+virtualbox:
+	pacman -S --noconfirm virtualbox virtualbox-host-modules-arch virtualbox-guest-iso
+	usermod -aG vboxusers $(USER)
 
 soundboard:
 	sudo systemctl --machine=$(USER)@.host --user enable soundboard.service
