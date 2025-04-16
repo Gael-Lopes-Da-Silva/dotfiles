@@ -17,7 +17,7 @@ pacman:
 
 paru:
 	sudo -u $(USER) git clone https://aur.archlinux.org/paru.git /home/$(USER)/.dotfiles/paru
-	cd /home/$(USER)/.dotfiles/paru && sudo -u $(USER) makepkg -si --noconfirm
+	cd /home/$(USER)/.dotfiles/paru && makepkg -si --noconfirm
 	rm -rf /home/$(USER)/.dotfiles/paru
 
 packages:
