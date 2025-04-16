@@ -56,12 +56,12 @@ v4l2loopback:
 docker:
 	pacman -S --noconfirm docker
 	usermod -aG docker $(USER)
-	systemctl enable --now docker.service
+	systemctl enable docker.service
 
 virtmanager:
 	pacman -S --noconfirm libvirt dmidecode dnsmasq qemu-full virt-manager virt-viewer
 	usermod -aG libvirt $(USER)
-	systemctl enable --now libvirtd.service
+	systemctl enable libvirtd.service
 
 soundboard:
-	systemctl --user enable --now soundboard.service
+	systemctl --user enable soundboard.service
