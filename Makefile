@@ -33,9 +33,9 @@ stow:
 desktop:
 	pacman -S --noconfirm xorg xorg-xinit xclip xdg-desktop-portal xdg-desktop-portal-gtk \
 		maim upower brightnessctl network-manager-applet
-	cd /home/$(USER)/.dotfiles/home/.config/suckless/dwm && make clean install
-	cd /home/$(USER)/.dotfiles/home/.config/suckless/dwmblocks && make clean install
-	cd /home/$(USER)/.dotfiles/home/.config/suckless/dmenu && make clean install
+	cd /home/$(USER)/.dotfiles/home/.config/suckless/dwm && make install clean
+	cd /home/$(USER)/.dotfiles/home/.config/suckless/dwmblocks && make install clean
+	cd /home/$(USER)/.dotfiles/home/.config/suckless/dmenu && make install clean
 
 drivers:
 	@if lspci | grep -i vga | grep -iq nvidia; then \
@@ -64,4 +64,4 @@ virtmanager:
 	systemctl enable libvirtd.service
 
 soundboard:
-	systemctl --user enable soundboard.service
+	sudo -i -u $(USER) systemctl --user enable soundboard.service
