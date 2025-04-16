@@ -36,7 +36,6 @@ desktop:
 	cd /home/$(USER)/.dotfiles/home/.config/suckless/dwm && make clean install
 	cd /home/$(USER)/.dotfiles/home/.config/suckless/dwmblocks && make clean install
 	cd /home/$(USER)/.dotfiles/home/.config/suckless/dmenu && make clean install
-	sudo -u $(USER) dconf write /org/gnome/desktop/interface/color-scheme \'prefer-dark\'
 
 drivers:
 	@if lspci | grep -i vga | grep -iq nvidia; then \

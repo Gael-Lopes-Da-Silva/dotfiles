@@ -17,6 +17,7 @@ xsetroot -cursor_name left_ptr
 xset r rate 250 40
 xset s off -dpms
 
+dconf write /org/gnome/desktop/interface/color-scheme \'prefer-dark\'
 systemctl --user restart soundboard.service &
 
 exec dwm
