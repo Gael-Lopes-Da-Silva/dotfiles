@@ -16,7 +16,7 @@
     (open-on-exit)
     (aux-info
         (left-docks-width "66")
-        (right-docks-width "352")
+        (right-docks-width "350")
         (maximized "no"))
     (gimp-toolbox
         (side left))
@@ -46,7 +46,7 @@
                 (aux-info
                     (show-button-bar "true"))))
         (book
-            (position 501)
+            (position 502)
             (current-page 0)
             (dockable "gimp-layer-list"
                 (tab-style icon)
@@ -65,13 +65,13 @@
                     (show-button-bar "true"))))))
 (session-info "toplevel"
     (factory-entry "gimp-image-new-dialog")
-    (position 593 392))
+    (position 593 391))
 (session-info "toplevel"
     (factory-entry "gimp-toolbox-color-dialog")
     (position 2559 856))
 (session-info "toplevel"
     (factory-entry "gimp-preferences-dialog")
-    (position 44 88)
+    (position 88 76)
     (size 1746 896))
 (session-info "toplevel"
     (factory-entry "gimp-levels-tool-dialog")
