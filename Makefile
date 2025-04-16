@@ -64,4 +64,4 @@ virtmanager:
 	systemctl enable --now libvirtd.service
 
 soundboard:
-	sudo -u $(USER) systemctl --user enable --now soundboard.service
+	sudo -u $(USER) systemctl --machine=$(USER)@.host --user enable --now soundboard.service
