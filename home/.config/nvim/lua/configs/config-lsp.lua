@@ -123,4 +123,11 @@ vim.lsp.config("jsonls", {
     },
 })
 
+vim.lsp.enable("pylsp")
+vim.lsp.config("pylsp", {
+    cmd = { "pylsp" },
+    filetypes = { "python" },
+    single_file_support = true,
+})
+
 vim.lsp.config('*', { capabilities = require("mini.completion").get_lsp_capabilities() })
