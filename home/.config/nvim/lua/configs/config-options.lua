@@ -23,12 +23,9 @@ opt.winblend = 0
 opt.scrolloff = 5
 opt.relativenumber = false
 opt.number = false
-opt.foldenable = true
-opt.foldmethod = "expr"
-opt.foldexpr = "nvim_treesitter#foldexpr()"
+opt.foldmethod = "indent"
+opt.foldenable = false
 opt.foldlevel = 99
-opt.foldlevelstart = 99
-opt.foldcolumn = "0"
 opt.foldtext = ""
 opt.hlsearch = true
 opt.ignorecase = true
@@ -44,10 +41,13 @@ opt.signcolumn = "yes:1"
 opt.winborder = "single"
 opt.list = true
 opt.breakindentopt = 'list:-1'
-opt.listchars = table.concat({
-    'tab: ',
-    'nbsp:␣',
-    'conceal:*',
-    'extends:…',
-    'precedes:…',
-}, ',')
+opt.fillchars = {
+    fold = " ",
+}
+opt.listchars = {
+    tab = " ",
+    nbsp = "␣",
+    conceal = "*",
+    extends = "…",
+    precedes = "…",
+}
