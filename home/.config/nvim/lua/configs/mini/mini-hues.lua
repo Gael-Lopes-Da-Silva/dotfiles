@@ -1,7 +1,7 @@
 -- MiniDeps.later(function()
 --     require("mini.hues").setup({
---         background = "#351721",
---         foreground = "#cdc4c6",
+--         background = "#1F1F1F",
+--         foreground = "#ffffff",
 --         saturation = "high"
 --     })
 -- end)

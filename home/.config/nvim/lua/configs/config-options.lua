@@ -44,10 +44,6 @@ opt.signcolumn = "yes:1"
 opt.winborder = "single"
 opt.list = true
 opt.breakindentopt = 'list:-1'
-opt.fillchars = table.concat({
-    'fold:•',
-    'eob: ',
-}, ',')
 opt.listchars = table.concat({
     'tab: ',
     'nbsp:␣',
