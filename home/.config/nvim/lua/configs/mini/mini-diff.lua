@@ -3,9 +3,9 @@ MiniDeps.later(function()
         view = {
             style = (vim.go.number or vim.go.relativenumber) and "number" or "sign",
             signs = {
-                add = "",
-                change = "",
-                delete = "",
+                add = "+",
+                change = "~",
+                delete = "-",
             },
             priority = 10;
         },
