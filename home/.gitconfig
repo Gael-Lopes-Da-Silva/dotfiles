@@ -1,57 +1,77 @@
 [user]
-name = gael-lopes-da-silva
-email = gael.lopes-da-silva@outlook.fr
+    name = gael-lopes-da-silva
+    email = gael.lopes-da-silva@outlook.fr
 
 [credential]
-helper = store
+    helper = store
 
 [push]
-default = simple
-followTags = true
+    default = current
+    followTags = true
+    autoSetupRemote = true
 
 [fetch]
-recurseSubmodules = on-demand
+    recurseSubmodules = on-demand
 
 [pull]
-rebase = true
+    default = current
+    rebase = true
 
 [rebase]
-autoStash = true
+    autoStash = true
+    missingCommitsCheck = warn
 
 [branch]
-sort = -committerdate
+    sort = -committerdate
+
+[tag]
+    sort = -taggerdate
 
 [status]
-submoduleSummary = true
-showUntrackedFiles = all
+    branch = true
+    showStash = true
+    submoduleSummary = true
+    showUntrackedFiles = all
 
 [log]
-abbrevCommit = true
-follow = true
-decorate = false
+    abbrevCommit = true
+    follow = true
+    decorate = false
 
 [core]
-editor = nvim
-pager = less
-whitespace = -trailing-space
+    compression = 9
+    editor = nvim
+    pager = less
+    whitespace = -trailing-space
+    preloadindex = true
+
+[init]
+    defaultBranch = main
+
+[advice]
+    addEmptyPathspec = false
+    pushNonFastForward = false
+    statusHints = false
 
 [diff]
-mnemonicPrefix = true
-renames = true
-submodule = log
+    context = 3
+    interHunkContext = 10
+    mnemonicPrefix = true
+    renames = true
+    submodule = log
 
 [grep]
-break = true
-heading = true
-lineNumber = true
+    break = true
+    heading = true
+    lineNumber = true
 
 [rerere]
-autoupdate = true
-enabled = true
+    autoupdate = true
+    enabled = true
 
 [color]
-ui = auto
+    ui = auto
 
 [alias]
-prune = fetch --prune
-undo = reset --soft HEAD^
+    prune = fetch --prune
+    undo = reset --soft HEAD^
