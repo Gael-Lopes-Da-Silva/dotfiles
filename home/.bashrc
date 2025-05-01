@@ -44,6 +44,7 @@ alias gbranch='git branch'
 alias gcheckout='git checkout'
 alias ginit='git init'
 alias gclone='git clone'
+alias gstash='git stash'
 
 bind 'set show-all-if-ambiguous on'
 bind 'set mark-symlinked-directories on'
