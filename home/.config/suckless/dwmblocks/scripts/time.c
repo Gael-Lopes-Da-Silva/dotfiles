@@ -10,7 +10,7 @@ main(void)
 {
     time_t t;
     struct tm *tm_info;
-    char time_str[9];
+    char time_str[6];
     int hour;
     const char *icon = ICON_DEFAULT;
 
@@ -23,7 +23,7 @@ main(void)
         return 1;
     }
 
-    strftime(time_str, sizeof(time_str), "%T", tm_info);
+    strftime(time_str, sizeof(time_str), "%H:%M", tm_info);
     hour = tm_info->tm_hour;
 
     if (hour == 12 || hour == 19) {

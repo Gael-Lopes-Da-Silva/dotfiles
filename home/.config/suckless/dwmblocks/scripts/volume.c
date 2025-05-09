@@ -36,7 +36,7 @@ main(void)
     if (isMuted) {
         printf(" %s ^c#474747^MUTED^d^ ", icon);
     } else {
-        printf(" %s %.2f ", icon, volume);
+        printf(" %s %d%% ", icon, (int)(volume * 100));
     }
 
     return 0;

@@ -2,9 +2,18 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define ICON_BATTERY "󰁹"
-#define ICON_CHARGING "󱐋"
-#define ICON_FULL ""
+#define ICON_BATTERY_100 "󰁹"
+#define ICON_BATTERY_90 "󰂂"
+#define ICON_BATTERY_80 "󰂁"
+#define ICON_BATTERY_70 "󰂀"
+#define ICON_BATTERY_60 "󰁿"
+#define ICON_BATTERY_50 "󰁾"
+#define ICON_BATTERY_40 "󰁽"
+#define ICON_BATTERY_30 "󰁼"
+#define ICON_BATTERY_20 "󰁻"
+#define ICON_BATTERY_10 "󰁺"
+#define ICON_CHARGING "󰂄"
+#define ICON_FULL "󰂃"
 
 #define CMD_GET_BATTERY "upower -i $(upower -e 2>/dev/null | grep /battery) 2>/dev/null"
 
@@ -15,7 +24,7 @@ main(void)
     char output[256];
     int battery = -1;
     char state[16] = "";
-    const char *icon = ICON_BATTERY;
+    const char *icon = ICON_BATTERY_100;
     const char *color = "";
     int type = 0;
 
@@ -34,6 +43,28 @@ main(void)
 
     if (battery < 0 || strlen(state) == 0) {
         return 1;
+    }
+
+    if (strcmp(state, "charging") != 0 && battery != 100) {
+        if (battery >= 90) {
+            icon = ICON_BATTERY_90;
+        } else if (battery >= 80) {
+            icon = ICON_BATTERY_80;
+        } else if (battery >= 70) {
+            icon = ICON_BATTERY_70;
+        } else if (battery >= 60) {
+            icon = ICON_BATTERY_60;
+        } else if (battery >= 50) {
+            icon = ICON_BATTERY_50;
+        } else if (battery >= 40) {
+            icon = ICON_BATTERY_40;
+        } else if (battery >= 30) {
+            icon = ICON_BATTERY_30;
+        } else if (battery >= 20) {
+            icon = ICON_BATTERY_20;
+        } else {
+            icon = ICON_BATTERY_10;
+        }
     }
 
     if (strcmp(state, "charging") == 0) {

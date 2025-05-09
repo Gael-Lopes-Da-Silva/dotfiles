@@ -2,7 +2,7 @@
 #include <time.h>
 #include <string.h>
 
-#define ICON_DEFAULT ""
+#define ICON_DEFAULT "󰃭"
 #define ICON_BIRTHDAY ""
 #define ICON_TRAVEL ""
 #define ICON_SPECIAL "󰴺"
