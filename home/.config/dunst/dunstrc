@@ -34,18 +34,21 @@ ignore_dbusclose = true
 
 [urgency_low]
 timeout = 2
+override_dbus_timeout = 2
 background = "#393939"
 foreground = "#eeeeee"
 frame_color = "#005577"
 
 [urgency_normal]
 timeout = 5
+override_dbus_timeout = 5
 background = "#393939"
 foreground = "#eeeeee"
 frame_color = "#005577"
 
 [urgency_critical]
 timeout = 0
+override_dbus_timeout = 0
 background = "#393939"
 foreground = "#fb4934"
 frame_color = "#fb4934"
