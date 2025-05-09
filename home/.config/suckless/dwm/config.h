@@ -24,7 +24,7 @@ static const char *colors[][3]           = {
 };
 
 static const char *const autostart[] = {
-    "xrdb", "~/.Xresources", NULL,
+    "xrdb", "/home/gael/.Xresources", NULL,
     "xsetroot", "-solid", "#474747", NULL,
     "xsetroot", "-cursor_name", "left_ptr", NULL,
     "xset", "r", "rate", "250", "40", NULL,
