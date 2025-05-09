@@ -7,8 +7,6 @@ set("n", "<Esc>", function()
     vim.cmd.echo()
 end, { noremap = true })
 
-set("i", "<Tab>", [[pumvisible() ? "\<C-n>" : "\<Tab>"]], { expr = true })
-set("i", "<S-Tab>", [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]], { expr = true })
 set("i", "<C-Space>", "<cmd>lua MiniCompletion.complete_twostage()<cr>")
 set("i", "<C-S-Space>", "<cmd>lua vim.lsp.buf.signature_help()<cr>")
 set("n", "<S-Tab>", "<cmd>lua MiniBracketed.buffer('backward')<cr>")
