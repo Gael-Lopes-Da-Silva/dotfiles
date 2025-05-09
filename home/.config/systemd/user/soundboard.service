@@ -5,7 +5,7 @@ PartOf=graphical-session.target
 
 [Service]
 Type=oneshot
-ExecStart=/home/gael/.scripts/setup
+ExecStart=/home/gael/.scripts/soundboard/setup
 
 [Install]
 WantedBy=graphical-session.target
