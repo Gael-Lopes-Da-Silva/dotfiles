@@ -24,17 +24,18 @@ static const char *colors[][3]           = {
 };
 
 static const char *const autostart[] = {
-    "xrdb", "-merge", "~/.Xresources", NULL,
     "xsetroot", "-solid", "#474747", NULL,
     "xsetroot", "-cursor_name", "left_ptr", NULL,
     "xset", "r", "rate", "250", "40", NULL,
     "xset", "s", "off", "-dpms", NULL,
     "xset", "s", "noblank", NULL,
+
     "eval", "\'$(ssh-agent -s)\'", NULL,
     "gpgconf", "--launch", "gpg-agent", NULL,
     "dbus-update-activation-environment", "--systemd", "--all", NULL,
+
     "dconf", "write", "/org/gnome/desktop/interface/color-scheme", "\'prefer-dark\'", NULL,
-    "systemctl", "--user", "restart", "soundboard.service", NULL,
+
     "nm-applet", NULL,
     "dwmblocks", NULL,
     "udiskie", NULL,
