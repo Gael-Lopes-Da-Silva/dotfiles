@@ -6,7 +6,6 @@
 #ifndef NO_X
 #include<X11/Xlib.h>
 #endif
-
 #ifdef __OpenBSD__
 #define SIGPLUS			SIGUSR1+1
 #define SIGMINUS		SIGUSR1-1
@@ -14,7 +13,7 @@
 #define SIGPLUS			SIGRTMIN
 #define SIGMINUS		SIGRTMIN
 #endif
-#define LENGTH(X)               (sizeof(X) / sizeof (X[0]))
+#define LENGTH(X)			   (sizeof(X) / sizeof (X[0]))
 #define CMDLENGTH		50
 #define MIN( a, b ) ( ( a < b) ? a : b )
 #define STATUSLENGTH (LENGTH(blocks) * CMDLENGTH + 1)
@@ -25,7 +24,6 @@ typedef struct {
 	unsigned int interval;
 	unsigned int signal;
 } Block;
-
 #ifndef __OpenBSD__
 void dummysighandler(int num);
 #endif
@@ -36,7 +34,7 @@ void setupsignals();
 void sighandler(int signum);
 int getstatus(char *str, char *last);
 void statusloop();
-void termhandler();
+void termhandler(int signum);
 void pstdout();
 #ifndef NO_X
 void setroot();
@@ -49,15 +47,16 @@ static Window root;
 static void (*writestatus) () = pstdout;
 #endif
 
+
 #include "config.h"
 
 static char statusbar[LENGTH(blocks)][CMDLENGTH] = {0};
 static char statusstr[2][STATUSLENGTH];
 static int statusContinue = 1;
+static int returnStatus = 0;
 
 //opens process *cmd and stores output in *output
-void
-getcmd(const Block *block, char *output)
+void getcmd(const Block *block, char *output)
 {
 	//make sure status is same until output is ready
 	char tempstatus[CMDLENGTH] = {0};
@@ -82,8 +81,7 @@ getcmd(const Block *block, char *output)
 	pclose(cmdf);
 }
 
-void
-getcmds(int time)
+void getcmds(int time)
 {
 	const Block* current;
 	for (unsigned int i = 0; i < LENGTH(blocks); i++) {
@@ -93,8 +91,7 @@ getcmds(int time)
 	}
 }
 
-void
-getsigcmds(unsigned int signal)
+void getsigcmds(unsigned int signal)
 {
 	const Block *current;
 	for (unsigned int i = 0; i < LENGTH(blocks); i++) {
@@ -104,13 +101,12 @@ getsigcmds(unsigned int signal)
 	}
 }
 
-void
-setupsignals()
+void setupsignals()
 {
 #ifndef __OpenBSD__
-	    /* initialize all real time signals with dummy handler */
-    for (int i = SIGRTMIN; i <= SIGRTMAX; i++)
-        signal(i, dummysighandler);
+		/* initialize all real time signals with dummy handler */
+	for (int i = SIGRTMIN; i <= SIGRTMAX; i++)
+		signal(i, dummysighandler);
 #endif
 
 	for (unsigned int i = 0; i < LENGTH(blocks); i++) {
@@ -120,8 +116,7 @@ setupsignals()
 
 }
 
-int
-getstatus(char *str, char *last)
+int getstatus(char *str, char *last)
 {
 	strcpy(last, str);
 	str[0] = '\0';
@@ -132,8 +127,7 @@ getstatus(char *str, char *last)
 }
 
 #ifndef NO_X
-void
-setroot()
+void setroot()
 {
 	if (!getstatus(statusstr[0], statusstr[1]))//Only set root if text has changed.
 		return;
@@ -141,8 +135,7 @@ setroot()
 	XFlush(dpy);
 }
 
-int
-setupX()
+int setupX()
 {
 	dpy = XOpenDisplay(NULL);
 	if (!dpy) {
@@ -155,8 +148,7 @@ setupX()
 }
 #endif
 
-void
-pstdout()
+void pstdout()
 {
 	if (!getstatus(statusstr[0], statusstr[1]))//Only write out if text has changed.
 		return;
@@ -165,8 +157,7 @@ pstdout()
 }
 
 
-void
-statusloop()
+void statusloop()
 {
 	setupsignals();
 	int i = 0;
@@ -182,28 +173,24 @@ statusloop()
 
 #ifndef __OpenBSD__
 /* this signal handler should do nothing */
-void
-dummysighandler(int signum)
+void dummysighandler(int signum)
 {
-    return;
+	return;
 }
 #endif
 
-void
-sighandler(int signum)
+void sighandler(int signum)
 {
 	getsigcmds(signum-SIGPLUS);
 	writestatus();
 }
 
-void
-termhandler()
+void termhandler(int signum)
 {
 	statusContinue = 0;
 }
 
-int
-main(int argc, char** argv)
+int main(int argc, char** argv)
 {
 	for (int i = 0; i < argc; i++) {//Handle command line arguments
 		if (!strcmp("-d",argv[i]))
@@ -223,5 +210,5 @@ main(int argc, char** argv)
 #ifndef NO_X
 	XCloseDisplay(dpy);
 #endif
-	return 0;
+	return returnStatus;
 }
