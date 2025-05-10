@@ -28,7 +28,7 @@ char *battery_status(void) {
     int type = 0;
 
     if ((fp = popen(CMD_GET_BATTERY, "r")) == NULL) {
-        snprintf(result, sizeof(result), " %s ERR ", ICON_BATTERY_100);
+        result[0] = '\0';
         return result;
     }
 
@@ -42,7 +42,7 @@ char *battery_status(void) {
     pclose(fp);
 
     if (battery < 0 || strlen(state) == 0) {
-        snprintf(result, sizeof(result), " %s ERR ", ICON_BATTERY_100);
+        result[0] = '\0';
         return result;
     }
 

@@ -14,7 +14,7 @@ char *brightness_status(void) {
     const char *icon = ICON_BRIGHT;
 
     if ((fp = popen(CMD_GET_BRIGHTNESS, "r")) == NULL) {
-        snprintf(result, sizeof(result), " %s ERR ", ICON_BRIGHT);
+        result[0] = '\0';
         return result;
     }
 
@@ -30,7 +30,7 @@ char *brightness_status(void) {
     pclose(fp);
 
     if (brightness < 0) {
-        snprintf(result, sizeof(result), " %s ERR ", ICON_BRIGHT);
+        result[0] = '\0';
         return result;
     }
 
