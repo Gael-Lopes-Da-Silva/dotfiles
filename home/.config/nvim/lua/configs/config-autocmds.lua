@@ -27,3 +27,19 @@ create_autocmd('BufWinEnter', {
         vim.api.nvim_win_set_config(win_id, config)
     end,
 })
+
+create_autocmd({ 'BufWrite', 'BufWinLeave' }, {
+    desc = "Save folds when saving or closing a buffer",
+    group = group,
+    callback = function()
+        vim.cmd('silent! mkview')
+    end,
+})
+
+create_autocmd('BufWinEnter', {
+    desc = "Load saved folds when openning a buffer",
+    group = group,
+    callback = function()
+        vim.cmd('silent! loadview')
+    end,
+})
