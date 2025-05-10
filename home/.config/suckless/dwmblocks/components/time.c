@@ -5,9 +5,8 @@
 #define ICON_NOON_EVENING "󰩰"
 #define ICON_NIGHT "󰖔"
 
-int
-main(void)
-{
+char *time_status(void) {
+    static char result[32];
     time_t t;
     struct tm *tm_info;
     char time_str[6];
@@ -15,12 +14,14 @@ main(void)
     const char *icon = ICON_DEFAULT;
 
     if (time(&t) == -1) {
-        return 1;
+        snprintf(result, sizeof(result), " %s ERR ", ICON_DEFAULT);
+        return result;
     }
 
     tm_info = localtime(&t);
     if (!tm_info) {
-        return 1;
+        snprintf(result, sizeof(result), " %s ERR ", ICON_DEFAULT);
+        return result;
     }
 
     strftime(time_str, sizeof(time_str), "%H:%M", tm_info);
@@ -32,7 +33,6 @@ main(void)
         icon = ICON_NIGHT;
     }
 
-    printf(" %s %s ", icon, time_str);
-
-    return 0;
+    snprintf(result, sizeof(result), " %s %s ", icon, time_str);
+    return result;
 }

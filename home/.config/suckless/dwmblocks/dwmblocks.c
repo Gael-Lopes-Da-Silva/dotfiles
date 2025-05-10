@@ -13,14 +13,14 @@
 #define SIGPLUS			SIGRTMIN
 #define SIGMINUS		SIGRTMIN
 #endif
-#define LENGTH(X)			   (sizeof(X) / sizeof (X[0]))
+#define LENGTH(X)		(sizeof(X) / sizeof (X[0]))
 #define CMDLENGTH		50
-#define MIN( a, b ) ( ( a < b) ? a : b )
-#define STATUSLENGTH (LENGTH(blocks) * CMDLENGTH + 1)
+#define MIN(a, b)		((a < b) ? a : b)
+#define STATUSLENGTH	(LENGTH(blocks) * CMDLENGTH + 1)
 
 typedef struct {
 	char* icon;
-	char* command;
+	char* (*func)(void); // Function pointer for status function
 	unsigned int interval;
 	unsigned int signal;
 } Block;
@@ -31,7 +31,6 @@ void sighandler(int num);
 void getcmds(int time);
 void getsigcmds(unsigned int signal);
 void setupsignals();
-void sighandler(int signum);
 int getstatus(char *str, char *last);
 void statusloop();
 void termhandler(int signum);
@@ -47,7 +46,6 @@ static Window root;
 static void (*writestatus) () = pstdout;
 #endif
 
-
 #include "config.h"
 
 static char statusbar[LENGTH(blocks)][CMDLENGTH] = {0};
@@ -55,30 +53,27 @@ static char statusstr[2][STATUSLENGTH];
 static int statusContinue = 1;
 static int returnStatus = 0;
 
-//opens process *cmd and stores output in *output
 void getcmd(const Block *block, char *output)
 {
-	//make sure status is same until output is ready
+	if (!block->func) {
+		output[0] = '\0';
+		return;
+	}
 	char tempstatus[CMDLENGTH] = {0};
 	strcpy(tempstatus, block->icon);
-	FILE *cmdf = popen(block->command, "r");
-	if (!cmdf)
+	const char *func_output = block->func();
+	if (!func_output) {
+		output[0] = '\0';
 		return;
-	int i = strlen(block->icon);
-	fgets(tempstatus+i, CMDLENGTH-i-delimLen, cmdf);
-	i = strlen(tempstatus);
-	//if block and command output are both not empty
-	if (i != 0) {
-		//only chop off newline if one is present at the end
-		i = tempstatus[i-1] == '\n' ? i-1 : i;
-		if (delim[0] != '\0') {
-			strncpy(tempstatus+i, delim, delimLen);
-		}
-		else
-			tempstatus[i++] = '\0';
+	}
+	strncat(tempstatus, func_output, CMDLENGTH - strlen(block->icon) - delimLen);
+	int i = strlen(tempstatus);
+	if (i != 0 && delim[0] != '\0') {
+		strncpy(tempstatus + i, delim, delimLen);
+	} else {
+		tempstatus[i++] = '\0';
 	}
 	strcpy(output, tempstatus);
-	pclose(cmdf);
 }
 
 void getcmds(int time)
@@ -87,7 +82,7 @@ void getcmds(int time)
 	for (unsigned int i = 0; i < LENGTH(blocks); i++) {
 		current = blocks + i;
 		if ((current->interval != 0 && time % current->interval == 0) || time == -1)
-			getcmd(current,statusbar[i]);
+			getcmd(current, statusbar[i]);
 	}
 }
 
@@ -97,23 +92,20 @@ void getsigcmds(unsigned int signal)
 	for (unsigned int i = 0; i < LENGTH(blocks); i++) {
 		current = blocks + i;
 		if (current->signal == signal)
-			getcmd(current,statusbar[i]);
+			getcmd(current, statusbar[i]);
 	}
 }
 
 void setupsignals()
 {
 #ifndef __OpenBSD__
-		/* initialize all real time signals with dummy handler */
 	for (int i = SIGRTMIN; i <= SIGRTMAX; i++)
 		signal(i, dummysighandler);
 #endif
-
 	for (unsigned int i = 0; i < LENGTH(blocks); i++) {
 		if (blocks[i].signal > 0)
-			signal(SIGMINUS+blocks[i].signal, sighandler);
+			signal(SIGMINUS + blocks[i].signal, sighandler);
 	}
-
 }
 
 int getstatus(char *str, char *last)
@@ -122,14 +114,14 @@ int getstatus(char *str, char *last)
 	str[0] = '\0';
 	for (unsigned int i = 0; i < LENGTH(blocks); i++)
 		strcat(str, statusbar[i]);
-	str[strlen(str)-strlen(delim)] = '\0';
-	return strcmp(str, last);//0 if they are the same
+	str[strlen(str) - strlen(delim)] = '\0';
+	return strcmp(str, last);
 }
 
 #ifndef NO_X
 void setroot()
 {
-	if (!getstatus(statusstr[0], statusstr[1]))//Only set root if text has changed.
+	if (!getstatus(statusstr[0], statusstr[1]))
 		return;
 	XStoreName(dpy, root, statusstr[0]);
 	XFlush(dpy);
@@ -150,12 +142,11 @@ int setupX()
 
 void pstdout()
 {
-	if (!getstatus(statusstr[0], statusstr[1]))//Only write out if text has changed.
+	if (!getstatus(statusstr[0], statusstr[1]))
 		return;
-	printf("%s\n",statusstr[0]);
+	printf("%s\n", statusstr[0]);
 	fflush(stdout);
 }
-
 
 void statusloop()
 {
@@ -172,7 +163,6 @@ void statusloop()
 }
 
 #ifndef __OpenBSD__
-/* this signal handler should do nothing */
 void dummysighandler(int signum)
 {
 	return;
@@ -181,7 +171,7 @@ void dummysighandler(int signum)
 
 void sighandler(int signum)
 {
-	getsigcmds(signum-SIGPLUS);
+	getsigcmds(signum - SIGPLUS);
 	writestatus();
 }
 
@@ -192,10 +182,10 @@ void termhandler(int signum)
 
 int main(int argc, char** argv)
 {
-	for (int i = 0; i < argc; i++) {//Handle command line arguments
-		if (!strcmp("-d",argv[i]))
+	for (int i = 0; i < argc; i++) {
+		if (!strcmp("-d", argv[i]))
 			strncpy(delim, argv[++i], delimLen);
-		else if (!strcmp("-p",argv[i]))
+		else if (!strcmp("-p", argv[i]))
 			writestatus = pstdout;
 	}
 #ifndef NO_X

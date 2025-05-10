@@ -4,19 +4,18 @@
 
 #define ICON_BRIGHT "󰃠"
 #define ICON_DIM "󰃞"
-
 #define CMD_GET_BRIGHTNESS "brightnessctl -m 2>/dev/null | grep backlight"
 
-int
-main(void)
-{
+char *brightness_status(void) {
+    static char result[32];
     FILE *fp;
     char output[128];
     int brightness = -1;
     const char *icon = ICON_BRIGHT;
 
     if ((fp = popen(CMD_GET_BRIGHTNESS, "r")) == NULL) {
-        return 1;
+        snprintf(result, sizeof(result), " %s ERR ", ICON_BRIGHT);
+        return result;
     }
 
     if (fgets(output, sizeof(output), fp)) {
@@ -31,14 +30,14 @@ main(void)
     pclose(fp);
 
     if (brightness < 0) {
-        return 1;
+        snprintf(result, sizeof(result), " %s ERR ", ICON_BRIGHT);
+        return result;
     }
 
     if (brightness <= 50) {
         icon = ICON_DIM;
     }
 
-    printf(" %s %d%% ", icon, brightness);
-
-    return 0;
+    snprintf(result, sizeof(result), " %s %d%% ", icon, brightness);
+    return result;
 }

@@ -17,9 +17,8 @@
 
 #define CMD_GET_BATTERY "upower -i $(upower -e 2>/dev/null | grep /battery) 2>/dev/null"
 
-int
-main(void)
-{
+char *battery_status(void) {
+    static char result[128];
     FILE *fp;
     char output[256];
     int battery = -1;
@@ -29,7 +28,8 @@ main(void)
     int type = 0;
 
     if ((fp = popen(CMD_GET_BATTERY, "r")) == NULL) {
-        return 1;
+        snprintf(result, sizeof(result), " %s ERR ", ICON_BATTERY_100);
+        return result;
     }
 
     while (fgets(output, sizeof(output), fp)) {
@@ -42,7 +42,8 @@ main(void)
     pclose(fp);
 
     if (battery < 0 || strlen(state) == 0) {
-        return 1;
+        snprintf(result, sizeof(result), " %s ERR ", ICON_BATTERY_100);
+        return result;
     }
 
     if (strcmp(state, "charging") != 0 && battery != 100) {
@@ -91,12 +92,12 @@ main(void)
     }
 
     if (type == 0) {
-        printf(" %s %d%% ", icon, battery);
+        snprintf(result, sizeof(result), " %s %d%% ", icon, battery);
     } else if (type == 1) {
-        printf(" %s ^c%s^%d%%^d^ ", icon, color, battery);
+        snprintf(result, sizeof(result), " %s ^c%s^%d%%^d^ ", icon, color, battery);
     } else if (type == 2) {
-        printf("^b%s^ %s %d%% ^d^", color, icon, battery);
+        snprintf(result, sizeof(result), "^b%s^ %s %d%% ^d^", color, icon, battery);
     }
 
-    return 0;
+    return result;
 }

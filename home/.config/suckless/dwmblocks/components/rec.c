@@ -4,12 +4,10 @@
 
 #define ICON_MIC ""
 #define ICON_MUTE ""
-
 #define CMD_GET_VOLUME "wpctl get-volume @DEFAULT_AUDIO_SOURCE@ 2>/dev/null"
 
-int
-main(void)
-{
+char *rec_status(void) {
+    static char result[128];
     FILE *fp;
     char output[128];
     float volume = -1.0;
@@ -17,7 +15,8 @@ main(void)
     const char *icon = ICON_MIC;
 
     if ((fp = popen(CMD_GET_VOLUME, "r")) == NULL) {
-        return 1;
+        snprintf(result, sizeof(result), " %s ERR ", ICON_MIC);
+        return result;
     }
 
     if (fgets(output, sizeof(output), fp) && sscanf(output, "Volume: %f %*s", &volume) == 1) {
@@ -26,7 +25,8 @@ main(void)
     pclose(fp);
 
     if (volume < 0.0) {
-        return 1;
+        snprintf(result, sizeof(result), " %s ERR ", ICON_MIC);
+        return result;
     }
 
     if (volume == 0.0 || isMuted) {
@@ -34,10 +34,10 @@ main(void)
     }
 
     if (isMuted) {
-        printf(" %s ^c#474747^MUTED^d^ ", icon);
+        snprintf(result, sizeof(result), " %s ^c#474747^MUTED^d^ ", icon);
     } else {
-        printf(" %s %d%% ", icon, (int)(volume * 100));
+        snprintf(result, sizeof(result), " %s %d%% ", icon, (int)(volume * 100));
     }
 
-    return 0;
+    return result;
 }
