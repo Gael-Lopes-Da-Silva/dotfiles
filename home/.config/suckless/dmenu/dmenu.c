@@ -387,6 +387,7 @@ keypress(XKeyEvent *ev)
 			insert(NULL, 0 - cursor);
 			break;
 		case XK_w: /* delete word */
+		case XK_BackSpace:
 			while (cursor > 0 && strchr(worddelimiters, text[nextrune(-1)]))
 				insert(NULL, nextrune(-1) - cursor);
 			while (cursor > 0 && !strchr(worddelimiters, text[nextrune(-1)]))
@@ -446,6 +447,8 @@ insert:
 		cursor = nextrune(+1);
 		/* fallthrough */
 	case XK_BackSpace:
+		if (ev->state & ControlMask)
+			break;
 		if (cursor == 0)
 			return;
 		insert(NULL, nextrune(-1) - cursor);
