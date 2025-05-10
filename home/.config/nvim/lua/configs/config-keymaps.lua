@@ -36,7 +36,7 @@ set("n", "<leader>gb", "<cmd>Git blame %<cr>", { desc = "Blame" })
 set("n", "<leader>gc", "<cmd>Git commit<cr>", { desc = "Commit" })
 set("n", "<leader>gl", "<cmd>Git log<cr>", { desc = "Log" })
 set("n", "<leader>gp", "<cmd>Git push<cr>", { desc = "Push" })
-set("n", "<leader>gs", "<cmd>Git status<cr>", { desc = "Status" })
+set("n", "<leader>gs", "<cmd>Git status --short<cr>", { desc = "Status" })
 set("n", "<leader>go", "<cmd>lua MiniDiff.toggle_overlay()<cr>", { desc = "Diff overlay" })
 
 -- Leader + Lsp
