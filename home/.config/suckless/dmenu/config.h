@@ -7,7 +7,7 @@ static int fuzzy  = 1;                      /* -F  option; if 0, dmenu doesn't u
 static const char *fonts[] = {
 	"Cascadia Mono NF:size=14"
 };
-static const char *prompt = "Run:";      /* -p  option; prompt to the left of input field */
+static const char *prompt = "Run";      /* -p  option; prompt to the left of input field */
 static const char *colors[SchemeLast][2] = {
 	/*                   fg         bg       */
 	[SchemeNorm] = { "#bbbbbb", "#222222" },
