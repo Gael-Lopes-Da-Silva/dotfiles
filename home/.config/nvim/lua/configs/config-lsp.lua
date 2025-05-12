@@ -130,4 +130,20 @@ vim.lsp.config("pylsp", {
     single_file_support = true,
 })
 
+vim.lsp.enable("clangd")
+vim.lsp.config("clangd", {
+    cmd = { "clangd" },
+    filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
+    root_markers = { ".clangd", ".clang-tidy", ".clang-format", "compile_commands.json", "compile_flags.txt", "configure.ac" },
+    single_file_support = true,
+    capabilities = {
+        offsetEncoding = { "utf-8", "utf-16" },
+        textDocument = {
+            completion = {
+                editsNearCursor = true,
+            },
+        },
+    },
+})
+
 vim.lsp.config('*', { capabilities = require("mini.completion").get_lsp_capabilities() })
