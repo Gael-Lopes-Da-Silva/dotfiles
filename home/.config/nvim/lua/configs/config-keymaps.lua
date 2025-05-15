@@ -26,6 +26,7 @@ set("n", "<leader>d", "<cmd>lua MiniBufremove.delete()<cr>", { desc = "Delete bu
 set("n", "<leader>ff", "<cmd>lua MiniFiles.open()<cr>", { desc = "Files" })
 set("n", "<leader>ft", "<cmd>lua MiniTrailspace.trim()<cr>", { desc = "Trim whitespace" })
 set("n", "<leader>fT", "<cmd>lua MiniTrailspace.trim_last_lines()<cr>", { desc = "Trim last line" })
+set("n", "<leader>fc", "<cmd>Compile<cr>", { desc = "Compile" })
 
 -- Leader + Git
 set("n", "<leader>gA", "<cmd>Git add .<cr>", { desc = "Add all" })
