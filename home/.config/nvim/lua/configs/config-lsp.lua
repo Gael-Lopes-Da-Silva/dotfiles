@@ -146,4 +146,11 @@ vim.lsp.config("clangd", {
     },
 })
 
+vim.lsp.enable("rust_analyzer")
+vim.lsp.config("rust_analyzer", {
+    cmd = { "rust-analyzer" },
+    filetypes = { "rust" },
+    single_file_support = true,
+})
+
 vim.lsp.config('*', { capabilities = require("mini.completion").get_lsp_capabilities() })
