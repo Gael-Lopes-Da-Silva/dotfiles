@@ -51,7 +51,7 @@ create_user_command("Compile", function()
         cpp = "clang++ % -o %:r",
         python = "python %",
         java = "javac %",
-        rust = "rustc %",
+        rust = "cargo run %",
         go = "go build %",
         javascript = "node %",
         typescript = "tsc %",

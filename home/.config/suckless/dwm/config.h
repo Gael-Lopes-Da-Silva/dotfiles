@@ -28,7 +28,6 @@ static const char *const autostart[] = {
     "xsetroot", "-cursor_name", "left_ptr", NULL,
     "xset", "r", "rate", "250", "40", NULL,
     "xset", "s", "off", "-dpms", NULL,
-    "xset", "s", "noblank", NULL,
 
     "eval", "\'$(ssh-agent -s)\'", NULL,
     "gpgconf", "--launch", "gpg-agent", NULL,
