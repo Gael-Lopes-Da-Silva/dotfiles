@@ -22,7 +22,7 @@ paru:
 
 packages:
 	pacman -S --noconfirm noto-fonts noto-fonts-extra noto-fonts-emoji noto-fonts-cjk \
-		ttf-cascadia-code ttf-liberation papirus-icon-theme bash-completion ouch stow chromium \
+		ttf-martian-mono-nerd ttf-liberation papirus-icon-theme bash-completion ouch stow chromium \
 		neovim ripgrep udiskie dunst feh btop kitty
 
 stow:
