@@ -13,6 +13,8 @@ set("n", "<S-Tab>", "<cmd>lua MiniBracketed.buffer('backward')<cr>")
 set("n", "<Tab>", "<cmd>lua MiniBracketed.buffer('forward')<cr>")
 set("n", "gqq", "<cmd>lua vim.lsp.buf.format()<cr>", { desc = "Format buffer" })
 
+set({ "n", "v" }, "<MiddleMouse>", ":Pipe<cr>", { desc = "Pipe" })
+
 -- Toggles
 set("n", "\\m", "<cmd>lua MiniMap.toggle()<cr>", { desc = "Toggle 'minimap'" })
 set("n", "\\z", "<cmd>lua MiniMisc.zoom()<cr>", { desc = "Toggle 'zoom'" })
