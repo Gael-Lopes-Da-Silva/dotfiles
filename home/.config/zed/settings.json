@@ -1,0 +1,21 @@
+{
+  "telemetry": {
+    "metrics": false,
+    "diagnostics": false
+  },
+  "scrollbar": {
+    "axes": {
+      "horizontal": false
+    }
+  },
+  "ui_font_size": 18,
+  "buffer_font_size": 18,
+  "ui_font_family": "MartianMono Nerd Font",
+  "buffer_font_family": "MartianMono Nerd Font",
+  "soft_wrap": "editor_width",
+  "theme": {
+    "mode": "system",
+    "light": "Gruvbox Light",
+    "dark": "Gruvbox Dark"
+  }
+}
