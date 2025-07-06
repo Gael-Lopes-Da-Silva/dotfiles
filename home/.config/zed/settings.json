@@ -1,27 +1,28 @@
 {
-  "buffer_font_family": "MartianMono Nerd Font",
-  "buffer_font_size": 18,
-  "indent_guides": {
-    "active_line_width": 2,
-    "line_width": 2
-  },
-  "scrollbar": {
-    "axes": {
-      "horizontal": false
-    }
-  },
-  "soft_wrap": "editor_width",
-  "telemetry": {
-    "metrics": false,
-    "diagnostics": false
-  },
-  "theme": {
-    "mode": "system",
-    "light": "Gruvbox Light",
-    "dark": "Gruvbox Dark"
-  },
-  "tab_size": 2,
-  "ui_font_family": "MartianMono Nerd Font",
-  "ui_font_size": 18,
-  "vertical_scroll_margin": 5
+	"buffer_font_family": "MartianMono Nerd Font",
+	"buffer_font_size": 18,
+	"indent_guides": {
+		"active_line_width": 2,
+		"line_width": 2
+	},
+	"scrollbar": {
+		"axes": {
+			"horizontal": false
+		}
+	},
+	"soft_wrap": "editor_width",
+	"telemetry": {
+		"metrics": false,
+		"diagnostics": false
+	},
+	"theme": {
+		"mode": "system",
+		"light": "Gruvbox Light",
+		"dark": "Gruvbox Dark"
+	},
+	"tab_size": 2,
+	"hard_tabs": true,
+	"ui_font_family": "MartianMono Nerd Font",
+	"ui_font_size": 18,
+	"vertical_scroll_margin": 5
 }
