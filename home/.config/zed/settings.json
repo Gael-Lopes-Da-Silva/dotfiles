@@ -20,6 +20,7 @@
     "light": "Gruvbox Light",
     "dark": "Gruvbox Dark"
   },
+  "tab_size": 2,
   "ui_font_family": "MartianMono Nerd Font",
   "ui_font_size": 18,
   "vertical_scroll_margin": 5
