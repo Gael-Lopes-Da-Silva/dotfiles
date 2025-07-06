@@ -15,6 +15,7 @@ alias ll='ls -lh'
 alias cp='cp -priv'
 alias rm='rm -rfIdv'
 alias mv='mv -iv'
+alias zed='zeditor'
 
 alias compress='ouch compress'
 alias decompress='ouch decompress'
