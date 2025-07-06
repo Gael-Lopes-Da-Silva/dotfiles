@@ -5,5 +5,3 @@
 systemctl --user start --no-block soundboard.service
 
 exec dwm
-
-exec dwm
