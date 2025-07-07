@@ -1,13 +1,8 @@
-.PHONY: all terminal pacman paru packages stow desktop drivers v4l2loopback docker virtualbox soundboard
+.PHONY: all pacman paru packages stow desktop drivers v4l2loopback docker soundboard
 
 USER := gael
 
-all: terminal pacman paru packages stow desktop drivers v4l2loopback docker virtualbox soundboard
-
-terminal:
-	pacman -S --noconfirm terminus-font
-	setfont ter-132n
-	echo "FONT=ter-132n" | tee -a /etc/vconsole.conf
+all: pacman paru packages stow desktop drivers v4l2loopback docker soundboard
 
 pacman:
 	sed -i "s|#Color|Color|" /etc/pacman.conf
@@ -22,8 +17,8 @@ paru:
 
 packages:
 	pacman -S --noconfirm noto-fonts noto-fonts-extra noto-fonts-emoji noto-fonts-cjk \
-		ttf-martian-mono-nerd ttf-liberation papirus-icon-theme bash-completion ouch stow chromium \
-		neovim ripgrep udiskie dunst feh btop kitty
+		nerd-fonts papirus-icon-theme bash-completion ouch stow chromium zed \
+		neovim ripgrep udiskie dunst feh btop kitty jq
 
 stow:
 	cd /home/$(USER)/.dotfiles/ && \
@@ -54,13 +49,9 @@ v4l2loopback:
 	modprobe v4l2loopback
 
 docker:
-	pacman -S --noconfirm docker
+	pacman -S --noconfirm docker docker-compose
 	usermod -aG docker $(USER)
 	systemctl enable docker.service
-
-virtualbox:
-	pacman -S --noconfirm virtualbox virtualbox-host-modules-arch virtualbox-guest-iso
-	usermod -aG vboxusers $(USER)
 
 soundboard:
 	sudo systemctl --machine=$(USER)@.host --user enable soundboard.service

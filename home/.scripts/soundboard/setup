@@ -2,18 +2,21 @@
 
 logger -t soundboard "Setting up soundboard..."
 
+logger -t soundboard "Waiting default source..."
 while [[ -z $(pactl get-default-source) || $(pactl get-default-source) == "@DEFAULT_SOURCE@" ]]; do
-	logger -t soundboard "Waiting default source..."
 	sleep 1
 done
 
-SOUNDBOARD_SINK=SoundboardInput
-SOUNDBOARD_SOURCE=SoundboardOutput
+SOUNDBOARD_SINK="SoundboardInput"
+SOUNDBOARD_SOURCE="SoundboardOutput"
 
 logger -t soundboard "Resetting virtual devices..."
 pactl unload-module $(pactl list short modules | grep null-sink | grep $SOUNDBOARD_SINK | cut -f1) 2>/dev/null
 pactl unload-module $(pactl list short modules | grep null-sink | grep $SOUNDBOARD_SOURCE | cut -f1) 2>/dev/null
 pactl unload-module module-null-sink 2>/dev/null
+
+logger -t soundboard "Deleting existing links..."
+pw-cli destroy $(pw-cli list-objects Link | grep -B 5 -A 5 -E "$DEFAULT_MIC|$SOUNDBOARD_SINK|$SOUNDBOARD_SOURCE" | grep 'id ' | awk '{print $2}') 2>/dev/null
 
 SOUNDBOARD_MIC=$(pactl get-default-source | sed "s/\.monitor$//")
 
