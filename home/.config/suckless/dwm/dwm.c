@@ -1611,6 +1611,22 @@ restoreSession(void)
 void
 quit(const Arg *arg)
 {
+	if(arg->i) {
+		/* kill child processes */
+		size_t i;
+		for (i = 0; i < autostart_len; i++) {
+			if (0 < autostart_pids[i]) {
+				kill(autostart_pids[i], SIGTERM);
+				waitpid(autostart_pids[i], NULL, 0);
+			}
+		}
+		restart = 1;
+		running = 0;
+
+		saveSession();
+		return;
+	}
+
 	FILE *fd = NULL;
 	struct stat filestat;
 
@@ -1632,11 +1648,7 @@ quit(const Arg *arg)
 				waitpid(autostart_pids[i], NULL, 0);
 			}
 		}
-		if(arg->i) restart = 1;
 		running = 0;
-
-		if (restart == 1)
-			saveSession();
 	} else {
 		if ((fd = fopen(lockfile, "a")) != NULL)
 			fclose(fd);
