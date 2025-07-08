@@ -3,7 +3,7 @@
 
 #define ICON_DEFAULT "󰥔"
 #define ICON_NOON_EVENING "󰩰"
-#define ICON_NIGHT "󰖔"
+#define ICON_NIGHT "󰤄"
 
 char *time_status(void) {
 	static char result[32];

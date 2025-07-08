@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define ICON "󰕾"
+#define ICON_DEFAULT "󰕾"
 #define ICON_MUTE "󰖁"
 
 #define CMD_GET_VOLUME "wpctl get-volume @DEFAULT_AUDIO_SINK@ 2>/dev/null"
@@ -12,10 +12,10 @@ char *volume_status(void) {
 	char output[128];
 	float volume = -1.0;
 	int isMuted = 0;
-	const char *icon = ICON;
+	const char *icon = ICON_DEFAULT;
 
 	if ((fp = popen(CMD_GET_VOLUME, "r")) == NULL) {
-		snprintf(result, sizeof(result), " %s ERR ", ICON);
+		snprintf(result, sizeof(result), " %s ERR ", ICON_DEFAULT);
 		return result;
 	}
 
@@ -25,7 +25,7 @@ char *volume_status(void) {
 	pclose(fp);
 
 	if (volume < 0.0) {
-		snprintf(result, sizeof(result), " %s ERR ", ICON);
+		snprintf(result, sizeof(result), " %s ERR ", ICON_DEFAULT);
 		return result;
 	}
 

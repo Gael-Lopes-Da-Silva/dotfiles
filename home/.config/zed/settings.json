@@ -1,5 +1,5 @@
 {
-	"buffer_font_family": "MartianMono Nerd Font",
+	"buffer_font_family": "MartianMono Nerd Font Mono",
 	"buffer_font_size": 18,
 	"indent_guides": {
 		"active_line_width": 2,
@@ -22,7 +22,7 @@
 	},
 	"tab_size": 4,
 	"hard_tabs": true,
-	"ui_font_family": "MartianMono Nerd Font",
+	"ui_font_family": "MartianMono Nerd Font Mono",
 	"ui_font_size": 18,
 	"vertical_scroll_margin": 5
 }
