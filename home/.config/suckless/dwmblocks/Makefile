@@ -1,8 +1,8 @@
 include config.mk
 
-COMPONENTS_DIR := components
-COMPONENTS_SRC := $(wildcard $(COMPONENTS_DIR)/*.c)
-COMPONENTS_OBJ := $(COMPONENTS_SRC:.c=.o)
+COMPONENTS_DIR = components
+COMPONENTS_SRC = $(wildcard $(COMPONENTS_DIR)/*.c)
+COMPONENTS_OBJ = $(COMPONENTS_SRC:.c=.o)
 
 all: dwmblocks
 

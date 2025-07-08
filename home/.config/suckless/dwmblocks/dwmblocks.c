@@ -29,15 +29,15 @@ void dummysighandler(int num);
 void sighandler(int num);
 void getcmds(int time);
 void getsigcmds(unsigned int signal);
-void setupsignals();
+void setupsignals(void);
 int getstatus(char *str, char *last);
-void statusloop();
+void statusloop(void);
 void termhandler(int signum);
-void pstdout();
+void pstdout(void);
 #ifndef NO_X
-void setroot();
-static void (*writestatus) () = setroot;
-static int setupX();
+void setroot(void);
+static void (*writestatus) (void) = setroot;
+static int setupX(void);
 static Display *dpy;
 static int screen;
 static Window root;
@@ -95,7 +95,7 @@ void getsigcmds(unsigned int signal)
 	}
 }
 
-void setupsignals()
+void setupsignals(void)
 {
 #ifndef __OpenBSD__
 	for (int i = SIGRTMIN; i <= SIGRTMAX; i++)
@@ -118,7 +118,7 @@ int getstatus(char *str, char *last)
 }
 
 #ifndef NO_X
-void setroot()
+void setroot(void)
 {
 	if (!getstatus(statusstr[0], statusstr[1]))
 		return;
@@ -126,7 +126,7 @@ void setroot()
 	XFlush(dpy);
 }
 
-int setupX()
+int setupX(void)
 {
 	dpy = XOpenDisplay(NULL);
 	if (!dpy) {
@@ -139,7 +139,7 @@ int setupX()
 }
 #endif
 
-void pstdout()
+void pstdout(void)
 {
 	if (!getstatus(statusstr[0], statusstr[1]))
 		return;
@@ -147,7 +147,7 @@ void pstdout()
 	fflush(stdout);
 }
 
-void statusloop()
+void statusloop(void)
 {
 	setupsignals();
 	int i = 0;
