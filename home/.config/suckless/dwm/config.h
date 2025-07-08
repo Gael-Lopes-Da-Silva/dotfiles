@@ -34,9 +34,8 @@ static const char *const autostart[] = {
 
     "dconf", "write", "/org/gnome/desktop/interface/color-scheme", "\'prefer-dark\'", NULL,
 
-    "/home/gael/.scripts/soundboard/setup", "&", NULL,
-
     "udiskie", "-a", "-n", "-s", NULL,
+    "dsound_setup", NULL,
     "dwmblocks", NULL,
     "nm-applet", NULL,
     "dunst", NULL,

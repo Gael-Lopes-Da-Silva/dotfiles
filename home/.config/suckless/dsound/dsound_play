@@ -1,0 +1,4 @@
+#!/bin/bash
+
+paplay -d "SoundboardInput" "$@" 2> /dev/null &
+paplay -d $(pactl get-default-sink) "$@" 2> /dev/null &

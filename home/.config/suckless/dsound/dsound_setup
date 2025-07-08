@@ -1,8 +1,8 @@
 #!/bin/bash
 
-logger -t soundboard "Setting up soundboard..."
+logger -t dsound "Setting up soundboard..."
 
-logger -t soundboard "Waiting default source..."
+logger -t dsound "Waiting default source..."
 while [[ -z $(pactl get-default-source) || $(pactl get-default-source) == "@DEFAULT_SOURCE@" ]]; do
 	sleep 1
 done
@@ -10,21 +10,21 @@ done
 SOUNDBOARD_SINK="SoundboardInput"
 SOUNDBOARD_SOURCE="SoundboardOutput"
 
-logger -t soundboard "Resetting virtual devices..."
+logger -t dsound "Resetting virtual devices..."
 pactl unload-module $(pactl list short modules | grep null-sink | grep $SOUNDBOARD_SINK | cut -f1) 2>/dev/null
 pactl unload-module $(pactl list short modules | grep null-sink | grep $SOUNDBOARD_SOURCE | cut -f1) 2>/dev/null
 pactl unload-module module-null-sink 2>/dev/null
 
-logger -t soundboard "Deleting existing links..."
+logger -t dsound "Deleting existing links..."
 pw-cli destroy $(pw-cli list-objects Link | grep -B 5 -A 5 -E "$DEFAULT_MIC|$SOUNDBOARD_SINK|$SOUNDBOARD_SOURCE" | grep 'id ' | awk '{print $2}') 2>/dev/null
 
 SOUNDBOARD_MIC=$(pactl get-default-source | sed "s/\.monitor$//")
 
-logger -t soundboard "Creating virtual devices..."
+logger -t dsound "Creating virtual devices..."
 pactl load-module module-null-sink media.class=Audio/Sink sink_name=$SOUNDBOARD_SINK device.description=$SOUNDBOARD_SINK channel_map=stereo >/dev/null
 pactl load-module module-null-sink media.class=Audio/Source/Virtual sink_name=$SOUNDBOARD_SOURCE device.description=$SOUNDBOARD_SOURCE channel_map=front-left,front-right >/dev/null
 
-logger -t soundboard "Linking virtual devices..."
+logger -t dsound "Linking virtual devices..."
 pw-link $SOUNDBOARD_MIC:capture_FL $SOUNDBOARD_SINK:playback_FL 2>/dev/null
 pw-link $SOUNDBOARD_MIC:capture_FR $SOUNDBOARD_SINK:playback_FR 2>/dev/null
 pw-link $SOUNDBOARD_MIC:capture_MONO $SOUNDBOARD_SINK:playback_FL 2>/dev/null
@@ -32,7 +32,7 @@ pw-link $SOUNDBOARD_MIC:capture_MONO $SOUNDBOARD_SINK:playback_FR 2>/dev/null
 pw-link $SOUNDBOARD_SINK:monitor_FL $SOUNDBOARD_SOURCE:input_FL 2>/dev/null
 pw-link $SOUNDBOARD_SINK:monitor_FR $SOUNDBOARD_SOURCE:input_FR 2>/dev/null
 
-logger -t soundboard "Setting up default source..."
+logger -t dsound "Setting up default source..."
 pactl set-default-source $SOUNDBOARD_SOURCE
 
-logger -t soundboard "Soundboard setup finished."
+logger -t dsound "Soundboard setup finished."

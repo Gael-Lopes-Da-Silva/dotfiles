@@ -11,6 +11,6 @@ export BROWSER='chromium'
 export COLORTERM='truecolor'
 export GTK_THEME='Adwaita:dark'
 
-export PATH=$PATH:~/.scripts/:~/.cargo/bin
+export PATH=$PATH:~/.cargo/bin
 
 [[ $(tty) == "/dev/tty1" ]] && exec startx
