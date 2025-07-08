@@ -49,6 +49,9 @@ static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 /* Lockfile */
 static char lockfile[] = "/tmp/dwm.lock";
 
+/* Session */
+static char sessionfile[] = "/tmp/dwm.session";
+
 static const Rule rules[] = {
     /* xprop(1):
      *    WM_CLASS(STRING) = instance, class
@@ -128,6 +131,7 @@ static const Key keys[] = {
     {MODKEY|ShiftMask,   XK_comma,                   tagmon,           {.i = -1} },
     {MODKEY|ShiftMask,   XK_period,                  tagmon,           {.i = +1} },
     {MODKEY|ShiftMask,   XK_q,                       quit,             {0} },
+    {MODKEY|ShiftMask,   XK_r,                       quit,             {1} },
     {MODKEY|ShiftMask,   XK_o,                       spawn,            SHCMD(scrsht) },
     {MODKEY,             XK_o,                       spawn,            SHCMD(scrsht_all) },
     {0,                  XF86XK_AudioRaiseVolume,    spawn,            {.v = vol_plus} },
