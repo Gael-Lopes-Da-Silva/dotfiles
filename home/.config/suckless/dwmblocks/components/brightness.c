@@ -23,7 +23,7 @@ char *brightness_status(void) {
 		}
 		globfree(&glob_result);
 	} else {
-		snprintf(result, sizeof(result), " %s ERR ", ICON_BRIGHT);
+		result[0] = '\0';
 		return result;
 	}
 
@@ -42,7 +42,7 @@ char *brightness_status(void) {
 	}
 
 	if (brightness < 0 || max_brightness <= 0) {
-		snprintf(result, sizeof(result), " %s ERR ", ICON_BRIGHT);
+		result[0] = '\0';
 		return result;
 	}
 

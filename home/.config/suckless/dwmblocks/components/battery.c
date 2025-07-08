@@ -69,7 +69,7 @@ char *battery_status(void) {
 
     char *battery_dir = find_battery();
     if (!battery_dir) {
-	    snprintf(result, sizeof(result), " %s ERR ", ICON_BATTERY_100);
+    	result[0] = '\0';
         return result;
     }
 
@@ -93,7 +93,7 @@ char *battery_status(void) {
     }
 
     if (battery < 0 || strlen(state) == 0) {
-	    snprintf(result, sizeof(result), " %s ERR ", ICON_BATTERY_100);
+		result[0] = '\0';
         return result;
     }
 
