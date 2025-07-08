@@ -1,4 +1,3 @@
-#include<stdlib.h>
 #include<stdio.h>
 #include<string.h>
 #include<unistd.h>
@@ -20,7 +19,7 @@
 
 typedef struct {
 	char* icon;
-	char* (*func)(void); // Function pointer for status function
+	char* (*func)(void);
 	unsigned int interval;
 	unsigned int signal;
 } Block;

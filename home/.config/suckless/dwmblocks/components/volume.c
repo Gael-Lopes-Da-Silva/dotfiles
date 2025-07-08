@@ -1,9 +1,9 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 #define ICON "󰕾"
 #define ICON_MUTE "󰖁"
+
 #define CMD_GET_VOLUME "wpctl get-volume @DEFAULT_AUDIO_SINK@ 2>/dev/null"
 
 char *volume_status(void) {

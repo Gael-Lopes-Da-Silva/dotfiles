@@ -38,5 +38,6 @@ char *date_status(void) {
 	}
 
 	snprintf(result, sizeof(result), " %s %s ", icon, date_str);
+
 	return result;
 }

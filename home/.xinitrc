@@ -1,5 +1,5 @@
 #!/bin/bash
 
-[[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
+[[ -f ~/.Xresources ]] && xrdb -merge -I$HOME ~/.Xresources
 
 exec dwm

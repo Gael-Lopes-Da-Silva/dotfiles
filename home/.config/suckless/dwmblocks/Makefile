@@ -1,27 +1,11 @@
-PREFIX  := /usr/local
-CC      := cc
-CFLAGS  := -pedantic -Wall -Wno-deprecated-declarations -Os
-LDFLAGS := -lX11
+include config.mk
 
-# FreeBSD (uncomment)
-#LDFLAGS += -L/usr/local/lib -I/usr/local/include
-# OpenBSD (uncomment)
-#LDFLAGS += -L/usr/X11R6/lib -I/usr/X11R6/include
-
-# Component source files
 COMPONENTS_DIR := components
 COMPONENTS_SRC := $(wildcard $(COMPONENTS_DIR)/*.c)
 COMPONENTS_OBJ := $(COMPONENTS_SRC:.c=.o)
 
-all: options dwmblocks
+all: dwmblocks
 
-options:
-	@echo dwmblocks build options:
-	@echo "CFLAGS  = ${CFLAGS}"
-	@echo "LDFLAGS = ${LDFLAGS}"
-	@echo "CC      = ${CC}"
-
-# Compile component source files
 $(COMPONENTS_DIR)/%.o: $(COMPONENTS_DIR)/%.c
 	${CC} ${CFLAGS} -c $< -o $@
 
@@ -42,4 +26,4 @@ install: dwmblocks
 uninstall:
 	rm -f ${DESTDIR}${PREFIX}/bin/dwmblocks
 
-.PHONY: all options clean install uninstall
+.PHONY: all clean install uninstall

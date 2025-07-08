@@ -34,5 +34,6 @@ char *time_status(void) {
 	}
 
 	snprintf(result, sizeof(result), " %s %s ", icon, time_str);
+
 	return result;
 }
