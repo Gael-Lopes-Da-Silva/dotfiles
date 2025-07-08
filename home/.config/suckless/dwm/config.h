@@ -118,6 +118,7 @@ static const Key keys[] = {
     {MODKEY|ShiftMask,   XK_Tab,                     view,             {0} },
     {MODKEY,             XK_Tab,                     zoom,             {0} },
     {MODKEY|ShiftMask,   XK_c,                       killclient,       {0} },
+    {MODKEY,             XK_g,                       gesture,          {0} },
     {MODKEY,             XK_t,                       setlayout,        {.v = &layouts[1]} },
     {MODKEY,             XK_f,                       setlayout,        {.v = &layouts[2]} },
     {MODKEY,             XK_m,                       setlayout,        {.v = &layouts[0]} },
@@ -155,16 +156,28 @@ static const Key keys[] = {
 /* button definitions */
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 static const Button buttons[] = {
-    /* click                event mask      button          function        argument */
-    { ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
-    { ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
-    { ClkWinTitle,          0,              Button2,        zoom,           {0} },
-    { ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd} },
-    { ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
-    { ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
-    { ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
-    { ClkTagBar,            0,              Button1,        view,           {0} },
-    { ClkTagBar,            0,              Button3,        toggleview,     {0} },
-    { ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
-    { ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
+    /* click                event mask         button          function        argument */
+    { ClkLtSymbol,          0,                 Button1,        setlayout,      {0} },
+    { ClkLtSymbol,          0,                 Button3,        setlayout,      {.v = &layouts[2]} },
+    { ClkWinTitle,          0,                 Button2,        zoom,           {0} },
+    { ClkStatusText,        0,                 Button2,        spawn,          {.v = termcmd} },
+    { ClkClientWin,         MODKEY,            Button1,        movemouse,      {0} },
+    { ClkClientWin,         MODKEY,            Button2,        togglefloating, {0} },
+    { ClkClientWin,         MODKEY,            Button3,        resizemouse,    {0} },
+    { ClkTagBar,            0,                 Button1,        view,           {0} },
+    { ClkTagBar,            0,                 Button3,        toggleview,     {0} },
+    { ClkTagBar,            MODKEY,            Button1,        tag,            {0} },
+    { ClkTagBar,            MODKEY,            Button3,        toggletag,      {0} },
+    { ClkClientWin,         MODKEY|ShiftMask,  Button3,        gesture,        {0} },
+};
+
+/* gestures
+ * u means up
+ * d means down
+ * l means left
+ * r means right
+ * ud means up and down
+ */
+static Gesture gestures[] = {
+	{ NULL },
 };
