@@ -20,7 +20,7 @@
 		"light": "Gruvbox Light",
 		"dark": "Gruvbox Dark"
 	},
-	"tab_size": 4,
+	"tab_size": 2,
 	"hard_tabs": true,
 	"ui_font_family": "MartianMono Nerd Font Mono",
 	"ui_font_size": 18,
