@@ -153,11 +153,4 @@ vim.lsp.config("rust_analyzer", {
     single_file_support = true,
 })
 
-vim.lsp.enable("svelte")
-vim.lsp.config("svelte", {
-    cmd = { "svelteserver", "--stdio" },
-    filetypes = { "svelte" },
-    single_file_support = true,
-})
-
 vim.lsp.config('*', { capabilities = require("mini.completion").get_lsp_capabilities() })
