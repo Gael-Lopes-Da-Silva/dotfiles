@@ -149,7 +149,7 @@ static void cleanup_sound_buttons(void) {
 
 static void activate(GtkApplication *app, gpointer user_data) {
     GtkWidget *window = gtk_application_window_new(app);
-    gtk_window_set_title(GTK_WINDOW(window), "Dsoundboard");
+    gtk_window_set_title(GTK_WINDOW(window), "Dsound");
     gtk_window_set_default_size(GTK_WINDOW(window), 600, 400);
 
     GtkWidget *vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
