@@ -43,7 +43,7 @@ programming:
 	sudo ln -s /etc/sv/docker /var/service
 	sleep 1
 	sudo sv up docker
-	usermod -aG docker $(shell logname)
+	sudo usermod -aG docker $(shell logname)
 
 editor:
 	git clone https://github.com/zed-industries/zed.git /tmp/zed || true
