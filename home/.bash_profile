@@ -12,4 +12,4 @@ export GTK_THEME='Adwaita:dark'
 
 export PATH=$PATH:~/.cargo/bin
 
-[[ $(tty) == "/dev/tty1" ]] && exec dbus-run-session startx
+[[ $(tty) == "/dev/tty1" ]] && exec startx
