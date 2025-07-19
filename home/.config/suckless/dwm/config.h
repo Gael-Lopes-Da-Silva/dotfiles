@@ -28,17 +28,12 @@ static const char *const autostart[] = {
     "xset", "r", "rate", "250", "40", NULL,
     "xset", "s", "off", "-dpms", NULL,
 
-    "dbus-update-activation-environment", "--all", NULL,
     "dconf", "write", "/org/gnome/desktop/interface/color-scheme", "\'prefer-dark\'", NULL,
 
     "udiskie", "-a", "-n", "-s", NULL,
     "dsound_setup", NULL,
     "dwmblocks", NULL,
     "dunst", NULL,
-
-    "pipewire", NULL,
-    "pipewire-pulse", NULL,
-
     NULL /* terminate */
 };
 
