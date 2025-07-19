@@ -44,7 +44,7 @@ programming:
 editor:
 	curl -f https://zed.dev/install.sh | sh
 	sudo mkdir -p /usr/local/bin
-	sudo cp -r ~/.local/zed.app /usr/local/src/
+	sudo cp -f ~/.local/zed.app /usr/local/src/
 	sudo ln -s /usr/local/src/zed.app/bin/zed /usr/local/bin
 	sudo chmod 755 /usr/local/bin/zed
 	rm -rf ~/.local/bin ~/.local/zed.app ~/.local/share/applications
