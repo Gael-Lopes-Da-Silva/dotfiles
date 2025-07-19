@@ -1,25 +1,30 @@
-all: packages stow desktop audio drivers programming editor
+all: packages desktop audio network drivers programming editor
 
 packages:
 	sudo xbps-install -y linux-headers void-repo-nonfree
-	sudo xbps-install -y noto-fonts-ttf noto-fonts-ttf-extra noto-fonts-ttf-variable noto-fonts-cjk noto-fonts-emoji nerd-fonts-ttf papirus-icon-theme bash-completion stow ouch chromium neovim ripgrep udiskie dunst feh kitty jq maim brightnessctl xtools v4l2loopback
-
-stow:
-	cd $(HOME)/.dotfiles/ && stow home --adopt &&  git restore .
+	sudo xbps-install -y noto-fonts-ttf noto-fonts-ttf-extra noto-fonts-ttf-variable noto-fonts-cjk noto-fonts-emoji nerd-fonts-ttf papirus-icon-theme bash-completion stow ouch chromium neovim ripgrep udiskie dunst feh kitty filezilla jq maim brightnessctl xdotool xtools v4l2loopback
+	sudo xbps-install -y unzip unrar 7zip
 
 desktop:
+	cd $(HOME)/.dotfiles/ && stow home --adopt &&  git restore .
 	sudo xbps-install -y xorg xinit xclip xclipboard xdg-desktop-portal xdg-desktop-portal-gtk
 	cd $(HOME)/.dotfiles/home/.config/suckless/dwm && make install clean
 	cd $(HOME)/.dotfiles/home/.config/suckless/dwmblocks && make install clean
 	cd $(HOME)/.dotfiles/home/.config/suckless/dmenu && make install clean
+	cd $(HOME)/.dotfiles/home/.config/suckless/dsound && make install clean
 	dconf write /org/gnome/desktop/interface/color-scheme 'prefer-dark'
 
 audio:
-	sudo xbps-install -y pipewire wireplumber pipewire-alsa pipewire-pulse pipewire-jack
+	sudo xbps-install -y pavucontrol pipewire wireplumber pipewire-alsa pipewire-pulse pipewire-jack
 	sudo ln -s /etc/sv/pipewire /var/service
 	sudo ln -s /etc/sv/wireplumber /var/service
 	sudo sv up pipewire
 	sudo sv up wireplumber
+
+network:
+	sudo xbps-install -y NetworkManager
+	sudo ln -s /etc/sv/NetworkManager /var/service
+	sudo sv up NetworkManager
 
 drivers:
 	@if lspci | grep -i vga | grep -iq nvidia; then \
@@ -35,10 +40,9 @@ drivers:
 programming:
 	sudo xbps-install -y nodejs
 	sudo -E npm -g install bun
-
 	sudo xbps-install -y rustup
 	rustup default stable
-
+	sudo xbps-install -y php php-gd composer
 	sudo xbps-install -y docker docker-compose
 	sudo ln -s /etc/sv/docker /var/service
 	sudo sv up docker
@@ -52,4 +56,4 @@ editor:
 	sudo chmod 755 /usr/local/bin/zed
 	rm -rf /tmp/zed
 
-.PHONY: packages stow desktop audio drivers programming editor
+.PHONY: packages desktop audio network drivers programming editor
