@@ -42,11 +42,10 @@ programming:
 	sudo usermod -aG docker $(shell logname)
 
 editor:
-	git clone https://github.com/zed-industries/zed.git /tmp/zed || true
-	cd /tmp/zed && cargo build --release
+	cd /tmp && curl -f https://zed.dev/install.sh | sh
 	sudo mkdir -p /usr/local/bin
-	sudo cp -f /tmp/zed/target/release/zed /usr/local/bin/zed
+	sudo cp -f ~/.local/zed.app/bin/zed /usr/local/bin
 	sudo chmod 755 /usr/local/bin/zed
-	rm -rf /tmp/zed
+	rm /tmp/install.sh ~/.local/bin ~/.local/zed.app
 
 .PHONY: packages desktop audio network drivers programming editor
