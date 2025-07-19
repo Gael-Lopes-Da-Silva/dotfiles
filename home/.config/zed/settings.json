@@ -1,6 +1,8 @@
 {
 	"buffer_font_family": "MartianMono Nerd Font Mono",
 	"buffer_font_size": 18,
+	"format_on_save": "on",
+	"hard_tabs": true,
 	"indent_guides": {
 		"active_line_width": 2,
 		"line_width": 2
@@ -11,18 +13,16 @@
 		}
 	},
 	"soft_wrap": "editor_width",
+	"tab_size": 2,
 	"telemetry": {
-		"metrics": false,
-		"diagnostics": false
+		"diagnostics": false,
+		"metrics": false
 	},
 	"theme": {
-		"mode": "system",
+		"dark": "Gruvbox Dark",
 		"light": "Gruvbox Light",
-		"dark": "Gruvbox Dark"
+		"mode": "system"
 	},
-	"tab_size": 2,
-	"hard_tabs": true,
-	"format_on_save": "on",
 	"ui_font_family": "MartianMono Nerd Font Mono",
 	"ui_font_size": 18,
 	"vertical_scroll_margin": 5
