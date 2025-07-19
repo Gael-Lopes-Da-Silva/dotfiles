@@ -27,7 +27,7 @@ drivers:
 		sudo mkdir -p /etc/dracut.conf.d; \
 		echo 'add_drivers+=" nvidia nvidia_modeset nvidia_uvm nvidia_drm "' | sudo tee /etc/dracut.conf.d/nvidia.conf > /dev/null; \
 		sudo dracut --force; \
-	elif lspci | grep -i vga | grep -iq intel; then \
+	elif lspci | grep -i vga | grep -iq intel; then; \
 		sudo xbps-install -y mesa-vulkan-intel vulkan-loader; \
 	fi
 
