@@ -23,13 +23,13 @@ network:
 
 drivers:
 	@if lspci | grep -i vga | grep -iq nvidia; then \
-		sudo xbps-install -y nvidia; \
-		echo "options nvidia-drm modeset=1" | sudo tee /etc/modprobe.d/nvidia.conf > /dev/null; \
-		sudo mkdir -p /etc/dracut.conf.d; \
-		echo 'add_drivers+=" nvidia nvidia_modeset nvidia_uvm nvidia_drm "' | sudo tee /etc/dracut.conf.d/nvidia.conf > /dev/null; \
-		sudo dracut --force; \
-	elif lspci | grep -i vga | grep -iq intel; then; \
-		sudo xbps-install -y mesa-vulkan-intel vulkan-loader; \
+		xbps-install -y nvidia; \
+		echo "options nvidia-drm modeset=1" > /etc/modprobe.d/nvidia.conf; \
+		mkdir -p /etc/dracut.conf.d; \
+		echo 'add_drivers+=" nvidia nvidia_modeset nvidia_uvm nvidia_drm "' > /etc/dracut.conf.d/nvidia.conf; \
+		dracut --force; \
+	elif lspci | grep -i vga | grep -iq intel; then \
+		xbps-install -y mesa-vulkan-intel vulkan-loader; \
 	fi
 
 programming:
