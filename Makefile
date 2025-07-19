@@ -7,15 +7,14 @@ packages:
 desktop:
 	cd $(HOME)/.dotfiles/ && stow home --adopt &&  git restore .
 	sudo xbps-install -y xorg xinit xclip xclipboard xdg-desktop-portal xdg-desktop-portal-gtk
-	sudo xbps-install -y clang libX11 libX11-devel libXft libXft-devel libXinerama libXinerama-devel
+	sudo xbps-install -y clang libX11 libX11-devel libXft libXft-devel libXinerama libXinerama-devel gtk4 gtk4-devel
 	cd $(HOME)/.dotfiles/home/.config/suckless/dwm && sudo make install clean
 	cd $(HOME)/.dotfiles/home/.config/suckless/dwmblocks && sudo make install clean
 	cd $(HOME)/.dotfiles/home/.config/suckless/dmenu && sudo make install clean
 	cd $(HOME)/.dotfiles/home/.config/suckless/dsound && sudo make install clean
-	dconf write /org/gnome/desktop/interface/color-scheme 'prefer-dark'
 
 audio:
-	sudo xbps-install -y pavucontrol pipewire wireplumber pipewire-alsa pipewire-pulse pipewire-jack
+	sudo xbps-install -y pavucontrol pipewire wireplumber
 	sudo ln -s /etc/sv/pipewire /var/service
 	sudo ln -s /etc/sv/wireplumber /var/service
 	sudo sv up pipewire
