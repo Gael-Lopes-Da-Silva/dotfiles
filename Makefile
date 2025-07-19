@@ -7,11 +7,10 @@ packages:
 desktop:
 	cd $(HOME)/.dotfiles/ && stow home --adopt &&  git restore .
 	sudo xbps-install -y xorg xinit xclip xclipboard xdg-desktop-portal xdg-desktop-portal-gtk
-	sudo xbps-install -y clang libX11 libX11-devel libXft libXft-devel libXinerama libXinerama-devel
-	cd $(HOME)/.dotfiles/home/.config/suckless/dwm && sudo make install clean
-	cd $(HOME)/.dotfiles/home/.config/suckless/dwmblocks && sudo make install clean
-	cd $(HOME)/.dotfiles/home/.config/suckless/dmenu && sudo make install clean
-	cd $(HOME)/.dotfiles/home/.config/suckless/dsound && sudo make install clean
+	cd $(HOME)/.dotfiles/home/.config/suckless/dwm && make install clean
+	cd $(HOME)/.dotfiles/home/.config/suckless/dwmblocks && make install clean
+	cd $(HOME)/.dotfiles/home/.config/suckless/dmenu && make install clean
+	cd $(HOME)/.dotfiles/home/.config/suckless/dsound && make install clean
 	dconf write /org/gnome/desktop/interface/color-scheme 'prefer-dark'
 
 audio:
