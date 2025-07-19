@@ -47,9 +47,6 @@ programming:
 editor:
 	git clone https://github.com/zed-industries/zed.git /tmp/zed || true
 	cd /tmp/zed && cargo build --release
-	sudo mkdir -p /usr/local/bin
-	sudo cp -f /tmp/zed/target/release/zed /usr/local/bin/zed
-	sudo chmod 755 /usr/local/bin/zed
-	rm -rf /tmp/zed
+	sudo rm -rf /tmp/zed
 
 .PHONY: packages stow desktop audio drivers programming editor
