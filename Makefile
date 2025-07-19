@@ -19,7 +19,6 @@ audio:
 network:
 	sudo xbps-install -y NetworkManager
 	sudo ln -s /etc/sv/NetworkManager /var/service
-	sleep 1
 	sudo sv up NetworkManager
 
 drivers:
@@ -37,11 +36,10 @@ programming:
 	sudo xbps-install -y nodejs
 	sudo -E npm -g install bun
 	sudo xbps-install -y rustup
-	rustup-init -y
+	rustup default stable
 	sudo xbps-install -y php php-gd composer
 	sudo xbps-install -y docker docker-compose
 	sudo ln -s /etc/sv/docker /var/service
-	sleep 1
 	sudo sv up docker
 	usermod -aG docker $(shell logname)
 
