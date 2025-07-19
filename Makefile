@@ -19,6 +19,8 @@ audio:
 network:
 	sudo xbps-install -y NetworkManager
 	sudo ln -s /etc/sv/NetworkManager /var/service
+	sleep 1
+	sudo sv up NetworkManager
 
 drivers:
 	@if lspci | grep -i vga | grep -iq nvidia; then \
@@ -39,6 +41,8 @@ programming:
 	sudo xbps-install -y php php-gd composer
 	sudo xbps-install -y docker docker-compose
 	sudo ln -s /etc/sv/docker /var/service
+	sleep 1
+	sudo sv up docker
 	sudo usermod -aG docker $(shell logname)
 
 editor:
