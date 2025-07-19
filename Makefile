@@ -2,8 +2,7 @@ all: packages desktop audio network drivers programming editor
 
 packages:
 	sudo xbps-install -y linux-headers void-repo-nonfree
-	sudo xbps-install -y noto-fonts-ttf noto-fonts-ttf-extra noto-fonts-ttf-variable noto-fonts-cjk noto-fonts-emoji nerd-fonts-ttf papirus-icon-theme bash-completion stow ouch chromium neovim ripgrep udiskie dunst feh kitty filezilla jq maim brightnessctl xdotool xtools v4l2loopback
-	sudo xbps-install -y unzip unrar 7zip
+	sudo xbps-install -y noto-fonts-ttf noto-fonts-ttf-extra noto-fonts-ttf-variable noto-fonts-cjk noto-fonts-emoji nerd-fonts-ttf papirus-icon-theme bash-completion stow ouch chromium neovim ripgrep udiskie dunst feh kitty filezilla jq 7zip maim brightnessctl xdotool xtools v4l2loopback
 
 desktop:
 	cd $(HOME)/.dotfiles/ && stow home --adopt &&  git restore .
