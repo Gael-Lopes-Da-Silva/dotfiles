@@ -1,57 +1,52 @@
-.PHONY: all pacman paru packages stow desktop drivers v4l2loopback docker soundboard
-
-USER := gael
-
-all: pacman paru packages stow desktop drivers v4l2loopback docker soundboard
-
-pacman:
-	sed -i "s|#Color|Color|" /etc/pacman.conf
-	sed -i "s|#ParallelDownloads = 5|ParallelDownloads = 5|" /etc/pacman.conf
-	sed -i "s|#VerbosePkgLists|VerbosePkgLists|" /etc/pacman.conf
-	sed -i "s|#HookDir|HookDir|" /etc/pacman.conf
-
-paru:
-	sudo -u $(USER) git clone https://aur.archlinux.org/paru.git /home/$(USER)/.dotfiles/paru
-	cd /home/$(USER)/.dotfiles/paru && sudo -u $(USER) makepkg -si --noconfirm
-	rm -rf /home/$(USER)/.dotfiles/paru
+all: packages stow desktop audio drivers programming editor
 
 packages:
-	pacman -S --noconfirm noto-fonts noto-fonts-extra noto-fonts-emoji noto-fonts-cjk \
-		nerd-fonts papirus-icon-theme bash-completion ouch stow chromium zed \
-		neovim ripgrep udiskie dunst feh btop kitty jq
+	sudo xbps-install -y linux-headers void-repo-nonfree
+	sudo xbps-install -y noto-fonts-ttf noto-fonts-ttf-extra noto-fonts-ttf-variable noto-fonts-cjk noto-fonts-emoji nerd-fonts-ttf papirus-icon-theme bash-completion stow ouch chromium neovim ripgrep udiskie dunst feh kitty jq maim brightnessctl xtools v4l2loopback
 
 stow:
-	cd /home/$(USER)/.dotfiles/ && \
-		sudo -u $(USER) stow home --adopt && \
-		sudo -u $(USER) git restore .
+	cd $(HOME)/.dotfiles/ && stow home --adopt &&  git restore .
 
 desktop:
-	pacman -S --noconfirm xorg xorg-xinit xclip xdg-desktop-portal xdg-desktop-portal-gtk \
-		maim upower brightnessctl network-manager-applet
-	cd /home/$(USER)/.dotfiles/home/.config/suckless/dwm && make install clean
-	cd /home/$(USER)/.dotfiles/home/.config/suckless/dwmblocks && make install clean
-	cd /home/$(USER)/.dotfiles/home/.config/suckless/dmenu && make install clean
+	sudo xbps-install -y xorg xinit xclip xclipboard xdg-desktop-portal xdg-desktop-portal-gtk
+	cd $(HOME)/.dotfiles/home/.config/suckless/dwm && make install clean
+	cd $(HOME)/.dotfiles/home/.config/suckless/dwmblocks && make install clean
+	cd $(HOME)/.dotfiles/home/.config/suckless/dmenu && make install clean
+	dconf write /org/gnome/desktop/interface/color-scheme 'prefer-dark'
+
+audio:
+	sudo xbps-install -y pipewire wireplumber pipewire-alsa pipewire-pulse pipewire-jack
+	sudo ln -s /etc/sv/pipewire /var/service
+	sudo ln -s /etc/sv/wireplumber /var/service
+	sudo sv up pipewire
+	sudo sv up wireplumber
 
 drivers:
 	@if lspci | grep -i vga | grep -iq nvidia; then \
-		pacman -S --noconfirm nvidia; \
-		sed -i '/^MODULES=/ s/)/ nvidia nvidia_modeset nvidia_uvm nvidia_drm)/' /etc/mkinitcpio.conf; \
-		mkinitcpio -P; \
-		nvidia-xconfig; \
-		mkdir -p /etc/pacman.d/hooks; \
-		echo -e "[Trigger]\nOperation=Install\nOperation=Upgrade\nOperation=Remove\nType=Package\nTarget=nvidia\nTarget=nvidia-open\nTarget=nvidia-lts\nTarget=linux\n\n[Action]\nDescription=Updating NVIDIA module in initcpio\nDepends=mkinitcpio\nWhen=PostTransaction\nNeedsTargets\nExec=/bin/sh -c 'while read -r trg; do case $$trg in linux*) exit 0; esac; done; /usr/bin/mkinitcpio -P'" | tee -a /etc/pacman.d/hooks/nvidia.hook; \
+		xbps-install -y nvidia; \
+		echo "options nvidia-drm modeset=1" > /etc/modprobe.d/nvidia.conf; \
+		mkdir -p /etc/dracut.conf.d; \
+		echo 'add_drivers+=" nvidia nvidia_modeset nvidia_uvm nvidia_drm "' > /etc/dracut.conf.d/nvidia.conf; \
+		dracut --force; \
 	elif lspci | grep -i vga | grep -iq intel; then \
-		pacman -S --noconfirm mesa vulkan-intel; \
+		xbps-install -y mesa-vulkan-intel vulkan-loader; \
 	fi
 
-v4l2loopback:
-	pacman -S --noconfirm linux-headers v4l2loopback-dkms v4l2loopback-utils
-	modprobe v4l2loopback
+programming:
+	sudo xbps-install -y nodejs
+	sudo -E npm -g install bun
 
-docker:
-	pacman -S --noconfirm docker docker-compose
-	usermod -aG docker $(USER)
-	systemctl enable docker.service
+	sudo xbps-install -y rustup
+	rustup default stable
 
-soundboard:
-	sudo systemctl --machine=$(USER)@.host --user enable soundboard.service
+	sudo xbps-install -y docker docker-compose
+	sudo ln -s /etc/sv/docker /var/service
+	sudo sv up docker
+	usermod -aG docker $(shell logname)
+
+editor:
+	git clone https://github.com/zed-industries/zed.git /tmp/zed || true
+	cd /tmp/zed && cargo build --release
+	sudo rm -rf /tmp/zed
+
+.PHONY: packages stow desktop audio drivers programming editor
