@@ -15,6 +15,8 @@ desktop:
 
 audio:
 	sudo xbps-install -y pavucontrol pipewire wireplumber
+	sudo ln -s /etc/sv/pipewire /var/service
+	sudo ln -s /etc/sv/wireplumber /var/service
 
 network:
 	sudo xbps-install -y NetworkManager
