@@ -32,14 +32,11 @@ drivers:
 programming:
 	pacman -S --noconfirm v4l2loopback-dkms v4l2loopback-utils
 	modprobe v4l2loopback
-
 	pacman -S --noconfirm nodejs npm
 	sudo npm -g install bun
-
 	pacman -S --noconfirm php php-gd composer
-
 	pacman -S --noconfirm docker docker-compose
-	usermod -aG docker $(USER)
+	usermod -aG docker $(whoami)
 	systemctl enable docker.service
 
 .PHONY: all system packages desktop drivers programming
