@@ -31,12 +31,6 @@ static const char *const autostart[] = {
     "dbus-update-activation-environment", "--systemd", "--all", NULL,
     "dconf", "write", "/org/gnome/desktop/interface/color-scheme", "\'prefer-dark\'", NULL,
 
-    "udiskie", "-a", "-n", "-s", NULL,
-    "dwmblocks", NULL,
-    "dunst", NULL,
-
-    "dsound_setup", NULL,
-
     NULL /* terminate */
 };
 
