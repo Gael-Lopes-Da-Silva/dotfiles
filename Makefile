@@ -22,11 +22,9 @@ desktop:
 
 drivers:
 	@if lspci | grep -i vga | grep -iq nvidia; then \
-		sudo pacman -S --noconfirm nvidia; \
+		sudo pacman -S --noconfirm nvidia-dkms dkms; \
 		sudo sed -i '/^MODULES=/ s/)/ nvidia nvidia_modeset nvidia_uvm nvidia_drm)/' /etc/mkinitcpio.conf; \
 		sudo mkinitcpio -P; \
-		sudo mkdir -p /etc/pacman.d/hooks; \
-		echo -e "[Trigger]\nOperation=Install\nOperation=Upgrade\nOperation=Remove\nType=Package\nTarget=nvidia\nTarget=nvidia-open\nTarget=nvidia-lts\nTarget=linux\n\n[Action]\nDescription=Updating NVIDIA module in initcpio\nDepends=mkinitcpio\nWhen=PostTransaction\nNeedsTargets\nExec=/bin/sh -c 'while read -r trg; do case $$trg in linux*) exit 0; esac; done; /usr/bin/mkinitcpio -P'" | sudo tee -a /etc/pacman.d/hooks/nvidia.hook; \
 	elif lspci | grep -i vga | grep -iq intel; then \
 		sudo pacman -S --noconfirm mesa vulkan-intel; \
 	fi
