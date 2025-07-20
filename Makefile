@@ -1,11 +1,12 @@
 all: system packages desktop drivers programming
 
 system:
+	sudo pacman -S --noconfirm linux-headers terminus-font
+	echo "FONT=ter-132n" | tee -a /etc/vconsole.conf
 	sudo sed -i "s|#Color|Color|" /etc/pacman.conf
 	sudo sed -i "s|#ParallelDownloads = 5|ParallelDownloads = 5|" /etc/pacman.conf
 	sudo sed -i "s|#VerbosePkgLists|VerbosePkgLists|" /etc/pacman.conf
 	sudo sed -i "s|#HookDir|HookDir|" /etc/pacman.conf
-	sudo pacman -S --noconfirm linux-headers
 
 packages:
 	sudo pacman -S --noconfirm noto-fonts noto-fonts-extra noto-fonts-emoji noto-fonts-cjk nerd-fonts papirus-icon-theme bash-completion ouch stow chromium zed neovim ripgrep udiskie dunst feh kitty jq 7zip maim brightnessctl
