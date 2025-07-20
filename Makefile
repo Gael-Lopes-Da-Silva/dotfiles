@@ -1,57 +1,45 @@
-.PHONY: all pacman paru packages stow desktop drivers v4l2loopback docker soundboard
+all: system packages desktop drivers programming
 
-USER := gael
-
-all: pacman paru packages stow desktop drivers v4l2loopback docker soundboard
-
-pacman:
-	sed -i "s|#Color|Color|" /etc/pacman.conf
-	sed -i "s|#ParallelDownloads = 5|ParallelDownloads = 5|" /etc/pacman.conf
-	sed -i "s|#VerbosePkgLists|VerbosePkgLists|" /etc/pacman.conf
-	sed -i "s|#HookDir|HookDir|" /etc/pacman.conf
-
-paru:
-	sudo -u $(USER) git clone https://aur.archlinux.org/paru.git /home/$(USER)/.dotfiles/paru
-	cd /home/$(USER)/.dotfiles/paru && sudo -u $(USER) makepkg -si --noconfirm
-	rm -rf /home/$(USER)/.dotfiles/paru
+system:
+	sudo sed -i "s|#Color|Color|" /etc/pacman.conf
+	sudo sed -i "s|#ParallelDownloads = 5|ParallelDownloads = 5|" /etc/pacman.conf
+	sudo sed -i "s|#VerbosePkgLists|VerbosePkgLists|" /etc/pacman.conf
+	sudo sed -i "s|#HookDir|HookDir|" /etc/pacman.conf
+	sudo pacman -S --noconfirm linux-headers
 
 packages:
-	pacman -S --noconfirm noto-fonts noto-fonts-extra noto-fonts-emoji noto-fonts-cjk \
-		nerd-fonts papirus-icon-theme bash-completion ouch stow chromium zed \
-		neovim ripgrep udiskie dunst feh btop kitty jq
-
-stow:
-	cd /home/$(USER)/.dotfiles/ && \
-		sudo -u $(USER) stow home --adopt && \
-		sudo -u $(USER) git restore .
+	sudo pacman -S --noconfirm noto-fonts noto-fonts-extra noto-fonts-emoji noto-fonts-cjk nerd-fonts papirus-icon-theme bash-completion ouch stow chromium zed neovim ripgrep udiskie dunst feh kitty jq 7zip maim brightnessctl
 
 desktop:
-	pacman -S --noconfirm xorg xorg-xinit xclip xdg-desktop-portal xdg-desktop-portal-gtk \
-		maim upower brightnessctl network-manager-applet
-	cd /home/$(USER)/.dotfiles/home/.config/suckless/dwm && make install clean
-	cd /home/$(USER)/.dotfiles/home/.config/suckless/dwmblocks && make install clean
-	cd /home/$(USER)/.dotfiles/home/.config/suckless/dmenu && make install clean
+	cd $(HOME)/.dotfiles/ && stow home --adopt && git restore .
+	sudo pacman -S --noconfirm xorg xorg-xinit xclip xdg-desktop-portal xdg-desktop-portal-gtk
+	cd $(HOME)/.dotfiles/home/.config/suckless/dwm && sudo make install clean
+	cd $(HOME)/.dotfiles/home/.config/suckless/dwmblocks && sudo make install clean
+	cd $(HOME)/.dotfiles/home/.config/suckless/dmenu && sudo make install clean
+	cd $(HOME)/.dotfiles/home/.config/suckless/dsound && sudo make install clean
 
 drivers:
 	@if lspci | grep -i vga | grep -iq nvidia; then \
-		pacman -S --noconfirm nvidia; \
-		sed -i '/^MODULES=/ s/)/ nvidia nvidia_modeset nvidia_uvm nvidia_drm)/' /etc/mkinitcpio.conf; \
-		mkinitcpio -P; \
-		nvidia-xconfig; \
-		mkdir -p /etc/pacman.d/hooks; \
-		echo -e "[Trigger]\nOperation=Install\nOperation=Upgrade\nOperation=Remove\nType=Package\nTarget=nvidia\nTarget=nvidia-open\nTarget=nvidia-lts\nTarget=linux\n\n[Action]\nDescription=Updating NVIDIA module in initcpio\nDepends=mkinitcpio\nWhen=PostTransaction\nNeedsTargets\nExec=/bin/sh -c 'while read -r trg; do case $$trg in linux*) exit 0; esac; done; /usr/bin/mkinitcpio -P'" | tee -a /etc/pacman.d/hooks/nvidia.hook; \
+		sudo pacman -S --noconfirm nvidia; \
+		sudo sed -i '/^MODULES=/ s/)/ nvidia nvidia_modeset nvidia_uvm nvidia_drm)/' /etc/mkinitcpio.conf; \
+		sudo mkinitcpio -P; \
+		sudo mkdir -p /etc/pacman.d/hooks; \
+		echo -e "[Trigger]\nOperation=Install\nOperation=Upgrade\nOperation=Remove\nType=Package\nTarget=nvidia\nTarget=nvidia-open\nTarget=nvidia-lts\nTarget=linux\n\n[Action]\nDescription=Updating NVIDIA module in initcpio\nDepends=mkinitcpio\nWhen=PostTransaction\nNeedsTargets\nExec=/bin/sh -c 'while read -r trg; do case $$trg in linux*) exit 0; esac; done; /usr/bin/mkinitcpio -P'" | sudo tee -a /etc/pacman.d/hooks/nvidia.hook; \
 	elif lspci | grep -i vga | grep -iq intel; then \
-		pacman -S --noconfirm mesa vulkan-intel; \
+		sudo pacman -S --noconfirm mesa vulkan-intel; \
 	fi
 
-v4l2loopback:
-	pacman -S --noconfirm linux-headers v4l2loopback-dkms v4l2loopback-utils
+programming:
+	pacman -S --noconfirm v4l2loopback-dkms v4l2loopback-utils
 	modprobe v4l2loopback
 
-docker:
+	pacman -S --noconfirm nodejs npm
+	sudo npm -g install bun
+
+	pacman -S --noconfirm php php-gd composer
+
 	pacman -S --noconfirm docker docker-compose
 	usermod -aG docker $(USER)
 	systemctl enable docker.service
 
-soundboard:
-	sudo systemctl --machine=$(USER)@.host --user enable soundboard.service
+.PHONY: all system packages desktop drivers programming

@@ -10,6 +10,7 @@ export TERMINAL='kitty'
 export BROWSER='chromium'
 export COLORTERM='truecolor'
 export GTK_THEME='Adwaita:dark'
+export SUDO_PROMPT='Password: '
 
 export PATH=$PATH:~/.cargo/bin
 

@@ -4,8 +4,6 @@
 
 [[ $- != *i* ]] && return
 
-alias zed='zeditor'
-
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
@@ -20,20 +18,6 @@ alias mv='mv -iv'
 
 alias compress='ouch compress'
 alias decompress='ouch decompress'
-
-alias shutdown='systemctl poweroff'
-alias reboot='systemctl reboot'
-alias suspend='systemctl suspend'
-
-alias paru='paru --bottomup'
-alias install='paru -S'
-alias search='paru -Ss'
-alias update='paru -Syu'
-alias remove='paru -Rns'
-alias infos='paru -Qi'
-alias list='paru -Qe'
-alias owns='paru -Qo'
-alias clean='paru -Qdtq | paru -Rns -'
 
 bind 'set show-all-if-ambiguous on'
 bind 'set mark-symlinked-directories on'
