@@ -32,9 +32,11 @@ static const char *const autostart[] = {
     "dconf", "write", "/org/gnome/desktop/interface/color-scheme", "\'prefer-dark\'", NULL,
 
     "udiskie", "-a", "-n", "-s", NULL,
-    "dsound_setup", NULL,
     "dwmblocks", NULL,
     "dunst", NULL,
+
+    "dsound_setup", NULL,
+
     NULL /* terminate */
 };
 
