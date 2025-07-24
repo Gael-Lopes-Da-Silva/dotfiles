@@ -18,5 +18,5 @@ static const Block blocks[] = {
 };
 
 // Sets delimiter between status commands. NULL character ('\0') means no delimiter.
-static char delim[] = "\0";
-static unsigned int delimLen = 5;
+static char delim[] = "^c#474747^|^d^";
+static unsigned int delimLen = 15;
