@@ -7,6 +7,8 @@
 		"active_line_width": 2,
 		"line_width": 2
 	},
+	"scroll_beyond_last_line": "off",
+	"horizontal_scroll_margin": 0,
 	"scrollbar": {
 		"axes": {
 			"horizontal": false
@@ -22,6 +24,9 @@
 		"dark": "Gruvbox Dark",
 		"light": "Gruvbox Light",
 		"mode": "system"
+	},
+	"project_panel": {
+		"auto_fold_dirs": false
 	},
 	"ui_font_family": "MartianMono Nerd Font Mono",
 	"ui_font_size": 18,
