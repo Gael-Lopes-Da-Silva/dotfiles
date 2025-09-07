@@ -10,6 +10,7 @@ export TERMINAL="kitty"
 export BROWSER="chromium"
 export GTK_THEME="Adwaita:dark"
 export SUDO_PROMPT="Password: "
+export VDPAU_DRIVER="va_gl"
 
 export PATH="$PATH:~/.cargo/bin"
 
