@@ -24,7 +24,7 @@ desktop:
 
 drivers:
 	@if lspci | grep -i vga | grep -iq nvidia; then \
-		sudo pacman -S --noconfirm nvidia-dkms dkms; \
+		sudo pacman -S --noconfirm nvidia-dkms dkms libvdpau-va-gl; \
 		sudo sed -i '/^MODULES=/ s/)/ nvidia nvidia_modeset nvidia_uvm nvidia_drm)/' /etc/mkinitcpio.conf; \
 		sudo mkinitcpio -P; \
 	elif lspci | grep -i vga | grep -iq intel; then \
