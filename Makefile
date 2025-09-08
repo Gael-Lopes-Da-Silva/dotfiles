@@ -11,7 +11,7 @@ system:
 	sudo sed -i "s|#HookDir|HookDir|" /etc/pacman.conf
 
 packages:
-	sudo pacman -S --noconfirm noto-fonts noto-fonts-extra noto-fonts-emoji noto-fonts-cjk nerd-fonts papirus-icon-theme bash-completion ouch stow chromium zed neovim ripgrep udiskie dunst feh kitty jq 7zip maim brightnessctl
+	sudo pacman -S --noconfirm noto-fonts noto-fonts-extra noto-fonts-emoji noto-fonts-cjk nerd-fonts papirus-icon-theme bash-completion ouch stow vivaldi zed neovim ripgrep udiskie dunst feh kitty jq 7zip maim brightnessctl
 	sudo ln -s /usr/bin/zeditor /usr/local/bin/zed
 
 desktop:
