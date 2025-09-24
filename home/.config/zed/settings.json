@@ -20,6 +20,12 @@
 	"auto_signature_help": true,
 	"show_signature_help_after_edits": true,
 
+	"git": {
+		"inline_blame": {
+			"enabled": false
+		}
+	},
+
 	"indent_guides": {
 		"enabled": true,
 		"line_width": 2,
