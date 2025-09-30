@@ -59,7 +59,6 @@
 	},
 	"tabs": {
 		"file_icons": true,
-		"close_position": "left",
 		"git_status": true
 	},
 	"preview_tabs": {

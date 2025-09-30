@@ -4,10 +4,10 @@
 
 [[ -f ~/.bashrc ]] && . ~/.bashrc
 
-export EDITOR="nvim"
-export VISUAL="nvim"
+export EDITOR="zed"
+export VISUAL="zed"
 export TERMINAL="kitty"
-export BROWSER="chromium"
+export BROWSER="firefox"
 export GTK_THEME="Adwaita:dark"
 export SUDO_PROMPT="Password: "
 export VDPAU_DRIVER="va_gl"

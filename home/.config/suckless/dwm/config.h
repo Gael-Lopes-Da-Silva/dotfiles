@@ -80,7 +80,7 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, topbar ? NULL : "-b", NULL };
 static const char *termcmd[]   = { "kitty", NULL };
-static const char *browsercmd[]  = { "vivaldi", "-force-device-scale-factor=1", NULL };
+static const char *browsercmd[]  = { "firefox", NULL };
 
 static const char *vol_plus[]  = { "wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", "0.10+", NULL };
 static const char *vol_minus[] = { "wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", "0.10-", NULL };
