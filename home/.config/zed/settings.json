@@ -68,8 +68,8 @@
 	},
 
 	"theme": {
-		"dark": "Gruvbox Dark",
-		"light": "Gruvbox Light",
+		"dark": "Gruvbox Dark Soft",
+		"light": "Gruvbox Light Soft",
 		"mode": "system"
 	},
 
