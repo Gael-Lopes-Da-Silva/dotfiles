@@ -16,9 +16,6 @@ alias cp='cp -prv'
 alias rm='rm -rfIdv'
 alias mv='mv -v'
 
-alias poweroff='systemctl --force poweroff'
-alias reboot='systemctl --force reboot'
-
 alias compress='ouch compress'
 alias decompress='ouch decompress'
 

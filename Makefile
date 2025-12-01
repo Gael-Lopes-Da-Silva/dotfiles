@@ -3,7 +3,7 @@ all: system packages desktop drivers programming
 USER := $(whoami)
 
 system:
-	sudo pacman -S --noconfirm linux-headers terminus-font
+	sudo pacman -S --noconfirm terminus-font
 	echo "FONT=ter-132n" | tee -a /etc/vconsole.conf
 	sudo sed -i "s|#Color|Color|" /etc/pacman.conf
 	sudo sed -i "s|#ParallelDownloads = 5|ParallelDownloads = 5|" /etc/pacman.conf
@@ -11,16 +11,13 @@ system:
 	sudo sed -i "s|#HookDir|HookDir|" /etc/pacman.conf
 
 packages:
-	sudo pacman -S --noconfirm noto-fonts noto-fonts-extra noto-fonts-emoji noto-fonts-cjk nerd-fonts papirus-icon-theme bash-completion ouch stow firefox zed neovim ripgrep udiskie dunst feh kitty jq 7zip maim brightnessctl
+	sudo pacman -S --noconfirm noto-fonts noto-fonts-extra noto-fonts-emoji noto-fonts-cjk nerd-fonts bash-completion ouch stow firefox zed neovim ripgrep feh kitty jq 7zip brightnessctl udiskie
 	sudo ln -s /usr/bin/zeditor /usr/local/bin/zed
 
 desktop:
 	cd ${HOME}/.dotfiles/ && stow home --adopt && git restore .
-	sudo pacman -S --noconfirm xorg xorg-xinit xclip xdg-desktop-portal xdg-desktop-portal-gtk
-	cd ${HOME}/.dotfiles/home/.config/suckless/dwm && sudo make install clean
-	cd ${HOME}/.dotfiles/home/.config/suckless/dwmblocks && sudo make install clean
-	cd ${HOME}/.dotfiles/home/.config/suckless/dmenu && sudo make install clean
-	cd ${HOME}/.dotfiles/home/.config/suckless/dsound && sudo make install clean
+	sudo pacman -S --noconfirm gtk3 gtk4 qt5-wayland qt6-wayland xdg-desktop-portal xdg-desktop-portal-hyprland
+	sudo pacman -S --noconfirm hyprland niri xdg-desktop-portal xdg-desktop-portal-hyprland
 
 drivers:
 	@if lspci | grep -i vga | grep -iq nvidia; then \
@@ -36,7 +33,7 @@ programming:
 	sudo modprobe v4l2loopback
 	sudo pacman -S --noconfirm nodejs npm
 	sudo npm -g install bun
-	sudo pacman -S --noconfirm php php-gd composer
+	sudo pacman -S --noconfirm php composer
 	sudo pacman -S --noconfirm docker docker-compose
 	sudo usermod -aG docker ${USER}
 	sudo systemctl enable docker.service

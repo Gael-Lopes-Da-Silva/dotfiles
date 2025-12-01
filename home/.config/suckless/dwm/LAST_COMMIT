@@ -1,1 +1,0 @@
-2024-10-28 00:34	Avoid unsigned integer underflow in drw_text()	Raymond Cole	1	+2	-0
