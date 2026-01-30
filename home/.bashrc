@@ -41,6 +41,18 @@ shopt -s extglob
 HISTCONTROL=ignoredups:erasedups
 HISTSIZE=1000
 HISTFILESIZE=2000
+PROMPT_COMMAND=get_prompt
 
-PS1='\[\e[92;1m\]\w\[\e[0m\]\n$(exit_code=$?; if [[ $exit_code -ne 0 ]]; then printf "\[\e[91;1m\]\[\e[0m\]"; else printf "\[\e[90;1m\]\[\e[0m\]"; fi) '
-PS2='\[\e[90;1m\]\[\e[0m\] '
+RESET="\[\e[0m\]"
+GREEN="\[\e[92;1m\]"
+RED="\[\e[91;1m\]"
+
+function get_prompt {
+    if [ "$?" -eq "0" ]; then
+        PROMPT="${GREEN}\w${RESET}"
+    else
+        PROMPT="${RED}\w${RESET}"
+    fi
+
+    PS1="${PROMPT}\n"
+}

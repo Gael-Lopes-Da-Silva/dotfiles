@@ -1,0 +1,3 @@
+[submodule "home/.shell"]
+	path = home/.shell
+	url = https://github.com/gael-lopes-da-silva/canopy
