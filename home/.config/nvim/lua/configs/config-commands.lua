@@ -15,6 +15,17 @@ create_autocmd({ "BufAdd", "BufEnter" }, {
     end,
 })
 
+create_autocmd('User', {
+    pattern = { 'MiniCompletionWindowOpen', 'MiniCompletionWindowUpdate' },
+    group = group,
+    callback = function(event)
+        local win_id, kind = event.data.win_id, event.data.kind
+        local config = vim.api.nvim_win_get_config(win_id)
+        config.title = ''
+        vim.api.nvim_win_set_config(win_id, config)
+    end,
+})
+
 create_autocmd({ 'BufWrite', 'BufWinLeave' }, {
     desc = "Save folds when saving or closing a buffer",
     group = group,
