@@ -1,0 +1,49 @@
+####################################
+# Window
+####################################
+
+[window]
+padding = { x = 10, y = 10 }
+opacity = 0.8
+
+
+####################################
+# Font
+####################################
+
+[font]
+size = 17.0
+# normal = { family = "JetBrainsMono Nerd Font", style = "Regular" }
+
+
+####################################
+# Cursor
+####################################
+
+[cursor]
+style = { shape = "Block", blinking = "Off" }
+unfocused_hollow = true
+
+####################################
+# Bell
+####################################
+
+[bell]
+duration = 0
+
+####################################
+# Mouse
+####################################
+
+[mouse]
+middle_click_paste = false
+
+####################################
+# Key bindings
+####################################
+
+[keyboard]
+bindings = [
+  { key = "Back", mods = "Control", chars = "\u0017" },
+  { key = "Enter", mods = "Control|Shift", chars = "\u0017" },
+]
