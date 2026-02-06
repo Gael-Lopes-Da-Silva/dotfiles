@@ -43,8 +43,6 @@
   "drag_and_drop_selection": {
     "enabled": false,
   },
-  "show_signature_help_after_edits": true,
-  "auto_signature_help": true,
   "scroll_beyond_last_line": "off",
   "which_key": {
     "enabled": true,
