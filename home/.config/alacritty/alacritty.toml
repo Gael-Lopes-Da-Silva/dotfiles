@@ -23,6 +23,7 @@ size = 17.0
 [cursor]
 style = { shape = "Block", blinking = "Off" }
 unfocused_hollow = true
+thickness = 0.2
 
 ####################################
 # Bell
