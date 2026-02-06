@@ -11,13 +11,12 @@ system:
 	sudo sed -i "s|#HookDir|HookDir|" /etc/pacman.conf
 
 packages:
-	sudo pacman -S --noconfirm noto-fonts noto-fonts-extra noto-fonts-emoji noto-fonts-cjk nerd-fonts bash-completion ouch stow firefox zed neovim ripgrep feh kitty jq 7zip brightnessctl udiskie
-	sudo ln -s /usr/bin/zeditor /usr/local/bin/zed
+	sudo pacman -S --noconfirm noto-fonts noto-fonts-extra noto-fonts-emoji noto-fonts-cjk alacritty neovim firefox zed stow ouch ripgrep 7zip bash-completion
 
 desktop:
 	cd ${HOME}/.dotfiles/ && stow home --adopt && git restore .
-	sudo pacman -S --noconfirm gtk3 gtk4 qt5-wayland qt6-wayland xdg-desktop-portal xdg-desktop-portal-hyprland
-	sudo pacman -S --noconfirm hyprland niri xdg-desktop-portal xdg-desktop-portal-hyprland
+	sudo pacman -S --noconfirm gtk3 gtk4 qt5-wayland qt6-wayland xdg-desktop-portal xdg-desktop-portal-gtk
+	sudo pacman -S --noconfirm niri
 
 drivers:
 	@if lspci | grep -i vga | grep -iq nvidia; then \

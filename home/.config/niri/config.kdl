@@ -1,3 +1,14 @@
+// ###################################
+// Autostart
+// ###################################
+
+// spawn-at-startup "waybar"
+// spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
+
+// ###################################
+// Input
+// ###################################
+
 input {
     keyboard {
         xkb {
@@ -45,10 +56,18 @@ input {
     // focus-follows-mouse max-scroll-amount="0%"
 }
 
+// ###################################
+// Output
+// ###################################
+
 output "eDP-1" {
     mode "1920x1080@60"
     scale 1
 }
+
+// ###################################
+// Layout
+// ###################################
 
 layout {
     gaps 16
@@ -62,8 +81,6 @@ layout {
         // fixed 1920
     }
 
-    // preset-window-heights { }
-
     default-column-width {
         proportion 1.0
     }
@@ -76,7 +93,6 @@ layout {
         inactive-color "#505050"
 
         // active-gradient from="#80c8ff" to="#c7ff7f" angle=45
-
         // inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
     }
 
@@ -89,13 +105,11 @@ layout {
         urgent-color "#9b0000"
 
         // active-gradient from="#e5989b" to="#ffb4a2" angle=45 relative-to="workspace-view" in="oklch longer hue"
-
         // inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
     }
 
     shadow {
         // on
-
         // draw-behind-window true
 
         softness 30
@@ -103,33 +117,55 @@ layout {
         offset x=0 y=5
         color "#0007"
     }
-
-    struts {}
 }
 
-// spawn-at-startup "waybar"
-
-// spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
+// ###################################
+// Hotkey Overlay
+// ###################################
 
 hotkey-overlay {
     skip-at-startup
 }
 
+// ###################################
+// CSD Preference
+// ###################################
+
 prefer-no-csd
+
+// ###################################
+// Screenshot
+// ###################################
 
 // screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 screenshot-path null
 
-animations {
-    // off
+// ###################################
+// Animations
+// ###################################
 
+/-animations {
+    // off
     // slowdown 3.0
 }
+
+// ###################################
+// Gestures
+// ###################################
 
 gestures {
     hot-corners {
         off
     }
+}
+
+// ###################################
+// Window Rules
+// ###################################
+
+window-rule {
+    geometry-corner-radius 12
+    clip-to-geometry true
 }
 
 window-rule {
@@ -146,15 +182,14 @@ window-rule {
     // block-out-from "screencast"
 }
 
-window-rule {
-    geometry-corner-radius 12
-    clip-to-geometry true
-}
+// ###################################
+// Key Bindings
+// ###################################
 
 binds {
     // Mod+Shift+Slash { show-hotkey-overlay; }
 
-    Mod+Return repeat=false { spawn "kitty"; }
+    Mod+Return repeat=false { spawn "alacritty"; }
     Mod+BackSpace repeat=false { spawn "firefox"; }
 
     XF86AudioRaiseVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1+" "-l" "1.0"; }

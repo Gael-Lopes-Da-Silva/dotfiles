@@ -1,20 +1,19 @@
-####################################
+###################################
 # Window
 ####################################
 
 [window]
 padding = { x = 10, y = 10 }
+dynamic_padding = true
 opacity = 0.8
-
 
 ####################################
 # Font
 ####################################
 
 [font]
-size = 17.0
+size = 18.0
 # normal = { family = "JetBrainsMono Nerd Font", style = "Regular" }
-
 
 ####################################
 # Cursor
@@ -26,18 +25,11 @@ unfocused_hollow = true
 thickness = 0.2
 
 ####################################
-# Bell
-####################################
-
-[bell]
-duration = 0
-
-####################################
 # Mouse
 ####################################
 
 [mouse]
-middle_click_paste = false
+hide_when_typing = true
 
 ####################################
 # Key bindings
@@ -45,6 +37,6 @@ middle_click_paste = false
 
 [keyboard]
 bindings = [
-  { key = "Back", mods = "Control", chars = "\u0017" },
-  { key = "Enter", mods = "Control|Shift", chars = "\u0017" },
+    { key = "Back", mods = "Control", chars = "\u0017" },
+    { key = "Enter", mods = "Control|Shift", chars = "\u0017" },
 ]
