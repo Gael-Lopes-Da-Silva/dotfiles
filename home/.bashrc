@@ -12,9 +12,9 @@ alias vdir='vdir --color=auto'
 alias ls='ls --color=auto --sort=extension --group-directories-first'
 alias la='ls -Alh'
 alias ll='ls -lh'
-alias cp='cp -prv'
-alias rm='rm -rfIdv'
-alias mv='mv -v'
+alias cp='cp -iprv'
+alias rm='rm -rIdv'
+alias mv='mv -iv'
 
 alias compress='ouch compress'
 alias decompress='ouch decompress'
@@ -26,6 +26,7 @@ bind 'set colored-stats on'
 bind 'set enable-bracketed-paste off'
 
 bind 'TAB:menu-complete'
+bind '"\e[Z":menu-complete-backward'
 bind '"\e[A":history-search-backward'
 bind '"\e[B":history-search-forward'
 
@@ -38,11 +39,7 @@ shopt -s cmdhist
 shopt -s globstar
 shopt -s extglob
 
-HISTCONTROL=ignoredups:erasedups
-HISTSIZE=1000
-HISTFILESIZE=2000
 PROMPT_COMMAND=get_prompt
-
 RESET="\[\e[0m\]"
 GREEN="\[\e[92;1m\]"
 RED="\[\e[91;1m\]"
