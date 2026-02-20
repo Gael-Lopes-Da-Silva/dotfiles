@@ -9,6 +9,23 @@ DOTFILES_REPO="https://github.com/Gael-Lopes-Da-Silva/dotfiles.git"
 echo "==> Starting installation..."
 
 # -----------------
+# Distro check
+# -----------------
+if [[ ! -f /etc/os-release ]]; then
+  echo "Unable to detect Linux distribution."
+  exit 1
+fi
+
+. /etc/os-release
+
+if [[ "$ID" != "arch" && "$ID_LIKE" != *"arch"* ]]; then
+  echo "This script requires an Arch-based distribution."
+  echo "Detected distro: $PRETTY_NAME"
+  exit 1
+fi
+
+
+# -----------------
 # System
 # -----------------
 echo "==> Installing system configuration..."
