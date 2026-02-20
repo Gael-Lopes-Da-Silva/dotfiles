@@ -3,6 +3,8 @@
 set -e
 
 USER_NAME="$(whoami)"
+DOTFILES_DIR="${HOME}/.dotfiles"
+DOTFILES_REPO="https://github.com/Gael-Lopes-Da-Silva/dotfiles.git"
 
 echo "==> Starting installation..."
 
@@ -29,25 +31,53 @@ sudo pacman -S --noconfirm \
   noto-fonts-extra \
   noto-fonts-emoji \
   noto-fonts-cjk \
+  git \
+  stow \
+  ouch \
   alacritty \
   neovim \
   firefox \
   zed \
-  stow \
-  ouch \
-  ripgrep \
-  7zip \
-  bash-completion
+  7zip
+
+
+# -----------------
+# Dependencies
+# -----------------
+echo "==> Installing dependencies..."
+sudo pacman -S --noconfirm \
+  accountsservice \
+  power-profiles-daemon \
+  cups-pk-helper \
+  fprintd
+
+echo "=> Enabling related services..."
+sudo systemctl enable --now power-profiles-daemon.service
+sudo systemctl enable --now fprintd.service
+
+
+# -----------------
+# Dotfiles
+# -----------------
+echo "==> Setting up dotfiles..."
+
+if [ ! -d "$DOTFILES_DIR" ]; then
+  echo "Cloning dotfiles repository..."
+  git clone "$DOTFILES_REPO" "$DOTFILES_DIR"
+else
+  echo "Dotfiles already exist, pulling latest changes..."
+  git -C "$DOTFILES_DIR" pull
+fi
+
+cd "$DOTFILES_DIR"
+stow home --adopt
+git restore .
 
 
 # -----------------
 # Desktop
 # -----------------
-echo "==> Setting up desktop..."
-cd "${HOME}/.dotfiles/"
-stow home --adopt
-git restore .
-
+echo "==> Installing desktop packages..."
 sudo pacman -S --noconfirm \
   gtk3 \
   gtk4 \
@@ -64,15 +94,14 @@ sudo pacman -S --noconfirm \
 echo "==> Installing drivers..."
 
 if lspci | grep -i vga | grep -iq nvidia; then
-  echo "NVIDIA GPU detected"
-  sudo pacman -S --noconfirm nvidia-dkms dkms libvdpau-va-gl
+  echo "=> NVIDIA GPU detected"
+  sudo pacman -S --noconfirm nvidia-dkms
 
-  sudo sed -i '/^MODULES=/ s/)/ nvidia nvidia_modeset nvidia_uvm nvidia_drm)/' \
-    /etc/mkinitcpio.conf
+  sudo sed -i '/^MODULES=/ s/)/ nvidia nvidia_modeset nvidia_uvm nvidia_drm)/' /etc/mkinitcpio.conf
 
   sudo mkinitcpio -P
 elif lspci | grep -i vga | grep -iq intel; then
-  echo "Intel GPU detected"
+  echo "=> Intel GPU detected"
   sudo pacman -S --noconfirm mesa vulkan-intel
 fi
 
@@ -89,13 +118,13 @@ sudo pacman -S --noconfirm \
 sudo modprobe v4l2loopback
 
 sudo pacman -S --noconfirm nodejs npm
-sudo npm -g install bun
+sudo npm install -g bun
 
 sudo pacman -S --noconfirm php composer
 
 sudo pacman -S --noconfirm docker docker-compose
 sudo usermod -aG docker "${USER_NAME}"
-sudo systemctl enable docker.service
+sudo systemctl enable --now docker.service
 
 
 echo "==> Installation complete!"
