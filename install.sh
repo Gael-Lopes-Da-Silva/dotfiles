@@ -53,6 +53,7 @@ print "==> Installing base packages..."
       noto-fonts-extra \
       noto-fonts-emoji \
       noto-fonts-cjk \
+      nerd-fonts \
       git \
       stow \
       ouch \
@@ -69,11 +70,11 @@ print "==> Installing base packages..."
 print "==> Setting up dotfiles..."
 
 if [ ! -d "$DOTFILES_DIR" ]; then
-  print "Cloning dotfiles repository..."
-  git clone "$DOTFILES_REPO" "$DOTFILES_DIR" > /dev/null
+    print "Cloning dotfiles repository..."
+    git clone "$DOTFILES_REPO" "$DOTFILES_DIR" > /dev/null
 else
-  print "Dotfiles already exist, pulling latest changes..."
-  git -C "$DOTFILES_DIR" pull > /dev/null
+    print "Dotfiles already exist, pulling latest changes..."
+    git -C "$DOTFILES_DIR" pull > /dev/null
 fi
 
 {
@@ -98,9 +99,9 @@ print "==> Installing desktop packages..."
 } > /dev/null
 
 # -----------------
-# Dependencies
+# Utils
 # -----------------
-print "==> Installing dependencies..."
+print "==> Installing system utils..."
 {
     sudo pacman -S --noconfirm \
       accountsservice \
@@ -111,7 +112,10 @@ print "==> Installing dependencies..."
       wl-clip-persist \
       cliphist \
       xdg-user-dirs \
-      xdg-user-dirs-gtk
+      xdg-user-dirs-gtk \
+      firejail \
+      wine \
+      winetricks
 
     sudo systemctl enable --now power-profiles-daemon.service
     sudo systemctl enable --now fprintd.service
