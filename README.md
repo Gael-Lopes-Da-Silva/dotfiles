@@ -1,3 +1,3 @@
-~~~sh
-curl --location https://github.com/Gael-Lopes-Da-Silva/dotfiles/blob/main/install.sh | sh
-~~~
+```sh
+curl --location https://raw.githubusercontent.com/Gael-Lopes-Da-Silva/dotfiles/refs/heads/main/install.sh | sh
+```
