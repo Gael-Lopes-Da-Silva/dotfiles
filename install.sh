@@ -107,6 +107,9 @@ print "==> Installing dependencies..."
       power-profiles-daemon \
       cups-pk-helper \
       fprintd \
+      wl-clipboard \
+      wl-clip-persist \
+      cliphist \
       xdg-user-dirs \
       xdg-user-dirs-gtk
 
