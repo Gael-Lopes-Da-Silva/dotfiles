@@ -129,6 +129,7 @@ fi
 echo "==> Installing programming tools..."
 
 sudo pacman -S --noconfirm \
+  linux-headers \
   v4l2loopback-dkms \
   v4l2loopback-utils
 
