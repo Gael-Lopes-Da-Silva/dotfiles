@@ -106,10 +106,15 @@ print "==> Installing dependencies..."
       accountsservice \
       power-profiles-daemon \
       cups-pk-helper \
-      fprintd
+      fprintd \
+      xdg-user-dirs \
+      xdg-user-dirs-gtk
 
     sudo systemctl enable --now power-profiles-daemon.service
     sudo systemctl enable --now fprintd.service
+
+    xdg-user-dirs-update
+    xdg-user-dirs-gtk-update
 } > /dev/null
 
 # -----------------
