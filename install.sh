@@ -57,6 +57,7 @@ print "==> Installing base packages..."
       git \
       stow \
       ouch \
+      fzf \
       alacritty \
       neovim \
       firefox \
@@ -161,6 +162,17 @@ print "==> Installing programming tools..."
     sudo pacman -S --noconfirm docker docker-compose
     sudo usermod -aG docker "${USER_NAME}"
     sudo systemctl enable --now docker.service
+} > /dev/null
+
+# -----------------
+# Auto mount
+# -----------------
+print "==> Setting up auto mounting..."
+{
+    sudo pacman -S --noconfirm \
+      udiskie \
+      gvfs \
+      gvfs-mtp
 } > /dev/null
 
 print "==> Installation complete!"

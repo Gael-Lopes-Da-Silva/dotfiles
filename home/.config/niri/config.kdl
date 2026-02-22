@@ -5,6 +5,8 @@
 spawn-sh-at-startup "wl-clip-persist --clipboard regular"
 spawn-sh-at-startup "wl-paste --watch cliphist store"
 
+spawn-sh-at-startup "udiskie --automount --notify --smart-tray"
+
 // ###################################
 // Input
 // ###################################
@@ -173,15 +175,6 @@ window-rule {
     open-floating true
 }
 
-/-window-rule {
-    match app-id=r#"^org\.keepassxc\.KeePassXC$"#
-    match app-id=r#"^org\.gnome\.World\.Secrets$"#
-
-    block-out-from "screen-capture"
-
-    // block-out-from "screencast"
-}
-
 // ###################################
 // Key Bindings
 // ###################################
@@ -339,6 +332,4 @@ binds {
 
     Mod+Shift+Q { quit; }
     Ctrl+Alt+Delete { quit; }
-
-    Mod+Shift+P { power-off-monitors; }
 }
