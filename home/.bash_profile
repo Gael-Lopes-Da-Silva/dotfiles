@@ -35,3 +35,5 @@ export HISTCONTROL=ignoreboth
 export HISTIGNORE="ls:cd:cd -:pwd:exit:clear"
 export HISTTIMEFORMAT='%F %T '
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
+
+[[ $(tty) == "/dev/tty1" ]] && exec niri

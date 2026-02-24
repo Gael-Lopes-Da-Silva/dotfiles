@@ -73,14 +73,11 @@ output "eDP-1" {
 
 layout {
     gaps 16
-    center-focused-column "on-overflow"
+    center-focused-column "never"
 
     preset-column-widths {
-        proportion 0.33333
         proportion 0.5
-        proportion 0.66667
-
-        // fixed 1920
+        proportion 1.0
     }
 
     default-column-width {
@@ -88,36 +85,15 @@ layout {
     }
 
     focus-ring {
-        // off
-
         width 4
-        active-color "#7fc8ff"
-        inactive-color "#505050"
-
         // active-gradient from="#80c8ff" to="#c7ff7f" angle=45
         // inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
     }
 
-    border {
-        off
-
-        width 4
-        active-color "#ffc87f"
-        inactive-color "#505050"
-        urgent-color "#9b0000"
-
-        // active-gradient from="#e5989b" to="#ffb4a2" angle=45 relative-to="workspace-view" in="oklch longer hue"
-        // inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
-    }
-
-    shadow {
-        // on
-        // draw-behind-window true
-
-        softness 30
-        spread 5
-        offset x=0 y=5
-        color "#0007"
+    tab-indicator {
+        gap 8
+        gaps-between-tabs 6
+        corner-radius 8
     }
 }
 
@@ -175,12 +151,43 @@ window-rule {
     open-floating true
 }
 
+window-rule {
+    match app-id="launcher"
+
+    open-floating true
+
+    default-column-width { proportion 0.75; }
+    default-window-height { proportion 0.50; }
+    default-floating-position x=0 y=100 relative-to="top"
+    geometry-corner-radius 0
+}
+
+window-rule {
+    match app-id="monitor"
+
+    open-floating true
+
+    default-column-width { proportion 0.90; }
+    default-window-height { proportion 0.90; }
+    geometry-corner-radius 0
+}
+
+window-rule {
+    match app-id="cliphist"
+
+    open-floating true
+
+    default-column-width { proportion 0.50; }
+    default-window-height { proportion 0.50; }
+    geometry-corner-radius 0
+}
+
 // ###################################
 // Key Bindings
 // ###################################
 
 binds {
-    // Mod+Shift+Slash { show-hotkey-overlay; }
+    Mod+Shift+Slash { show-hotkey-overlay; }
 
     Mod+Return repeat=false { spawn "alacritty"; }
     Mod+BackSpace repeat=false { spawn "firefox"; }
@@ -195,6 +202,14 @@ binds {
     XF86AudioNext allow-when-locked=true { spawn "playerctl" "next"; }
     XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
     XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
+
+    Mod+V repeat=false { spawn-sh "bash ~/.scripts/cliphist_menu.sh"; }
+
+    Mod+P repeat=false { spawn-sh "bash ~/.scripts/command_menu.sh"; }
+    Mod+Shift+P repeat=false { spawn-sh "bash ~/.scripts/application_menu.sh"; }
+    Mod+Ctrl+P repeat=false { spawn-sh "bash ~/.scripts/power_menu.sh"; }
+
+    Ctrl+Shift+Escape repeat=false { spawn-sh "bash ~/.scripts/monitor_menu.sh"; }
 
     Mod+O repeat=false { toggle-overview; }
     Mod+Shift+C repeat=false { close-window; }
@@ -244,14 +259,14 @@ binds {
     Mod+Page_Up { focus-workspace-up; }
     Mod+U { focus-workspace-down; }
     Mod+I { focus-workspace-up; }
-    Mod+Ctrl+Page_Down { move-column-to-workspace-down; }
-    Mod+Ctrl+Page_Up { move-column-to-workspace-up; }
-    Mod+Ctrl+U { move-column-to-workspace-down; }
-    Mod+Ctrl+I { move-column-to-workspace-up; }
     Mod+Shift+Page_Down { move-workspace-down; }
     Mod+Shift+Page_Up { move-workspace-up; }
     Mod+Shift+U { move-workspace-down; }
     Mod+Shift+I { move-workspace-up; }
+    Mod+Ctrl+Page_Down { move-column-to-workspace-down; }
+    Mod+Ctrl+Page_Up { move-column-to-workspace-up; }
+    Mod+Ctrl+U { move-column-to-workspace-down; }
+    Mod+Ctrl+I { move-column-to-workspace-up; }
 
     Mod+WheelScrollDown cooldown-ms=150 { focus-workspace-down; }
     Mod+WheelScrollUp cooldown-ms=150 { focus-workspace-up; }
@@ -275,15 +290,6 @@ binds {
     Mod+7 { focus-workspace 7; }
     Mod+8 { focus-workspace 8; }
     Mod+9 { focus-workspace 9; }
-    Mod+Ctrl+1 { move-column-to-workspace 1; }
-    Mod+Ctrl+2 { move-column-to-workspace 2; }
-    Mod+Ctrl+3 { move-column-to-workspace 3; }
-    Mod+Ctrl+4 { move-column-to-workspace 4; }
-    Mod+Ctrl+5 { move-column-to-workspace 5; }
-    Mod+Ctrl+6 { move-column-to-workspace 6; }
-    Mod+Ctrl+7 { move-column-to-workspace 7; }
-    Mod+Ctrl+8 { move-column-to-workspace 8; }
-    Mod+Ctrl+9 { move-column-to-workspace 9; }
     Mod+Shift+1 { move-window-to-workspace 1; }
     Mod+Shift+2 { move-window-to-workspace 2; }
     Mod+Shift+3 { move-window-to-workspace 3; }
@@ -293,6 +299,15 @@ binds {
     Mod+Shift+7 { move-window-to-workspace 7; }
     Mod+Shift+8 { move-window-to-workspace 8; }
     Mod+Shift+9 { move-window-to-workspace 9; }
+    Mod+Ctrl+1 { move-column-to-workspace 1; }
+    Mod+Ctrl+2 { move-column-to-workspace 2; }
+    Mod+Ctrl+3 { move-column-to-workspace 3; }
+    Mod+Ctrl+4 { move-column-to-workspace 4; }
+    Mod+Ctrl+5 { move-column-to-workspace 5; }
+    Mod+Ctrl+6 { move-column-to-workspace 6; }
+    Mod+Ctrl+7 { move-column-to-workspace 7; }
+    Mod+Ctrl+8 { move-column-to-workspace 8; }
+    Mod+Ctrl+9 { move-column-to-workspace 9; }
 
     Mod+Tab { focus-workspace-previous; }
 
@@ -316,10 +331,10 @@ binds {
     Mod+Shift+Minus { set-window-height "-10%"; }
     Mod+Shift+Equal { set-window-height "+10%"; }
 
-    Mod+V { toggle-window-floating; }
-    Mod+Shift+V { switch-focus-between-floating-and-tiling; }
+    Mod+Space { toggle-window-floating; }
+    Mod+Shift+Space { switch-focus-between-floating-and-tiling; }
 
-    Mod+W { toggle-column-tabbed-display; }
+    Mod+T { toggle-column-tabbed-display; }
 
     Print { screenshot; }
     Shift+Print { screenshot-window; }

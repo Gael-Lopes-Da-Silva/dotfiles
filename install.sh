@@ -2,7 +2,6 @@
 
 set -e
 
-USER_NAME="$(whoami)"
 DOTFILES_DIR="${HOME}/.dotfiles"
 DOTFILES_REPO="https://github.com/Gael-Lopes-Da-Silva/dotfiles.git"
 
@@ -90,13 +89,14 @@ fi
 print "==> Installing desktop packages..."
 {
     sudo pacman -S --noconfirm \
+      niri \
       gtk3 \
       gtk4 \
       qt5-wayland \
       qt6-wayland \
       xdg-desktop-portal \
       xdg-desktop-portal-gtk \
-      niri
+      xdg-desktop-portal-gnome
 } > /dev/null
 
 # -----------------
@@ -112,8 +112,11 @@ print "==> Installing system utils..."
       wl-clipboard \
       wl-clip-persist \
       cliphist \
+      brightnessctl \
+      playerctl \
       xdg-user-dirs \
       xdg-user-dirs-gtk \
+      gnome-keyring \
       firejail \
       wine \
       winetricks
@@ -160,7 +163,7 @@ print "==> Installing programming tools..."
     sudo pacman -S --noconfirm php composer
 
     sudo pacman -S --noconfirm docker docker-compose
-    sudo usermod -aG docker "${USER_NAME}"
+    sudo usermod -aG docker "$(whoami)"
     sudo systemctl enable --now docker.service
 } > /dev/null
 

@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+if pgrep -f "alacritty.*--class launcher" >/dev/null; then
+    exit 0
+fi
+
+tmpfile=$(mktemp)
+
+alacritty --class launcher --command bash -c '
+    compgen -c | sort -u | fzf --prompt="Run: " --bind "tab:replace-query" --print-query > "'$tmpfile'"
+'
+
+fzf_output=$(cat "$tmpfile")
+rm "$tmpfile"
+
+query=$(head -n1 <<< "$fzf_output")
+selection=$(sed -n '2p' <<< "$fzf_output")
+
+cmd_to_run="${selection:-$query}"
+
+if [ -n "$cmd_to_run" ]; then
+    nohup $cmd_to_run >/dev/null 2>&1 &
+fi
+
+exit 0
