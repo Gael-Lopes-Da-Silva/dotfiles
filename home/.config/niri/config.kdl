@@ -6,6 +6,12 @@ spawn-sh-at-startup "wl-clip-persist --clipboard regular"
 spawn-sh-at-startup "wl-paste --watch cliphist store"
 
 spawn-sh-at-startup "udiskie --automount --notify --smart-tray"
+spawn-sh-at-startup "dunst"
+
+spawn-sh-at-startup "bash ~/.scripts/audio_monitor.sh"
+spawn-sh-at-startup "bash ~/.scripts/battery_monitor.sh"
+spawn-sh-at-startup "bash ~/.scripts/brightness_monitor.sh"
+spawn-sh-at-startup "bash ~/.scripts/keys_monitor.sh"
 
 // ###################################
 // Input

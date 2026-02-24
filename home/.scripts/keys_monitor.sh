@@ -18,17 +18,53 @@ while true; do
     scroll=$(cat "$scroll_led/brightness")
 
     if [ "$caps" != "$prev_caps" ]; then
-        [ "$caps" = "1" ] && notify-send "Keyboard" "Caps Lock ON" || notify-send "Keyboard" "Caps Lock OFF"
+        if [ "$caps" = "1" ]; then
+            dunstify \
+                -a "capslock" \
+                -h string:x-dunst-stack-tag:capslock \
+                -u low \
+                "Caps Lock" "On"
+        else
+            dunstify \
+                -a "capslock" \
+                -h string:x-dunst-stack-tag:capslock \
+                -u low \
+                "Caps Lock" "Off"
+        fi
         prev_caps="$caps"
     fi
 
     if [ "$num" != "$prev_num" ]; then
-        [ "$num" = "1" ] && notify-send "Keyboard" "Num Lock ON" || notify-send "Keyboard" "Num Lock OFF"
+        if [ "$num" = "1" ]; then
+            dunstify \
+                -a "numlock" \
+                -h string:x-dunst-stack-tag:numlock \
+                -u low \
+                "Num Lock" "On"
+        else
+            dunstify \
+                -a "numlock" \
+                -h string:x-dunst-stack-tag:numlock \
+                -u low \
+                "Num Lock" "Off"
+        fi
         prev_num="$num"
     fi
 
     if [ "$scroll" != "$prev_scroll" ]; then
-        [ "$scroll" = "1" ] && notify-send "Keyboard" "Scroll Lock ON" || notify-send "Keyboard" "Scroll Lock OFF"
+        if [ "$scroll" = "1" ]; then
+            dunstify \
+                -a "scrolllock" \
+                -h string:x-dunst-stack-tag:scrolllock \
+                -u low \
+                "Scroll Lock" "On"
+        else
+            dunstify \
+                -a "scrolllock" \
+                -h string:x-dunst-stack-tag:scrolllock \
+                -u low \
+                "Scroll Lock" "Off"
+        fi
         prev_scroll="$scroll"
     fi
 
