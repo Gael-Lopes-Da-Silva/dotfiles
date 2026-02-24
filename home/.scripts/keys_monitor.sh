@@ -2,15 +2,12 @@
 
 caps_led=$(find /sys/class/leds -maxdepth 1 -type l -name '*::capslock' | head -n1)
 num_led=$(find /sys/class/leds -maxdepth 1 -type l -name '*::numlock' | head -n1)
-scroll_led=$(find /sys/class/leds -maxdepth 1 -type l -name '*::scrolllock' | head -n1)
 
 [ -z "$caps_led" ] && echo "No capslock LED found" && exit 1
 [ -z "$num_led" ] && echo "No numlock LED found" && exit 1
-[ -z "$scroll_led" ] && echo "No scrolllock LED found" && exit 1
 
 prev_caps=$(cat "$caps_led/brightness")
 prev_num=$(cat "$num_led/brightness")
-prev_scroll=$(cat "$scroll_led/brightness")
 
 while true; do
     caps=$(cat "$caps_led/brightness")
@@ -49,23 +46,6 @@ while true; do
                 "Num Lock" "Off"
         fi
         prev_num="$num"
-    fi
-
-    if [ "$scroll" != "$prev_scroll" ]; then
-        if [ "$scroll" = "1" ]; then
-            dunstify \
-                -a "scrolllock" \
-                -h string:x-dunst-stack-tag:scrolllock \
-                -u low \
-                "Scroll Lock" "On"
-        else
-            dunstify \
-                -a "scrolllock" \
-                -h string:x-dunst-stack-tag:scrolllock \
-                -u low \
-                "Scroll Lock" "Off"
-        fi
-        prev_scroll="$scroll"
     fi
 
     sleep 0.1
