@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+if ! ls /sys/class/backlight/ 1> /dev/null 2>&1; then
+    exit 1
+fi
+
 prev_percent=""
 device=""
 

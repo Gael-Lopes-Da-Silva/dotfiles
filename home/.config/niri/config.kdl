@@ -6,6 +6,7 @@ spawn-sh-at-startup "wl-clip-persist --clipboard regular"
 spawn-sh-at-startup "wl-paste --watch cliphist store"
 
 spawn-sh-at-startup "udiskie --automount --notify --smart-tray"
+
 spawn-sh-at-startup "dunst"
 
 spawn-sh-at-startup "bash ~/.scripts/audio_monitor.sh"
@@ -210,13 +211,11 @@ binds {
     XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
     XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
 
-    Mod+V repeat=false { spawn-sh "bash ~/.scripts/cliphist_menu.sh"; }
-
-    Mod+P repeat=false { spawn-sh "bash ~/.scripts/command_menu.sh"; }
-    Mod+Shift+P repeat=false { spawn-sh "bash ~/.scripts/application_menu.sh"; }
-    Mod+Ctrl+P repeat=false { spawn-sh "bash ~/.scripts/power_menu.sh"; }
-
-    Ctrl+Shift+Escape repeat=false { spawn-sh "bash ~/.scripts/monitor_menu.sh"; }
+    Mod+V repeat=false hotkey-overlay-title="Spawn cliphist menu" { spawn-sh "bash ~/.scripts/cliphist_menu.sh"; }
+    Mod+P repeat=false hotkey-overlay-title="Spawn command launcher" { spawn-sh "bash ~/.scripts/command_menu.sh"; }
+    Mod+Shift+P repeat=false hotkey-overlay-title="Spawn application launcher" { spawn-sh "bash ~/.scripts/application_menu.sh"; }
+    Mod+Ctrl+P repeat=false hotkey-overlay-title="Spawn power menu" { spawn-sh "bash ~/.scripts/power_menu.sh"; }
+    Ctrl+Shift+Escape repeat=false hotkey-overlay-title="Spawn system monitor" { spawn-sh "bash ~/.scripts/monitor_menu.sh"; }
 
     Mod+O repeat=false { toggle-overview; }
     Mod+Shift+C repeat=false { close-window; }

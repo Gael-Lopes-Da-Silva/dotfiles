@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+if ! ls /sys/class/power_supply/ | grep -q BAT 1> /dev/null 2>&1; then
+    exit 1
+fi
+
 prev_online=""
 prev_capacity=""
 brightness_reduced=0
