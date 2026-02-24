@@ -163,22 +163,23 @@ window-rule {
 }
 
 window-rule {
-    match app-id="monitor"
-
-    open-floating true
-
-    default-column-width { proportion 0.90; }
-    default-window-height { proportion 0.90; }
-    geometry-corner-radius 0
-}
-
-window-rule {
     match app-id="cliphist"
 
     open-floating true
 
     default-column-width { proportion 0.50; }
     default-window-height { proportion 0.50; }
+    default-floating-position x=0 y=100 relative-to="top"
+    geometry-corner-radius 0
+}
+
+window-rule {
+    match app-id="monitor"
+
+    open-floating true
+
+    default-column-width { proportion 0.90; }
+    default-window-height { proportion 0.90; }
     geometry-corner-radius 0
 }
 
