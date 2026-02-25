@@ -181,6 +181,16 @@ window-rule {
 }
 
 window-rule {
+    match app-id="powermenu"
+
+    open-floating true
+
+    default-column-width { proportion 0.30; }
+    default-window-height { proportion 0.30; }
+    geometry-corner-radius 0
+}
+
+window-rule {
     match app-id="monitor"
 
     open-floating true

@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-if pgrep -f "alacritty.*--class launcher" >/dev/null; then
+if pgrep -f "alacritty.*--class powermenu" >/dev/null; then
     exit 0
 fi
 
 tmpfile=$(mktemp)
 
-alacritty --class launcher --command bash -c '
+alacritty --class powermenu --command bash -c '
     options=(
         "Shutdown"
         "Reboot"

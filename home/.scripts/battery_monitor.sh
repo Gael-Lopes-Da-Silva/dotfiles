@@ -79,7 +79,7 @@ udevadm monitor --environment --udev --subsystem-match=power_supply | while read
                                 -h string:x-dunst-stack-tag:battery \
                                 -h int:value:"$level" \
                                 -u low \
-                                "Battery" "$level%"
+                                "Battery Full" "$level%"
                         fi
                     fi
 
