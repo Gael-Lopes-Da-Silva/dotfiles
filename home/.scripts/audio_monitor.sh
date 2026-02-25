@@ -17,12 +17,14 @@ pactl subscribe | while read -r line; do
                         -a "volume" \
                         -h string:x-dunst-stack-tag:volume \
                         -u low \
+                        -t 5000 \
                         "Speaker" "Muted"
                 else
                     dunstify \
                         -a "volume" \
                         -h string:x-dunst-stack-tag:volume \
                         -u low \
+                        -t 5000 \
                         "Speaker" "Unmuted"
                 fi
 
@@ -33,6 +35,7 @@ pactl subscribe | while read -r line; do
                     -h string:x-dunst-stack-tag:volume \
                     -h int:value:"$sink_volume" \
                     -u low \
+                    -t 5000 \
                     "Speaker" "$sink_volume%"
 
                 prev_sink_volume="$sink_volume"
@@ -51,12 +54,14 @@ pactl subscribe | while read -r line; do
                         -a "microphone" \
                         -h string:x-dunst-stack-tag:microphone \
                         -u low \
+                        -t 5000 \
                         "Microphone" "Muted"
                 else
                     dunstify \
                         -a "microphone" \
                         -h string:x-dunst-stack-tag:microphone \
                         -u low \
+                        -t 5000 \
                         "Microphone" "Unmuted"
                 fi
 
@@ -67,6 +72,7 @@ pactl subscribe | while read -r line; do
                     -h string:x-dunst-stack-tag:microphone \
                     -h int:value:"$source_volume" \
                     -u low \
+                    -t 5000 \
                     "Microphone" "$source_volume%"
 
                 prev_source_volume="$source_volume"

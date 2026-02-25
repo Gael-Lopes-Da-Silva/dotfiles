@@ -35,6 +35,7 @@ udevadm monitor --environment --udev --subsystem-match=backlight | while read -r
                             -h string:x-dunst-stack-tag:brightness \
                             -h int:value:"$percent" \
                             -u low \
+                            -t 5000 \
                             "Brightness" "$percent%"
                     fi
 

@@ -20,12 +20,14 @@ while true; do
                 -a "capslock" \
                 -h string:x-dunst-stack-tag:capslock \
                 -u low \
+                -t 5000 \
                 "Caps Lock" "On"
         else
             dunstify \
                 -a "capslock" \
                 -h string:x-dunst-stack-tag:capslock \
                 -u low \
+                -t 5000 \
                 "Caps Lock" "Off"
         fi
         prev_caps="$caps"
@@ -37,12 +39,14 @@ while true; do
                 -a "numlock" \
                 -h string:x-dunst-stack-tag:numlock \
                 -u low \
+                -t 5000 \
                 "Num Lock" "On"
         else
             dunstify \
                 -a "numlock" \
                 -h string:x-dunst-stack-tag:numlock \
                 -u low \
+                -t 5000 \
                 "Num Lock" "Off"
         fi
         prev_num="$num"

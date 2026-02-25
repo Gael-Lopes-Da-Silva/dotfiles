@@ -119,7 +119,11 @@ print "==> Installing system utils..."
       gnome-keyring \
       firejail \
       wine \
-      winetricks
+      winetricks \
+      dunst \
+      udiskie \
+      gvfs \
+      gvfs-mtp
 
     sudo systemctl enable --now power-profiles-daemon.service
     sudo systemctl enable --now fprintd.service
@@ -165,17 +169,6 @@ print "==> Installing programming tools..."
     sudo pacman -S --noconfirm docker docker-compose
     sudo usermod -aG docker "$(whoami)"
     sudo systemctl enable --now docker.service
-} > /dev/null
-
-# -----------------
-# Auto mount
-# -----------------
-print "==> Setting up auto mounting..."
-{
-    sudo pacman -S --noconfirm \
-      udiskie \
-      gvfs \
-      gvfs-mtp
 } > /dev/null
 
 print "==> Installation complete!"
