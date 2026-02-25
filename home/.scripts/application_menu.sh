@@ -17,13 +17,33 @@ alacritty --class launcher --command bash -c '
 
     for dir in "${desktop_dirs[@]}"; do
         [ -d "$dir" ] || continue
-
         for file in "$dir"/*.desktop; do
             [ -f "$file" ] || continue
 
-            name=$(grep -m1 "^Name=" "$file" | cut -d= -f2-)
-            nodisplay=$(grep -m1 "^NoDisplay=" "$file" | cut -d= -f2-)
-            exec_cmd=$(grep -m1 "^Exec=" "$file" | cut -d= -f2- | sed "s/%[a-zA-Z]//g" | xargs)
+            name=
+            nodisplay=
+            exec_cmd=
+
+            while IFS='=' read -r key value; do
+                case $key in
+                    Name)
+                        [ -z "$name" ] && name=$value
+                        ;;
+                    NoDisplay)
+                        nodisplay=$value
+                        ;;
+                    Exec)
+                        if [ -z "$exec_cmd" ]; then
+                            exec_cmd=$value
+                            exec_cmd=${exec_cmd//%[a-zA-Z]/}
+                        fi
+                        ;;
+                esac
+
+                if [ -n "$name" ] && [ -n "$exec_cmd" ] && [ -n "$nodisplay" ]; then
+                    break
+                fi
+            done < "$file"
 
             if [ -n "$name" ] && [ "$nodisplay" != "true" ] && [ -n "$exec_cmd" ]; then
                 app_map["$name"]="$exec_cmd"
