@@ -149,8 +149,8 @@ gestures {
 // ###################################
 
 window-rule {
-    geometry-corner-radius 12
     clip-to-geometry true
+    // geometry-corner-radius 0
 }
 
 window-rule {
@@ -166,7 +166,6 @@ window-rule {
     default-column-width { proportion 0.75; }
     default-window-height { proportion 0.50; }
     default-floating-position x=0 y=100 relative-to="top"
-    geometry-corner-radius 0
 }
 
 window-rule {
@@ -177,7 +176,6 @@ window-rule {
     default-column-width { proportion 0.50; }
     default-window-height { proportion 0.50; }
     default-floating-position x=0 y=100 relative-to="top"
-    geometry-corner-radius 0
 }
 
 window-rule {
@@ -187,7 +185,6 @@ window-rule {
 
     default-column-width { proportion 0.30; }
     default-window-height { proportion 0.30; }
-    geometry-corner-radius 0
 }
 
 window-rule {
@@ -197,7 +194,6 @@ window-rule {
 
     default-column-width { proportion 0.90; }
     default-window-height { proportion 0.90; }
-    geometry-corner-radius 0
 }
 
 // ###################################
