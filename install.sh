@@ -78,7 +78,7 @@ else
 fi
 
 {
-    mkdir "${HOME}/.config"
+    mkdir -p "${HOME}/.config"
     cd "$DOTFILES_DIR"
     stow home --adopt
     git restore .
