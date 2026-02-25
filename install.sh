@@ -172,5 +172,64 @@ print "==> Installing programming tools..."
     sudo systemctl enable --now docker.service
 } > /dev/null
 
+# -----------------
+# Dark mode
+# -----------------
+print "==> Applying dark mode..."
+{
+    mkdir -p ~/.config/gtk-3.0
+    mkdir -p ~/.config/gtk-4.0
+
+    printf '%s\n' \
+    "[Settings]" \
+    "gtk-application-prefer-dark-theme=1" \
+    "gtk-theme-name=Adwaita-dark" \
+    "gtk-icon-theme-name=Adwaita" \
+    "gtk-cursor-theme-name=Adwaita" \
+    >> ~/.config/gtk-3.0/settings.ini
+
+    printf '%s\n' \
+    "[Settings]" \
+    "gtk-application-prefer-dark-theme=1" \
+    "gtk-theme-name=Adwaita-dark" \
+    "gtk-icon-theme-name=Adwaita" \
+    "gtk-cursor-theme-name=Adwaita" \
+    >> ~/.config/gtk-4.0/settings.ini
+
+    mkdir -p ~/.config/xdg-desktop-portal
+
+    printf '%s\n' \
+    "[preferred]" \
+    "default=gtk" \
+    >> ~/.config/xdg-desktop-portal/portals.conf
+
+    mkdir -p ~/.config/environment.d
+
+    printf '%s\n' \
+    "QT_QPA_PLATFORMTHEME=qt6ct" \
+    "QT_STYLE_OVERRIDE=Fusion" \
+    "QT_QUICK_CONTROLS_STYLE=Fusion" \
+    >> ~/.config/environment.d/qt-dark.conf
+
+    mkdir -p ~/.config/qt5ct
+    mkdir -p ~/.config/qt6ct
+
+    printf '%s\n' \
+    "[Appearance]" \
+    "style=Fusion" \
+    "icon_theme=Adwaita" \
+    >> ~/.config/qt5ct/qt5ct.conf
+
+    printf '%s\n' \
+    "[Appearance]" \
+    "style=Fusion" \
+    "icon_theme=Adwaita" \
+    >> ~/.config/qt6ct/qt6ct.conf
+
+    if command -v gsettings >/dev/null 2>&1; then
+        gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark' || true
+        gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark' || true
+    fi
+} > /dev/null
 
 print "==> Installation complete!"
