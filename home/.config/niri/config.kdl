@@ -129,7 +129,7 @@ screenshot-path null
 // Animations
 // ###################################
 
-/-animations {
+animations {
     // off
     // slowdown 3.0
 }
