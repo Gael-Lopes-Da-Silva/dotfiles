@@ -108,7 +108,6 @@ print "==> Installing system utils..."
       accountsservice \
       power-profiles-daemon \
       cups-pk-helper \
-      fprintd \
       wl-clipboard \
       wl-clip-persist \
       cliphist \
@@ -126,7 +125,6 @@ print "==> Installing system utils..."
       gvfs-mtp
 
     sudo systemctl enable --now power-profiles-daemon.service
-    sudo systemctl enable --now fprintd.service
 
     xdg-user-dirs-update
     xdg-user-dirs-gtk-update
@@ -161,10 +159,15 @@ print "==> Installing programming tools..."
 
     sudo modprobe v4l2loopback
 
-    sudo pacman -S --noconfirm nodejs npm
-    sudo npm install -g bun
-
+    sudo pacman -S --noconfirm python
+    sudo pacman -S --noconfirm bun
     sudo pacman -S --noconfirm php composer
+    sudo pacman -S --noconfirm rustup
+    rustup default stable
+    rustup component add rust-src
+    rustup component add rust-analyzer
+    rustup component add clippy
+    rustup component add rustfmt
 
     sudo pacman -S --noconfirm docker docker-compose
     sudo usermod -aG docker "$(whoami)"
