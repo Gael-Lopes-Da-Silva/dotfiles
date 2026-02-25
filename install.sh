@@ -106,7 +106,6 @@ print "==> Installing system utils..."
 {
     sudo pacman -S --noconfirm \
       accountsservice \
-      power-profiles-daemon \
       cups-pk-helper \
       wl-clipboard \
       wl-clip-persist \
@@ -123,8 +122,6 @@ print "==> Installing system utils..."
       udiskie \
       gvfs \
       gvfs-mtp
-
-    sudo systemctl enable --now power-profiles-daemon.service
 
     xdg-user-dirs-update
     xdg-user-dirs-gtk-update
