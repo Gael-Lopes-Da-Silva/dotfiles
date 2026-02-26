@@ -221,7 +221,6 @@ binds {
     Mod+P repeat=false hotkey-overlay-title="Spawn command launcher" { spawn-sh "bash ~/.scripts/command_menu.sh"; }
     Mod+Shift+P repeat=false hotkey-overlay-title="Spawn application launcher" { spawn-sh "bash ~/.scripts/application_menu.sh"; }
     Mod+Ctrl+P repeat=false hotkey-overlay-title="Spawn power menu" { spawn-sh "bash ~/.scripts/power_menu.sh"; }
-    Ctrl+Shift+Escape repeat=false hotkey-overlay-title="Spawn system monitor" { spawn-sh "bash ~/.scripts/monitor_menu.sh"; }
 
     Mod+O repeat=false { toggle-overview; }
     Mod+Shift+C repeat=false { close-window; }
