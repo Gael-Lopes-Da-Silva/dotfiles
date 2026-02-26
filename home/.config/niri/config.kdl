@@ -14,6 +14,8 @@ spawn-sh-at-startup "bash ~/.scripts/battery_monitor.sh"
 spawn-sh-at-startup "bash ~/.scripts/brightness_monitor.sh"
 spawn-sh-at-startup "bash ~/.scripts/keys_monitor.sh"
 
+spawn-sh-at-startup "bash ~/.scripts/soundboard_setup.sh"
+
 // ###################################
 // Input
 // ###################################
@@ -178,6 +180,16 @@ window-rule {
 }
 
 window-rule {
+    match app-id="soundboard"
+
+    open-floating true
+
+    default-column-width { proportion 0.50; }
+    default-window-height { proportion 0.50; }
+    default-floating-position x=0 y=100 relative-to="top"
+}
+
+window-rule {
     match app-id="powermenu"
 
     open-floating true
@@ -217,6 +229,9 @@ binds {
     XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
 
     Mod+B repeat=false hotkey-overlay-title="Notify battery level" { spawn-sh "bash ~/.scripts/battery_notify.sh"; }
+
+    Mod+M repeat=false hotkey-overlay-title="Spawn soundboard menu" { spawn-sh "bash ~/.scripts/soundboard_menu.sh"; }
+    Mod+Shift+M repeat=false hotkey-overlay-title="Stop soundboard sounds" { spawn-sh "bash ~/.scripts/soundboard_stop.sh"; }
 
     Mod+V repeat=false hotkey-overlay-title="Spawn cliphist menu" { spawn-sh "bash ~/.scripts/cliphist_menu.sh"; }
     Mod+P repeat=false hotkey-overlay-title="Spawn command launcher" { spawn-sh "bash ~/.scripts/command_menu.sh"; }

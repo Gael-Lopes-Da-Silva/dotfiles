@@ -7,7 +7,7 @@ fi
 tmpfile=$(mktemp)
 
 alacritty --class launcher --command bash -c '
-    compgen -c | sort -u | fzf --prompt="Run: " --bind "tab:replace-query" --print-query > "'$tmpfile'"
+    compgen -c | sort -u | fzf --prompt="Run Command: " --bind "tab:replace-query" --print-query > "'$tmpfile'"
 '
 
 fzf_output=$(cat "$tmpfile")

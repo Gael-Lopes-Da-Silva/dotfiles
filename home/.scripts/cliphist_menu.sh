@@ -5,7 +5,7 @@ if pgrep -f "alacritty.*--class cliphist" >/dev/null; then
 fi
 
 alacritty --class cliphist --command bash -c '
-    selection=$(cliphist list | fzf --no-sort)
+    selection=$(cliphist list | fzf --no-sort --prompt="Copy: ")
     [ -n "$selection" ] && echo "$selection" | cliphist decode | wl-copy
 '
 

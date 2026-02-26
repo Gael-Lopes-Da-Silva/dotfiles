@@ -51,7 +51,7 @@ alacritty --class launcher --command bash -c '
         done
     done
 
-    selection=$(printf "%s\n" "${!app_map[@]}" | sort | fzf --prompt="Run: ")
+    selection=$(printf "%s\n" "${!app_map[@]}" | sort | fzf --prompt="Run Application: ")
 
     [ -n "$selection" ] && printf "%s\n" "${app_map[$selection]}" > "'$tmpfile'"
 '

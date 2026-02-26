@@ -16,7 +16,7 @@ alacritty --class powermenu --command bash -c '
         "Lock"
     )
 
-    printf "%s\n" "${options[@]}" | fzf --prompt="Run: " --bind "tab:replace-query" > "'$tmpfile'"
+    printf "%s\n" "${options[@]}" | fzf --prompt="Select: " --bind "tab:replace-query" > "'$tmpfile'"
 '
 
 fzf_output=$(cat "$tmpfile")

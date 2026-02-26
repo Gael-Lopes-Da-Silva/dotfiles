@@ -14,3 +14,5 @@ dunstify \
     -u low \
     -t 3000 \
     "Battery" "$level%"
+
+exit 0
