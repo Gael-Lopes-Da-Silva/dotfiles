@@ -12,7 +12,6 @@ prev_num=$(cat "$num_led/brightness")
 while true; do
     caps=$(cat "$caps_led/brightness")
     num=$(cat "$num_led/brightness")
-    scroll=$(cat "$scroll_led/brightness")
 
     if [ "$caps" != "$prev_caps" ]; then
         if [ "$caps" = "1" ]; then
