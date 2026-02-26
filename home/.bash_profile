@@ -40,5 +40,3 @@ export GTK_THEME=Adwaita:dark
 export QT_QPA_PLATFORMTHEME=qt5ct
 export QT_STYLE_OVERRIDE=Fusion
 export QT_QUICK_CONTROLS_STYLE=Fusion
-
-[[ $(tty) == "/dev/tty1" ]] && exec niri

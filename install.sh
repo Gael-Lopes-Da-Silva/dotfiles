@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -e
-
 DOTFILES_DIR="${HOME}/.dotfiles"
 DOTFILES_REPO="https://github.com/Gael-Lopes-Da-Silva/dotfiles.git"
 
@@ -97,7 +95,8 @@ print "==> Installing desktop packages..."
       qt6-wayland \
       xdg-desktop-portal \
       xdg-desktop-portal-gtk \
-      xdg-desktop-portal-gnome
+      xdg-desktop-portal-gnome \
+      xwayland-satellite
 } > /dev/null
 
 # -----------------
@@ -230,6 +229,15 @@ print "==> Applying dark mode..."
         gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark' || true
         gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark' || true
     fi
+} > /dev/null
+
+# -----------------
+# Display manager
+# -----------------
+print "==> Installing display manager..."
+{
+    sudo pacman -S --noconfirm emptty
+    systemctl enable --now emptty.service
 } > /dev/null
 
 print "==> Installation complete!"
