@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if ! ls /sys/class/power_supply/ | grep -q BAT 1> /dev/null 2>&1; then
+if ! compgen -G "/sys/class/power_supply/BAT*" > /dev/null; then
     exit 1
 fi
 

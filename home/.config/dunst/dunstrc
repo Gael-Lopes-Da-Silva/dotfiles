@@ -6,6 +6,7 @@
     offset = (10, 10)
     scale = 0
     timeout = 20
+    idle_threshold = 0
     notification_limit = 10
     progress_bar = true
     progress_bar_height = 10

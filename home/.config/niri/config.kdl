@@ -216,6 +216,8 @@ binds {
     XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
     XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
 
+    Mod+B repeat=false hotkey-overlay-title="Notify battery level" { spawn-sh "bash ~/.scripts/battery_notify.sh"; }
+
     Mod+V repeat=false hotkey-overlay-title="Spawn cliphist menu" { spawn-sh "bash ~/.scripts/cliphist_menu.sh"; }
     Mod+P repeat=false hotkey-overlay-title="Spawn command launcher" { spawn-sh "bash ~/.scripts/command_menu.sh"; }
     Mod+Shift+P repeat=false hotkey-overlay-title="Spawn application launcher" { spawn-sh "bash ~/.scripts/application_menu.sh"; }
