@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-if pgrep -f "alacritty.*--class powermenu" >/dev/null; then
+if pgrep -f "$TERMINAL.*--class powermenu" >/dev/null; then
     exit 0
 fi
 
 tmpfile=$(mktemp)
 
-alacritty --class powermenu --command bash -c '
+$TERMINAL --class powermenu -e bash -c '
     options=(
         "Shutdown"
         "Reboot"

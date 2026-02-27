@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-if pgrep -f "alacritty.*--class launcher" >/dev/null; then
+if pgrep -f "$TERMINAL.*--class launcher" >/dev/null; then
     exit 0
 fi
 
 tmpfile=$(mktemp)
 
-alacritty --class launcher --command bash -c '
+$TERMINAL --class launcher -e bash -c '
     desktop_dirs=(
         /usr/share/applications
         /usr/local/share/applications

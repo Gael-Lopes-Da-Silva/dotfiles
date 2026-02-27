@@ -6,7 +6,7 @@ fi
 
 tmpfile=$(mktemp)
 
-alacritty --class launcher --command bash -c '
+$TERMINAL --class launcher -e bash -c '
     compgen -c | sort -u | fzf --prompt="Run Command: " --bind "tab:replace-query" --print-query > "'$tmpfile'"
 '
 
@@ -19,7 +19,11 @@ selection=$(sed -n '2p' <<< "$fzf_output")
 cmd_to_run="${selection:-$query}"
 
 if [ -n "$cmd_to_run" ]; then
-    nohup $cmd_to_run >/dev/null 2>&1 &
+    if [[ "$cmd_to_run" == *"!" ]]; then
+        $TERMINAL -e bash -c "${cmd_to_run%?}" &
+    else
+        nohup bash -c "$cmd_to_run" >/dev/null 2>&1 &
+    fi
 fi
 
 exit 0
