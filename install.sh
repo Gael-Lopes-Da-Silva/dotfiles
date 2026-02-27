@@ -156,6 +156,8 @@ print "==> Installing programming tools..."
 
     sudo modprobe v4l2loopback
 
+    sudo pacman -S --noconfirm termscp
+
     sudo pacman -S --noconfirm python
     sudo pacman -S --noconfirm bun
     sudo pacman -S --noconfirm php composer
