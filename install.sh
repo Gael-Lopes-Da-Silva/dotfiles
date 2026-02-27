@@ -124,23 +124,6 @@ print "==> Installing desktop packages..."
 } > /dev/null
 
 # -----------------
-# Drivers
-# -----------------
-print "==> Installing drivers..."
-
-if lspci | grep -i vga | grep -iq nvidia; then
-    print "NVIDIA GPU detected"
-
-    sudo pacman -S --noconfirm nvidia-dkms > /dev/null
-    sudo sed -i '/^MODULES=/ s/)/nvidia nvidia_modeset nvidia_uvm nvidia_drm)/' /etc/mkinitcpio.conf > /dev/null
-    sudo mkinitcpio -P > /dev/null
-elif lspci | grep -i vga | grep -iq intel; then
-    print "Intel GPU detected"
-
-    sudo pacman -S --noconfirm mesa vulkan-intel > /dev/null
-fi
-
-# -----------------
 # Programming
 # -----------------
 print "==> Installing programming tools..."
