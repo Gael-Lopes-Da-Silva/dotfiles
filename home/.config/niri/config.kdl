@@ -198,15 +198,6 @@ window-rule {
     default-window-height { proportion 0.30; }
 }
 
-window-rule {
-    match app-id="monitor"
-
-    open-floating true
-
-    default-column-width { proportion 0.90; }
-    default-window-height { proportion 0.90; }
-}
-
 // ###################################
 // Key Bindings
 // ###################################
@@ -216,6 +207,14 @@ binds {
 
     Mod+Return repeat=false { spawn "alacritty"; }
     Mod+BackSpace repeat=false { spawn "firefox"; }
+
+    Mod+B repeat=false hotkey-overlay-title="Notify battery level" { spawn-sh "bash ~/.scripts/battery_notify.sh"; }
+    Mod+M repeat=false hotkey-overlay-title="Spawn soundboard menu" { spawn-sh "bash ~/.scripts/soundboard_menu.sh"; }
+    Mod+Shift+M repeat=false hotkey-overlay-title="Stop soundboard sounds" { spawn "pkill" "-f" "'paplay'"; }
+    Mod+V repeat=false hotkey-overlay-title="Spawn cliphist menu" { spawn-sh "bash ~/.scripts/cliphist_menu.sh"; }
+    Mod+Q repeat=false hotkey-overlay-title="Spawn power menu" { spawn-sh "bash ~/.scripts/power_menu.sh"; }
+    Mod+P repeat=false hotkey-overlay-title="Spawn command launcher" { spawn-sh "bash ~/.scripts/command_menu.sh"; }
+    Mod+Shift+P repeat=false hotkey-overlay-title="Spawn application launcher" { spawn-sh "bash ~/.scripts/application_menu.sh"; }
 
     XF86AudioRaiseVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1+" "-l" "1.0"; }
     XF86AudioLowerVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1-"; }
@@ -227,16 +226,6 @@ binds {
     XF86AudioNext allow-when-locked=true { spawn "playerctl" "next"; }
     XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
     XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
-
-    Mod+B repeat=false hotkey-overlay-title="Notify battery level" { spawn-sh "bash ~/.scripts/battery_notify.sh"; }
-
-    Mod+M repeat=false hotkey-overlay-title="Spawn soundboard menu" { spawn-sh "bash ~/.scripts/soundboard_menu.sh"; }
-    Mod+Shift+M repeat=false hotkey-overlay-title="Stop soundboard sounds" { spawn-sh "pkill -f 'paplay'"; }
-
-    Mod+V repeat=false hotkey-overlay-title="Spawn cliphist menu" { spawn-sh "bash ~/.scripts/cliphist_menu.sh"; }
-    Mod+P repeat=false hotkey-overlay-title="Spawn command launcher" { spawn-sh "bash ~/.scripts/command_menu.sh"; }
-    Mod+Shift+P repeat=false hotkey-overlay-title="Spawn application launcher" { spawn-sh "bash ~/.scripts/application_menu.sh"; }
-    Mod+Ctrl+P repeat=false hotkey-overlay-title="Spawn power menu" { spawn-sh "bash ~/.scripts/power_menu.sh"; }
 
     Mod+O repeat=false { toggle-overview; }
     Mod+Shift+C repeat=false { close-window; }
@@ -363,12 +352,12 @@ binds {
 
     Mod+T { toggle-column-tabbed-display; }
 
-    Print { screenshot; }
-    Shift+Print { screenshot-window; }
-    Ctrl+Print { screenshot-screen; }
     Mod+S { screenshot; }
-    Mod+Shift+S { screenshot-window; }
-    Mod+Ctrl+S { screenshot-screen; }
+    Mod+Print { screenshot; }
+    Mod+Shift+Print { screenshot-window; }
+    Mod+Ctrl+Print { screenshot-screen; }
+    Mod+Shift+S { screenshot-window write-to-disk=false; }
+    Mod+Ctrl+S { screenshot-screen write-to-disk=false; }
 
     Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 
