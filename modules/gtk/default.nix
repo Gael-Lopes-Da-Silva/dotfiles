@@ -9,8 +9,15 @@
 
     gtk = {
       enable = true;
-      theme = "Adwaita-dark";
-      iconTheme = "Adwaita";
+      theme = {
+        name = "Adwaita-dark";
+      };
+      iconTheme = {
+        name = "Adwaita";
+      };
+      cursorTheme {
+        name = "Adwaita";
+      };
     };
   };
 }
