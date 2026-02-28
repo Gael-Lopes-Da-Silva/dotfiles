@@ -26,13 +26,6 @@
     ];
   };
 
-  # services.emptty = {
-  #   enable = true;
-  #   settings = {
-  #     tty = "/dev/tty1";
-  #   };
-  # };
-
   networking.networkmanager.enable = true;
 
   console.font = "ter-132n";

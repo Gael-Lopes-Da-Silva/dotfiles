@@ -33,18 +33,14 @@
         content = {
           type = "gpt";
           partitions = {
-            boot = {
-              size = "1M";
-              type = "EF02";
-              priority = 1;
-            };
             ESP = {
-              size = "512M";
+              size = "1G";
               type = "EF00";
               content = {
                 type = "filesystem";
                 format = "vfat";
                 mountpoint = "/boot";
+                mountOptions = [ "fmask=0077" "dmask=0077" ];
               };
             };
             swap = {
