@@ -2,7 +2,6 @@
 
 {
   imports = [
-    ./home.nix
     ./packages.nix
   ];
 
@@ -42,7 +41,10 @@
     printing.enable = true;
     pipewire = {
       enable = true;
+      audio.enable = true;
       pulse.enable = true;
+      alsa.enable = true;
+      jack.enable = true;
     };
   };
 
@@ -67,6 +69,14 @@
     isNormalUser = true;
     extraGroups = [ "wheel" "docker" ];
     shell = pkgs.bash;
+  };
+
+  home-manager.users.gael = {
+    home.stateVersion = "25.11";
+    home.sessionPath = [
+      "$HOME/.local/bin"
+      "$HOME/.cargo/bin"
+    ];
   };
 
   system = {

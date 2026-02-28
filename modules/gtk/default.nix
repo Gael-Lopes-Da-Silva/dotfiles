@@ -12,12 +12,6 @@
       theme = {
         name = "Adwaita-dark";
       };
-      iconTheme = {
-        name = "Adwaita";
-      };
-      cursorTheme = {
-        name = "Vanilla-DMZ";
-      };
     };
   };
 }

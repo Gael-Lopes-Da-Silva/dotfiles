@@ -27,20 +27,18 @@
   ];
 
   environment.systemPackages = with pkgs; [
-    xdg-desktop-portal
-    xdg-desktop-portal-gtk
-    xdg-desktop-portal-gnome
-    xwayland-satellite
-
     fzf
     firefox
     ouch
     p7zip
+    cliphist
+    wl-clip-persist
     wl-clipboard
     brightnessctl
     playerctl
     udiskie
     gvfs
+    firejail
     wine
     winetricks
 
@@ -56,4 +54,21 @@
     docker-compose
     bash-completion
   ];
+
+  services = {
+    wl-clip-persist = {
+      enable = true;
+      clipboardType = "regular";
+    };
+    cliphist = {
+      enable = true;
+      allowImages = true;
+    };
+    udiskie = {
+      enable = true;
+      tray = "auto";
+      notify = true;
+      automount = true;
+    };
+  };
 }
