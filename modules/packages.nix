@@ -3,16 +3,14 @@
 {
   imports = [
     ./alacritty
-    # ./dunst
-    # ./niri
-    # ./nvim
-    # ./termscp
-    # ./zed
+    ./dunst
+    ./niri
+    ./nvim
+    ./termscp
+    ./zed
   ];
 
   fonts.packages = with pkgs; [
-    terminus_font
-
     noto-fonts
     noto-fonts-lgc-plus
     noto-fonts-cjk-sans
@@ -23,10 +21,7 @@
     nerd-fonts.symbols-only
   ];
 
-  console.font = "ter-132n";
-
   environment.systemPackages = with pkgs; [
-    niri
     gtk3
     gtk4
     qt5.qtwayland
@@ -36,27 +31,21 @@
     xdg-desktop-portal-gnome
     xwayland-satellite
 
-    git
     fzf
-    neovim
     firefox
-    zed-editor
     ouch
     p7zip
     wl-clipboard
     brightnessctl
     playerctl
-    dunst
     udiskie
     gvfs
     wine
     winetricks
-    termscp
 
     python3
     bun
     php
-    # composer
     rustc
     cargo
     rust-analyzer
