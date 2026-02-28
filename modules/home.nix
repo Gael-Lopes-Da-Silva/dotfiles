@@ -10,8 +10,11 @@
   home-manager.users.gael = {
     home.stateVersion = "24.11";
 
-    # home.file = {
-    #   ".gitconfig".source = ./home/.gitconfig;
+    home.file = {
+      ".gitconfig" = {
+        source = ../home/.gitconfig;
+        target = ./;
+      };
 
     #   ".local/bin".source = ./home/.scripts;
 
@@ -21,7 +24,7 @@
     #   ".config/nvim".source = ./home/.config/nvim;
     #   ".config/termscp".source = ./home/.config/termscp;
     #   ".config/zed".source = ./home/.config/zed;
-    # };
+    };
 
     home.sessionPath = [
       "$HOME/.local/bin"
