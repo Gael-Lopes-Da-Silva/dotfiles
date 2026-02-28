@@ -20,8 +20,9 @@
         inherit system;
 
         modules = [
-          ./hosts/laptop/configuration.nix
-          ./modules/common.nix
+          ./hosts/laptop
+          ./modules
+
           home-manager.nixosModules.home-manager
         ];
       };
@@ -30,8 +31,9 @@
         inherit system;
 
         modules = [
-          ./hosts/desktop/configuration.nix
-          ./modules/common.nix
+          ./hosts/desktop
+          ./modules
+
           home-manager.nixosModules.home-manager
         ];
       };

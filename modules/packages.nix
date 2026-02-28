@@ -3,7 +3,6 @@
 {
   environment.systemPackages = with pkgs; [
     git
-    stow
     fzf
     neovim
     firefox
@@ -20,5 +19,18 @@
     wine
     winetricks
     termscp
+
+    python3
+    bun
+    php
+    composer
+    rustc
+    cargo
+    rust-analyzer
+    clippy
+    rustfmt
+
+    docker-compose
+    bash-completion
   ];
 }
