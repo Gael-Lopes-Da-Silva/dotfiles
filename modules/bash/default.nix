@@ -80,15 +80,11 @@
         bind '"\e[A":history-search-backward'
         bind '"\e[B":history-search-forward'
 
-        RESET="\[\e[0m\]"
-        GREEN="\[\e[92;1m\]"
-        RED="\[\e[91;1m\]"
-
         get_prompt() {
           if [ "$?" -eq 0 ]; then
-            PS1="$\{GREEN}\w$\{RESET}\n"
+            PS1="\[\e[92;1m\]\w$\[\e[0m\]"
           else
-            PS1="$\{RED}\w$\{RESET}\n"
+            PS1="\[\e[91;1m\]\w$\[\e[0m\]"
           fi
         }
 

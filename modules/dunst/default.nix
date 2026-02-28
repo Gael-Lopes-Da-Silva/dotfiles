@@ -6,6 +6,65 @@
       dunst
     ];
 
-    home.file.".config/alacritty/dunstrc".source = ./dunstrc;
+    services.dunst = {
+      enable = true;
+      settings = {
+        global = {
+          follow = "mouse";
+          origin = "bottom-right";
+          offset = "(10, 10)";
+          corner_radius = 0;
+          timeout = 20;
+          idle_threshold = 0;
+          notification_limit = 10;
+          progress_bar = true;
+          indicate_hidden = true;
+          transparency = 0;
+          separator_height = 4;
+          padding = 8;
+          horizontal_padding = 8;
+          text_icon_padding = 0;
+          frame_width = 4;
+          gap_size = 4;
+          separator_color = "frame";
+          sort = true;
+          font = "Monospace 14";
+          line_height = 0;
+          markup = "full";
+          format = "<b>%s</b>\n%b";
+          alignment = "left";
+          vertical_alignment = "center";
+          show_age_threshold = 30;
+          stack_duplicates = true;
+          show_indicators = true;
+          icon_position = "left";
+          layer = "overlay";
+
+          mouse_left_click = "close_current";
+          mouse_middle_click = "do_action, close_current";
+          mouse_right_click = "open_url, close_current";
+        };
+
+        urgency_low = {
+          background = "#191919";
+          foreground = "#888888";
+          timeout = 10;
+        };
+
+        urgency_normal = {
+          background = "#191919";
+          foreground = "#ffffff";
+          frame_color = "#80c8ff";
+          timeout = 10;
+        };
+
+        urgency_critical = {
+          background = "#191919";
+          foreground = "#ffffff";
+          frame_color = "#ff4c4c";
+          timeout = 0;
+        };
+      };
+    };
   };
 }
