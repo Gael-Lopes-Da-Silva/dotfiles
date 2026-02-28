@@ -16,7 +16,7 @@
         name = "Adwaita";
       };
       cursorTheme = {
-        name = "Adwaita";
+        name = "Vanilla-DMZ";
       };
     };
   };
