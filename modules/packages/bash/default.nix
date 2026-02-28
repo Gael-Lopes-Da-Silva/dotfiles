@@ -3,15 +3,11 @@
 {
   home-manager.users.gael = {
     home.packages = with pkgs; [
-      bash
+      nushell
     ];
 
-    programs.bash = {
+    programs.nushell = {
       enable = true;
-
-      historySize = 10000;
-      historyFileSize = 20000;
-      historyControl = [ "ignoreboth" ];
 
       shellAliases = {
         grep = "grep --color=auto";
@@ -20,19 +16,19 @@
         dir = "dir --color=auto";
         vdir = "vdir --color=auto";
 
-        ls = "ls --color=auto --sort=extension --group-directories-first";
-        la = "ls -Alh";
-        ll = "ls -lh";
+        ls = "ls --sort-by type --sort-by extension";
+        la = "ls -a";
+        ll = "ls -l";
 
-        cp = "cp -iprv";
-        rm = "rm -rIdv";
+        cp = "cp -iv";
+        rm = "rm -i";
         mv = "mv -iv";
 
         compress = "ouch compress";
         decompress = "ouch decompress";
       };
 
-      sessionVariables = {
+      environmentVariables = {
         EDITOR = "nvim";
         VISUAL = "nvim";
         GIT_EDITOR = "nvim";
@@ -66,29 +62,64 @@
         QT_QUICK_CONTROLS_STYLE = "Fusion";
       };
 
-      initExtra = ''
-        shopt -s checkwinsize histappend autocd dirspell cdspell cmdhist globstar extglob
+      configFile.text = ''
+        # History
+        $env.config = {
+          history: {
+            max_size: 20000
+            sync_on_enter: true
+            file_format: "plaintext"
+          }
 
-        bind 'set show-all-if-ambiguous on'
-        bind 'set mark-symlinked-directories on'
-        bind 'set completion-ignore-case on'
-        bind 'set colored-stats on'
-        bind 'set enable-bracketed-paste off'
+          show_banner: false
 
-        bind 'TAB:menu-complete'
-        bind '"\e[Z":menu-complete-backward'
-        bind '"\e[A":history-search-backward'
-        bind '"\e[B":history-search-forward'
+          completions: {
+            case_sensitive: false
+            quick: true
+            partial: true
+          }
 
-        get_prompt() {
-          if [ "$?" -eq 0 ]; then
-            PS1="\[\e[92;1m\]\w\[\e[0m\]\n"
-          else
-            PS1="\[\e[91;1m\]\w\[\e[0m\]\n"
-          fi
+          edit_mode: emacs
         }
 
-        PROMPT_COMMAND=get_prompt
+        # Keybindings
+        $env.config.keybindings ++= [
+          {
+            name: menu_complete
+            modifier: none
+            keycode: tab
+            mode: [emacs vi_normal vi_insert]
+            event: { send: menucomplete }
+          }
+          {
+            name: history_prev
+            modifier: none
+            keycode: up
+            mode: [emacs vi_normal vi_insert]
+            event: { send: up }
+          }
+          {
+            name: history_next
+            modifier: none
+            keycode: down
+            mode: [emacs vi_normal vi_insert]
+            event: { send: down }
+          }
+        ]
+
+        # Prompt
+        def create_left_prompt [] {
+          let last_status = $env.LAST_EXIT_CODE
+          let path = (pwd)
+
+          if $last_status == 0 {
+            $"(ansi green_bold)($path)(ansi reset)\n"
+          } else {
+            $"(ansi red_bold)($path)(ansi reset)\n"
+          }
+        }
+
+        $env.PROMPT_COMMAND = { create_left_prompt }
       '';
     };
   };

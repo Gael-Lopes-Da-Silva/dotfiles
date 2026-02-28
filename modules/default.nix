@@ -5,6 +5,7 @@
     ./packages
   ];
 
+  # Nix
   nix = {
     settings = {
       experimental-features = [ "nix-command" "flakes" ];
@@ -13,6 +14,7 @@
       cores = 0;
       max-jobs = "auto";
     };
+
     gc = {
       automatic = true;
       dates = "daily";
@@ -20,33 +22,28 @@
     };
   };
 
+  # Boot
   boot = {
+    consoleLogLevel = 2;
+
     kernelModules = [ "v4l2loopback" ];
     extraModulePackages = with config.boot.kernelPackages; [
       v4l2loopback
     ];
-    consoleLogLevel = 2;
   };
 
-  console = {
-    earlySetup = true;
-    # font = "${pkgs.terminus_font}/share/consolefonts/ter-132n.psf.gz";
-    # packages = with pkgs; [ terminus_font ];
-  };
+  console.earlySetup = true;
 
+  # Networking & Time
   networking = {
     networkmanager.enable = true;
     firewall.enable = true;
   };
 
-  time = {
-    timeZone = "Europe/Paris";
-  };
+  time.timeZone = "Europe/Paris";
+  i18n.defaultLocale = "en_US.UTF-8";
 
-  i18n = {
-    defaultLocale = "en_US.UTF-8";
-  };
-
+  # Security & Hardware
   security = {
     protectKernelImage = true;
     rtkit.enable = true;
@@ -54,10 +51,12 @@
 
   hardware.bluetooth.enable = true;
 
+  # Services
   services = {
     xserver.enable = false;
     printing.enable = true;
     blueman.enable = true;
+
     pipewire = {
       enable = true;
       audio.enable = true;
@@ -67,6 +66,7 @@
       jack.enable = true;
       wireplumber.enable = true;
     };
+
     openssh = {
       enable = true;
       settings = {
@@ -74,67 +74,67 @@
         PermitRootLogin = "no";
       };
     };
-    displayManager = {
-      ly = {
-        enable = true;
-        settings = {
-          animation = "colormix";
-          session_log = ".cache/ly/session.log";
-          clock = "%d-%m-%Y %H:%M:%S";
-          bigclock = true;
-          blank_password = true;
-          blank_box = true;
-          hide_borders = false;
-          hide_key_hints = true;
-          load = true;
-          save = true;
-        };
+
+    displayManager.ly = {
+      enable = true;
+      settings = {
+        animation = "colormix";
+        session_log = ".cache/ly/session.log";
+        clock = "%d-%m-%Y %H:%M:%S";
+        bigclock = true;
+        blank_password = true;
+        blank_box = true;
+        hide_borders = false;
+        hide_key_hints = true;
+        load = true;
+        save = true;
       };
     };
   };
 
-  virtualisation = {
-    docker.enable = true;
-  };
+  # Virtualisation
+  virtualisation.docker.enable = true;
 
+  # XDG Portals
   xdg.portal = {
     enable = true;
+
     extraPortals = with pkgs; [
       xdg-desktop-portal-gtk
       xdg-desktop-portal-gnome
     ];
-    config = {
-      common = {
-        default = [ "gtk" "gnome" ];
-      };
-    };
+
+    config.common.default = [ "gtk" "gnome" ];
   };
 
+  # Users
   users.users.gael = {
     isNormalUser = true;
     extraGroups = [ "wheel" "audio" "video" "docker" ];
-    shell = pkgs.bash;
+    shell = pkgs.nushell;
   };
 
+  # Home Manager
   home-manager.users.gael = {
-    home.stateVersion = "25.11";
-    home.sessionPath = [
-      "$HOME/.local/bin"
-      "$HOME/.cargo/bin"
-    ];
-
-    dconf = {
-      settings = {
-        "org/gnome/desktop/interface" = {
-          color-scheme = "prefer-dark";
-        };
-      };
+    home = {
+      stateVersion = "25.11";
+      sessionPath = [
+        "$HOME/.local/bin"
+        "$HOME/.cargo/bin"
+      ];
     };
+
+    dconf.settings."org/gnome/desktop/interface".color-scheme =
+      "prefer-dark";
   };
 
+  # System
   system = {
-    autoUpgrade.enable = true;
-    autoUpgrade.dates = "weekly";
+    autoUpgrade = {
+      enable = true;
+      dates = "weekly";
+    };
+
     stateVersion = "25.11";
   };
 }

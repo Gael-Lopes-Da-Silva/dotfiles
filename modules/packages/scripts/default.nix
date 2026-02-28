@@ -2,6 +2,10 @@
 
 {
   home-manager.users.gael = {
+    home.packages = with pkgs; [
+      fzf
+    ];
+
     home.file.".local/bin/application_menu.sh".source = ./application_menu.sh;
     home.file.".local/bin/audio_monitor.sh".source = ./audio_monitor.sh;
     home.file.".local/bin/battery_monitor.sh".source = ./battery_monitor.sh;

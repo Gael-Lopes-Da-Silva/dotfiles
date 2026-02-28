@@ -15,6 +15,7 @@
   ];
 
   fonts.packages = with pkgs; [
+    # Noto families
     noto-fonts
     noto-fonts-lgc-plus
     noto-fonts-cjk-sans
@@ -22,55 +23,71 @@
     noto-fonts-color-emoji
     noto-fonts-monochrome-emoji
 
+    # Symbols
     nerd-fonts.symbols-only
   ];
 
   environment.systemPackages = with pkgs; [
+
+    # Audio
     pulseaudio
+    playerctl
 
-    bash-completion
+    # Wayland / Desktop
     xwayland-satellite
-
-    fzf
-    tree
-    firefox
-    ouch
-    p7zip
-    cliphist
     wl-clipboard
     wl-clip-persist
+    cliphist
+    brightnessctl
+
+    # Core Utilities
+    tree
+    p7zip
+    ouch
     xdg-user-dirs
     xdg-user-dirs-gtk
+
+    # Desktop Integration
     gnome-keyring
-    brightnessctl
-    playerctl
-    udiskie
     gvfs
+    udiskie
+
+    # Applications
+    firefox
+
+    # Sandboxing
     firejail
     wine
     wine-wayland
     winetricks
-    direnv
 
+    # Development
+    direnv
     python3
     bun
     php
+
+    # Rust
     rustc
     cargo
     rust-analyzer
     clippy
     rustfmt
+
+    # Containers
     docker-compose
   ];
 
   services.gvfs.enable = true;
 
-  programs.firefox.enable = true;
-  programs.xwayland.enable = true;
-  programs.firejail.enable = true;
+  programs = {
+    firefox.enable = true;
+    xwayland.enable = true;
+    firejail.enable = true;
 
-  programs.direnv = {
-    enable = true;
-    nix-direnv.enable = true;
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+    };
   };
 }
