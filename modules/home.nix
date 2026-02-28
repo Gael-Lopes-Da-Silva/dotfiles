@@ -12,8 +12,8 @@
 
     home.file = {
       ".gitconfig" = {
-        source = "../home/.gitconfig";
-        target = "./";
+        source = ./home/.gitconfig;
+        target = ".";
       };
 
     #   ".local/bin".source = ./home/.scripts;
