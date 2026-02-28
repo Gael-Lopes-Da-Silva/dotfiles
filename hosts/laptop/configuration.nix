@@ -1,14 +1,12 @@
 { config, pkgs, ... }:
 
 {
-  networking.hostName = "laptop";
-
-  # Import generated hardware config
   imports = [
-    ./hardware-configuration.nix
+    /etc/nixos/hardware-configuration.nix
   ];
 
-  # Example: Intel graphics
+  networking.hostName = "laptop";
+
   services.xserver.videoDrivers = [ "modesetting" ];
 
   powerManagement.enable = true;
