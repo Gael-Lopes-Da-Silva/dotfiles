@@ -31,8 +31,8 @@
 
 			keyboard = {
 			  bindings = [
-					{ key = "Back"; mods = "Control"; chars = "\u0017"; };
-          { key = "Enter"; mods = "Control|Shift"; chars = "\u0017"; };
+					{ key = "Back"; mods = "Control"; chars = "\u0017"; }
+          { key = "Enter"; mods = "Control|Shift"; chars = "\u0017"; }
 				];
 			};
 		};
