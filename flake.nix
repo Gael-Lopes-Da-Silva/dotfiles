@@ -26,8 +26,8 @@
             home-manager.useUserPackages = true;
           }
 
-          ./hosts/laptop
           ./modules
+          ./hosts/laptop
 
           home-manager.nixosModules.home-manager
         ];
@@ -43,8 +43,8 @@
             home-manager.useUserPackages = true;
           }
 
-          ./hosts/desktop
           ./modules
+          ./hosts/desktop
 
           home-manager.nixosModules.home-manager
         ];
