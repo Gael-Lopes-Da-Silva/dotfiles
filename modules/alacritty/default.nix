@@ -6,6 +6,11 @@
       alacritty
     ];
 
+    programs.alacritty = {
+      enable = true;
+      settings = {};
+    };
+
     home.file.".config/alacritty/alacritty.toml".source = ./alacritty.toml;
   };
 }
