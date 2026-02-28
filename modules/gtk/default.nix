@@ -15,7 +15,7 @@
       iconTheme = {
         name = "Adwaita";
       };
-      cursorTheme {
+      cursorTheme = {
         name = "Adwaita";
       };
     };
