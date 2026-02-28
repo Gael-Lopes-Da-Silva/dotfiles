@@ -78,7 +78,7 @@
 
   users.users.gael = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "docker" ];
+    extraGroups = [ "wheel" "audio" "video" "docker" ];
     shell = pkgs.bash;
   };
 
