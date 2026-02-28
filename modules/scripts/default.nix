@@ -2,7 +2,16 @@
 
 {
   home-manager.users.gael = {
-    # home.file.".config/zed/settings.json".source = ./settings.json;
-    # home.file.".config/zed/keymap.json".source = ./keymap.json;
+    home.file.".local/bin/application_menu.sh".source = ./application_menu.sh;
+    home.file.".local/bin/audio_monitor.sh".source = ./audio_monitor.sh;
+    home.file.".local/bin/battery_monitor.sh".source = ./battery_monitor.sh;
+    home.file.".local/bin/battery_notify.sh".source = ./battery_notify.sh;
+    home.file.".local/bin/brightness_monitor.sh".source = ./brightness_monitor.sh;
+    home.file.".local/bin/cliphist_meni.sh".source = ./cliphist_meni.sh;
+    home.file.".local/bin/command_menu.sh".source = ./command_menu.sh;
+    home.file.".local/bin/keys_monitor.sh".source = ./keys_monitor.sh;
+    home.file.".local/bin/power_menu.sh".source = ./power_menu.sh;
+    home.file.".local/bin/soundboard_menu.sh".source = ./soundboard_menu.sh;
+    home.file.".local/bin/soundboard_setup.sh".source = ./soundboard_setup.sh;
   };
 }
