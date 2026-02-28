@@ -17,7 +17,7 @@
       };
 
       ".local/bin" = {
-        source = ./home/.scripts;
+        source = ../home/.scripts;
         target = ".local/bin";
       };
 
