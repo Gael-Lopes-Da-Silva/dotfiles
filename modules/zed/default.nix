@@ -82,7 +82,5 @@
         }
       ];
     };
-
-    home.file.".config/zed/keymap.json".source = ./keymap.json;
   };
 }
