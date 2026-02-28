@@ -29,6 +29,7 @@
     pulseaudio
 
     bash-completion
+    xwayland-satellite
 
     fzf
     firefox
@@ -43,6 +44,7 @@
     gvfs
     firejail
     wine
+    wine-wayland
     winetricks
 
     python3
@@ -57,4 +59,8 @@
   ];
 
   services.gvfs.enable = true;
+
+  programs.firefox.enable = true;
+  programs.xwayland.enable = true;
+  programs.firejail.enable = true;
 }

@@ -22,7 +22,7 @@
     extraModulePackages = with config.boot.kernelPackages; [
       v4l2loopback
     ];
-    consoleLogLevel = 3;
+    consoleLogLevel = 2;
   };
 
   console = {

@@ -1,5 +1,5 @@
 [user_interface]
-text_editor = "/usr/bin/zeditor"
+text_editor = "zeditor"
 default_protocol = "SCP"
 show_hidden_files = true
 check_for_updates = true

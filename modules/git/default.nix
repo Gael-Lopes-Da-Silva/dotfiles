@@ -8,7 +8,6 @@
 
     programs.git = {
       enable = true;
-
       settings = {
         user = {
           name = "gael-lopes-da-silva";
