@@ -37,7 +37,7 @@
   };
 
   security.rtkit.enable = true;
-
+  hardware.pulseaudio.enable = false;
   services = {
     xserver.enable = false;
     printing.enable = true;
@@ -50,6 +50,7 @@
       jack.enable = true;
       wireplumber.enable = true;
       socketActivation = true;
+      systemWide = true;
     };
     displayManager = {
       ly = {
