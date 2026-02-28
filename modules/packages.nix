@@ -4,7 +4,6 @@
   imports = [
     ./alacritty
     ./bash
-    ./clipboard
     ./dunst
     ./git
     ./gtk
@@ -13,7 +12,6 @@
     ./qt
     ./scripts
     ./termscp
-    ./udiskie
     ./zed
   ];
 
@@ -33,6 +31,9 @@
     firefox
     ouch
     p7zip
+    cliphist
+    wl-clipboard
+    wl-clip-persist
     brightnessctl
     playerctl
     udiskie
