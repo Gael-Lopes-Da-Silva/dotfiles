@@ -56,8 +56,6 @@
 
   programs = {
     firefox.enable = true;
-    alacritty.enable = true;
-    dunst.enable = true;
     niri.enable = true;
 
     bash = {
