@@ -24,6 +24,8 @@
     ];
   };
 
+  sound.enable = true;
+
   networking = {
     networkmanager.enable = true;
   };
@@ -36,6 +38,8 @@
     defaultLocale = "en_US.UTF-8";
   };
 
+  security.rtkit.enable = true;
+
   services = {
     xserver.enable = false;
     printing.enable = true;
@@ -44,7 +48,14 @@
       audio.enable = true;
       pulse.enable = true;
       alsa.enable = true;
+      alsa.support32Bit = true;
       jack.enable = true;
+    };
+    displayManager = {
+      ly = {
+        enable = true;
+        settings = {};
+      };
     };
   };
 
