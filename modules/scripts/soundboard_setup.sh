@@ -29,6 +29,6 @@ pw-link $SOUNDBOARD_SINK:monitor_FR $SOUNDBOARD_SOURCE:input_FR 2>/dev/null
 
 pactl set-default-source $SOUNDBOARD_SOURCE
 
-mkdir -p $HOME/.oundboard
+mkdir -p $HOME/.soundboard
 
 exit 0

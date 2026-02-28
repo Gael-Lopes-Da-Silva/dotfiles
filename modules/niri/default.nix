@@ -3,6 +3,7 @@
 {
   home-manager.users.gael = {
     home.packages = with pkgs; [
+      xcursor-theme
       niri
     ];
 
