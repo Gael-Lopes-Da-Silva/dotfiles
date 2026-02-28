@@ -43,7 +43,7 @@
     python3
     bun
     php
-    composer
+    # composer
     rustc
     cargo
     rust-analyzer
