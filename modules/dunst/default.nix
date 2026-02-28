@@ -31,7 +31,7 @@
           font = "Monospace 14";
           line_height = 0;
           markup = "full";
-          format = "<b>%s</b>\n%b";
+          format = "<b>%s</b>\\n%b";
           alignment = "left";
           vertical_alignment = "center";
           show_age_threshold = 30;

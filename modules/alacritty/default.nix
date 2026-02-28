@@ -20,6 +20,10 @@
 
         font = {
           size = 18.0;
+          normal = {
+            family = "Monospace";
+            style = "Regular";
+          };
         };
 
         cursor = {
@@ -40,12 +44,12 @@
             {
               key = "Back";
               mods = "Control";
-              chars = "\u0017";
+              chars = "\\u0017";
             }
             {
               key = "Enter";
               mods = "Control|Shift";
-              chars = "\u0017";
+              chars = "\\u0017";
             }
           ];
         };

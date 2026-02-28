@@ -9,6 +9,7 @@
     ./gtk
     ./niri
     ./nvim
+    ./qt
     ./scripts
     ./termscp
     ./zed
@@ -26,8 +27,6 @@
   ];
 
   environment.systemPackages = with pkgs; [
-    qt5.qtwayland
-    qt6.qtwayland
     xdg-desktop-portal
     xdg-desktop-portal-gtk
     xdg-desktop-portal-gnome
