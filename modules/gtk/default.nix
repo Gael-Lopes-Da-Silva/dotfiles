@@ -3,7 +3,6 @@
 {
   home-manager.users.gael = {
     home.packages = with pkgs; [
-      dconf
       gtk3
       gtk4
     ];
