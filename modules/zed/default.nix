@@ -9,7 +9,7 @@
     programs.zed-editor = {
       enable = true;
       extensions = [ "yellowed" ];
-      settings = {
+      userSettings = {
         collaboration_panel = {
           default_width = 300.0;
         };
