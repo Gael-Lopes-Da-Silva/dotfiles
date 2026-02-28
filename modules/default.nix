@@ -26,12 +26,12 @@
     ];
   };
 
-  services.emptty = {
-    enable = true;
-    settings = {
-      tty = "/dev/tty1";
-    };
-  };
+  # services.emptty = {
+  #   enable = true;
+  #   settings = {
+  #     tty = "/dev/tty1";
+  #   };
+  # };
 
   networking.networkmanager.enable = true;
 
