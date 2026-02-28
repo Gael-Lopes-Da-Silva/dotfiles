@@ -1,9 +1,11 @@
 { config, pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    alacritty
-	];
+  home-manager.users.gael = {
+    home.packages = with pkgs; [
+      alacritty
+  	];
+  };
 
 	programs.alacritty = {
 	  enable = true;
