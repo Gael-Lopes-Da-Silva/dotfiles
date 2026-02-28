@@ -8,9 +8,48 @@
 
     programs.alacritty = {
       enable = true;
-      settings = {};
-    };
+      settings = {
+        window = {
+          padding = {
+            x = 10;
+            y = 10;
+          };
+          dynamic_padding = true;
+          opacity = 0.8;
+        };
 
-    home.file.".config/alacritty/alacritty.toml".source = ./alacritty.toml;
+        font = {
+          size = 18.0;
+        };
+
+        cursor = {
+          style = {
+            shape = "Block";
+            blinking = "Off";
+          };
+          unfocused_hollow = true;
+          thickness = 0.2;
+        };
+
+        mouse = {
+          hide_when_typing = true;
+        };
+
+        keyboard = {
+          bindings = [
+            {
+              key = "Back";
+              mods = "Control";
+              chars = "\u0017";
+            }
+            {
+              key = "Enter";
+              mods = "Control|Shift";
+              chars = "\u0017";
+            }
+          ];
+        };
+      };
+    };
   };
 }
