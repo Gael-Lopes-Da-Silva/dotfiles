@@ -13,11 +13,12 @@
   outputs = { self, nixpkgs, home-manager, ... }:
   let
     system = "x86_64-linux";
+  in
+  {
     nixpkgs.config.allowUnfree = true;
     home-manager.useGlobalPkgs = true;
     home-manager.useUserPackages = true;
-  in
-  {
+
     nixosConfigurations = {
       laptop = nixpkgs.lib.nixosSystem {
         inherit system;
