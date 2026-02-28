@@ -113,5 +113,5 @@
   #       PROMPT_COMMAND=get_prompt
   #     '';
   #   };
-  # };
+  };
 }
