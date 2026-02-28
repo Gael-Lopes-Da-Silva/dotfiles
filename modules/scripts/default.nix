@@ -7,7 +7,7 @@
     home.file.".local/bin/battery_monitor.sh".source = ./battery_monitor.sh;
     home.file.".local/bin/battery_notify.sh".source = ./battery_notify.sh;
     home.file.".local/bin/brightness_monitor.sh".source = ./brightness_monitor.sh;
-    home.file.".local/bin/cliphist_meni.sh".source = ./cliphist_meni.sh;
+    home.file.".local/bin/cliphist_menu.sh".source = ./cliphist_menu.sh;
     home.file.".local/bin/command_menu.sh".source = ./command_menu.sh;
     home.file.".local/bin/keys_monitor.sh".source = ./keys_monitor.sh;
     home.file.".local/bin/power_menu.sh".source = ./power_menu.sh;
