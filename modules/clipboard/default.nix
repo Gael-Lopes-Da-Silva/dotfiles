@@ -11,10 +11,12 @@
       cliphist = {
         enable = true;
         allowImages = true;
+        systemdTargets = "niri-session.target";
       };
       wl-clip-persist = {
         enable = true;
         clipboardType = "regular";
+        systemdTargets = "niri-session.target";
       };
     };
   };

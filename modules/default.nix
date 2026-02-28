@@ -49,6 +49,7 @@
       alsa.support32Bit = true;
       jack.enable = true;
       wireplumber.enable = true;
+      socketActivation = true;
     };
     displayManager = {
       ly = {
