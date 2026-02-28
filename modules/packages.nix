@@ -6,6 +6,7 @@
     ./bash
     ./dunst
     ./git
+    ./gtk
     ./niri
     ./nvim
     ./scripts
@@ -25,8 +26,6 @@
   ];
 
   environment.systemPackages = with pkgs; [
-    gtk3
-    gtk4
     qt5.qtwayland
     qt6.qtwayland
     xdg-desktop-portal
