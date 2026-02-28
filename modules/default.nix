@@ -49,7 +49,6 @@
       jack.enable = true;
       wireplumber.enable = true;
       socketActivation = true;
-      systemWide = true;
     };
     displayManager = {
       ly = {
