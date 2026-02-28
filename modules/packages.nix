@@ -59,7 +59,6 @@
     alacritty.enable = true;
     dunst.enable = true;
     niri.enable = true;
-    bash.enable = true;
 
     bash = {
       enable = true;
