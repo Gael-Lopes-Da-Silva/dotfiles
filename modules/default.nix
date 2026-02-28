@@ -37,6 +37,7 @@
   };
 
   security.rtkit.enable = true;
+
   services = {
     xserver.enable = false;
     printing.enable = true;
@@ -48,12 +49,22 @@
       alsa.support32Bit = true;
       jack.enable = true;
       wireplumber.enable = true;
-      socketActivation = true;
     };
     displayManager = {
       ly = {
         enable = true;
-        settings = {};
+        settings = {
+          animation = "colormix";
+          session_log = ".cache/ly/session.log";
+          clock = "%d-%m-%Y %H:%M:%S";
+          bigclock = true;
+          blank_password = true;
+          blank_box = true;
+          hide_borders = false;
+          hide_key_hints = true;
+          load = true;
+          save = true;
+        };
       };
     };
   };
