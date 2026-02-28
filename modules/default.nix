@@ -37,7 +37,6 @@
   };
 
   security.rtkit.enable = true;
-  hardware.pulseaudio.enable = false;
   services = {
     xserver.enable = false;
     printing.enable = true;

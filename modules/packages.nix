@@ -27,6 +27,8 @@
   ];
 
   environment.systemPackages = with pkgs; [
+    pulseaudio
+
     fzf
     firefox
     ouch
