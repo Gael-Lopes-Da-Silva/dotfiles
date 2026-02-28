@@ -83,14 +83,13 @@
           let home = $nu.home-path
           let cwd = (pwd | path expand)
 
-          let display_path =
-            if $cwd == $home {
-              "~"
-            } else if ($cwd | str starts-with $home) {
-              "~" + ($cwd | str replace $home "")
-            } else {
-              $cwd
-            }
+          let display_path = if $cwd == $home {
+            "~"
+          } else if ($cwd | str starts-with $home) {
+            "~" + ($cwd | str replace $home "")
+          } else {
+            $cwd
+          }
 
           if $last_status == 0 {
             $"(ansi green_bold)($display_path)(ansi reset)\n"
