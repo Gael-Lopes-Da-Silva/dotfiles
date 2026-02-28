@@ -3,18 +3,6 @@
 {
   services.xserver.enable = false;
 
-  environment.systemPackages = with pkgs; [
-    niri
-    gtk3
-    gtk4
-    qt5.qtwayland
-    qt6.qtwayland
-    xdg-desktop-portal
-    xdg-desktop-portal-gtk
-    xdg-desktop-portal-gnome
-    xwayland-satellite
-  ];
-
   xdg.portal = {
     enable = true;
     extraPortals = with pkgs; [
@@ -56,7 +44,4 @@
       gtk-theme = "Adwaita-dark";
     };
   };
-
-  programs.niri.enable = true;
-  programs.xwayland.enable = true;
 }
