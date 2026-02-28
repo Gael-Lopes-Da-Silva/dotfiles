@@ -28,6 +28,7 @@
           ./hosts/laptop
           ./modules
 
+          disko.nixosModules.disko
           home-manager.nixosModules.home-manager
         ];
       };
@@ -39,6 +40,7 @@
           ./hosts/desktop
           ./modules
 
+          disko.nixosModules.disko
           home-manager.nixosModules.home-manager
         ];
       };
