@@ -26,7 +26,7 @@
   };
 
   networking = {
-    networkmanager.enable = true
+    networkmanager.enable = true;
   };
 
   time = {
