@@ -80,12 +80,22 @@
       configFile.text = ''
         def create_left_prompt [] {
           let last_status = $env.LAST_EXIT_CODE
-          let path = (pwd)
+          let home = $nu.home-path
+          let cwd = (pwd | path expand)
+
+          let display_path =
+            if $cwd == $home {
+              "~"
+            } else if ($cwd | str starts-with $home) {
+              "~" + ($cwd | str replace $home "")
+            } else {
+              $cwd
+            }
 
           if $last_status == 0 {
-            $"(ansi green_bold)($path)(ansi reset)\n"
+            $"(ansi green_bold)($display_path)(ansi reset)\n"
           } else {
-            $"(ansi red_bold)($path)(ansi reset)\n"
+            $"(ansi red_bold)($display_path)(ansi reset)\n"
           }
         }
 
