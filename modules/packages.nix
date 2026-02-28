@@ -106,9 +106,9 @@
 
         get_prompt() {
           if [ "$?" -eq 0 ]; then
-            PS1="${GREEN}\w${RESET}\n"
+            PS1="$\{GREEN}\w$\{RESET}\n"
           else
-            PS1="${RED}\w${RESET}\n"
+            PS1="$\{RED}\w$\{RESET}\n"
           fi
         }
 
