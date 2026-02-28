@@ -13,6 +13,9 @@
   outputs = { self, nixpkgs, home-manager, ... }:
   let
     system = "x86_64-linux";
+    nixpkgs.config.allowUnfree = true;
+    home-manager.useGlobalPkgs = true;
+    home-manager.useUserPackages = true;
   in
   {
     nixosConfigurations = {
