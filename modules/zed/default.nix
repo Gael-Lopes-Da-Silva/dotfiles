@@ -72,7 +72,7 @@
           context = "Editor";
           bindings = {
             ctrl-enter = "editor::NewlineBelow";
-          }
+          };
         }
         {
           context = "Editor";
