@@ -7,19 +7,19 @@
       gtk4
     ];
 
+    home.pointerCursor = {
+      gtk.enable = true;
+      name = "Adwaita";
+      package = pkgs.adwaita-icon-theme;
+      size = 32;
+    };
+
     gtk = {
       enable = true;
       theme = {
         name = "Adwaita-dark";
       };
-      iconTheme = {
-        name = "Adwaita";
-        package = pkgs.adwaita-icon-theme;
-      };
-      cursorTheme = {
-        name = "Adwaita";
-        package = pkgs.adwaita-icon-theme;
-      };
+      cursorTheme.size = 32;
     };
   };
 

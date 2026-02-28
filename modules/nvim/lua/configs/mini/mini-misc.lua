@@ -1,6 +1,0 @@
-MiniDeps.later(function()
-    local mini_misc = require("mini.misc")
-    mini_misc.setup({})
-    mini_misc.setup_termbg_sync()
-    mini_misc.setup_restore_cursor()
-end)

@@ -8,7 +8,6 @@
     ./git
     ./gtk
     ./niri
-    ./nvim
     ./qt
     ./scripts
     ./termscp
