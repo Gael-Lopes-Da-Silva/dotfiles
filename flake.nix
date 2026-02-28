@@ -15,15 +15,17 @@
     system = "x86_64-linux";
   in
   {
-    nixpkgs.config.allowUnfree = true;
-    home-manager.useGlobalPkgs = true;
-    home-manager.useUserPackages = true;
-
     nixosConfigurations = {
       laptop = nixpkgs.lib.nixosSystem {
         inherit system;
 
         modules = [
+          {
+            nixpkgs.config.allowUnfree = true;
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+          }
+
           ./hosts/laptop
           ./modules
 
@@ -35,6 +37,12 @@
         inherit system;
 
         modules = [
+          {
+            nixpkgs.config.allowUnfree = true;
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+          }
+
           ./hosts/desktop
           ./modules
 
