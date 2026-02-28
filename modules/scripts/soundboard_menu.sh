@@ -7,7 +7,7 @@ fi
 tmpfile=$(mktemp)
 
 $TERMINAL --class soundboard -e bash -c '
-    find "$HOME/Music/Soundboard" -maxdepth 1 -type f \( \
+    find "$HOME/.soundboard" -maxdepth 1 -type f \( \
         -iname "*.mp3" -o -iname "*.aac" -o -iname "*.wav" -o -iname "*.flac" -o -iname "*.ogg" -o -iname "*.opus" -o -iname "*.aiff" -o -iname "*.au" -o -iname "*.caf" -o -iname "*.raw" \
     \) \
     | sort \

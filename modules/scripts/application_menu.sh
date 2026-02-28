@@ -8,8 +8,7 @@ tmpfile=$(mktemp)
 
 $TERMINAL --class launcher -e bash -c '
     desktop_dirs=(
-        /usr/share/applications
-        /usr/local/share/applications
+        "/etc/profiles/per-user/$USER/share/applications"
         "$HOME/.local/share/applications"
     )
 

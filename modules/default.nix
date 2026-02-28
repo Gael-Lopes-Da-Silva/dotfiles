@@ -87,6 +87,14 @@
       "$HOME/.local/bin"
       "$HOME/.cargo/bin"
     ];
+
+    dconf = {
+      settings = {
+        "org/gnome/desktop/interface" = {
+          color-scheme = "prefer-dark";
+        };
+      };
+    };
   };
 
   system = {
