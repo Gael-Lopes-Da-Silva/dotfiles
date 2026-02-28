@@ -4,6 +4,7 @@
   imports = [
     ./alacritty
     ./bash
+    ./clipboard
     ./dunst
     ./git
     ./gtk
@@ -12,6 +13,7 @@
     ./qt
     ./scripts
     ./termscp
+    ./udiskie
     ./zed
   ];
 
@@ -31,9 +33,6 @@
     firefox
     ouch
     p7zip
-    cliphist
-    wl-clip-persist
-    wl-clipboard
     brightnessctl
     playerctl
     udiskie
@@ -54,21 +53,4 @@
     docker-compose
     bash-completion
   ];
-
-  services = {
-    wl-clip-persist = {
-      enable = true;
-      clipboardType = "regular";
-    };
-    cliphist = {
-      enable = true;
-      allowImages = true;
-    };
-    udiskie = {
-      enable = true;
-      tray = "auto";
-      notify = true;
-      automount = true;
-    };
-  };
 }
