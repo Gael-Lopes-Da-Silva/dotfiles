@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 
 {
   imports = [
@@ -13,4 +13,8 @@
       efi.canTouchEfiVariables = true;
     };
   };
+
+  environment.systemPackages = with pkgs; [
+    steam
+  ];
 }

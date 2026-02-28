@@ -29,6 +29,8 @@
   environment.systemPackages = with pkgs; [
     pulseaudio
 
+    bash-completion
+
     fzf
     firefox
     ouch
@@ -43,6 +45,7 @@
     firejail
     wine
     winetricks
+    plymouth
 
     python3
     bun
@@ -52,8 +55,10 @@
     rust-analyzer
     clippy
     rustfmt
-
     docker-compose
-    bash-completion
   ];
+
+  services.gvfs.enable = true;
+
+  boot.plymouth.enable = true;
 }
