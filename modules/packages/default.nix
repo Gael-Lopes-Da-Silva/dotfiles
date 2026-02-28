@@ -2,16 +2,16 @@
 
 {
   imports = [
-    ./packages/alacritty
-    ./packages/bash
-    ./packages/dunst
-    ./packages/git
-    ./packages/gtk
-    ./packages/niri
-    ./packages/qt
-    ./packages/scripts
-    ./packages/termscp
-    ./packages/zed
+    ./alacritty
+    ./bash
+    ./dunst
+    ./git
+    ./gtk
+    ./niri
+    ./qt
+    ./scripts
+    ./termscp
+    ./zed
   ];
 
   fonts.packages = with pkgs; [
