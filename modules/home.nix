@@ -12,7 +12,7 @@
 
     home.file = {
       ".gitconfig" = {
-        source = ./home/.gitconfig;
+        source = ../home/.gitconfig;
         target = ".";
       };
 
