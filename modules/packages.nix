@@ -57,8 +57,6 @@
   ];
 
   programs = {
-    firefox.enable = true;
-    niri.enable = true;
   #   bash = {
   #     enable = true;
 

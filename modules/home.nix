@@ -4,47 +4,6 @@
   home-manager.users.gael = {
     home.stateVersion = "25.11";
 
-  #   home.file = {
-  #     ".gitconfig" = {
-  #       source = ../home/.gitconfig;
-  #       target = ".";
-  #     };
-  #     ".local/bin" = {
-  #       source = ../home/.scripts;
-  #       target = ".local/bin";
-  #     };
-  #     ".config/alacritty" = {
-  #       source = ../home/.config/alacritty;
-  #       target = ".config/alacritty";
-  #       recursive = true;
-  #     };
-  #     ".config/dunst" = {
-  #       source = ../home/.config/dunst;
-  #       target = ".config/dunst";
-  #       recursive = true;
-  #     };
-  #     ".config/niri" = {
-  #       source = ../home/.config/niri;
-  #       target = ".config/niri";
-  #       recursive = true;
-  #     };
-  #     ".config/nvim" = {
-  #       source = ../home/.config/nvim;
-  #       target = ".config/nvim";
-  #       recursive = true;
-  #     };
-  #     ".config/termscp" = {
-  #       source = ../home/.config/termscp;
-  #       target = ".config/termscp";
-  #       recursive = true;
-  #     };
-  #     ".config/zed" = {
-  #       source = ../home/.config/zed;
-  #       target = ".config/zed";
-  #       recursive = true;
-  #     };
-  #   };
-
   #   home.sessionPath = [
   #     "$HOME/.local/bin"
   #     "$HOME/.cargo/bin"
