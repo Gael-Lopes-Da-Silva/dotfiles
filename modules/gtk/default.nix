@@ -2,33 +2,33 @@
 
 {
   home-manager.users.gael = {
-    home.packages = with pkgs; [
-      gtk3
-      gtk4
-      dconf
-    ];
+    # home.packages = with pkgs; [
+    #   gtk3
+    #   gtk4
+    #   dconf
+    # ];
 
-    home.pointerCursor = {
-      gtk.enable = true;
-      name = "Adwaita";
-      package = pkgs.adwaita-icon-theme;
-      size = 32;
-    };
+    # home.pointerCursor = {
+    #   gtk.enable = true;
+    #   name = "Adwaita";
+    #   package = pkgs.adwaita-icon-theme;
+    #   size = 32;
+    # };
 
-    gtk = {
-      enable = true;
-      theme = {
-        name = "Adwaita-dark";
-      };
-      iconTheme = {
-        name = "Adwaita";
-        package = pkgs.adwaita-icon-theme;
-      };
-      cursorTheme = {
-        name = "Adwaita";
-        package = pkgs.adwaita-icon-theme;
-      };
-    };
+    # gtk = {
+    #   enable = true;
+    #   theme = {
+    #     name = "Adwaita-dark";
+    #   };
+    #   iconTheme = {
+    #     name = "Adwaita";
+    #     package = pkgs.adwaita-icon-theme;
+    #   };
+    #   cursorTheme = {
+    #     name = "Adwaita";
+    #     package = pkgs.adwaita-icon-theme;
+    #   };
+    # };
   };
 
   environment.etc = {
