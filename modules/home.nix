@@ -10,10 +10,6 @@
   home-manager.users.gael = {
     home.stateVersion = "24.11";
 
-    home.directories = {
-      ".local/bin".source = null;
-    };
-
     home.file = {
       ".gitconfig".source = ./home/.gitconfig;
 
