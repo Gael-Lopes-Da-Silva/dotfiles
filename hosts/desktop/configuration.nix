@@ -1,13 +1,12 @@
 { config, pkgs, ... }:
 
 {
-  networking.hostName = "desktop";
-
   imports = [
-    ./hardware-configuration.nix
+    /etc/nixos/hardware-configuration.nix
   ];
 
-  # Example: NVIDIA
+  networking.hostName = "desktop";
+
   services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.nvidia.open = false;
