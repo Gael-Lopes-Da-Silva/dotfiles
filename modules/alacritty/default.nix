@@ -6,7 +6,7 @@
       alacritty
     ];
 
-    home.programs.alacritty = {
+    home.alacritty = {
       enable = true;
 
       settings = {
