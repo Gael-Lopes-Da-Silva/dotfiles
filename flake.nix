@@ -8,14 +8,9 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    disko = {
-      url = "github:nix-community/disko";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
-  outputs = { self, nixpkgs, home-manager, disko, ... }:
+  outputs = { self, nixpkgs, home-manager, ... }:
   let
     system = "x86_64-linux";
   in
@@ -28,7 +23,6 @@
           ./hosts/laptop
           ./modules
 
-          disko.nixosModules.disko
           home-manager.nixosModules.home-manager
         ];
       };
@@ -40,7 +34,6 @@
           ./hosts/desktop
           ./modules
 
-          disko.nixosModules.disko
           home-manager.nixosModules.home-manager
         ];
       };
