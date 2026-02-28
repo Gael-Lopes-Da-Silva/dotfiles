@@ -3,7 +3,7 @@
 {
   imports = [
     ./home.nix
-    ./configs.nix
+    ./desktop.nix
     ./packages.nix
   ];
 
