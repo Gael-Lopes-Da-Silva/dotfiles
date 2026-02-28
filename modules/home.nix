@@ -16,7 +16,10 @@
         target = ".";
       };
 
-    #   ".local/bin".source = ./home/.scripts;
+      ".local/bin" = {
+        source = ./home/.scripts;
+        target = ./.local/bin;
+      };
 
     #   ".config/alacritty".source = ./home/.config/alacritty;
     #   ".config/dunst".source = ./home/.config/dunst;
