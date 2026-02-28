@@ -3,11 +3,11 @@
 {
   imports = [
     ./alacritty
-    ./bash
     ./dunst
     ./git
     ./gtk
     ./niri
+    ./nushell
     ./qt
     ./scripts
     ./termscp

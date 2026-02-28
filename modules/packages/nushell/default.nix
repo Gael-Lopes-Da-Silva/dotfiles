@@ -16,7 +16,6 @@
         dir = "dir --color=auto";
         vdir = "vdir --color=auto";
 
-        ls = "ls --sort-by type --sort-by extension";
         la = "ls -a";
         ll = "ls -l";
 
@@ -29,9 +28,9 @@
       };
 
       environmentVariables = {
-        EDITOR = "nvim";
-        VISUAL = "nvim";
-        GIT_EDITOR = "nvim";
+        EDITOR = "zeditor";
+        VISUAL = "zeditor";
+        GIT_EDITOR = "zeditor";
         GIT_PAGER = "less";
         TERMINAL = "alacritty";
         BROWSER = "firefox";
@@ -62,26 +61,23 @@
         QT_QUICK_CONTROLS_STYLE = "Fusion";
       };
 
+      settings = {
+        show_banner = false;
+
+        history = {
+          max_size = 20000;
+          sync_on_enter = true;
+          file_format = "plaintext";
+        };
+
+        completions = {
+          case_sensitive = false;
+          quick = true;
+          partial = true;
+        };
+      };
+
       configFile.text = ''
-        # History
-        $env.config = {
-          history: {
-            max_size: 20000
-            sync_on_enter: true
-            file_format: "plaintext"
-          }
-
-          show_banner: false
-
-          completions: {
-            case_sensitive: false
-            quick: true
-            partial: true
-          }
-
-          edit_mode: emacs
-        }
-
         # Keybindings
         $env.config.keybindings ++= [
           {
