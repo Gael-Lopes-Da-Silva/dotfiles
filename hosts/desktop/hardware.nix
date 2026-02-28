@@ -30,10 +30,6 @@
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
   hardware = {
-    opengl = {
-      enable = true;
-      driSupport32Bit = true;
-    };
     graphics = {
       enable = true;
       enable32Bit = true;
