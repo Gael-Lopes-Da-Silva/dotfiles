@@ -30,6 +30,10 @@
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
   hardware = {
+    opengl = {
+      enable = true;
+      driSupport32Bit = true;
+    };
     graphics = {
       enable = true;
       enable32Bit = true;
@@ -37,6 +41,8 @@
     nvidia = {
       open = false;
       modesetting.enable = true;
+      powerManagement.enable = false;
+      powerManagement.finegrained = false;
       nvidiaSettings = true;
       package = config.boot.kernelPackages.nvidiaPackages.stable;
     };

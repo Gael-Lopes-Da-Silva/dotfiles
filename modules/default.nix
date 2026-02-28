@@ -2,13 +2,16 @@
 
 {
   imports = [
-    ./packages.nix
+    ./packages
   ];
 
   nix = {
     settings = {
       experimental-features = [ "nix-command" "flakes" ];
       auto-optimise-store = true;
+      trusted-users = [ "root" "gael" ];
+      cores = 0;
+      max-jobs = "auto";
     };
     gc = {
       automatic = true;
@@ -33,6 +36,7 @@
 
   networking = {
     networkmanager.enable = true;
+    firewall.enable = true;
   };
 
   time = {
@@ -43,11 +47,17 @@
     defaultLocale = "en_US.UTF-8";
   };
 
-  security.rtkit.enable = true;
+  security = {
+    protectKernelImage = true;
+    rtkit.enable = true;
+  };
+
+  hardware.bluetooth.enable = true;
 
   services = {
     xserver.enable = false;
     printing.enable = true;
+    blueman.enable = true;
     pipewire = {
       enable = true;
       audio.enable = true;
@@ -56,6 +66,13 @@
       alsa.support32Bit = true;
       jack.enable = true;
       wireplumber.enable = true;
+    };
+    openssh = {
+      enable = true;
+      settings = {
+        PasswordAuthentication = true;
+        PermitRootLogin = "no";
+      };
     };
     displayManager = {
       ly = {

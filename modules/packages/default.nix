@@ -2,16 +2,16 @@
 
 {
   imports = [
-    ./alacritty
-    ./bash
-    ./dunst
-    ./git
-    ./gtk
-    ./niri
-    ./qt
-    ./scripts
-    ./termscp
-    ./zed
+    ./packages/alacritty
+    ./packages/bash
+    ./packages/dunst
+    ./packages/git
+    ./packages/gtk
+    ./packages/niri
+    ./packages/qt
+    ./packages/scripts
+    ./packages/termscp
+    ./packages/zed
   ];
 
   fonts.packages = with pkgs; [
@@ -32,12 +32,16 @@
     xwayland-satellite
 
     fzf
+    tree
     firefox
     ouch
     p7zip
     cliphist
     wl-clipboard
     wl-clip-persist
+    xdg-user-dirs
+    xdg-user-dirs-gtk
+    gnome-keyring
     brightnessctl
     playerctl
     udiskie
@@ -46,6 +50,7 @@
     wine
     wine-wayland
     winetricks
+    direnv
 
     python3
     bun
@@ -63,4 +68,9 @@
   programs.firefox.enable = true;
   programs.xwayland.enable = true;
   programs.firejail.enable = true;
+
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
 }
