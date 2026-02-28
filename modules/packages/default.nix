@@ -28,7 +28,6 @@
   ];
 
   environment.systemPackages = with pkgs; [
-
     # Audio
     pulseaudio
     playerctl

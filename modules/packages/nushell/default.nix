@@ -78,32 +78,6 @@
       };
 
       configFile.text = ''
-        # Keybindings
-        $env.config.keybindings ++= [
-          {
-            name: menu_complete
-            modifier: none
-            keycode: tab
-            mode: [emacs vi_normal vi_insert]
-            event: { send: menucomplete }
-          }
-          {
-            name: history_prev
-            modifier: none
-            keycode: up
-            mode: [emacs vi_normal vi_insert]
-            event: { send: up }
-          }
-          {
-            name: history_next
-            modifier: none
-            keycode: down
-            mode: [emacs vi_normal vi_insert]
-            event: { send: down }
-          }
-        ]
-
-        # Prompt
         def create_left_prompt [] {
           let last_status = $env.LAST_EXIT_CODE
           let path = (pwd)
