@@ -83,7 +83,7 @@
           let home = ($env.HOME | path expand)
           let cwd = (pwd | path expand)
 
-          let display_path =if $cwd == $home {
+          let display_path = if $cwd == $home {
             "~"
           } else if ($cwd | str starts-with $home) {
             "~" + ($cwd | str replace $home "")
