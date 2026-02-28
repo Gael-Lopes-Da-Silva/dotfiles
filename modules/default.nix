@@ -28,7 +28,7 @@
 
   networking.networkmanager.enable = true;
 
-  console.font = "ter-132n";
+  # console.font = "ter-132n";
 
   time.timeZone = "Europe/Paris";
   i18n.defaultLocale = "en_US.UTF-8";
