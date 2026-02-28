@@ -16,9 +16,9 @@
   in
   {
     nixosConfigurations = {
-
       laptop = nixpkgs.lib.nixosSystem {
         inherit system;
+
         modules = [
           ./hosts/laptop/configuration.nix
           ./modules/common.nix
@@ -28,6 +28,7 @@
 
       desktop = nixpkgs.lib.nixosSystem {
         inherit system;
+
         modules = [
           ./hosts/desktop/configuration.nix
           ./modules/common.nix
