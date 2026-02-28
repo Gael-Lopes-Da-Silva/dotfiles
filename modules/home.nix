@@ -1,8 +1,8 @@
 { config, pkgs, ... }:
 
 {
-  # home-manager.users.gael = {
-  #   home.stateVersion = "25.11";
+  home-manager.users.gael = {
+    home.stateVersion = "25.11";
 
   #   home.file = {
   #     ".gitconfig" = {
@@ -83,5 +83,5 @@
   #     QT_STYLE_OVERRIDE = "Fusion";
   #     QT_QUICK_CONTROLS_STYLE = "Fusion";
   #   };
-  # };
+  };
 }
