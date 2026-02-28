@@ -18,7 +18,7 @@
 
       ".local/bin" = {
         source = ./home/.scripts;
-        target = ./.local/bin;
+        target = ".local/bin";
       };
 
     #   ".config/alacritty".source = ./home/.config/alacritty;
