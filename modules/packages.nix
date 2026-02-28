@@ -1,6 +1,15 @@
 { config, pkgs, ... }:
 
 {
+  imports = [
+    ./alacritty
+    # ./dunst
+    # ./niri
+    # ./nvim
+    # ./termscp
+    # ./zed
+  ];
+
   fonts.packages = with pkgs; [
     terminus_font
 
@@ -13,6 +22,8 @@
 
     nerd-fonts.symbols-only
   ];
+
+  console.font = "ter-132n";
 
   environment.systemPackages = with pkgs; [
     niri
@@ -29,7 +40,6 @@
     fzf
     neovim
     firefox
-    alacritty
     zed-editor
     ouch
     p7zip
@@ -60,7 +70,6 @@
   programs = {
     firefox.enable = true;
     niri.enable = true;
-
   #   bash = {
   #     enable = true;
 

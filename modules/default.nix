@@ -3,7 +3,6 @@
 {
   imports = [
     ./home.nix
-    ./desktop.nix
     ./packages.nix
   ];
 
@@ -26,12 +25,17 @@
     ];
   };
 
-  networking.networkmanager.enable = true;
+  networking = {
+    networkmanager.enable = true
+  };
 
-  # console.font = "ter-132n";
+  time = {
+    timeZone = "Europe/Paris";
+  };
 
-  time.timeZone = "Europe/Paris";
-  i18n.defaultLocale = "en_US.UTF-8";
+  i18n = {
+    defaultLocale = "en_US.UTF-8";
+  };
 
   services = {
     xserver.enable = false;
@@ -42,7 +46,23 @@
     };
   };
 
-  virtualisation.docker.enable = true;
+  virtualisation = {
+    docker.enable = true;
+  };
+
+  xdg.portal = {
+    enable = true;
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-gtk
+      xdg-desktop-portal-gnome
+    ];
+  };
+
+  users.users.gael = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" "docker" ];
+    shell = pkgs.bash;
+  };
 
   system = {
     autoUpgrade.enable = true;
