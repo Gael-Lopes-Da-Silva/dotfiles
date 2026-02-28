@@ -45,7 +45,6 @@
     firejail
     wine
     winetricks
-    plymouth
 
     python3
     bun
@@ -59,6 +58,4 @@
   ];
 
   services.gvfs.enable = true;
-
-  boot.plymouth.enable = true;
 }
