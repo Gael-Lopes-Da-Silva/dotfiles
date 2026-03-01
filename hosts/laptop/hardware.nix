@@ -7,7 +7,7 @@
       kernelModules = [ ];
     };
 
-    kernelModules = [ "kvm-intel" ];
+    kernelModules = [ "kvm-intel" "iwlwifi" ];
     extraModulePackages = [ ];
   };
 
