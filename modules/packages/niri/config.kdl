@@ -65,6 +65,29 @@ input {
 }
 
 // ###################################
+// Outputs
+// ###################################
+
+output "eDP-1" {
+    mode "1920x1080@60"
+    scale 1
+    focus-at-startup
+}
+
+output "HDMI-A-1" {
+    mode "1920x1080@100"
+    scale 1
+    position x=0 y=0
+    focus-at-startup
+}
+
+output "HDMI-A-2" {
+    mode "1920x1080@60"
+    scale 1
+    position x=0 y=1080
+}
+
+// ###################################
 // Layout
 // ###################################
 
