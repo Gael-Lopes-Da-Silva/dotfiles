@@ -4,7 +4,6 @@
   boot = {
     initrd = {
       availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "sd_mod" ];
-      extraFirmwarePaths = [ "iwlwifi-QuZ-a0-jf-b0-77.ucode.zst" ];
       kernelModules = [ ];
     };
 
