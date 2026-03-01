@@ -16,6 +16,10 @@
       device = "/dev/disk/by-uuid/2b641924-f6ba-4e6c-ba11-f5f904d20bf4";
       fsType = "ext4";
     };
+    "/mnt/disk" = {
+      device = "/dev/disk/by-uuid/1bbc0128-f73b-4e7e-becd-c72933295304";
+      fsType = "ext4";
+    };
     "/boot" = {
       device = "/dev/disk/by-uuid/E2BC-ED4B";
       fsType = "vfat";

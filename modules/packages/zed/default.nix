@@ -8,7 +8,16 @@
 
     programs.zed-editor = {
       enable = true;
-      extensions = [ "yellowed" ];
+      extensions = [
+        "yellowed"
+        "nix"
+        "php"
+        "toml"
+        "log"
+        "html"
+        "sql"
+        "dockerfile"
+      ];
       userSettings = {
         collaboration_panel = {
           default_width = 300.0;
