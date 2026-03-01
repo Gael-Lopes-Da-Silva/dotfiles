@@ -62,19 +62,6 @@
 
     # Development
     direnv
-    python3
-    bun
-    php
-
-    # Rust
-    rustc
-    cargo
-    rust-analyzer
-    clippy
-    rustfmt
-
-    # Containers
-    docker-compose
   ];
 
   services.gvfs.enable = true;
