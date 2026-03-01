@@ -11,7 +11,7 @@
       gtk.enable = true;
       name = "Adwaita";
       package = pkgs.adwaita-icon-theme;
-      size = 32;
+      size = 24;
     };
 
     gtk = {
