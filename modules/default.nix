@@ -94,7 +94,10 @@
   };
 
   # Virtualisation
-  virtualisation.docker.enable = true;
+  virtualisation = {
+    docker.enable = true;
+    virtualbox.host.enable = true;
+  };
 
   # XDG Portals
   xdg.portal = {
