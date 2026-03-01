@@ -229,7 +229,7 @@ binds {
 
     Mod+B repeat=false hotkey-overlay-title="Notify battery level" { spawn-sh "bash ~/.local/bin/battery_notify.sh"; }
     Mod+M repeat=false hotkey-overlay-title="Spawn soundboard menu" { spawn-sh "bash ~/.local/bin/soundboard_menu.sh"; }
-    Mod+Shift+M repeat=false hotkey-overlay-title="Stop soundboard sounds" { spawn "pkill" "-f" "'paplay'"; }
+    Mod+Shift+M repeat=false hotkey-overlay-title="Stop soundboard sounds" { spawn-sh "pkill -f paplay"; }
     Mod+V repeat=false hotkey-overlay-title="Spawn cliphist menu" { spawn-sh "bash ~/.local/bin/cliphist_menu.sh"; }
     Mod+Q repeat=false hotkey-overlay-title="Spawn power menu" { spawn-sh "bash ~/.local/bin/power_menu.sh"; }
     Mod+P repeat=false hotkey-overlay-title="Spawn command launcher" { spawn-sh "bash ~/.local/bin/command_menu.sh"; }
