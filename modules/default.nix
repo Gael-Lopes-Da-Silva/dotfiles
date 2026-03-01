@@ -115,7 +115,7 @@
   };
 
   # Environment
-  environment.variables = [
+  environment.variables = {
     EDITOR = "zeditor";
     VISUAL = "zeditor";
     GIT_EDITOR = "zeditor";
@@ -147,7 +147,7 @@
     QT_QPA_PLATFORMTHEME = "qt5ct";
     QT_STYLE_OVERRIDE = "Fusion";
     QT_QUICK_CONTROLS_STYLE = "Fusion";
-  ];
+  };
 
   # Home Manager
   home-manager.users.gael = {
