@@ -18,15 +18,15 @@
     gc = {
       automatic = true;
       dates = "daily";
-      options = "--delete-older-than 10d";
+      options = "--delete-older-than 5d";
     };
   };
 
   # Boot
   boot = {
-    consoleLogLevel = 2;
+    consoleLogLevel = 0;
 
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackages_6_18;
     kernelModules = [ "v4l2loopback" ];
     extraModulePackages = with config.boot.kernelPackages; [
       v4l2loopback
@@ -49,8 +49,6 @@
     protectKernelImage = true;
     rtkit.enable = true;
   };
-
-  hardware.bluetooth.enable = true;
 
   # Services
   services = {
@@ -99,25 +97,6 @@
     virtualbox.host.enable = true;
   };
 
-  # XDG Portals
-  xdg.portal = {
-    enable = true;
-
-    extraPortals = with pkgs; [
-      xdg-desktop-portal-gtk
-      xdg-desktop-portal-gnome
-    ];
-
-    config.common.default = [ "gtk" "gnome" ];
-  };
-
-  # Users
-  users.users.gael = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" "audio" "video" "docker" ];
-    shell = pkgs.nushell;
-  };
-
   # Environment
   environment.variables = {
     EDITOR = "zeditor";
@@ -153,6 +132,13 @@
     QT_QUICK_CONTROLS_STYLE = "Fusion";
   };
 
+  # Users
+  users.users.gael = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" "audio" "video" "docker" "vboxusers" ];
+    shell = pkgs.nushell;
+  };
+
   # Home Manager
   home-manager.users.gael = {
     home = {
@@ -163,17 +149,30 @@
       ];
     };
 
-    dconf.settings."org/gnome/desktop/interface".color-scheme =
-      "prefer-dark";
+    services.home-manager.autoUpgrade = {
+      enable = true;
+      useFlake = true;
+      flakeDir = "${config.users.users.gael.home}/.dotfiles";
+      frequency = "weekly";
+    };
+
+    xdg.portal = {
+      enable = true;
+      xdgOpenUsePortal = true;
+
+      extraPortals = with pkgs; [
+        xdg-desktop-portal-gtk
+        xdg-desktop-portal-gnome
+      ];
+
+      config.common.default = [ "gtk" "gnome" ];
+    };
+
+    dconf.settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
   };
 
   # System
   system = {
-    autoUpgrade = {
-      enable = true;
-      dates = "weekly";
-    };
-
     stateVersion = "25.11";
   };
 }

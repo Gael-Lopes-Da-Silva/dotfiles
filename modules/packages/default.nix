@@ -59,7 +59,6 @@
     wine
     wine-wayland
     winetricks
-    virtualbox
 
     # Development
     direnv
