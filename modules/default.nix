@@ -26,6 +26,7 @@
   boot = {
     consoleLogLevel = 2;
 
+    kernelPackages = pkgs.linuxPackages_latest;
     kernelModules = [ "v4l2loopback" ];
     extraModulePackages = with config.boot.kernelPackages; [
       v4l2loopback
