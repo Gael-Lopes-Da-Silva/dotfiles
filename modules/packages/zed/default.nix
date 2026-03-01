@@ -16,6 +16,7 @@
         "log"
         "html"
         "sql"
+        "kdl"
         "dockerfile"
       ];
       userSettings = {
