@@ -227,7 +227,7 @@ binds {
     Mod+Return repeat=false { spawn "alacritty"; }
     Mod+BackSpace repeat=false { spawn "firefox"; }
 
-    Mod+N repeat=false hotkey-overlay-title="Notify time" { spawn-sh "bash ~/.local/bin/time_notify.sh"; }
+    Mod+N repeat=false hotkey-overlay-title="Notify time" { spawn-sh "bash ~/.local/bin/datetime_notify.sh"; }
     Mod+B repeat=false hotkey-overlay-title="Notify battery level" { spawn-sh "bash ~/.local/bin/battery_notify.sh"; }
     Mod+M repeat=false hotkey-overlay-title="Spawn soundboard menu" { spawn-sh "bash ~/.local/bin/soundboard_menu.sh"; }
     Mod+Shift+M repeat=false hotkey-overlay-title="Stop soundboard sounds" { spawn-sh "pkill -f paplay"; }
