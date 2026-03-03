@@ -18,7 +18,7 @@ $TERMINAL --class soundboard -e bash -c '
         name = toupper(substr(name,1,1)) substr(name,2);
         print name "\t" $0
     }'\'' \
-    | fzf --prompt="Select: " --with-nth=1 --delimiter="\t" --bind "tab:replace-query" \
+    | fzf --prompt="Play: " --with-nth=1 --delimiter="\t" --bind "tab:replace-query" \
     | awk -F"\t" '\''{print $2}'\'' > "'$tmpfile'"
 '
 
