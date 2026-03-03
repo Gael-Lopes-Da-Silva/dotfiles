@@ -17,5 +17,6 @@
     home.file.".local/bin/power_menu.sh".source = ./power_menu.sh;
     home.file.".local/bin/soundboard_menu.sh".source = ./soundboard_menu.sh;
     home.file.".local/bin/soundboard_setup.sh".source = ./soundboard_setup.sh;
+    home.file.".local/bin/datetime_notify.sh".source = ./datetime_notify.sh;
   };
 }

@@ -17,6 +17,7 @@
         "html"
         "sql"
         "kdl"
+        "twig"
         "dockerfile"
       ];
       userSettings = {
