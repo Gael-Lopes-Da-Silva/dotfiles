@@ -24,10 +24,15 @@
 
   # Boot
   boot = {
+    initrd = {
+      verbose = false;
+    };
+
     consoleLogLevel = 0;
 
     kernelPackages = pkgs.linuxPackages_6_18;
     kernelModules = [ "v4l2loopback" ];
+    kernelParams = [ "quiet" "udev.log_level=3" ];
     extraModulePackages = with config.boot.kernelPackages; [
       v4l2loopback
     ];
