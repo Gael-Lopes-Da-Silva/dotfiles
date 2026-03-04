@@ -47,7 +47,7 @@
 
     Service = {
       Type = "oneshot";
-      ExecStart = "$HOME/.local/bin/soundboard_setup.sh";
+      ExecStart = "%h/.local/bin/soundboard_setup.sh";
       RemainAfterExit = true;
     };
 
