@@ -1,3 +1,5 @@
+{ config, pkgs, ... }:
+
 let
   soundboardScript = pkgs.writeShellScriptBin "soundboard-setup" {
     name = "soundboard-setup";
