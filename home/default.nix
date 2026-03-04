@@ -10,7 +10,6 @@
     ./nushell
     ./qt
     ./scripts
-    ./services
     ./zed
   ];
 
