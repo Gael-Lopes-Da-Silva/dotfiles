@@ -41,7 +41,7 @@
 
     battery_monitor = {
       Unit = {
-        Description = "Audio OSD";
+        Description = "Battery OSD";
         After = [ "niri.service" ];
         BindsTo = "niri.service";
         PartOf = "niri.service";
@@ -59,7 +59,7 @@
 
     brightness_monitor = {
       Unit = {
-        Description = "Audio OSD";
+        Description = "Brightness OSD";
         After = [ "niri.service" ];
         BindsTo = "niri.service";
         PartOf = "niri.service";
