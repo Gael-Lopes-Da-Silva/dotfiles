@@ -8,8 +8,8 @@ let
     SOUNDBOARD_SOURCE="SoundboardOutput"
 
     if ${pkgs.pipewire}/bin/pw-link --links | grep -Eq "$SOUNDBOARD_SINK|$SOUNDBOARD_SOURCE"; then
-        echo "Soundboard links already exist, skipping."
-        exit 0
+      echo "Soundboard links already exist, skipping."
+      exit 0
     fi
 
     REAL_MIC=$(${pkgs.pulseaudio}/bin/pactl get-default-source)
