@@ -1,7 +1,6 @@
 { config, pkgs, ... }:
 
 {
-  # Nix
   nix = {
     settings = {
       experimental-features = [ "nix-command" "flakes" ];
@@ -18,7 +17,6 @@
     };
   };
 
-  # Boot
   boot = {
     initrd = {
       verbose = false;
@@ -37,23 +35,19 @@
 
   console.earlySetup = true;
 
-  # Networking
   networking = {
     networkmanager.enable = true;
     firewall.enable = true;
   };
 
-  # Time
   time.timeZone = "Europe/Paris";
   i18n.defaultLocale = "en_US.UTF-8";
 
-  # Security & Hardware
   security = {
     protectKernelImage = true;
     rtkit.enable = true;
   };
 
-  # Virtualisation
   virtualisation = {
     docker = {
       enable = false;
@@ -71,7 +65,6 @@
     virtualbox.host.enable = true;
   };
 
-  # Environment
   environment = {
     variables = {
       EDITOR = "zeditor";
@@ -122,7 +115,6 @@
     };
   };
 
-  # User
   users.users.gael = {
     isNormalUser = true;
     extraGroups = [ "wheel" "audio" "video" "vboxusers" ];

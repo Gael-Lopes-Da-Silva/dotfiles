@@ -2,7 +2,6 @@
 
 {
   fonts.packages = with pkgs; [
-    # Noto families
     noto-fonts
     noto-fonts-lgc-plus
     noto-fonts-cjk-sans
@@ -10,7 +9,6 @@
     noto-fonts-color-emoji
     noto-fonts-monochrome-emoji
 
-    # Symbols
     nerd-fonts.symbols-only
   ];
 
