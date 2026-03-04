@@ -33,7 +33,7 @@ in
   systemd.user.services.soundboard = {
     description = "Soundboard Setup";
 
-    after = [ "pipewire.service" "wireplumber.service" ];
+    after = [ "pipewire.service" "pipewire-pulse.service" "wireplumber.service" ];
     wantedBy = [ "default.target" ];
 
     serviceConfig = {
