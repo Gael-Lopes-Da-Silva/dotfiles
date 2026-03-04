@@ -65,17 +65,4 @@
       };
     };
   };
-
-  systemd.user.services.soundboard = {
-    description = "Soundboard Setup";
-    after = [ "pipewire.service" "wireplumber.service" ];
-
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-      ExecStart = "bash ${config.users.users.gael.home}/.local/bin/soundboard_setup.sh";
-    };
-
-    wantedBy = [ "default.target" ];
-  };
 }
