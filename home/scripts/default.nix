@@ -5,10 +5,6 @@
     enable = true;
   };
 
-  home.file.".local/bin/audio_monitor.sh".source = ./audio_monitor.sh;
-  home.file.".local/bin/battery_monitor.sh".source = ./battery_monitor.sh;
-  home.file.".local/bin/brightness_monitor.sh".source = ./brightness_monitor.sh;
-
   home.file.".local/bin/application_menu.sh".source = ./application_menu.sh;
   home.file.".local/bin/cliphist_menu.sh".source = ./cliphist_menu.sh;
   home.file.".local/bin/command_menu.sh".source = ./command_menu.sh;
@@ -17,6 +13,21 @@
 
   home.file.".local/bin/battery_notify.sh".source = ./battery_notify.sh;
   home.file.".local/bin/datetime_notify.sh".source = ./datetime_notify.sh;
+
+  home.file.".local/bin/audio_monitor.sh" = {
+    source = ./audio_monitor.sh;
+    executable = true;
+  };
+
+  home.file.".local/bin/battery_monitor.sh" = {
+    source = ./battery_monitor.sh;
+    executable = true;
+  };
+
+  home.file.".local/bin/brightness_monitor.sh" = {
+    source = ./brightness_monitor.sh;
+    executable = true;
+  };
 
   home.file.".local/bin/soundboard_setup.sh" = {
     source = ./soundboard_setup.sh;

@@ -11,6 +11,8 @@
     ./qt
     ./scripts
     ./zed
+
+    ./services.nix
   ];
 
   home = {

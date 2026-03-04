@@ -1,0 +1,78 @@
+{ config, pkgs, ... }:
+
+{
+  systemd.user.services = {
+    soundboard = {
+      Unit = {
+        Description = "Soundboard Setup";
+        After = [ "pipewire.service" "pipewire-pulse.service" ];
+        BindsTo = "pipewire.service";
+        PartOf = "pipewire.service";
+      };
+
+      Service = {
+        Type = "oneshot";
+        ExecStart = "%h/.local/bin/soundboard_setup.sh";
+        RemainAfterExit = true;
+      };
+
+      Install = {
+        WantedBy = [ "default.target" ];
+      };
+    };
+
+    audio_monitor = {
+      Unit = {
+        Description = "Audio OSD";
+        After = [ "niri.service" ];
+        BindsTo = "niri.service";
+        PartOf = "niri.service";
+      };
+
+      Service = {
+        ExecStart = "%h/.local/bin/audio_monitor.sh";
+        RemainAfterExit = true;
+      };
+
+      Install = {
+        WantedBy = [ "default.target" ];
+      };
+    };
+
+    battery_monitor = {
+      Unit = {
+        Description = "Audio OSD";
+        After = [ "niri.service" ];
+        BindsTo = "niri.service";
+        PartOf = "niri.service";
+      };
+
+      Service = {
+        ExecStart = "%h/.local/bin/battery_monitor.sh";
+        RemainAfterExit = true;
+      };
+
+      Install = {
+        WantedBy = [ "default.target" ];
+      };
+    };
+
+    brightness_monitor = {
+      Unit = {
+        Description = "Audio OSD";
+        After = [ "niri.service" ];
+        BindsTo = "niri.service";
+        PartOf = "niri.service";
+      };
+
+      Service = {
+        ExecStart = "%h/.local/bin/brightness_monitor.sh";
+        RemainAfterExit = true;
+      };
+
+      Install = {
+        WantedBy = [ "default.target" ];
+      };
+    };
+  };
+}
