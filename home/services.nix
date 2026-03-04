@@ -25,13 +25,10 @@
       Unit = {
         Description = "Audio OSD";
         After = [ "niri.service" ];
-        BindsTo = "niri.service";
-        PartOf = "niri.service";
       };
 
       Service = {
         ExecStart = "%h/.local/bin/audio_monitor.sh";
-        RemainAfterExit = true;
       };
 
       Install = {
@@ -43,13 +40,10 @@
       Unit = {
         Description = "Battery OSD";
         After = [ "niri.service" ];
-        BindsTo = "niri.service";
-        PartOf = "niri.service";
       };
 
       Service = {
         ExecStart = "%h/.local/bin/battery_monitor.sh";
-        RemainAfterExit = true;
       };
 
       Install = {
@@ -61,13 +55,10 @@
       Unit = {
         Description = "Brightness OSD";
         After = [ "niri.service" ];
-        BindsTo = "niri.service";
-        PartOf = "niri.service";
       };
 
       Service = {
         ExecStart = "%h/.local/bin/brightness_monitor.sh";
-        RemainAfterExit = true;
       };
 
       Install = {
