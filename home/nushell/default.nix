@@ -60,9 +60,9 @@
 
         let project = ($env | get -o PROJECT_NAME)
         if ($project | is-not-empty) {
-          $"($display_path) ((($project)))\n"
+          $"($display_path) \(($project)\)\n"
         } else {
-          $"(display_path)\n"
+          $"($display_path)\n"
         }
       }
 

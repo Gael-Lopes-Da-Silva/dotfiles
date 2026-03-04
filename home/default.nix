@@ -22,13 +22,6 @@
   };
 
   services = {
-    home-manager.autoUpgrade = {
-      enable = true;
-      useFlake = true;
-      flakeDir = "${config.users.users.gael.home}/.dotfiles";
-      frequency = "weekly";
-    };
-
     gnome-keyring.enable = true;
   };
 
