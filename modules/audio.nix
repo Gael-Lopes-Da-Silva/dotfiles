@@ -69,8 +69,6 @@
   systemd.user.services.soundboard = {
     description = "Soundboard Setup";
     after = [ "pipewire.service" "wireplumber.service" ];
-    partOf = "pipewire.service wireplumber.service";
-    bindsTo = "pipewire.service wireplumber.service";
 
     serviceConfig = {
       Type = "oneshot";
