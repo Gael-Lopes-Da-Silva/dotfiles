@@ -41,13 +41,13 @@
     Unit = {
       Description = "Soundboard Setup";
       After = [ "pipewire.service" "pipewire-pulse.service" ];
-      BindsTo = "pipewire.service"
-      PartOf = "pipewire.service"
+      BindsTo = "pipewire.service";
+      PartOf = "pipewire.service";
     };
 
     Service = {
       Type = "oneshot";
-      ExecStart = "bash ${config.users.users.gael.home}/.local/bin/soundboard_setup.sh";
+      ExecStart = "$HOME/.local/bin/soundboard_setup.sh";
       RemainAfterExit = true;
     };
 

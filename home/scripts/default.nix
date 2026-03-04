@@ -18,5 +18,8 @@
   home.file.".local/bin/battery_notify.sh".source = ./battery_notify.sh;
   home.file.".local/bin/datetime_notify.sh".source = ./datetime_notify.sh;
 
-  home.file.".local/bin/soundboard_setup.sh".source = ./soundboard_setup.sh;
+  home.file.".local/bin/soundboard_setup.sh" = {
+    source = ./soundboard_setup.sh;
+    executable = true;
+  };
 }
