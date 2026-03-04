@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+while [[ -z $(pactl get-default-source) || $(pactl get-default-source) == "@DEFAULT_SOURCE@" ]]; do
+    sleep 1
+done
+
 SOUNDBOARD_SINK="SoundboardInput"
 SOUNDBOARD_SOURCE="SoundboardOutput"
 
@@ -17,9 +21,5 @@ pw-link "$REAL_MIC:capture_MONO" "$SOUNDBOARD_SINK:playback_FR" 2>/dev/null
 
 pw-link "$SOUNDBOARD_SINK:monitor_FL" "$SOUNDBOARD_SOURCE:input_FL" 2>/dev/null
 pw-link "$SOUNDBOARD_SINK:monitor_FR" "$SOUNDBOARD_SOURCE:input_FR" 2>/dev/null
-
-pactl set-default-source "$SOUNDBOARD_SOURCE"
-
-mkdir -p "$HOME/.soundboard"
 
 exit 0
