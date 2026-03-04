@@ -69,14 +69,13 @@
   systemd.user.services.soundboard = {
     description = "Soundboard Setup";
     after = [ "pipewire.service" "wireplumber.service" ];
+    partOf = "pipewire.service wireplumber.service";
+    bindsTo = "pipewire.service wireplumber.service";
 
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
       ExecStart = "bash ${config.users.users.gael.home}/.local/bin/soundboard_setup.sh";
-
-      PartOf = "pipewire.service wireplumber.service";
-      BindsTo = "pipewire.service wireplumber.service";
     };
 
     wantedBy = [ "default.target" ];
