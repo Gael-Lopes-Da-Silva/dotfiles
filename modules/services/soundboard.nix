@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 let
-  soundboardScript = pkgs.writeShellScript "soundboard-init" ''
+  soundboardScript = pkgs.writeShellScript "soundboard" ''
     #!${pkgs.bash}/bin/bash
 
     SOUNDBOARD_SINK="SoundboardInput"
