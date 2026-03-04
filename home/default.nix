@@ -10,9 +10,8 @@
     ./nushell
     ./qt
     ./scripts
+    ./services
     ./zed
-
-    ./services.nix
   ];
 
   home = {
@@ -37,25 +36,6 @@
     ];
 
     config.common.default = [ "gtk" "gnome" ];
-  };
-
-  systemd.user.services.soundboard = {
-    Unit = {
-      Description = "Soundboard Setup";
-      After = [ "pipewire.service" "pipewire-pulse.service" ];
-      BindsTo = "pipewire.service";
-      PartOf = "pipewire.service";
-    };
-
-    Service = {
-      Type = "oneshot";
-      ExecStart = "%h/.local/bin/soundboard_setup.sh";
-      RemainAfterExit = true;
-    };
-
-    Install = {
-      WantedBy = [ "default.target" ];
-    };
   };
 
   dconf.settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
