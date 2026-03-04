@@ -1,6 +1,8 @@
 { config, pkgs, ... }:
 
 {
+  environment.userPackages = with pkgs; [ bash ];
+
   systemd.user.services = {
     soundboard = {
       Unit = {
