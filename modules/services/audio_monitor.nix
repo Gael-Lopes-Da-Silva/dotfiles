@@ -4,6 +4,14 @@ let
   audioMonitorScript = pkgs.writeShellScript "volume-listener" ''
     #!${pkgs.bash}/bin/bash
 
+    until pactl get-default-sink >/dev/null 2>&1; do
+        sleep 0.5
+    done
+
+    until pactl get-default-source >/dev/null 2>&1; do
+        sleep 0.5
+    done
+
     prev_sink_volume=$(${pkgs.pulseaudio}/bin/pactl get-sink-volume @DEFAULT_SINK@ | ${pkgs.gawk}/bin/awk '{print $5}' | ${pkgs.coreutils}/bin/tr -d '%')
     prev_sink_mute=$(${pkgs.pulseaudio}/bin/pactl get-sink-mute @DEFAULT_SINK@ | ${pkgs.gawk}/bin/awk '{print $2}')
     prev_source_volume=$(${pkgs.pulseaudio}/bin/pactl get-source-volume @DEFAULT_SOURCE@ | ${pkgs.gawk}/bin/awk '{print $5}' | ${pkgs.coreutils}/bin/tr -d '%')
