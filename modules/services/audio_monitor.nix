@@ -62,8 +62,7 @@ in
     after = [
       "pipewire.service"
       "wireplumber.service"
-      "niri.service"
-      "graphical-session.target"
+      "dunst.service"
     ];
 
     wantedBy = [ "default.target" ];
