@@ -95,9 +95,9 @@
       LC_TIME = "en_US.UTF-8";
 
       GTK_THEME = "Adwaita:dark";
-      QT_QPA_PLATFORMTHEME = "qt5ct";
-      QT_STYLE_OVERRIDE = "Fusion";
-      QT_QUICK_CONTROLS_STYLE = "Fusion";
+      QT_QPA_PLATFORMTHEME = "qt6ct";
+      QT_STYLE_OVERRIDE = "adwaita-dark";
+      QT_QUICK_CONTROLS_STYLE = "adwaita-dark";
     };
 
     etc = {

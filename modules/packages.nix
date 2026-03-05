@@ -18,7 +18,6 @@
     p7zip
     udiskie
     cliphist
-    ocenaudio
     filezilla
     pulseaudio
     winetricks

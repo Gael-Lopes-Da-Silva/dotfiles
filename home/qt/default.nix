@@ -4,12 +4,12 @@
   qt = {
     enable = true;
 
-    style = {
-      name = "adwaita-dark";
+    platformTheme = {
+      name = "gnome";
     };
 
-    platformTheme = {
-      name = "adwaita";
+    style = {
+      name = "adwaita-dark";
     };
   };
 }
