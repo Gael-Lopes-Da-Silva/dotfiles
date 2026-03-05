@@ -5,7 +5,7 @@
     enable = true;
 
     platformTheme = {
-      name = "gnome";
+      name = "adwaita";
     };
 
     style = {
