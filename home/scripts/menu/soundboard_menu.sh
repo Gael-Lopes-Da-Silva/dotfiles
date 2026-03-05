@@ -26,7 +26,7 @@ fzf_output=$(cat "$tmpfile")
 rm "$tmpfile"
 
 if [ -n "$fzf_output" ]; then
-    paplay -d "SoundboardInput" $fzf_output &
+    paplay -d "SoundboardSpeaker" $fzf_output &
     paplay -d "$(pactl get-default-sink)" $fzf_output &
 fi
 
