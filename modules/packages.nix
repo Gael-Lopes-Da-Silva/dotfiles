@@ -18,6 +18,7 @@
     p7zip
     udiskie
     cliphist
+    filezilla
     pulseaudio
     winetricks
     wl-clipboard
