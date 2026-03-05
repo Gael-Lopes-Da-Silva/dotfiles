@@ -7,5 +7,9 @@
     style = {
       name = "adwaita-dark";
     };
+
+    platformTheme = {
+      name = "adwaita";
+    };
   };
 }
