@@ -27,8 +27,8 @@
             factory = "adapter";
             args = {
               "factory.name"     = "support.null-audio-sink";
-              "node.name"        = "SoundboardInput";
-              "node.description" = "Soundboard Input";
+              "node.name"        = "SoundboardSink";
+              "node.description" = "Soundboard Speaker";
               "media.class"      = "Audio/Sink";
               "audio.position"   = "FL,FR";
             };
@@ -37,8 +37,8 @@
             factory = "adapter";
             args = {
               "factory.name"     = "support.null-audio-sink";
-              "node.name"        = "SoundboardOutput";
-              "node.description" = "Soundboard Output";
+              "node.name"        = "SoundboardSource";
+              "node.description" = "Soundboard Mic";
               "media.class"      = "Audio/Source/Virtual";
               "audio.position"   = "FL,FR";
             };

@@ -4,8 +4,8 @@ while [[ -z $(pactl get-default-source) || $(pactl get-default-source) == "@DEFA
     sleep 1
 done
 
-SOUNDBOARD_SINK="SoundboardInput"
-SOUNDBOARD_SOURCE="SoundboardOutput"
+SOUNDBOARD_SINK="SoundboardSink"
+SOUNDBOARD_SOURCE="SoundboardSource"
 
 if pw-link --links | grep -Eq "$SOUNDBOARD_SINK|$SOUNDBOARD_SOURCE"; then
     echo "Soundboard links already exist, skipping."
