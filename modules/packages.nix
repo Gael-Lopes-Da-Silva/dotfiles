@@ -16,7 +16,6 @@
     ouch
     wine
     p7zip
-    piper
     udiskie
     cliphist
     filezilla
@@ -35,7 +34,6 @@
     printing.enable = true;
     blueman.enable = true;
     gvfs.enable = true;
-    ratbagd.enable = true;
 
     openssh = {
       enable = true;
