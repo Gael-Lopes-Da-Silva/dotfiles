@@ -83,6 +83,12 @@
         };
       };
 
+      terminal = {
+        shell = {
+          program = "nu";
+        };
+      };
+
       telemetry = {
         diagnostics = false;
         metrics = false;
