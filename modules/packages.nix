@@ -17,15 +17,12 @@
     wine
     p7zip
     udiskie
-    cliphist
     filezilla
     pulseaudio
     winetricks
-    wl-clipboard
     wine-wayland
     brightnessctl
     xdg-user-dirs
-    wl-clip-persist
     xdg-user-dirs-gtk
     xwayland-satellite
   ];

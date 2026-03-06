@@ -3,6 +3,7 @@
 {
   imports = [
     ./alacritty
+    ./clipboard
     ./dunst
     ./git
     ./gtk
