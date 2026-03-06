@@ -1,9 +1,15 @@
-{ config, lib, pkgs, modulsPath, ... }:
+{ config, lib, ... }:
 
 {
   boot = {
     initrd = {
-      availableKernelModules = [ "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
+      availableKernelModules = [
+        "xhci_pci"
+        "ahci"
+        "usbhid"
+        "usb_storage"
+        "sd_mod"
+      ];
     };
 
     kernelModules = [ "kvm-intel" ];
@@ -22,7 +28,10 @@
     "/boot" = {
       device = "/dev/disk/by-uuid/E2BC-ED4B";
       fsType = "vfat";
-      options = [ "fmask=0077" "dmask=0077" ];
+      options = [
+        "fmask=0077"
+        "dmask=0077"
+      ];
     };
   };
 
@@ -50,5 +59,8 @@
     cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
   };
 
-  services.xserver.videoDrivers = [ "modesetting" "nvidia" ];
+  services.xserver.videoDrivers = [
+    "modesetting"
+    "nvidia"
+  ];
 }

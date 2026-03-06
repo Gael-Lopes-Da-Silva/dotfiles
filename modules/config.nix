@@ -3,9 +3,15 @@
 {
   nix = {
     settings = {
-      experimental-features = [ "nix-command" "flakes" ];
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
       auto-optimise-store = true;
-      trusted-users = [ "root" "gael" ];
+      trusted-users = [
+        "root"
+        "gael"
+      ];
       cores = 0;
       max-jobs = "auto";
     };
@@ -26,7 +32,10 @@
 
     kernelPackages = pkgs.linuxPackages_6_18;
     kernelModules = [ "v4l2loopback" ];
-    kernelParams = [ "quiet" "udev.log_level=3" ];
+    kernelParams = [
+      "quiet"
+      "udev.log_level=3"
+    ];
 
     extraModulePackages = with config.boot.kernelPackages; [
       v4l2loopback
@@ -57,7 +66,10 @@
         setSocketVariable = true;
 
         daemon.settings = {
-          dns = [ "1.1.1.1" "8.8.8.8" ];
+          dns = [
+            "1.1.1.1"
+            "8.8.8.8"
+          ];
         };
       };
     };
@@ -117,7 +129,12 @@
 
   users.users.gael = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "audio" "video" "vboxusers" ];
+    extraGroups = [
+      "wheel"
+      "audio"
+      "video"
+      "vboxusers"
+    ];
     shell = pkgs.nushell;
   };
 

@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -36,7 +36,10 @@
       xdg-desktop-portal-gnome
     ];
 
-    config.common.default = [ "gtk" "gnome" ];
+    config.common.default = [
+      "gtk"
+      "gnome"
+    ];
   };
 
   dconf.settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";

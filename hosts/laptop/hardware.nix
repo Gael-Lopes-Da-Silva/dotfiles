@@ -1,12 +1,21 @@
-{ config, lib, pkgs, modulsPath, ... }:
+{ config, lib, ... }:
 
 {
   boot = {
     initrd = {
-      availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "sd_mod" ];
+      availableKernelModules = [
+        "xhci_pci"
+        "ahci"
+        "nvme"
+        "usb_storage"
+        "sd_mod"
+      ];
     };
 
-    kernelModules = [ "kvm-intel" "snd_hda_intel" ];
+    kernelModules = [
+      "kvm-intel"
+      "snd_hda_intel"
+    ];
     extraModulePackages = [ ];
   };
 
@@ -18,7 +27,10 @@
     "/boot" = {
       device = "/dev/disk/by-uuid/4291-A4B0";
       fsType = "vfat";
-      options = [ "fmask=0077" "dmask=0077" ];
+      options = [
+        "fmask=0077"
+        "dmask=0077"
+      ];
     };
   };
 

@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ ... }:
 
 {
   services.pipewire = {
@@ -24,21 +24,21 @@
             {
               factory = "adapter";
               args = {
-                "factory.name"     = "support.null-audio-sink";
-                "node.name"        = "SoundboardSink";
+                "factory.name" = "support.null-audio-sink";
+                "node.name" = "SoundboardSink";
                 "node.description" = "Soundboard Speaker";
-                "media.class"      = "Audio/Sink";
-                "audio.position"   = "FL,FR";
+                "media.class" = "Audio/Sink";
+                "audio.position" = "FL,FR";
               };
             }
             {
               factory = "adapter";
               args = {
-                "factory.name"     = "support.null-audio-sink";
-                "node.name"        = "SoundboardSource";
+                "factory.name" = "support.null-audio-sink";
+                "node.name" = "SoundboardSource";
                 "node.description" = "Soundboard Mic";
-                "media.class"      = "Audio/Source/Virtual";
-                "audio.position"   = "FL,FR";
+                "media.class" = "Audio/Source/Virtual";
+                "audio.position" = "FL,FR";
               };
             }
           ];
