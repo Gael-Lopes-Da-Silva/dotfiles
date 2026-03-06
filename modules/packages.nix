@@ -13,6 +13,7 @@
   ];
 
   environment.systemPackages = with pkgs; [
+    nixd
     ouch
     wine
     p7zip
