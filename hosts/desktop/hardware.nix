@@ -42,11 +42,14 @@
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
   hardware = {
-    bluetooth.enable = true;
+    enableRedistributableFirmware = true;
+    cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+
     graphics = {
       enable = true;
       enable32Bit = true;
     };
+
     nvidia = {
       open = false;
       modesetting.enable = true;
@@ -55,8 +58,6 @@
       nvidiaSettings = true;
       package = config.boot.kernelPackages.nvidiaPackages.stable;
     };
-    enableRedistributableFirmware = true;
-    cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
   };
 
   services.xserver.videoDrivers = [

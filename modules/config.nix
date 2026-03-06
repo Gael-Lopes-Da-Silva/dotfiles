@@ -2,28 +2,45 @@
 
 {
   nix = {
+    optimise = {
+      automatic = true;
+      persistent = true;
+      dates = "daily";
+    };
+
     settings = {
+      max-jobs = "auto";
+      auto-optimise-store = true;
+
       experimental-features = [
         "nix-command"
         "flakes"
       ];
-      auto-optimise-store = true;
+
       trusted-users = [
         "root"
         "gael"
       ];
-      cores = 0;
-      max-jobs = "auto";
     };
 
     gc = {
       automatic = true;
+      persistent = true;
       dates = "daily";
       options = "--delete-older-than 5d";
     };
   };
 
   boot = {
+    loader = {
+      systemd-boot = {
+        enable = true;
+        configurationLimit = 5;
+      };
+
+      efi.canTouchEfiVariables = true;
+    };
+
     initrd = {
       verbose = false;
     };
@@ -34,12 +51,28 @@
     kernelModules = [ "v4l2loopback" ];
     kernelParams = [
       "quiet"
+      "splash"
+      "nowatchdog"
+      "nmi_watchdog=0"
       "udev.log_level=3"
+      "systemd.show_status=auto"
     ];
 
     extraModulePackages = with config.boot.kernelPackages; [
       v4l2loopback
     ];
+
+    tmp = {
+      cleanOnBoot = true;
+      useTmpfs = true;
+    };
+  };
+
+  hardware = {
+    bluetooth = {
+      enable = true;
+      powerOnBoot = false;
+    };
   };
 
   console.earlySetup = true;
@@ -51,6 +84,7 @@
 
   time.timeZone = "Europe/Paris";
   i18n.defaultLocale = "en_US.UTF-8";
+  documentation.enable = false;
 
   security = {
     protectKernelImage = true;
@@ -75,6 +109,38 @@
     };
 
     virtualbox.host.enable = true;
+  };
+
+  systemd.oomd.enable = false;
+
+  services = {
+    earlyoom.enable = true;
+
+    openssh = {
+      enable = true;
+
+      settings = {
+        PasswordAuthentication = true;
+        PermitRootLogin = "no";
+      };
+    };
+
+    displayManager.ly = {
+      enable = true;
+
+      settings = {
+        animation = "colormix";
+        session_log = ".cache/ly/session.log";
+        clock = "%d-%m-%Y %H:%M:%S";
+        bigclock = true;
+        blank_password = true;
+        blank_box = true;
+        hide_borders = false;
+        hide_key_hints = true;
+        load = true;
+        save = true;
+      };
+    };
   };
 
   environment = {
@@ -130,6 +196,7 @@
   users.users.gael = {
     isNormalUser = true;
     extraGroups = [
+      "disk"
       "wheel"
       "audio"
       "video"

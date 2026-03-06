@@ -27,6 +27,11 @@
     gnome-keyring.enable = true;
   };
 
+  programs = {
+    home-manager.enable = true;
+    ssh-agent.enable = true;
+  };
+
   xdg.portal = {
     enable = true;
     xdgOpenUsePortal = true;
