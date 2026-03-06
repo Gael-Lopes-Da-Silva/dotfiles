@@ -24,7 +24,7 @@
         gap_size = 4;
         separator_color = "frame";
         sort = true;
-        font = "Monospace 14";
+        font = "DejaVu Sans Mono 14";
         line_height = 0;
         markup = "full";
         format = "<b>%s</b>\\n%b";

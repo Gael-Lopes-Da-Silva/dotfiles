@@ -17,7 +17,7 @@
       font = {
         size = 18.0;
         normal = {
-          family = "Monospace";
+          family = "DejaVu Sans Mono";
           style = "Regular";
         };
       };

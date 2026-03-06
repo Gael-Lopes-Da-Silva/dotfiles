@@ -60,6 +60,10 @@ layout {
         gaps-between-tabs 6
         corner-radius 8
     }
+
+    border {
+        off
+    }
 }
 
 // ###################################
