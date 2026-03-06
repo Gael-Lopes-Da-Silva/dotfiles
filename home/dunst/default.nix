@@ -3,6 +3,7 @@
 {
   services.dunst = {
     enable = true;
+    systemdTarget = "graphical-session.target";
 
     settings = {
       global = {
