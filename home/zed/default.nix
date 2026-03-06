@@ -6,15 +6,20 @@
 
     extensions = [
       "yellowed"
+
       "nix"
       "php"
+      "xml"
+      "lua"
       "toml"
       "log"
       "html"
       "sql"
       "kdl"
       "twig"
+      "make"
       "dockerfile"
+      "git-firefly"
     ];
 
     userSettings = {
