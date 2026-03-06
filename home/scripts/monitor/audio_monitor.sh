@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+while [[ -z $(pactl get-default-source) || $(pactl get-default-source) == "@DEFAULT_SOURCE@" ]]; do
+    sleep 1
+done
+
 prev_sink_volume=$(pactl get-sink-volume @DEFAULT_SINK@ | awk '{print $5}' | tr -d '%')
 prev_sink_mute=$(pactl get-sink-mute @DEFAULT_SINK@ | awk '{print $2}')
 prev_source_volume=$(pactl get-source-volume @DEFAULT_SOURCE@ | awk '{print $5}' | tr -d '%')
