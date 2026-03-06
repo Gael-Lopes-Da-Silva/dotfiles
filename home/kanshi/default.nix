@@ -4,9 +4,11 @@
   services.kanshi = {
     enable = true;
 
-    profiles = {
-      laptop_undocked = {
-        outputs = [
+    settings = [
+      {
+        profile.name = "laptop_undocked";
+
+        profile.outputs = [
           {
             criteria = "eDP-1";
             mode = "1920x1080@60Hz";
@@ -14,9 +16,11 @@
             status = "enable";
           }
         ];
-      };
-      laptop_docked = {
-        outputs = [
+      }
+      {
+        profile.name = "laptop_docked";
+
+        profile.outputs = [
           {
             criteria = "eDP-1";
             mode = "1920x1080@60Hz";
@@ -32,9 +36,11 @@
             status = "enable";
           }
         ];
-      };
-      desktop = {
-        outputs = [
+      }
+      {
+        profile.name = "desktop";
+
+        profile.outputs = [
           {
             criteria = "HDMI-A-1";
             mode = "1920x1080@100Hz";
@@ -50,7 +56,7 @@
             status = "enable";
           }
         ];
-      };
-    };
+      }
+    ];
   };
 }
