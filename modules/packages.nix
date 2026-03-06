@@ -13,6 +13,7 @@
   ];
 
   environment.systemPackages = with pkgs; [
+    nil
     nixd
     ouch
     wine
