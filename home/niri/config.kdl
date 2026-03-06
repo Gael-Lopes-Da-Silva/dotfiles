@@ -9,6 +9,7 @@ spawn-sh-at-startup "bash ~/.local/bin/soundboard_setup.sh"
 spawn-sh-at-startup "bash ~/.local/bin/audio_monitor.sh"
 spawn-sh-at-startup "bash ~/.local/bin/battery_monitor.sh"
 spawn-sh-at-startup "bash ~/.local/bin/brightness_monitor.sh"
+spawn-sh-at-startup "bash ~/.local/bin/output_monitor.sh"
 
 // ###################################
 // Input
