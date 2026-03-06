@@ -6,6 +6,7 @@
     ./dunst
     ./git
     ./gtk
+    ./kanshi
     ./niri
     ./nushell
     ./qt
