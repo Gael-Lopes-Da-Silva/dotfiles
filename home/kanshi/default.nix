@@ -1,9 +1,8 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, ... }:
 
 {
   services.kanshi = {
     enable = true;
-    systemdTarget = "niri.service";
 
     settings = [
       {

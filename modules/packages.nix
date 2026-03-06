@@ -16,6 +16,7 @@
     ouch
     wine
     p7zip
+    udiskie
     cliphist
     filezilla
     pulseaudio
