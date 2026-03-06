@@ -7,8 +7,8 @@
     settings = {
       global = {
         follow = "mouse";
-        origin = "bottom-right";
-        offset = "(10, 10)";
+        origin = "top-right";
+        offset = "(18, 18)";
         corner_radius = 0;
         timeout = 20;
         idle_threshold = 0;
