@@ -59,8 +59,6 @@
       "splash"
       "nowatchdog"
       "nmi_watchdog=0"
-      "rd.udev.log_priority=3"
-      "rd.systemd.show_status=auto"
     ];
 
     extraModulePackages = with config.boot.kernelPackages; [
