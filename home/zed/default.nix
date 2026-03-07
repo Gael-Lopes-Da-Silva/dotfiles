@@ -99,6 +99,10 @@
         };
       };
 
+      session = {
+        trust_all_worktrees = true;
+      };
+
       telemetry = {
         diagnostics = false;
         metrics = false;
