@@ -58,9 +58,9 @@
           $"(ansi red_bold)($display_path)(ansi reset)"
         }
 
-        let project = ($env | get -o PROJECT_NAME)
-        if ($project | is-not-empty) {
-          $"($display_path) \(($project)\)\n"
+        let nix_shell = ($env | get -o IN_NIX_SHELL)
+        if ($nix_shell | is-not-empty) {
+          $"($display_path) ❄\n"
         } else {
           $"($display_path)\n"
         }
