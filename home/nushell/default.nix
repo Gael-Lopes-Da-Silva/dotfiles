@@ -39,35 +39,14 @@
     };
 
     configFile.text = ''
-      def create_left_prompt [] {
-        let last_status = $env.LAST_EXIT_CODE
-        let home = ($env.HOME | path expand)
-        let cwd = (pwd | path expand)
-
-        let display_path = if $cwd == $home {
-          "~"
-        } else if ($cwd | str starts-with $home) {
-          "~" + ($cwd | str replace $home "")
-        } else {
-          $cwd
-        }
-
-        let display_path = if $last_status == 0 {
-          $"(ansi green_bold)($display_path)(ansi reset)"
-        } else {
-          $"(ansi red_bold)($display_path)(ansi reset)"
-        }
-
+      def create_right_prompt [] {
         let nix_shell = ($env | get -o IN_NIX_SHELL)
         if ($nix_shell | is-not-empty) {
-          $"($display_path) ❄\n"
-        } else {
-          $"($display_path)\n"
+          $"❄"
         }
       }
 
-      $env.PROMPT_COMMAND = { create_left_prompt }
-      $env.PROMPT_COMMAND_RIGHT = {||}
+      $env.PROMPT_COMMAND_RIGHT = { create_right_prompt }
     '';
   };
 }
