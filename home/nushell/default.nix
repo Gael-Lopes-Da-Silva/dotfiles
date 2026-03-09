@@ -42,7 +42,7 @@
       def create_right_prompt [] {
         let nix_shell = ($env | get -o IN_NIX_SHELL)
         if ($nix_shell | is-not-empty) {
-          $"❄"
+          $"(ansi white)❄(ansi reset) "
         }
       }
 
