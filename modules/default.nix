@@ -56,9 +56,7 @@
     kernelModules = [ "v4l2loopback" ];
     kernelParams = [
       "quiet"
-      "splash"
-      "nowatchdog"
-      "nmi_watchdog=0"
+      "nowatchdog=1"
     ];
 
     extraModulePackages = with config.boot.kernelPackages; [
@@ -85,8 +83,15 @@
     firewall.enable = true;
   };
 
-  time.timeZone = "Europe/Paris";
-  i18n.defaultLocale = "en_US.UTF-8";
+  time = {
+    timeZone = "Europe/Paris";
+  };
+
+  i18n = {
+    defaultLocale = "en_US.UTF-8";
+    defaultCharset = "UTF-8";
+  };
+
   documentation.enable = false;
 
   security = {
@@ -117,7 +122,10 @@
   systemd.oomd.enable = false;
 
   services = {
-    earlyoom.enable = true;
+    earlyoom = {
+      enable = true;
+      enableNotifications = true;
+    };
 
     openssh = {
       enable = true;
