@@ -13,6 +13,7 @@
   ];
 
   environment.systemPackages = with pkgs; [
+    vial
     ouch
     wine
     p7zip
