@@ -17,6 +17,7 @@
     ouch
     wine
     p7zip
+    blender
     udiskie
     filezilla
     pulseaudio
