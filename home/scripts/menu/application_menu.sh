@@ -24,7 +24,7 @@ $TERMINAL --class launcher -e bash -c '
             nodisplay=
             exec_cmd=
 
-            while IFS='=' read -r key value; do
+            while IFS="=" read -r key value; do
                 case $key in
                     Name)
                         [ -z "$name" ] && name=$value
