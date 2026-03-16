@@ -50,7 +50,7 @@
       verbose = false;
     };
 
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackages_6_18;
     kernelModules = [ "v4l2loopback" ];
     kernelParams = [
       "quiet"
