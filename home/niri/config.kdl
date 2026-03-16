@@ -29,7 +29,7 @@ input {
     }
 
     warp-mouse-to-focus
-    focus-follows-mouse
+    focus-follows-mouse max-scroll-amount="0%"
 }
 
 // ###################################
@@ -50,7 +50,11 @@ layout {
     }
 
     focus-ring {
-        width 4
+        off
+    }
+
+    border {
+        width 6
         // active-gradient from="#80c8ff" to="#c7ff7f" angle=45
         // inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
     }
@@ -61,8 +65,12 @@ layout {
         corner-radius 8
     }
 
-    border {
-        off
+    shadow {
+        on
+        softness 10
+        spread 5
+        color "#1A1A1AAA"
+        inactive-color "#1A1A1AAA"
     }
 }
 
@@ -101,7 +109,39 @@ gestures {
 // ###################################
 
 cursor {
-  xcursor-size 24
+    xcursor-size 24
+}
+
+// ###################################
+// Recent Windows
+// ###################################
+
+recent-windows {
+    off
+}
+
+// ###################################
+// Layer Rules
+// ###################################
+
+layer-rule {
+    match namespace="^notifications$"
+
+    geometry-corner-radius 16
+
+    shadow {
+        on
+        softness 10
+        spread 5
+        color "#1A1A1AAA"
+        inactive-color "#1A1A1AAA"
+    }
+}
+
+layer-rule {
+    match namespace="^wallpaper$"
+
+    place-within-backdrop true
 }
 
 // ###################################
@@ -110,29 +150,23 @@ cursor {
 
 window-rule {
     clip-to-geometry true
+    geometry-corner-radius 16
+
+    open-fullscreen false
+    open-maximized false
+    open-maximized-to-edges false
+}
+
+window-rule {
+    match app-id="steam" title="^notificationtoasts"
+
+    open-focused false
+    default-floating-position x=8 y=8 relative-to="bottom-right"
 }
 
 window-rule {
     match app-id="launcher"
-
-    open-floating true
-
-    default-column-width { proportion 0.75; }
-    default-window-height { proportion 0.50; }
-    default-floating-position x=0 y=100 relative-to="top"
-}
-
-window-rule {
     match app-id="cliphist"
-
-    open-floating true
-
-    default-column-width { proportion 0.50; }
-    default-window-height { proportion 0.50; }
-    default-floating-position x=0 y=100 relative-to="top"
-}
-
-window-rule {
     match app-id="soundboard"
 
     open-floating true
