@@ -8,20 +8,21 @@
       global = {
         follow = "mouse";
         origin = "top-right";
-        offset = "(18, 18)";
-        corner_radius = 0;
+        offset = "(26, 26)";
+        corner_radius = 16;
         timeout = 20;
         idle_threshold = 0;
         notification_limit = 10;
         progress_bar = true;
+        progress_bar_corner_radius = 5;
         indicate_hidden = true;
         transparency = 0;
         separator_height = 4;
         padding = 8;
         horizontal_padding = 8;
         text_icon_padding = 0;
-        frame_width = 4;
-        gap_size = 4;
+        frame_width = 6;
+        gap_size = 6;
         separator_color = "frame";
         sort = true;
         font = "DejaVu Sans Mono 14";
@@ -41,22 +42,23 @@
       };
 
       urgency_low = {
-        background = "#191919";
-        foreground = "#888888";
+        background = "#4A4A4A";
+        foreground = "#FFFFFF";
+        frame_color = "#808080";
         timeout = 10;
       };
 
       urgency_normal = {
-        background = "#191919";
-        foreground = "#ffffff";
-        frame_color = "#80c8ff";
+        background = "#AB8655";
+        foreground = "#FFFFFF";
+        frame_color = "#FFC87F";
         timeout = 10;
       };
 
       urgency_critical = {
-        background = "#191919";
-        foreground = "#ffffff";
-        frame_color = "#ff4c4c";
+        background = "#960202";
+        foreground = "#FFFFFF";
+        frame_color = "#DE0000";
         timeout = 0;
       };
     };
