@@ -87,15 +87,6 @@ prefer-no-csd
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
 // ###################################
-// Animations
-// ###################################
-
-animations {
-    // off
-    // slowdown 3.0
-}
-
-// ###################################
 // Gestures
 // ###################################
 
@@ -119,12 +110,6 @@ cursor {
 
 window-rule {
     clip-to-geometry true
-    // geometry-corner-radius 0
-}
-
-window-rule {
-    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
-    open-floating true
 }
 
 window-rule {
