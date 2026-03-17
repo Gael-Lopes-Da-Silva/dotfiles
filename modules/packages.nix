@@ -37,13 +37,9 @@
 
   programs = {
     niri.enable = true;
+    hyprland.enable = true;
     firefox.enable = true;
     xwayland.enable = true;
     firejail.enable = true;
-
-    direnv = {
-      enable = true;
-      nix-direnv.enable = true;
-    };
   };
 }

@@ -7,6 +7,7 @@
     ./dunst
     ./git
     ./gtk
+    ./hyprland
     ./kanshi
     ./niri
     ./nushell
@@ -17,10 +18,18 @@
 
   home = {
     stateVersion = "25.11";
+
     sessionPath = [
       "$HOME/.local/bin"
       "$HOME/.cargo/bin"
     ];
+
+    pointerCursor = {
+      hyprcursor.enable = true;
+      gtk.enable = true;
+      name = "Adwaita";
+      size = 24;
+    };
   };
 
   services = {
@@ -47,5 +56,8 @@
     ];
   };
 
-  dconf.settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
+  dconf.settings = {
+    "org/gnome/desktop/interface".color-scheme = "prefer-dark";
+    "org/gnome/desktop/wm/preferences".button-layout = "";
+  };
 }
