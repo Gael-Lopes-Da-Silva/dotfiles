@@ -2,17 +2,18 @@
 
 {
   home.packages = with pkgs; [
+    hyprshot
+    hyprnome
+    hyprpaper
+    hyprshade
     hyprfreeze
     hyprpicker
-    hyprpaper
-    hyprshot
     hyprsunset
-    hyprshade
 
-    hyprgraphics
+    hyprland
     hyprutils
     hyprcursor
-    hyprland
+    hyprgraphics
     aquamarine
   ];
 
@@ -334,10 +335,13 @@
         "$mod SHIFT, 9, movetoworkspace, r~9"
         "$mod SHIFT, 0, movetoworkspace, r~10"
 
-        "$mod, U, workspace, r+1"
-        "$mod, I, workspace, r-1"
-        "$mod, mouse_up, workspace, r+1"
-        "$mod, mouse_down, workspace, r-1"
+        "$mod, U, exec, hyprnome"
+        "$mod, I, exec, hyprnome --no-empty --previous"
+        "$mod SHIFT, U, exec, hyprnome --move"
+        "$mod SHIFT, I, exec, hyprnome --move --no-empty --previous"
+        "$mod, mouse_down, exec, hyprnome"
+        "$mod, mouse_up, exec, hyprnome --no-empty --previous"
+
         "$mod, mouse_left, layoutmsg, cycleprev"
         "$mod, mouse_right, layoutmsg, cyclenext"
       ];
