@@ -64,16 +64,20 @@
       };
 
       general = {
-        gaps_in = 16;
+        gaps_in = 8;
         gaps_out = 16;
-
         border_size = 6;
         resize_on_border = false;
         allow_tearing = false;
         layout = "monocle";
+        modal_parent_blocking = true;
 
         "col.active_border" = "rgb(FFC87F)";
         "col.inactive_border" = "rgb(595959)";
+
+        snap = {
+          enabled = true;
+        };
       };
 
       decoration = {
@@ -339,8 +343,10 @@
         "$mod, I, exec, hyprnome --no-empty --previous"
         "$mod SHIFT, U, exec, hyprnome --move"
         "$mod SHIFT, I, exec, hyprnome --move --no-empty --previous"
-        "$mod, mouse_down, exec, hyprnome"
-        "$mod, mouse_up, exec, hyprnome --no-empty --previous"
+        "$mod, mouse_up, exec, hyprnome"
+        "$mod, mouse_down, exec, hyprnome --no-empty --previous"
+        "$mod SHIFT, mouse_up, exec, hyprnome --move"
+        "$mod SHIFT, mouse_down, exec, hyprnome --move --no-empty --previous"
 
         "$mod, mouse_left, layoutmsg, cycleprev"
         "$mod, mouse_right, layoutmsg, cyclenext"
