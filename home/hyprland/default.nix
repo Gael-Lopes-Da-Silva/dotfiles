@@ -8,7 +8,12 @@
     hyprshot
     hyprsunset
     hyprshade
-    hyprnome
+
+    hyprgraphics
+    hyprutils
+    hyprcursor
+    hyprland
+    aquamarine
   ];
 
   wayland.windowManager.hyprland = {
@@ -64,7 +69,7 @@
         border_size = 6;
         resize_on_border = false;
         allow_tearing = false;
-        layout = "scrolling";
+        layout = "monocle";
 
         "col.active_border" = "rgb(FFC87F)";
         "col.inactive_border" = "rgb(595959)";
@@ -118,7 +123,9 @@
       };
 
       gestures = {
-        workspace_swipe_distance = 100;
+        workspace_swipe_distance = 700;
+        workspace_swipe_min_speed_to_force = 10;
+        workspace_swipe_cancel_ratio = 0.2;
         workspace_swipe_create_new = true;
         workspace_swipe_direction_lock = true;
         workspace_swipe_forever = false;
@@ -126,10 +133,9 @@
       };
 
       gesture = [
-        "3, up, dispatcher, exec, hyprnome"
-        "3, down, dispatcher, exec, hyprnome --previous --no-empty"
-        "3, left, dispatcher, layoutmsg, move +col"
-        "3, right, dispatcher, layoutmsg, move -col"
+        "3, vertical, workspace"
+        "3, left, dispatcher, layoutmsg, cycleprev"
+        "3, right, dispatcher, layoutmsg, cyclenext"
       ];
 
       group = {
@@ -198,13 +204,6 @@
         hide_on_tablet = true;
       };
 
-      scrolling = {
-        fullscreen_on_one_column = true;
-        column_width = 1.0;
-        focus_fit_method = 1;
-        follow_focus = true;
-      };
-
       ecosystem = {
         no_update_news = true;
         no_donation_nag = true;
@@ -237,13 +236,21 @@
           no_focus = true;
         }
         {
+          name = "size-floating-windows";
+
+          "match:float" = true;
+
+          center = true;
+          size = "monitor_w*0.6 monitor_h*0.6";
+        }
+        {
           name = "terminal-based-menus";
 
           "match:class" = "^(launcher|cliphist|soundboard|powermenu)$";
 
           float = true;
-          size = "50% 50%";
-          move = "0 100";
+          center = true;
+          size = "monitor_w*0.5 monitor_h*0.5";
         }
       ];
 
@@ -254,10 +261,12 @@
         "$mod, N, exec, bash ~/.local/bin/datetime_notify.sh"
         "$mod, B, exec, bash ~/.local/bin/battery_notify.sh"
         "$mod, V, exec, bash ~/.local/bin/cliphist_menu.sh"
-        "$mod, A, exec, bash ~/.local/bin/application_menu.sh"
-        "$mod, C, exec, bash ~/.local/bin/command_menu.sh"
         "$mod, M, exec, bash ~/.local/bin/soundboard_menu.sh"
 
+        "$mod, P, exec, bash ~/.local/bin/application_menu.sh"
+        "$mod SHIFT, P, exec, bash ~/.local/bin/command_menu.sh"
+
+        "$mod, Q, exec, bash ~/.local/bin/power_menu.sh"
         "$mod SHIFT, Q, exec, bash ~/.local/bin/power_menu.sh"
         "CTRL ALT, Delete, exec, bash ~/.local/bin/power_menu.sh"
 
@@ -279,20 +288,20 @@
 
         "$mod SHIFT, C, killactive,"
         "$mod CTRL, C, forcekillactive,"
+
         "$mod, Space, togglefloating,"
 
-        "$mod, F, fullscreen, 1 toggle"
-        "$mod SHIFT, F, fullscreen, 0 toggle"
+        "$mod, F, fullscreenstate, 2 0"
+        "$mod SHIFT, F, fullscreenstate, 2 2"
 
-        "$mod, left, layoutmsg, move -col"
-        "$mod, right, layoutmsg, move +col"
-        "$mod, H, layoutmsg, move -col"
-        "$mod, L, layoutmsg, move +col"
-
-        "$mod CTRL, left, layoutmsg, swapcol l"
-        "$mod CTRL, right, layoutmsg, swapcol r"
-        "$mod CTRL, H, layoutmsg, swapcol l"
-        "$mod CTRL, L, layoutmsg, swapcol r"
+        "$mod, left, layoutmsg, cycleprev"
+        "$mod, right, layoutmsg, cyclenext"
+        "$mod, up, movefocus, u"
+        "$mod, down, movefocus, d"
+        "$mod, H, layoutmsg, cycleprev"
+        "$mod, L, layoutmsg, cyclenext"
+        "$mod, K, movefocus, u"
+        "$mod, J, movefocus, d"
 
         "$mod SHIFT, left, movefocus, mon:l"
         "$mod SHIFT, right, movefocus, mon:r"
@@ -303,19 +312,34 @@
         "$mod SHIFT, K, movefocus, mon:u"
         "$mod SHIFT, J, movefocus, mon:d"
 
-        "$mod, I, exec, hyprnome --previous --no-empty"
-        "$mod, U, exec, hyprnome"
-        "$mod, 1, exec, hyprnome --previous --no-empty"
-        "$mod, 2, exec, hyprnome"
-        "$mod SHIFT, 1, exec, hyprnome --previous --no-empty --move"
-        "$mod SHIFT, 2, exec, hyprnome --move"
-        "$mod SHIFT, I, exec, hyprnome --previous --no-empty --move"
-        "$mod SHIFT, U, exec, hyprnome --move"
+        "$mod, 1, workspace, r~1"
+        "$mod, 2, workspace, r~2"
+        "$mod, 3, workspace, r~3"
+        "$mod, 4, workspace, r~4"
+        "$mod, 5, workspace, r~5"
+        "$mod, 6, workspace, r~6"
+        "$mod, 7, workspace, r~7"
+        "$mod, 8, workspace, r~8"
+        "$mod, 9, workspace, r~9"
+        "$mod, 0, workspace, r~10"
 
-        "$mod, mouse_up, exec, hyprnome --previous --no-empty"
-        "$mod, mouse_down, exec, hyprnome"
-        "$mod, mouse_left, movefocus, l"
-        "$mod, mouse_right, movefocus, r"
+        "$mod SHIFT, 1, movetoworkspace, r~1"
+        "$mod SHIFT, 2, movetoworkspace, r~2"
+        "$mod SHIFT, 3, movetoworkspace, r~3"
+        "$mod SHIFT, 4, movetoworkspace, r~4"
+        "$mod SHIFT, 5, movetoworkspace, r~5"
+        "$mod SHIFT, 6, movetoworkspace, r~6"
+        "$mod SHIFT, 7, movetoworkspace, r~7"
+        "$mod SHIFT, 8, movetoworkspace, r~8"
+        "$mod SHIFT, 9, movetoworkspace, r~9"
+        "$mod SHIFT, 0, movetoworkspace, r~10"
+
+        "$mod, U, workspace, r+1"
+        "$mod, I, workspace, r-1"
+        "$mod, mouse_up, workspace, r+1"
+        "$mod, mouse_down, workspace, r-1"
+        "$mod, mouse_left, layoutmsg, cycleprev"
+        "$mod, mouse_right, layoutmsg, cyclenext"
       ];
 
       bindm = [
