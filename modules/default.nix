@@ -50,6 +50,8 @@
       verbose = false;
     };
 
+    consoleLogLevel = 3;
+
     kernelPackages = pkgs.linuxPackages_6_18;
     kernelModules = [ "v4l2loopback" ];
     kernelParams = [

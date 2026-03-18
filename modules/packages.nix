@@ -13,13 +13,10 @@
   ];
 
   environment.systemPackages = with pkgs; [
-    vial
     ouch
     wine
     p7zip
-    blender
     udiskie
-    filezilla
     pulseaudio
     winetricks
     wine-wayland
@@ -27,6 +24,10 @@
     xdg-user-dirs
     xdg-user-dirs-gtk
     xwayland-satellite
+
+    vial
+    blender
+    filezilla
   ];
 
   services = {

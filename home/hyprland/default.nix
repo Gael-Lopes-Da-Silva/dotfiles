@@ -1,24 +1,20 @@
 { pkgs, ... }:
 
 {
-  wayland.systemd.target = "niri.service";
+  home.packages = with pkgs; [
+    hyprfreeze
+    hyprpicker
+    hyprpaper
+    hyprshot
+    hyprsunset
+    hyprshade
+    hyprnome
+  ];
 
   wayland.windowManager.hyprland = {
     enable = true;
     systemd.enable = true;
     xwayland.enable = true;
-
-    plugins = with pkgs; [
-      hyprcursor
-      hyprgraphics
-      hyprfreeze
-      hyprpicker
-      hyprpaper
-      hyprshot
-      hyprsunset
-      hyprshade
-      hyprnome
-    ];
 
     settings = {
       "$mod" = "SUPER";
@@ -38,8 +34,6 @@
         "HYPRCURSOR_SIZE,24"
       ];
 
-      gesture = "3, horizontal, workspace";
-
       input = {
         kb_model = "";
         kb_layout = "us";
@@ -57,7 +51,7 @@
 
         touchpad = {
           disable_while_typing = true;
-          natural_scroll = false;
+          natural_scroll = true;
           tap-to-click = true;
           tap-and-drag = true;
         };
@@ -72,8 +66,8 @@
         allow_tearing = false;
         layout = "scrolling";
 
-        col.active_border = "rgb(FFC87F)";
-        col.inactive_border = "rgb(595959)";
+        "col.active_border" = "rgb(FFC87F)";
+        "col.inactive_border" = "rgb(595959)";
       };
 
       decoration = {
@@ -117,14 +111,26 @@
 
       animations = {
         enabled = true;
+
+        animation = [
+          "workspaces, 1, 5, default, slidevert"
+        ];
       };
 
       gestures = {
+        workspace_swipe_distance = 100;
         workspace_swipe_create_new = true;
         workspace_swipe_direction_lock = true;
         workspace_swipe_forever = false;
         workspace_swipe_use_r = false;
       };
+
+      gesture = [
+        "3, up, dispatcher, exec, hyprnome"
+        "3, down, dispatcher, exec, hyprnome --previous --no-empty"
+        "3, left, dispatcher, layoutmsg, move +col"
+        "3, right, dispatcher, layoutmsg, move -col"
+      ];
 
       group = {
         auto_group = true;
@@ -147,7 +153,7 @@
       };
 
       misc = {
-        background_color = "rgb(111111)";
+        background_color = "rgb(404040)";
 
         disable_hyprland_logo = true;
         disable_splash_rendering = false;
@@ -194,11 +200,9 @@
 
       scrolling = {
         fullscreen_on_one_column = true;
-        column_width = 0.5;
+        column_width = 1.0;
         focus_fit_method = 1;
         follow_focus = true;
-        wrap_focus = false;
-        wrap_swapcol = false;
       };
 
       ecosystem = {
@@ -280,14 +284,15 @@
         "$mod, F, fullscreen, 1 toggle"
         "$mod SHIFT, F, fullscreen, 0 toggle"
 
-        "$mod, left, movefocus, l"
-        "$mod, right, movefocus, r"
-        "$mod, up, movefocus, u"
-        "$mod, down, movefocus, d"
-        "$mod, H, movefocus, l"
-        "$mod, L, movefocus, r"
-        "$mod, K, movefocus, u"
-        "$mod, J, movefocus, d"
+        "$mod, left, layoutmsg, move -col"
+        "$mod, right, layoutmsg, move +col"
+        "$mod, H, layoutmsg, move -col"
+        "$mod, L, layoutmsg, move +col"
+
+        "$mod CTRL, left, layoutmsg, swapcol l"
+        "$mod CTRL, right, layoutmsg, swapcol r"
+        "$mod CTRL, H, layoutmsg, swapcol l"
+        "$mod CTRL, L, layoutmsg, swapcol r"
 
         "$mod SHIFT, left, movefocus, mon:l"
         "$mod SHIFT, right, movefocus, mon:r"
