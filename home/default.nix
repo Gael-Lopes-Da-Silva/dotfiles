@@ -7,7 +7,6 @@
     ./dunst
     ./git
     ./gtk
-    ./hyprland
     ./kanshi
     ./niri
     ./nushell

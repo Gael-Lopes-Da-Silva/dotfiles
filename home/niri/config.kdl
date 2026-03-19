@@ -2,7 +2,7 @@
 // Autostart
 // ###################################
 
-spawn-sh-at-startup "udiskie --automount --notify --smart-tray"
+// spawn-sh-at-startup "udiskie --automount --notify --smart-tray"
 
 spawn-sh-at-startup "bash ~/.local/bin/soundboard_setup.sh"
 
@@ -55,8 +55,6 @@ layout {
 
     border {
         width 6
-        // active-gradient from="#80c8ff" to="#c7ff7f" angle=45
-        // inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
     }
 
     tab-indicator {
@@ -92,7 +90,7 @@ prefer-no-csd
 // Screenshot
 // ###################################
 
-screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+screenshot-path "~/Pictures/Screenshot_%Y-%m-%d_%H-%M-%S.png"
 
 // ###################################
 // Gestures
@@ -135,6 +133,7 @@ layer-rule {
         spread 5
         color "#1A1A1AAA"
         inactive-color "#1A1A1AAA"
+        draw-behind-window true
     }
 }
 
@@ -155,21 +154,10 @@ window-rule {
     open-fullscreen false
     open-maximized false
     open-maximized-to-edges false
-
-    tiled-state true
 }
 
 window-rule {
-    match app-id="steam" title="^notificationtoasts"
-
-    open-focused false
-    default-floating-position x=8 y=8 relative-to="bottom-right"
-}
-
-window-rule {
-    match app-id="launcher"
-    match app-id="cliphist"
-    match app-id="soundboard"
+    match app-id="^(launcher|cliphist|soundboard|powermenu)$"
 
     open-floating true
 
@@ -179,7 +167,7 @@ window-rule {
 }
 
 window-rule {
-    match app-id="powermenu"
+    match app-id="^powermenu$"
 
     open-floating true
 
@@ -192,35 +180,36 @@ window-rule {
 // ###################################
 
 binds {
-    Mod+Shift+Slash { show-hotkey-overlay; }
-
     Mod+Return repeat=false { spawn "alacritty"; }
     Mod+BackSpace repeat=false { spawn "firefox"; }
 
-    Mod+N repeat=false hotkey-overlay-title="Notify time" { spawn-sh "bash ~/.local/bin/datetime_notify.sh"; }
-    Mod+B repeat=false hotkey-overlay-title="Notify battery level" { spawn-sh "bash ~/.local/bin/battery_notify.sh"; }
-    Mod+M repeat=false hotkey-overlay-title="Spawn soundboard menu" { spawn-sh "bash ~/.local/bin/soundboard_menu.sh"; }
-    Mod+Shift+M repeat=false hotkey-overlay-title="Stop soundboard sounds" { spawn-sh "pkill -f paplay"; }
-    Mod+V repeat=false hotkey-overlay-title="Spawn cliphist menu" { spawn-sh "bash ~/.local/bin/cliphist_menu.sh"; }
-    Mod+Q repeat=false hotkey-overlay-title="Spawn power menu" { spawn-sh "bash ~/.local/bin/power_menu.sh"; }
-    Mod+P repeat=false hotkey-overlay-title="Spawn command launcher" { spawn-sh "bash ~/.local/bin/command_menu.sh"; }
-    Mod+Shift+P repeat=false hotkey-overlay-title="Spawn application launcher" { spawn-sh "bash ~/.local/bin/application_menu.sh"; }
+    Mod+N repeat=false { spawn-sh "bash ~/.local/bin/datetime_notify.sh"; }
+    Mod+B repeat=false { spawn-sh "bash ~/.local/bin/battery_notify.sh"; }
+    Mod+M repeat=false { spawn-sh "bash ~/.local/bin/soundboard_menu.sh"; }
+    Mod+V repeat=false { spawn-sh "bash ~/.local/bin/cliphist_menu.sh"; }
 
-    XF86PowerOff repeat=false hotkey-overlay-title="Spawn power menu" { spawn-sh "bash ~/.local/bin/power_menu.sh"; }
+    Mod+P repeat=false { spawn-sh "bash ~/.local/bin/application_menu.sh"; }
+    Mod+Shift+P repeat=false { spawn-sh "bash ~/.local/bin/command_menu.sh"; }
 
-    XF86AudioRaiseVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1+" "-l" "1.0"; }
-    XF86AudioLowerVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1-"; }
-    XF86AudioMute allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
-    XF86AudioMicMute allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
-    XF86AudioPlay allow-when-locked=true { spawn "playerctl" "play-pause"; }
-    XF86AudioStop allow-when-locked=true { spawn "playerctl" "stop"; }
-    XF86AudioPrev allow-when-locked=true { spawn "playerctl" "previous"; }
-    XF86AudioNext allow-when-locked=true { spawn "playerctl" "next"; }
-    XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
-    XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
+    Mod+Q repeat=false { spawn-sh "bash ~/.local/bin/power_menu.sh"; }
+    Mod+Shift+Q repeat=false { spawn-sh "bash ~/.local/bin/power_menu.sh"; }
+    Ctrl+Alt+Delete repeat=false { spawn-sh "bash ~/.local/bin/power_menu.sh"; }
 
     Mod+O repeat=false { toggle-overview; }
+
     Mod+Shift+C repeat=false { close-window; }
+
+    XF86AudioRaiseVolume { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1+" "-l" "1.0"; }
+    XF86AudioLowerVolume { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1-"; }
+    XF86AudioMute { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
+    XF86AudioMicMute { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
+    XF86AudioPlay { spawn "playerctl" "play-pause"; }
+    XF86AudioStop { spawn "playerctl" "stop"; }
+    XF86AudioPrev { spawn "playerctl" "previous"; }
+    XF86AudioNext { spawn "playerctl" "next"; }
+    XF86MonBrightnessUp { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
+    XF86MonBrightnessDown { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
+
 
     Mod+Left { focus-column-left; }
     Mod+Down { focus-window-down; }
@@ -326,10 +315,9 @@ binds {
 
     Mod+R { switch-preset-column-width; }
     Mod+Shift+R { switch-preset-window-height; }
-    Mod+Ctrl+R { reset-window-height; }
+
     Mod+F { maximize-window-to-edges; }
     Mod+Shift+F { fullscreen-window; }
-    Mod+Ctrl+F { maximize-column; }
 
     Mod+E { center-column; }
     Mod+Ctrl+E { center-visible-columns; }
@@ -347,12 +335,10 @@ binds {
     Mod+Print { screenshot; }
     Mod+Shift+Print { screenshot-window; }
     Mod+Ctrl+Print { screenshot-screen; }
-    Mod+S { screenshot; }
-    Mod+Shift+S { screenshot-window write-to-disk=false; }
-    Mod+Ctrl+S { screenshot-screen write-to-disk=false; }
+
+    Mod+S { screenshot show-pointer=false; }
+    Mod+Shift+S { screenshot-window write-to-disk=false show-pointer=false; }
+    Mod+Ctrl+S { screenshot-screen write-to-disk=false show-pointer=false; }
 
     Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
-
-    Mod+Shift+Q { quit; }
-    Ctrl+Alt+Delete { quit; }
 }
