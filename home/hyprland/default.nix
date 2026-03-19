@@ -10,7 +10,8 @@
     hyprpicker
     hyprsunset
 
-    hyprland
+    hyprprop
+    hyprlang
     hyprutils
     hyprcursor
     hyprgraphics
@@ -144,8 +145,10 @@
         "3, vertical, workspace"
         "3, up, mod: $mod, dispatcher, exec, hyprnome --move"
         "3, down, mod: $mod, dispatcher, exec, hyprnome --move --no-empty --previous"
-        "3, left, dispatcher, changegroupactive, b"
-        "3, right, dispatcher, changegroupactive, f"
+        "3, right, dispatcher, changegroupactive, b"
+        "3, left, dispatcher, changegroupactive, f"
+        "3, right, mod: $mod, dispatcher, movegroupwindow, b"
+        "3, left, mod:$mod, dispatcher, movegroupwindow, f"
       ];
 
       group = {
@@ -165,6 +168,16 @@
         groupbar = {
           enabled = true;
           render_titles = false;
+          keep_upper_gap = false;
+          round_only_edges = false;
+          scrolling = false;
+
+          indicator_gap = 0;
+          indicator_height = 8;
+          gaps_out = 4;
+          gaps_in = 4;
+
+          rounding = 4;
 
           "col.active" = "rgb(FFC87F)";
           "col.inactive" = "rgb(595959)";
@@ -177,7 +190,7 @@
         background_color = "rgb(404040)";
 
         disable_hyprland_logo = true;
-        disable_splash_rendering = false;
+        disable_splash_rendering = true;
         disable_scale_notification = false;
 
         force_default_wallpaper = 0;
@@ -318,10 +331,15 @@
         "$mod SHIFT, C, killactive,"
         "$mod CTRL, C, forcekillactive,"
 
+        "$mod, C, exec, hyprpicker --autocopy --notify --scale=6 --radius=150 --quiet --render-inactive"
+
         "$mod, Space, togglefloating,"
 
         "$mod, F, fullscreenstate, 2 0"
         "$mod SHIFT, F, fullscreenstate, 2 2"
+
+        "$mod ALT, F, exec, hyprfreeze --active"
+        "$mod ALT SHIFT, F, exec, hyprfreeze --prop"
 
         "$mod, T, togglegroup,"
         "$mod SHIFT, T, lockactivegroup, toggle"
@@ -387,6 +405,20 @@
 
         "$mod, mouse_left, changegroupactive, b"
         "$mod, mouse_right, changegroupactive, f"
+
+        "$mod, O, exec, hyprshot --mode region --silent --freeze --clipboard-only"
+        "$mod SHIFT, O, exec, hyprshot --mode window --silent --freeze --clipboard-only"
+        "$mod CTRL, O, exec, hyprshot --mode output --silent --freeze --clipboard-only"
+        "$mod ALT, O, exec, hyprshot --mode region --freeze"
+        "$mod ALT SHIFT, O, exec, hyprshot --mode window --freeze"
+        "$mod ALT CTRL, O, exec, hyprshot --mode output --freeze"
+
+        "$mod, Print, exec, hyprshot --mode region --silent --freeze --clipboard-only"
+        "$mod SHIFT, Print, exec, hyprshot --mode window --silent --freeze --clipboard-only"
+        "$mod CTRL, Print, exec, hyprshot --mode output --silent --freeze --clipboard-only"
+        "$mod ALT, Print, exec, hyprshot --mode region --freeze"
+        "$mod ALT SHIFT, Print, exec, hyprshot --mode window --freeze"
+        "$mod ALT CTRL, Print, exec, hyprshot --mode output --freeze"
       ];
 
       bindm = [
