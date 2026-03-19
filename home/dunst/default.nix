@@ -7,7 +7,7 @@
     settings = {
       global = {
         follow = "mouse";
-        origin = "top-right";
+        origin = "top-center";
         offset = "(26, 26)";
         corner_radius = 16;
         timeout = 20;

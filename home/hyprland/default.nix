@@ -91,7 +91,7 @@
         dim_modal = true;
         dim_inactive = false;
         dim_strength = 0.5;
-        dim_special = 0.2;
+        dim_special = 0.4;
         dim_around = 0.4;
 
         border_part_of_window = true;
@@ -111,8 +111,8 @@
 
         shadow = {
           enabled = true;
-          range = 5;
-          render_power = 10;
+          range = 30;
+          render_power = 3;
           ignore_window = true;
           offset = "0 0";
           scale = 1.0;
@@ -122,7 +122,11 @@
       animations = {
         enabled = true;
 
+        bezier = [ ];
+
         animation = [
+          "windows, 1, 4, default, popin"
+          "layers, 1, 4, default, fade"
           "workspaces, 1, 5, default, slidevert"
         ];
       };
@@ -139,6 +143,8 @@
 
       gesture = [
         "3, vertical, workspace"
+        "3, up, mod: $mod, dispatcher, exec, hyprnome --move"
+        "3, down, mod: $mod, dispatcher, exec, hyprnome --move --no-empty --previous"
         "3, left, dispatcher, layoutmsg, cycleprev"
         "3, right, dispatcher, layoutmsg, cyclenext"
       ];
@@ -259,6 +265,16 @@
         }
       ];
 
+      layerrule = [
+        {
+          name = "notifications-style";
+
+          "match:namespace" = "^notifications$";
+
+          animation = "slide down";
+        }
+      ];
+
       bind = [
         "$mod, Return, exec, $terminal"
         "$mod, BackSpace, exec, $browser"
@@ -290,6 +306,7 @@
 
         "$mod, S, togglespecialworkspace, magic"
         "$mod SHIFT, S, movetoworkspace, special:magic"
+        "$mod CTRL, S, movetoworkspace, +0"
 
         "$mod SHIFT, C, killactive,"
         "$mod CTRL, C, forcekillactive,"
@@ -301,21 +318,26 @@
 
         "$mod, left, layoutmsg, cycleprev"
         "$mod, right, layoutmsg, cyclenext"
-        "$mod, up, movefocus, u"
-        "$mod, down, movefocus, d"
         "$mod, H, layoutmsg, cycleprev"
         "$mod, L, layoutmsg, cyclenext"
-        "$mod, K, movefocus, u"
-        "$mod, J, movefocus, d"
 
-        "$mod SHIFT, left, movefocus, mon:l"
-        "$mod SHIFT, right, movefocus, mon:r"
-        "$mod SHIFT, up, movefocus, mon:u"
-        "$mod SHIFT, down, movefocus, mon:d"
-        "$mod SHIFT, H, movefocus, mon:l"
-        "$mod SHIFT, L, movefocus, mon:r"
-        "$mod SHIFT, K, movefocus, mon:u"
-        "$mod SHIFT, J, movefocus, mon:d"
+        "$mod SHIFT, left, movefocus, l"
+        "$mod SHIFT, right, movefocus, r"
+        "$mod SHIFT, up, movefocus, u"
+        "$mod SHIFT, down, movefocus, d"
+        "$mod SHIFT, H, movefocus, l"
+        "$mod SHIFT, L, movefocus, r"
+        "$mod SHIFT, K, movefocus, u"
+        "$mod SHIFT, J, movefocus, d"
+
+        "$mod CTRL, left, movewindow, l"
+        "$mod CTRL, right, movewindow, r"
+        "$mod CTRL, up, movewindow, u"
+        "$mod CTRL, down, movewindow, d"
+        "$mod CTRL, H, movewindow, l"
+        "$mod CTRL, L, movewindow, r"
+        "$mod CTRL, K, movewindow, u"
+        "$mod CTRL, J, movewindow, d"
 
         "$mod, 1, workspace, r~1"
         "$mod, 2, workspace, r~2"
