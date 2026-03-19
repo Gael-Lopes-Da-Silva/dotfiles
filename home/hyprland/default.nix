@@ -69,7 +69,6 @@
         border_size = 6;
         resize_on_border = false;
         allow_tearing = false;
-        layout = "monocle";
         modal_parent_blocking = true;
 
         "col.active_border" = "rgb(FFC87F)";
@@ -145,8 +144,8 @@
         "3, vertical, workspace"
         "3, up, mod: $mod, dispatcher, exec, hyprnome --move"
         "3, down, mod: $mod, dispatcher, exec, hyprnome --move --no-empty --previous"
-        "3, left, dispatcher, layoutmsg, cycleprev"
-        "3, right, dispatcher, layoutmsg, cyclenext"
+        "3, left, dispatcher, changegroupactive, b"
+        "3, right, dispatcher, changegroupactive, f"
       ];
 
       group = {
@@ -156,16 +155,21 @@
         merge_groups_on_drag = true;
         merge_groups_on_groupbar = true;
         merge_floated_into_tiled_on_groupbar = false;
-        group_on_movetoworkspace = false;
+        group_on_movetoworkspace = true;
+
+        "col.border_active" = "rgb(FFC87F)";
+        "col.border_inactive" = "rgb(595959)";
+        "col.border_locked_active" = "rgb(C48633)";
+        "col.border_locked_inactive" = "rgb(595959)";
 
         groupbar = {
           enabled = true;
-          indicator_gap = 0;
-          indicator_height = 3;
-          stacked = false;
-          scrolling = true;
-          rounding = 1;
-          rounding_power = 2.0;
+          render_titles = false;
+
+          "col.active" = "rgb(FFC87F)";
+          "col.inactive" = "rgb(595959)";
+          "col.locked_active" = "rgb(C48633)";
+          "col.locked_inactive" = "rgb(595959)";
         };
       };
 
@@ -175,6 +179,7 @@
         disable_hyprland_logo = true;
         disable_splash_rendering = false;
         disable_scale_notification = false;
+
         force_default_wallpaper = 0;
         always_follow_on_dnd = true;
         layers_hog_keyboard_focus = true;
@@ -252,6 +257,7 @@
           "match:float" = true;
 
           center = true;
+          dim_around = true;
           size = "monitor_w*0.6 monitor_h*0.6";
         }
         {
@@ -261,6 +267,7 @@
 
           float = true;
           center = true;
+          dim_around = true;
           size = "monitor_w*0.5 monitor_h*0.5";
         }
       ];
@@ -316,10 +323,18 @@
         "$mod, F, fullscreenstate, 2 0"
         "$mod SHIFT, F, fullscreenstate, 2 2"
 
-        "$mod, left, layoutmsg, cycleprev"
-        "$mod, right, layoutmsg, cyclenext"
-        "$mod, H, layoutmsg, cycleprev"
-        "$mod, L, layoutmsg, cyclenext"
+        "$mod, T, togglegroup,"
+        "$mod SHIFT, T, lockactivegroup, toggle"
+
+        "$mod, right, changegroupactive, f"
+        "$mod, left, changegroupactive, b"
+        "$mod, L, changegroupactive, f"
+        "$mod, H, changegroupactive, b"
+
+        "$mod ALT, right, movegroupwindow, f"
+        "$mod ALT, left, movegroupwindow, b"
+        "$mod ALT, H, movegroupwindow, b"
+        "$mod ALT, L, movegroupwindow, f"
 
         "$mod SHIFT, left, movefocus, l"
         "$mod SHIFT, right, movefocus, r"
@@ -330,14 +345,14 @@
         "$mod SHIFT, K, movefocus, u"
         "$mod SHIFT, J, movefocus, d"
 
-        "$mod CTRL, left, movewindow, l"
-        "$mod CTRL, right, movewindow, r"
-        "$mod CTRL, up, movewindow, u"
-        "$mod CTRL, down, movewindow, d"
-        "$mod CTRL, H, movewindow, l"
-        "$mod CTRL, L, movewindow, r"
-        "$mod CTRL, K, movewindow, u"
-        "$mod CTRL, J, movewindow, d"
+        "$mod CTRL, left, movewindoworgroup, l"
+        "$mod CTRL, right, movewindoworgroup, r"
+        "$mod CTRL, up, movewindoworgroup, u"
+        "$mod CTRL, down, movewindoworgroup, d"
+        "$mod CTRL, H, movewindoworgroup, l"
+        "$mod CTRL, L, movewindoworgroup, r"
+        "$mod CTRL, K, movewindoworgroup, u"
+        "$mod CTRL, J, movewindoworgroup, d"
 
         "$mod, 1, workspace, r~1"
         "$mod, 2, workspace, r~2"
@@ -370,8 +385,8 @@
         "$mod SHIFT, mouse_up, exec, hyprnome --move"
         "$mod SHIFT, mouse_down, exec, hyprnome --move --no-empty --previous"
 
-        "$mod, mouse_left, layoutmsg, cycleprev"
-        "$mod, mouse_right, layoutmsg, cyclenext"
+        "$mod, mouse_left, changegroupactive, b"
+        "$mod, mouse_right, changegroupactive, f"
       ];
 
       bindm = [
