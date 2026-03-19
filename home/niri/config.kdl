@@ -1,19 +1,13 @@
-// ###################################
-// Autostart
-// ###################################
-
-// spawn-sh-at-startup "udiskie --automount --notify --smart-tray"
+spawn-sh-at-startup "udiskie --automount --notify --smart-tray"
 
 spawn-sh-at-startup "bash ~/.local/bin/soundboard_setup.sh"
-
 spawn-sh-at-startup "bash ~/.local/bin/audio_monitor.sh"
 spawn-sh-at-startup "bash ~/.local/bin/battery_monitor.sh"
 spawn-sh-at-startup "bash ~/.local/bin/brightness_monitor.sh"
 spawn-sh-at-startup "bash ~/.local/bin/output_monitor.sh"
 
-// ###################################
-// Input
-// ###################################
+prefer-no-csd
+screenshot-path "~/Pictures/Screenshot_%Y-%m-%d_%H-%M-%S.png"
 
 input {
     keyboard {
@@ -32,15 +26,16 @@ input {
     focus-follows-mouse max-scroll-amount="0%"
 }
 
-// ###################################
-// Layout
-// ###################################
-
 layout {
     gaps 16
     center-focused-column "never"
 
     preset-column-widths {
+        proportion 0.5
+        proportion 1.0
+    }
+
+    preset-window-heights {
         proportion 0.5
         proportion 1.0
     }
@@ -58,7 +53,7 @@ layout {
     }
 
     tab-indicator {
-        gap 8
+        gap 6
         gaps-between-tabs 6
         corner-radius 8
     }
@@ -67,34 +62,20 @@ layout {
         on
         softness 10
         spread 5
-        color "#1A1A1AAA"
-        inactive-color "#1A1A1AAA"
     }
 }
 
-// ###################################
-// Hotkey Overlay
-// ###################################
+overview {
+    zoom 0.45
+}
 
 hotkey-overlay {
     skip-at-startup
 }
 
-// ###################################
-// CSD Preference
-// ###################################
-
-prefer-no-csd
-
-// ###################################
-// Screenshot
-// ###################################
-
-screenshot-path "~/Pictures/Screenshot_%Y-%m-%d_%H-%M-%S.png"
-
-// ###################################
-// Gestures
-// ###################################
+clipboard {
+    disable-primary
+}
 
 gestures {
     hot-corners {
@@ -102,25 +83,13 @@ gestures {
     }
 }
 
-// ###################################
-// Gestures
-// ###################################
-
 cursor {
     xcursor-size 24
 }
 
-// ###################################
-// Recent Windows
-// ###################################
-
 recent-windows {
     off
 }
-
-// ###################################
-// Layer Rules
-// ###################################
 
 layer-rule {
     match namespace="^notifications$"
@@ -131,8 +100,6 @@ layer-rule {
         on
         softness 10
         spread 5
-        color "#1A1A1AAA"
-        inactive-color "#1A1A1AAA"
         draw-behind-window true
     }
 }
@@ -143,10 +110,6 @@ layer-rule {
     place-within-backdrop true
 }
 
-// ###################################
-// Window Rules
-// ###################################
-
 window-rule {
     clip-to-geometry true
     geometry-corner-radius 16
@@ -154,6 +117,13 @@ window-rule {
     open-fullscreen false
     open-maximized false
     open-maximized-to-edges false
+    draw-border-with-background false
+}
+
+window-rule {
+    match is-focused=false
+
+    opacity 0.7
 }
 
 window-rule {
@@ -163,7 +133,6 @@ window-rule {
 
     default-column-width { proportion 0.50; }
     default-window-height { proportion 0.50; }
-    default-floating-position x=0 y=100 relative-to="top"
 }
 
 window-rule {
@@ -174,10 +143,6 @@ window-rule {
     default-column-width { proportion 0.30; }
     default-window-height { proportion 0.30; }
 }
-
-// ###################################
-// Key Bindings
-// ###################################
 
 binds {
     Mod+Return repeat=false { spawn "alacritty"; }
@@ -336,9 +301,9 @@ binds {
     Mod+Shift+Print { screenshot-window; }
     Mod+Ctrl+Print { screenshot-screen; }
 
-    Mod+S { screenshot show-pointer=false; }
-    Mod+Shift+S { screenshot-window write-to-disk=false show-pointer=false; }
-    Mod+Ctrl+S { screenshot-screen write-to-disk=false show-pointer=false; }
+    Mod+S { screenshot; }
+    Mod+Shift+S { screenshot-window write-to-disk=false; }
+    Mod+Ctrl+S { screenshot-screen write-to-disk=false; }
 
     Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 }

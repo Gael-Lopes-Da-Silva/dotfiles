@@ -12,7 +12,6 @@
     ./nushell
     ./qt
     ./scripts
-    ./udiskie
     ./zed
   ];
 
