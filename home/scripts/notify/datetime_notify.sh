@@ -6,7 +6,7 @@ dunstify \
     -a "clock" \
     -h string:x-dunst-stack-tag:clock \
     -u low \
-    -t 3000 \
+    -t 5000 \
     "Time" "$datetime"
 
 exit 0

@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-if pgrep -f "$TERMINAL.*--class powermenu" >/dev/null; then
+if pgrep -f "$TERMINAL.*--class custom:powermenu" >/dev/null; then
     exit 0
 fi
 
 tmpfile=$(mktemp)
 
-$TERMINAL --class powermenu -e bash -c '
+$TERMINAL --class custom:powermenu -e bash -c '
     options=(
         "Shutdown"
         "Reboot"

@@ -78,7 +78,7 @@ udevadm monitor --environment --udev --subsystem-match=power_supply | while read
                                 -u low \
                                 -t 5000 \
                                 "Battery" "$level%"
-                        elif [ "$level" -ge 100 ] && [ "$prev_capacity" -le 100 ]; then
+                        elif [ "$level" -ge 100 ] && [ "$prev_capacity" -le 99 ]; then
                             dunstify \
                                 -a "power" \
                                 -h string:x-dunst-stack-tag:battery \

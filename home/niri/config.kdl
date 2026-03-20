@@ -121,7 +121,7 @@ window-rule {
 }
 
 window-rule {
-    match app-id="^(launcher|cliphist|soundboard|powermenu)$"
+    match app-id="^custom:(applications|cliphist|soundboard|powermenu)$"
 
     open-floating true
 
@@ -130,12 +130,22 @@ window-rule {
 }
 
 window-rule {
-    match app-id="^powermenu$"
+    match app-id="^custom:powermenu$"
 
     open-floating true
 
     default-column-width { proportion 0.30; }
     default-window-height { proportion 0.30; }
+}
+
+window-rule {
+    match app-id="^custom:commands$"
+
+    open-floating true
+
+    default-column-width { proportion 0.75; }
+    default-window-height { proportion 0.25; }
+    default-floating-position x=0 y=150 relative-to="top"
 }
 
 binds {
@@ -148,7 +158,7 @@ binds {
     Mod+V repeat=false { spawn-sh "bash ~/.local/bin/cliphist_menu.sh"; }
 
     Mod+P repeat=false { spawn-sh "bash ~/.local/bin/application_menu.sh"; }
-    Mod+Shift+P repeat=false { spawn-sh "bash ~/.local/bin/command_menu.sh"; }
+    Mod+Slash repeat=false { spawn-sh "bash ~/.local/bin/command_menu.sh"; }
 
     Mod+Q repeat=false { spawn-sh "bash ~/.local/bin/power_menu.sh"; }
     Mod+Shift+Q repeat=false { spawn-sh "bash ~/.local/bin/power_menu.sh"; }

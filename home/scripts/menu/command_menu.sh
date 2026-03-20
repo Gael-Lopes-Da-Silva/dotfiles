@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-if pgrep -f "alacritty.*--class launcher" >/dev/null; then
+if pgrep -f "alacritty.*--class custom:commands" >/dev/null; then
     exit 0
 fi
 
 tmpfile=$(mktemp)
 
-$TERMINAL --class launcher -e bash -c '
+$TERMINAL --class custom:commands -e bash -c '
     compgen -c | sort -u | fzf --prompt="Run Command: " --bind "tab:replace-query" --print-query > "'$tmpfile'"
 '
 

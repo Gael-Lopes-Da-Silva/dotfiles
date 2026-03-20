@@ -12,7 +12,7 @@ dunstify \
     -h string:x-dunst-stack-tag:battery \
     -h int:value:"$level" \
     -u low \
-    -t 3000 \
+    -t 5000 \
     "Battery" "$level%"
 
 exit 0

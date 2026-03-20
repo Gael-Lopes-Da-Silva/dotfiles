@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-if pgrep -f "$TERMINAL.*--class launcher" >/dev/null; then
+if pgrep -f "$TERMINAL.*--class custom:applications" >/dev/null; then
     exit 0
 fi
 
 tmpfile=$(mktemp)
 
-$TERMINAL --class launcher -e bash -c '
+$TERMINAL --class custom:applications -e bash -c '
     desktop_dirs=(
         "/run/current-system/sw/share/applications"
         "/etc/profiles/per-user/$USER/share/applications"
@@ -51,9 +51,20 @@ $TERMINAL --class launcher -e bash -c '
         done
     done
 
-    selection=$(printf "%s\n" "${!app_map[@]}" | sort | fzf --prompt="Run Application: ")
+    selection=$(
+        {
+            printf "%s\n" "${!app_map[@]}" | sort | sed "s/^/__item__:/"
+        } | fzf --prompt="Run Application: " --delimiter=":" --with-nth=2 --bind "tab:replace-query"
+    )
 
-    [ -n "$selection" ] && printf "%s\n" "${app_map[$selection]}" > "'$tmpfile'"
+    key=$(printf "%s" "$selection" | cut -d":" -f1)
+    value=$(printf "%s" "$selection" | cut -d":" -f2-)
+
+    case "$key" in
+        __item__)
+            [ -n "$value" ] && printf "%s\n" "${app_map[$value]}" > "'$tmpfile'"
+            ;;
+    esac
 '
 
 fzf_output=$(cat "$tmpfile")
