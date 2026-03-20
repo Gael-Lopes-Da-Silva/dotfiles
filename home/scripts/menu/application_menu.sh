@@ -4,8 +4,6 @@ if pgrep -f "$TERMINAL.*--class custom:applications" >/dev/null; then
     exit 0
 fi
 
-tmpfile=$(mktemp)
-
 $TERMINAL --class custom:applications -e bash -c '
     desktop_dirs=(
         "/run/current-system/sw/share/applications"
@@ -57,37 +55,30 @@ $TERMINAL --class custom:applications -e bash -c '
         done
     done
 
-    selection=$(
-        {
-            for name in "${!app_map[@]}"; do
-                printf "%s\t%s\t%s\n" "__item__" "$name" "${app_desc_map[$name]}"
-            done | sort
-        } | fzf \
-            --prompt="Run: " \
-            --delimiter=$'\''\t'\'' \
-            --with-nth=2 \
-            --layout=reverse \
-            --bind "tab:replace-query" \
-            --preview '\''echo {3}'\'' \
-            --preview-window=down:10%,wrap
-    )
+    execute_item() {
+        key="$1"
+        value="$2"
 
-    key=$(printf "%s" "$selection" | cut -d$'\''\t'\'' -f1)
-    value=$(printf "%s" "$selection" | cut -d$'\''\t'\'' -f2)
+        case "$key" in
+            __item__)
+                [ -n "$value" ] && setsid bash -c "$value" >/dev/null 2>&1 &
+                ;;
+        esac
+    }; export -f execute_item
 
-    case "$key" in
-        __item__)
-            [ -n "$value" ] && printf "%s\n" "${app_map[$value]}" > "'$tmpfile'"
-            ;;
-    esac
+    {
+        for name in "${!app_map[@]}"; do
+            printf "%s\t%s\t%s\t%s\n" "__item__" "$name" "${app_map[$name]}" "${app_desc_map[$name]}"
+        done | sort
+    } | fzf \
+        --prompt="Run: " \
+        --delimiter=$'\''\t'\'' \
+        --with-nth=2 \
+        --layout=reverse \
+        --bind "tab:replace-query" \
+        --preview '\''echo {4}'\'' \
+        --preview-window=down:10%,wrap \
+        --bind '\''enter:execute-silent(bash -c "execute_item \"$@\"" _ {1} {3})+abort'\''
 '
-
-fzf_output=$(cat "$tmpfile")
-rm "$tmpfile"
-
-cmd_to_run=$fzf_output
-if [ -n "$cmd_to_run" ]; then
-    nohup bash -c "$cmd_to_run" >/dev/null 2>&1 &
-fi
 
 exit 0
