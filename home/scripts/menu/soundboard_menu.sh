@@ -46,7 +46,7 @@ $TERMINAL --class custom:soundboard -e bash -c '
                 "Soundboard" "All sounds have been stopped."
             ;;
         __rstart__)
-            parec --file-format=wav $HOME/.soundboard/custom/record.wav
+            pw-record $HOME/.soundboard/custom/record.mp3
             dunstify \
                 -a "soundboard" \
                 -u normal \
@@ -54,7 +54,7 @@ $TERMINAL --class custom:soundboard -e bash -c '
                 "Soundboard" "Custom record successfully recorded."
             ;;
         __rplay__)
-            record=$(find "$HOME/.soundboard/custom" -maxdepth 1 -type f -iname "*.wav")
+            record=$(find "$HOME/.soundboard/custom" -maxdepth 1 -type f -iname "*.mp3")
             printf "%s" "$record" > "'$tmpfile'"
             ;;
         __item__)
