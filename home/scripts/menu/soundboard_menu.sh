@@ -10,6 +10,8 @@ $TERMINAL --class custom:soundboard -e bash -c '
     selection=$(
         {
             echo "__stop__:📢 Stop"
+            echo "__rstart__:📲 Record start"
+            echo "__rplay__:📱 Record play"
             find "$HOME/.soundboard" -maxdepth 1 -type f \( \
                 -iname "*.mp3" -o -iname "*.aac" -o -iname "*.wav" -o -iname "*.flac" -o -iname "*.ogg" -o -iname "*.opus" -o -iname "*.aiff" -o -iname "*.au" -o -iname "*.caf" -o -iname "*.raw" \
             \) \
@@ -33,10 +35,21 @@ $TERMINAL --class custom:soundboard -e bash -c '
             pkill paplay
             dunstify \
                 -a "soundboard" \
-                -h string:x-dunst-stack-tag:soundboard \
                 -u normal \
                 -t 5000 \
                 "Soundboard" "All sounds have been stopped."
+            ;;
+        __rstart__)
+            parecord --device="SoundboardSource" $HOME/.soundboard/custom/record.mp3
+            dunstify \
+                -a "soundboard" \
+                -u normal \
+                -t 5000 \
+                "Soundboard" "Custom record successfully recorded."
+            ;;
+        __rplay__)
+            record=$(find "$HOME/.soundboard/custom" -maxdepth 1 -type f -iname "*.mp3")
+            printf "%s" "$record" > "'$tmpfile'"
             ;;
         __item__)
             [ -n "$value" ] && printf "%s" "$value" | awk -F"\t" '\''{print $2}'\'' > "'$tmpfile'"
@@ -48,7 +61,7 @@ fzf_output=$(cat "$tmpfile")
 rm "$tmpfile"
 
 if [ -n "$fzf_output" ]; then
-    paplay --device="SoundboardSpeaker" --volume=65536 $fzf_output &
+    paplay --device="SoundboardSink" --volume=65536 $fzf_output &
     paplay --device="$(pactl get-default-sink)" --volume=32768 $fzf_output &
 fi
 

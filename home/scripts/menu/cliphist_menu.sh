@@ -20,7 +20,6 @@ $TERMINAL --class custom:cliphist -e bash -c '
             cliphist wipe
             dunstify \
                 -a "clipboard" \
-                -h string:x-dunst-stack-tag:clipboard \
                 -u normal \
                 -t 5000 \
                 "Clipboard history" "The clipboard history was successfully cleared."

@@ -22,4 +22,7 @@ pw-link "$REAL_MIC:capture_MONO" "$SOUNDBOARD_SINK:playback_FR" 2>/dev/null
 pw-link "$SOUNDBOARD_SINK:monitor_FL" "$SOUNDBOARD_SOURCE:input_FL" 2>/dev/null
 pw-link "$SOUNDBOARD_SINK:monitor_FR" "$SOUNDBOARD_SOURCE:input_FR" 2>/dev/null
 
+mkdir -p $HOME/.soundboard
+mkdir -p $HOME/.soundboard/custom
+
 exit 0
