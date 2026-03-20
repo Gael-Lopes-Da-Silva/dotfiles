@@ -111,9 +111,9 @@ layer-rule {
 }
 
 window-rule {
-    clip-to-geometry true
     geometry-corner-radius 16
 
+    clip-to-geometry true
     open-fullscreen false
     open-maximized false
     open-maximized-to-edges false
@@ -158,17 +158,20 @@ binds {
 
     Mod+Shift+C repeat=false { close-window; }
 
-    XF86AudioRaiseVolume { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1+" "-l" "1.0"; }
-    XF86AudioLowerVolume { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1-"; }
-    XF86AudioMute { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
-    XF86AudioMicMute { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
-    XF86AudioPlay { spawn "playerctl" "play-pause"; }
-    XF86AudioStop { spawn "playerctl" "stop"; }
-    XF86AudioPrev { spawn "playerctl" "previous"; }
-    XF86AudioNext { spawn "playerctl" "next"; }
-    XF86MonBrightnessUp { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
-    XF86MonBrightnessDown { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
+    Mod+C repeat=false { spawn-sh "niri msg pick-color | grep -i hex | awk '{print $2}' | tr -d '\n' | wl-copy"; }
 
+    XF86AudioRaiseVolume { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0"; }
+    XF86AudioLowerVolume { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }
+    XF86AudioMute { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
+    XF86AudioMicMute { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
+
+    XF86AudioPlay { spawn-sh "playerctl play-pause"; }
+    XF86AudioStop { spawn-sh "playerctl stop"; }
+    XF86AudioPrev { spawn-sh "playerctl previous"; }
+    XF86AudioNext { spawn-sh "playerctl next"; }
+
+    XF86MonBrightnessUp { spawn-sh "brightnessctl --class=backlight set +10%"; }
+    XF86MonBrightnessDown { spawn-sh "brightnessctl --class=backlight set 10%-"; }
 
     Mod+Left { focus-column-left; }
     Mod+Down { focus-window-down; }
