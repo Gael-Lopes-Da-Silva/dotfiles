@@ -9,7 +9,12 @@ $TERMINAL --class custom:cliphist -e bash -c '
         {
             echo "__clear__:🧹 Clear"
             cliphist list | sed "s/^/__item__:/"
-        } | fzf --no-sort --prompt="Copy: " --delimiter=":" --with-nth=2
+        } | fzf \
+            --no-sort \
+            --prompt="Copy: " \
+            --delimiter=":" \
+            --with-nth=2 \
+            --layout=reverse
     )
 
     key=$(printf "%s" "$selection" | cut -d":" -f1)

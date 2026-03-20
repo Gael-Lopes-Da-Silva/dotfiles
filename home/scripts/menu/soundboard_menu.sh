@@ -9,9 +9,9 @@ tmpfile=$(mktemp)
 $TERMINAL --class custom:soundboard -e bash -c '
     selection=$(
         {
-            echo "__stop__:📢 Stop"
-            echo "__rstart__:📲 Record start"
-            echo "__rplay__:📱 Record play"
+            printf "__stop__\t📢 Stop\n"
+            printf "__rstart__\t📲 Record start\n"
+            printf "__rplay__\t📱 Record play\n"
             find "$HOME/.soundboard" -maxdepth 1 -type f \( \
                 -iname "*.mp3" -o -iname "*.aac" -o -iname "*.wav" -o -iname "*.flac" -o -iname "*.ogg" -o -iname "*.opus" -o -iname "*.aiff" -o -iname "*.au" -o -iname "*.caf" -o -iname "*.raw" \
             \) \
@@ -21,14 +21,20 @@ $TERMINAL --class custom:soundboard -e bash -c '
                 sub(/\.[^.]*$/, "", name);
                 gsub(/[-_]/, " ", name);
                 name = toupper(substr(name,1,1)) substr(name,2);
-                print name "\t" $0
-            }'\'' \
-            | sed "s/^/__item__:/"
-        } | fzf --prompt="Play: " --delimiter=":" --with-nth=2 --bind "tab:replace-query"
+                printf "__item__\t%s\t%s\n", name, $0
+            }'\''
+        } | fzf \
+            --prompt="Play: " \
+            --delimiter=$'\''\t'\'' \
+            --with-nth=2 \
+            --layout=reverse \
+            --bind "tab:replace-query" \
+            --preview '\''echo {3}'\'' \
+            --preview-window=down:10%,wrap
     )
 
-    key=$(printf "%s" "$selection" | cut -d":" -f1)
-    value=$(printf "%s" "$selection" | cut -d":" -f2-)
+    key=$(printf "%s" "$selection" | cut -d$'\''\t'\'' -f1)
+    value=$(printf "%s" "$selection" | cut -d$'\''\t'\'' -f2-)
 
     case "$key" in
         __stop__)

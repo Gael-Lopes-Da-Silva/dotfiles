@@ -14,20 +14,25 @@ $TERMINAL --class custom:applications -e bash -c '
     )
 
     declare -A app_map
+    declare -A app_desc_map
 
     for dir in "${desktop_dirs[@]}"; do
         [ -d "$dir" ] || continue
         for file in "$dir"/*.desktop; do
             [ -f "$file" ] || continue
 
-            name=
-            nodisplay=
-            exec_cmd=
+            name=""
+            nodisplay=""
+            exec_cmd=""
+            comment=""
 
             while IFS="=" read -r key value; do
                 case $key in
                     Name)
                         [ -z "$name" ] && name=$value
+                        ;;
+                    Comment)
+                        [ -z "$comment" ] && comment=$value
                         ;;
                     NoDisplay)
                         nodisplay=$value
@@ -40,25 +45,35 @@ $TERMINAL --class custom:applications -e bash -c '
                         ;;
                 esac
 
-                if [ -n "$name" ] && [ -n "$exec_cmd" ] && [ -n "$nodisplay" ]; then
+                if [ -n "$name" ] && [ -n "$exec_cmd" ] && [ -n "$nodisplay" ] && [ -n "$comment" ]; then
                     break
                 fi
             done < "$file"
 
             if [ -n "$name" ] && [ "$nodisplay" != "true" ] && [ -n "$exec_cmd" ]; then
                 app_map["$name"]="$exec_cmd"
+                app_desc_map["$name"]="$comment"
             fi
         done
     done
 
     selection=$(
         {
-            printf "%s\n" "${!app_map[@]}" | sort | sed "s/^/__item__:/"
-        } | fzf --prompt="Run Application: " --delimiter=":" --with-nth=2 --bind "tab:replace-query"
+            for name in "${!app_map[@]}"; do
+                printf "%s\t%s\t%s\n" "__item__" "$name" "${app_desc_map[$name]}"
+            done | sort
+        } | fzf \
+            --prompt="Run: " \
+            --delimiter=$'\''\t'\'' \
+            --with-nth=2 \
+            --layout=reverse \
+            --bind "tab:replace-query" \
+            --preview '\''echo {3}'\'' \
+            --preview-window=down:10%,wrap
     )
 
-    key=$(printf "%s" "$selection" | cut -d":" -f1)
-    value=$(printf "%s" "$selection" | cut -d":" -f2-)
+    key=$(printf "%s" "$selection" | cut -d$'\''\t'\'' -f1)
+    value=$(printf "%s" "$selection" | cut -d$'\''\t'\'' -f2)
 
     case "$key" in
         __item__)

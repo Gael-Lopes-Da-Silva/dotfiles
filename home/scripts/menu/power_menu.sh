@@ -16,7 +16,10 @@ $TERMINAL --class custom:powermenu -e bash -c '
         "Lock"
     )
 
-    printf "%s\n" "${options[@]}" | fzf --prompt="Select: " --bind "tab:replace-query" > "'$tmpfile'"
+    printf "%s\n" "${options[@]}" | fzf \
+        --prompt="Select: " \
+        --layout=reverse \
+        --bind "tab:replace-query" > "'$tmpfile'"
 '
 
 fzf_output=$(cat "$tmpfile")
