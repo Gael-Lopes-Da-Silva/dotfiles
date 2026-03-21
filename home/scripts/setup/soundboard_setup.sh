@@ -9,7 +9,7 @@ SOUNDBOARD_SOURCE="SoundboardSource"
 
 if pw-link --links | grep -Eq "$SOUNDBOARD_SINK|$SOUNDBOARD_SOURCE"; then
     echo "Soundboard links already exist, skipping."
-    exit 0
+    exit 1
 fi
 
 REAL_MIC=$(pactl get-default-source)

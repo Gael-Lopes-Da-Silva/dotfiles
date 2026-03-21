@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if pgrep -f "$TERMINAL.*--class custom:cliphist" >/dev/null; then
-    exit 0
+    exit 1
 fi
 
 $TERMINAL --class custom:cliphist -e bash -c '

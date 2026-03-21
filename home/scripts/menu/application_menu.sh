@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if pgrep -f "$TERMINAL.*--class custom:applications" >/dev/null; then
-    exit 0
+    exit 1
 fi
 
 $TERMINAL --class custom:applications -e bash -c '
