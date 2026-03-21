@@ -26,7 +26,8 @@ $TERMINAL --class custom:commands -e bash -c '
         --prompt=": " \
         --delimiter=$'\''\t'\'' \
         --with-nth=2 \
-        --bind "tab:replace-query" \
+        --bind '\''ctrl-c:'\'' \
+        --bind '\''tab:replace-query'\'' \
         --bind '\''enter:execute-silent(bash -c "execute_item \"$@\"" _ {1} {2})+abort'\''
 '
 

@@ -77,9 +77,10 @@ $TERMINAL --class custom:applications -e bash -c '
         --delimiter=$'\''\t'\'' \
         --with-nth=2 \
         --layout=reverse \
-        --bind "tab:replace-query" \
         --preview '\''echo {4}'\'' \
         --preview-window=down:10%,wrap \
+        --bind '\''ctrl-c:'\'' \
+        --bind '\''tab:replace-query'\'' \
         --bind '\''enter:execute-silent(bash -c "execute_item \"$@\"" _ {1} {3})+abort'\''
 '
 

@@ -141,9 +141,10 @@ $TERMINAL --class custom:soundboard -e bash -c '
       --delimiter=$'\''\t'\'' \
       --with-nth=2 \
       --layout=reverse \
-      --bind "tab:replace-query" \
       --preview '\''echo {3}'\'' \
       --preview-window=down:10%,wrap \
+      --bind '\''tab:replace-query'\'' \
+      --bind '\''ctrl-c:execute-silent(bash -c "execute_item __stop__ \"$@\"")'\'' \
       --bind '\''ctrl-r:execute(bash -c "execute_item __rstart__ \"$@\"")'\'' \
       --bind '\''ctrl-s:execute(bash -c "execute_item __rsave__ \"$@\"")+reload(bash -c generate_list)'\'' \
       --bind '\''ctrl-d:execute(bash -c "execute_item __delete__ \"$@\"" _ {3})+reload(bash -c generate_list)'\'' \
