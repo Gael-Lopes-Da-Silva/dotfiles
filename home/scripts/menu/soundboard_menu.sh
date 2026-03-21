@@ -1,5 +1,25 @@
 #!/usr/bin/env bash
 
+# Navigation:
+#   ↑/↓            Move selection
+#   Tab            Autocomplete query with selection
+#   Enter          Play selected sound
+#
+# Actions:
+#   Ctrl+F         Play last recorded sound
+#   Ctrl+C         Stop all currently playing sounds
+#   Ctrl+R         Start recording from microphone (ESC to stop)
+#   Ctrl+S         Save last recording
+#   Ctrl+D         Delete selected sound file
+#
+# Behavior:
+#   - Plays selected sounds on both "SoundboardSink" and default output
+#   - Recording is saved to ~/.soundboard/custom/record.mp3
+#
+# Notes:
+#   - Supported formats: mp3, wav, flac, ogg, opus, etc.
+#   - Files are stored in ~/.soundboard
+
 if pgrep -f "$TERMINAL.*--class custom:soundboard" >/dev/null; then
     exit 1
 fi
@@ -12,11 +32,6 @@ $TERMINAL --class custom:soundboard -e bash -c '
         case "$key" in
             __stop__)
                 pkill paplay
-                dunstify \
-                    -a "soundboard" \
-                    -u normal \
-                    -t 5000 \
-                    "Soundboard" "All sounds have been stopped."
                 exit 0
                 ;;
             __delete__)
@@ -121,8 +136,6 @@ $TERMINAL --class custom:soundboard -e bash -c '
     }; export -f execute_item
 
     generate_list() {
-        printf "__stop__\t📢 Stop\n"
-        printf "__rplay__\t🔔 Play record\n"
         find "$HOME/.soundboard" -maxdepth 1 -type f \( \
             -iname "*.mp3" -o -iname "*.aac" -o -iname "*.wav" -o -iname "*.flac" \
             -o -iname "*.ogg" -o -iname "*.opus" -o -iname "*.aiff" \
@@ -137,18 +150,19 @@ $TERMINAL --class custom:soundboard -e bash -c '
     }; export -f generate_list
 
     generate_list | fzf \
-      --prompt=": " \
-      --delimiter=$'\''\t'\'' \
-      --with-nth=2 \
-      --layout=reverse \
-      --preview '\''echo {3}'\'' \
-      --preview-window=down:10%,wrap \
-      --bind '\''tab:replace-query'\'' \
-      --bind '\''ctrl-c:execute-silent(bash -c "execute_item __stop__ \"$@\"")'\'' \
-      --bind '\''ctrl-r:execute(bash -c "execute_item __rstart__ \"$@\"")'\'' \
-      --bind '\''ctrl-s:execute(bash -c "execute_item __rsave__ \"$@\"")+reload(bash -c generate_list)'\'' \
-      --bind '\''ctrl-d:execute(bash -c "execute_item __delete__ \"$@\"" _ {3})+reload(bash -c generate_list)'\'' \
-      --bind '\''enter:execute-silent(bash -c "execute_item \"$@\"" _ {1} {3})'\''
+        --prompt=": " \
+        --delimiter=$'\''\t'\'' \
+        --with-nth=2 \
+        --layout=reverse \
+        --preview '\''bash -c "[[ ! -z {3} ]] && echo {3}"'\'' \
+        --preview-window=down:10%,wrap \
+        --bind '\''tab:replace-query'\'' \
+        --bind '\''ctrl-f:execute-silent(bash -c "execute_item __rplay__ \"$@\"")'\'' \
+        --bind '\''ctrl-c:execute-silent(bash -c "execute_item __stop__ \"$@\"")'\'' \
+        --bind '\''ctrl-r:execute(bash -c "execute_item __rstart__ \"$@\"")'\'' \
+        --bind '\''ctrl-s:execute(bash -c "execute_item __rsave__ \"$@\"")+reload(bash -c generate_list)'\'' \
+        --bind '\''ctrl-d:execute(bash -c "execute_item __delete__ \"$@\"" _ {3})+reload(bash -c generate_list)'\'' \
+        --bind '\''enter:execute-silent(bash -c "execute_item \"$@\"" _ {1} {3})'\''
 '
 
 exit 0

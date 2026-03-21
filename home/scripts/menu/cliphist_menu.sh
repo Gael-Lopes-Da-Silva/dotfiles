@@ -1,5 +1,18 @@
 #!/usr/bin/env bash
 
+# Navigation:
+#   ↑/↓            Move selection
+#   Enter          Copy selected entry to clipboard
+#
+# Behavior:
+#   - Displays clipboard history entries (most recent first)
+#   - Selecting an entry copies it back to the clipboard
+#
+# Notes:
+#   - Uses `cliphist` for history management
+#   - Uses `wl-copy` for clipboard access (Wayland)
+#   - Clearing history is irreversible
+
 if pgrep -f "$TERMINAL.*--class custom:cliphist" >/dev/null; then
     exit 1
 fi

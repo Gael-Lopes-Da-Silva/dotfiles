@@ -1,5 +1,22 @@
 #!/usr/bin/env bash
 
+# Navigation:
+#   ↑/↓            Move selection
+#   Tab            Autocomplete query with selection
+#   Enter          Execute selected action
+#
+# Available options:
+#   Shutdown       Power off the system
+#   Reboot         Restart the system
+#   Suspend        Suspend to RAM
+#   Hibernate      Suspend to disk
+#   Logout         End current session
+#   Lock           Lock current session
+#
+# Notes:
+#   - Uses systemctl and loginctl for system/session control
+#   - Requires appropriate permissions for power actions
+
 if pgrep -f "$TERMINAL.*--class custom:powermenu" >/dev/null; then
     exit 1
 fi

@@ -1,5 +1,19 @@
 #!/usr/bin/env bash
 
+# Navigation:
+#   ↑/↓            Move selection
+#   Tab            Autocomplete query with selection
+#   Enter          Execute selected command
+#
+# Behavior:
+#   - Lists all available shell commands (from $PATH and builtins)
+#   - Executes selected command in background (detached)
+#
+# Notes:
+#   - Uses `compgen -c` to gather commands
+#   - Output is silenced (stdout/stderr redirected to /dev/null)
+#   - Useful as a quick command palette / launcher
+
 if pgrep -f "$TERMINAL.*--class custom:commands" >/dev/null; then
     exit 1
 fi
