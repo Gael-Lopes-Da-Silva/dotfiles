@@ -323,9 +323,9 @@ binds {
     Mod+Shift+Print { screenshot-window; }
     Mod+Ctrl+Print { screenshot-screen; }
 
-    Mod+S { screenshot; }
+    Mod+S { screenshot show-pointer=false; }
     Mod+Shift+S { screenshot-window write-to-disk=false; }
-    Mod+Ctrl+S { screenshot-screen write-to-disk=false; }
+    Mod+Ctrl+S { screenshot-screen show-pointer=false write-to-disk=false; }
 
     Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 }
