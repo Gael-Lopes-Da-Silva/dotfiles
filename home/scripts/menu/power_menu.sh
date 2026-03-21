@@ -23,7 +23,7 @@ $TERMINAL --class custom:powermenu -e bash -c '
         esac
     }; export -f execute_item
 
-    {
+    generate_list() {
         printf "__item__\t%s\n" \
             "Shutdown" \
             "Reboot" \
@@ -31,7 +31,9 @@ $TERMINAL --class custom:powermenu -e bash -c '
             "Hibernate" \
             "Logout" \
             "Lock"
-    } | fzf \
+    }; export -f generate_list
+
+    generate_list | fzf \
         --prompt=": " \
         --layout=reverse \
         --delimiter=$'\''\t'\'' \

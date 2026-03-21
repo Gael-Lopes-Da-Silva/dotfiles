@@ -16,11 +16,13 @@ $TERMINAL --class custom:commands -e bash -c '
         esac
     }; export -f execute_item
 
-    {
+    generate_list() {
         compgen -c | sort -u | while IFS=$'\''\n'\'' read -r command; do
             printf "__item__\t%s\n" "$command"
         done
-    } | fzf \
+    }; export -f generate_list
+
+    generate_list | fzf \
         --prompt=": " \
         --delimiter=$'\''\t'\'' \
         --with-nth=2 \

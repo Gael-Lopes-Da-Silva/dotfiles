@@ -66,11 +66,13 @@ $TERMINAL --class custom:applications -e bash -c '
         esac
     }; export -f execute_item
 
-    {
+    generate_list() {
         for name in "${!app_map[@]}"; do
             printf "%s\t%s\t%s\t%s\n" "__item__" "$name" "${app_map[$name]}" "${app_desc_map[$name]}"
         done | sort
-    } | fzf \
+    }; export -f generate_list
+
+    generate_list | fzf \
         --prompt="Run: " \
         --delimiter=$'\''\t'\'' \
         --with-nth=2 \

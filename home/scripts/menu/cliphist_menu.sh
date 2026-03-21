@@ -24,19 +24,21 @@ $TERMINAL --class custom:cliphist -e bash -c '
         esac
     }; export -f execute_item
 
-    {
-        printf "__clear__\t🧹 Clear\n"
+    generate_list() {
         cliphist list \
-        | sort -t $'\''\t'\'' -k1,1nr \
-        | while IFS=$'\''\t'\'' read -r id text; do
-            printf "__item__\t%s\t%s\n" "$text" "$id"
-        done
-    } | fzf \
+            | sort -t $'\''\t'\'' -k1,1nr \
+            | while IFS=$'\''\t'\'' read -r id text; do
+                printf "__item__\t%s\t%s\n" "$text" "$id"
+            done
+    }; export -f generate_list
+
+    generate_list | fzf \
         --no-sort \
         --prompt=": " \
         --delimiter=$'\''\t'\'' \
         --with-nth=2 \
         --layout=reverse \
+        --bind '\''ctrl-c:execute-silent(bash -c "execute_item __clear__ \"$@\"")+reload(bash -c generate_list)'\'' \
         --bind '\''enter:execute-silent(bash -c "execute_item \"$@\"" _ {1} {3})+abort'\''
 '
 
