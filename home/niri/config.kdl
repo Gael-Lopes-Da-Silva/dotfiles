@@ -121,6 +121,15 @@ window-rule {
 }
 
 window-rule {
+    match app-id="steam" title="^notificationtoasts"
+
+    open-focused false
+    open-floating true
+
+    default-floating-position x=2 y=2 relative-to="bottom-right"
+}
+
+window-rule {
     match app-id="^custom:(applications|cliphist|soundboard|powermenu)$"
 
     open-floating true
