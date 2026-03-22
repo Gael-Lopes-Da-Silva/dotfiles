@@ -182,7 +182,7 @@ binds {
     Mod+O repeat=false { toggle-overview; }
 
     Mod+Shift+C repeat=false { close-window; }
-
+    Mod+Ctrl+C repeat=false { spawn-sh "kill -9 $(niri msg focused-window | grep -i pid | awk '{print $2}')"; }
     Mod+C repeat=false { spawn-sh "niri msg pick-color | grep -i hex | awk '{print $2}' | tr -d '\n' | wl-copy"; }
 
     XF86AudioRaiseVolume { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0"; }
