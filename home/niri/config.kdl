@@ -114,8 +114,6 @@ window-rule {
     geometry-corner-radius 16
 
     clip-to-geometry true
-    open-fullscreen false
-    open-maximized false
     open-maximized-to-edges false
     draw-border-with-background false
 }
