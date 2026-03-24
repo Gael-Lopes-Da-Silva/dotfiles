@@ -1,3 +1,10 @@
+input {
+    touchpad {
+        off
+    }
+}
+
+
 window-rule {
     match app-id="steam" title="^notificationtoasts"
 
