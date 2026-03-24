@@ -1,0 +1,14 @@
+window-rule {
+    match app-id="steam" title="^notificationtoasts"
+
+    geometry-corner-radius 0
+
+    open-focused false
+    open-floating true
+
+    default-floating-position x=2 y=2 relative-to="bottom-right"
+
+    border {
+        off
+    }
+}

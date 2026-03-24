@@ -1,4 +1,4 @@
-include optional=true "host.kdl"
+include "host.kdl"
 
 spawn-sh-at-startup "udiskie --automount --notify --smart-tray"
 
@@ -17,11 +17,6 @@ input {
             layout "us"
             variant "intl"
         }
-    }
-
-    touchpad {
-        tap
-        natural-scroll
     }
 
     warp-mouse-to-focus
@@ -118,21 +113,6 @@ window-rule {
     clip-to-geometry true
     open-maximized-to-edges false
     draw-border-with-background false
-}
-
-window-rule {
-    match app-id="steam" title="^notificationtoasts"
-
-    geometry-corner-radius 0
-
-    open-focused false
-    open-floating true
-
-    default-floating-position x=2 y=2 relative-to="bottom-right"
-
-    border {
-        off
-    }
 }
 
 window-rule {
