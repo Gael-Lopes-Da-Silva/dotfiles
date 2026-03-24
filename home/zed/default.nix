@@ -23,6 +23,7 @@
       "kdl"
       "twig"
       "make"
+      "odin"
       "dockerfile"
       "git-firefly"
     ];
