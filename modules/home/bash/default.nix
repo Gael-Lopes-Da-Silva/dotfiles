@@ -1,6 +1,11 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
+  home.packages = with pkgs; [
+    bash-completion
+    bash-language-server
+  ];
+
   programs.bash = {
     enable = true;
 
@@ -23,29 +28,33 @@
     };
 
     historySize = 20000;
-
     historyFile = "$HOME/.bash_history";
 
     bashrcExtra = ''
-      # --- History behavior ---
-      shopt -s histappend
-      PROMPT_COMMAND="history -a; history -n"
-
-      # --- Case-insensitive completion ---
       bind "set completion-ignore-case on"
       bind "set show-all-if-ambiguous on"
+      bind "TAB:menu-complete"
+      bind "\"\e[Z\":menu-complete-backward"
 
-      # --- Right prompt (simulated) ---
-      # Bash doesn't support RPROMPT natively,
-      # so we inject it into PS1
-
-      function nix_shell_prompt() {
+      function set_right_prompt() {
         if [[ -n "$IN_NIX_SHELL" ]]; then
-          printf "\[\e[37m\]❄\[\e[0m\] "
+          RIGHT_PROMPT="\[\e[37m\]❄\[\e[0m\]"
+        else
+          RIGHT_PROMPT=""
         fi
       }
 
-      PS1='\u@\h:\w $(nix_shell_prompt)\$ '
+      function set_prompt() {
+        set_right_prompt
+
+        PS1="\u@\h:\w\$ "
+
+        if [[ -n "$RIGHT_PROMPT" ]]; then
+          PS1="$PS1\[\e[s\]\[\e[999C\]$RIGHT_PROMPT\[\e[u\]"
+        fi
+      }
+
+      PROMPT_COMMAND="set_prompt; history -a; history -n"
     '';
   };
 }

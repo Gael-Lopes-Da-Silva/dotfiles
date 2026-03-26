@@ -94,12 +94,6 @@
         };
       };
 
-      terminal = {
-        shell = {
-          program = "bash";
-        };
-      };
-
       session = {
         trust_all_worktrees = true;
       };

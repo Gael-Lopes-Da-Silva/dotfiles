@@ -233,7 +233,6 @@
       "video"
       "vboxusers"
     ];
-    shell = pkgs.bash;
   };
 
   home-manager.users.gael = import ./home;
