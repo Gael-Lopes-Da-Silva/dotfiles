@@ -65,7 +65,7 @@ $TERMINAL --class custom:soundboard -e bash -c '
                 while true; do
                     read -rsn1 key
                     if [[ $key == $'\''\e'\'' ]]; then
-                        if kill -0 "$pid" 2>/dev/null; then  # check if process exists
+                        if kill -0 "$pid" 2>/dev/null; then
                             kill "$pid"
                             wait "$pid" 2>/dev/null
                         fi
