@@ -1,5 +1,3 @@
-include "host.kdl"
-
 spawn-sh-at-startup "udiskie --automount --notify --smart-tray"
 
 spawn-sh-at-startup "bash ~/.local/bin/soundboard_setup.sh"
@@ -309,3 +307,5 @@ binds {
 
     Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 }
+
+include "host.kdl"

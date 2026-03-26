@@ -122,6 +122,10 @@
   systemd.oomd.enable = false;
 
   services = {
+    printing.enable = true;
+    blueman.enable = true;
+    gvfs.enable = true;
+
     earlyoom = {
       enable = true;
       enableNotifications = true;
@@ -232,7 +236,7 @@
     shell = pkgs.nushell;
   };
 
-  home-manager.users.gael = import ../home;
+  home-manager.users.gael = import ./home;
 
   system.stateVersion = "25.11";
 }

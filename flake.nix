@@ -29,15 +29,14 @@
 
             ./modules
             hostModule
-
             home-manager.nixosModules.home-manager
           ];
         };
     in
     {
       nixosConfigurations = {
-        laptop = mkHost ./hosts/laptop;
-        desktop = mkHost ./hosts/desktop;
+        laptop = mkHost ./modules/hosts/laptop;
+        desktop = mkHost ./modules/hosts/desktop;
       };
     };
 }

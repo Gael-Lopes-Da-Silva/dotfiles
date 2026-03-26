@@ -13,6 +13,8 @@
     ./qt
     ./scripts
     ./zed
+
+    ./packages.nix
   ];
 
   home = {
@@ -30,15 +32,6 @@
       name = "Adwaita";
       size = 24;
     };
-  };
-
-  services = {
-    gnome-keyring.enable = true;
-    ssh-agent.enable = true;
-  };
-
-  programs = {
-    home-manager.enable = true;
   };
 
   xdg.portal = {
