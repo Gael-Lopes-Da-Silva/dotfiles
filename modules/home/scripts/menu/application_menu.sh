@@ -100,7 +100,7 @@ $TERMINAL --class custom:applications -e bash -c '
         --preview-window=down:10%,wrap \
         --bind '\''ctrl-c:'\'' \
         --bind '\''tab:replace-query'\'' \
-        --bind '\''enter:execute-silent(bash -c "execute_item \"$@\"" _ {1} {3})+abort'\''
+        --bind '\''enter:execute(execute_item {1} {3})+abort'\''
 '
 
 exit 0

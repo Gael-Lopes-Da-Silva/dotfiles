@@ -157,12 +157,12 @@ $TERMINAL --class custom:soundboard -e bash -c '
         --preview '\''bash -c "[[ ! -z {3} ]] && echo {3}"'\'' \
         --preview-window=down:10%,wrap \
         --bind '\''tab:replace-query'\'' \
-        --bind '\''ctrl-f:execute-silent(bash -c "execute_item __rplay__ \"$@\"")'\'' \
-        --bind '\''ctrl-c:execute-silent(bash -c "execute_item __stop__ \"$@\"")'\'' \
-        --bind '\''ctrl-r:execute(bash -c "execute_item __rstart__ \"$@\"")'\'' \
-        --bind '\''ctrl-s:execute(bash -c "execute_item __rsave__ \"$@\"")+reload(bash -c generate_list)'\'' \
-        --bind '\''ctrl-d:execute(bash -c "execute_item __delete__ \"$@\"" _ {3})+reload(bash -c generate_list)'\'' \
-        --bind '\''enter:execute-silent(bash -c "execute_item \"$@\"" _ {1} {3})'\''
+        --bind '\''ctrl-f:execute-silent(execute_item __rplay__)'\'' \
+        --bind '\''ctrl-c:execute-silent(execute_item __stop__)'\'' \
+        --bind '\''ctrl-r:execute(execute_item __rstart__)'\'' \
+        --bind '\''ctrl-s:execute(execute_item __rsave__)+reload(bash -c generate_list)'\'' \
+        --bind '\''ctrl-d:execute(execute_item __delete__ {3})+reload(bash -c generate_list)'\'' \
+        --bind '\''enter:execute-silent(execute_item {1} {3})'\''
 '
 
 exit 0

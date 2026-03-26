@@ -51,8 +51,8 @@ $TERMINAL --class custom:cliphist -e bash -c '
         --delimiter=$'\''\t'\'' \
         --with-nth=2 \
         --layout=reverse \
-        --bind '\''ctrl-c:execute-silent(bash -c "execute_item __clear__ \"$@\"")+reload(bash -c generate_list)'\'' \
-        --bind '\''enter:execute-silent(bash -c "execute_item \"$@\"" _ {1} {3})+abort'\''
+        --bind '\''ctrl-c:execute-silent(execute_item __clear__)+reload(bash -c generate_list)'\'' \
+        --bind '\''enter:execute(execute_item {1} {3})+abort'\''
 '
 
 exit 0

@@ -57,7 +57,7 @@ $TERMINAL --class custom:powermenu -e bash -c '
         --with-nth=2 \
         --bind '\''ctrl-c:'\'' \
         --bind '\''tab:replace-query'\'' \
-        --bind '\''enter:execute-silent(bash -c "execute_item \"$@\"" _ {1} {2})+abort'\''
+        --bind '\''enter:execute(execute_item {1} {2})+abort'\''
 '
 
 exit 0
