@@ -233,7 +233,7 @@
       "video"
       "vboxusers"
     ];
-    shell = pkgs.nushell;
+    shell = pkgs.bash;
   };
 
   home-manager.users.gael = import ./home;

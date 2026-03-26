@@ -96,7 +96,7 @@
 
       terminal = {
         shell = {
-          program = "nu";
+          program = "bash";
         };
       };
 

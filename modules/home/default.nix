@@ -3,13 +3,13 @@
 {
   imports = [
     ./alacritty
+    ./bash
     ./clipboard
     ./dunst
     ./git
     ./gtk
     ./kanshi
     ./niri
-    ./nushell
     ./qt
     ./scripts
     ./zed
