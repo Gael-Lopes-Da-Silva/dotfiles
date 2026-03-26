@@ -162,12 +162,13 @@
       settings = {
         animation = "colormix";
         session_log = ".cache/ly/session.log";
-        clock = "%d-%m-%Y %H:%M:%S";
+        clock = null;
         bigclock = true;
         blank_password = true;
         blank_box = true;
         hide_borders = false;
         hide_key_hints = true;
+        hide_version_string = true;
         load = true;
         save = true;
       };

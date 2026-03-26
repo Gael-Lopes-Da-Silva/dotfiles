@@ -88,6 +88,12 @@
         enabled = true;
       };
 
+      terminal = {
+        shell = {
+          program = "bash";
+        };
+      };
+
       git = {
         inline_blame = {
           enabled = false;
