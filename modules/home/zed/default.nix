@@ -4,6 +4,7 @@
   home.packages = with pkgs; [
     nil
     nixd
+    package-version-server
   ];
 
   programs.zed-editor = {
