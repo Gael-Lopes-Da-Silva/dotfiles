@@ -16,5 +16,6 @@
     niri.enable = true;
     xwayland.enable = true;
     firejail.enable = true;
+    nix-ld.enable = true;
   };
 }
