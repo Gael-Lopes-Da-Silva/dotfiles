@@ -154,7 +154,7 @@ $TERMINAL --class custom:soundboard -e bash -c '
         --delimiter=$'\''\t'\'' \
         --with-nth=2 \
         --layout=reverse \
-        --preview '\''bash -c "[[ ! -z {3} ]] && echo {3}"'\'' \
+        --preview '\''echo {3}'\'' \
         --preview-window=down:10%,wrap \
         --bind '\''tab:replace-query'\'' \
         --bind '\''ctrl-f:execute-silent(execute_item __rplay__)'\'' \

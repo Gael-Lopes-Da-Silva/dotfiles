@@ -28,26 +28,19 @@ $TERMINAL --class custom:powermenu -e bash -c '
 
         case "$key" in
             __item__)
-                [ -n "$value" ] && case "$value" in
-                    Shutdown) systemctl poweroff ;;
-                    Reboot) systemctl reboot ;;
-                    Suspend) systemctl suspend ;;
-                    Hibernate) systemctl hibernate ;;
-                    Logout) loginctl terminate-session "$XDG_SESSION_ID" ;;
-                    Lock) loginctl lock-session ;;
-                esac
+                [ -n "$value" ] && bash -c "$value"
                 ;;
         esac
     }; export -f execute_item
 
     generate_list() {
-        printf "__item__\t%s\n" \
-            "Shutdown" \
-            "Reboot" \
-            "Suspend" \
-            "Hibernate" \
-            "Logout" \
-            "Lock"
+        printf "__item__\t%s\t%s\n" \
+            "Shutdown" "systemctl poweroff" \
+            "Reboot" "systemctl reboot" \
+            "Suspend" "systemctl suspend" \
+            "Hibernate" "systemctl hibernate" \
+            "Logout" "loginctl terminate-user $USER" \
+            "Lock" "loginctl lock-session"
     }; export -f generate_list
 
     generate_list | fzf \
@@ -55,9 +48,11 @@ $TERMINAL --class custom:powermenu -e bash -c '
         --layout=reverse \
         --delimiter=$'\''\t'\'' \
         --with-nth=2 \
+        --preview '\''echo {3}'\'' \
+        --preview-window=down:10%,wrap \
         --bind '\''ctrl-c:'\'' \
         --bind '\''tab:replace-query'\'' \
-        --bind '\''enter:execute(execute_item {1} {2})+abort'\''
+        --bind '\''enter:execute(execute_item {1} {3})+abort'\''
 '
 
 exit 0
