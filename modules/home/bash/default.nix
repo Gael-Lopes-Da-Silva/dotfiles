@@ -27,8 +27,31 @@
       decompress = "ouch decompress";
     };
 
+    sessionVariables = {
+      FZF_CTRL_R_OPTS = ''
+        --layout=reverse
+      '';
+      FZF_CTRL_T_OPTS = ''
+        --layout=reverse
+        --walker-skip .git,node_modules,target
+      '';
+      FZF_ALT_C_OPTS = ''
+        --layout=reverse
+        --walker-skip .git,node_modules,target
+      '';
+    };
+
     historySize = 20000;
     historyFile = "$HOME/.bash_history";
+    historyControl = [
+      "ignoredups"
+      "erasedups"
+    ];
+    historyIgnore = [
+      "ls"
+      "cd"
+      "exit"
+    ];
 
     bashrcExtra = ''
       bind "set completion-ignore-case on"
