@@ -12,7 +12,7 @@ if pw-link --links | grep -Eq "$SOUNDBOARD_SINK|$SOUNDBOARD_SOURCE"; then
     exit 1
 fi
 
-REAL_MIC=$(pactl get-default-source)
+REAL_MIC=$(pactl list short sources | awk '!/SoundboardSource/ && !/monitor/ { print $2 }' | head -n1)
 
 pw-link "$REAL_MIC:capture_FL" "$SOUNDBOARD_SINK:playback_FL" 2>/dev/null
 pw-link "$REAL_MIC:capture_FR" "$SOUNDBOARD_SINK:playback_FR" 2>/dev/null
@@ -21,6 +21,8 @@ pw-link "$REAL_MIC:capture_MONO" "$SOUNDBOARD_SINK:playback_FR" 2>/dev/null
 
 pw-link "$SOUNDBOARD_SINK:monitor_FL" "$SOUNDBOARD_SOURCE:input_FL" 2>/dev/null
 pw-link "$SOUNDBOARD_SINK:monitor_FR" "$SOUNDBOARD_SOURCE:input_FR" 2>/dev/null
+
+pactl set-default-source "$SOUNDBOARD_SOURCE"
 
 mkdir -p $HOME/.soundboard
 mkdir -p $HOME/.soundboard/custom
