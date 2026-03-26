@@ -10,6 +10,7 @@
     ./gtk
     ./kanshi
     ./niri
+    ./ollama
     ./qt
     ./scripts
     ./zed
