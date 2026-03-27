@@ -58,6 +58,10 @@
         };
       };
 
+      edit_predictions = {
+        provider = "ollama";
+      };
+
       collaboration_panel = {
         default_width = 300.0;
       };
