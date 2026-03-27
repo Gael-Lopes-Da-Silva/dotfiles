@@ -30,6 +30,7 @@
     ];
 
     userSettings = {
+      disable_ai = false;
       middle_click_paste = false;
       window_decorations = "server";
       lsp_document_colors = "background";
