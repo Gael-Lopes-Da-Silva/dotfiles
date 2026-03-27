@@ -36,12 +36,26 @@
       scroll_beyond_last_line = "off";
       format_on_save = "on";
       soft_wrap = "editor_width";
-      disable_ai = true;
       buffer_line_height = "standard";
       restore_on_startup = "empty_tab";
       ui_font_size = 18.0;
       buffer_font_size = 18.0;
+      agent_ui_font_size = 18.0;
       theme = "Yellowed";
+
+      language_models = {
+        ollama = {
+          api_url = "http://localhost:11434";
+          auto_discover = true;
+          context_window = 8192;
+        };
+      };
+
+      agent = {
+        default_model = {
+          provider = "ollama";
+        };
+      };
 
       collaboration_panel = {
         default_width = 300.0;
