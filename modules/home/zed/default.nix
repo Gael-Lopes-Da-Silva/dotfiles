@@ -47,7 +47,7 @@
         ollama = {
           api_url = "http://localhost:11434";
           auto_discover = true;
-          context_window = 8192;
+          context_window = 65536;
         };
       };
 
