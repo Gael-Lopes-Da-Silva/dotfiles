@@ -11,15 +11,14 @@
   };
 
   outputs =
-    { nixpkgs, home-manager, ... }:
+    { nixpkgs, ... }:
     let
       system = "x86_64-linux";
-
-      mkHost =
-        hostModule:
-        nixpkgs.lib.nixosSystem {
+    in
+    {
+      nixosConfigurations = {
+        laptop = nixpkgs.lib.nixosSystem {
           inherit system;
-
           modules = [
             {
               nixpkgs.config.allowUnfree = true;
@@ -27,16 +26,26 @@
               home-manager.useUserPackages = true;
             }
 
+            ./host/laptop
             ./modules
-            hostModule
-            home-manager.nixosModules.home-manager
+            ./home
           ];
         };
-    in
-    {
-      nixosConfigurations = {
-        laptop = mkHost ./modules/hosts/laptop;
-        desktop = mkHost ./modules/hosts/desktop;
+        desktop = nixpkgs.lib.nixosSystem {
+          inherit system;
+          modules = [
+            {
+              nixpkgs.config.allowUnfree = true;
+              nixpkgs.config.cudaSupport = true;
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+            }
+
+            ./host/desktop
+            ./modules
+            ./home
+          ];
+        };
       };
     };
 }

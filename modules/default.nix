@@ -225,18 +225,5 @@
     };
   };
 
-  users.users.gael = {
-    isNormalUser = true;
-    extraGroups = [
-      "disk"
-      "wheel"
-      "audio"
-      "video"
-      "vboxusers"
-    ];
-  };
-
-  home-manager.users.gael = import ./home;
-
   system.stateVersion = "25.11";
 }

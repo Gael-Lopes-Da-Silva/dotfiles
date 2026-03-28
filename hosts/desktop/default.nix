@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 
 {
   imports = [
@@ -6,10 +6,6 @@
   ];
 
   networking.hostName = "windows11";
-
-  environment.systemPackages = with pkgs; [
-    steam
-  ];
 
   programs.steam = {
     enable = true;
