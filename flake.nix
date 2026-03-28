@@ -26,7 +26,7 @@
               home-manager.useUserPackages = true;
             }
 
-            ./host/laptop
+            ./hosts/laptop
             ./modules
             ./home
           ];
@@ -41,7 +41,7 @@
               home-manager.useUserPackages = true;
             }
 
-            ./host/desktop
+            ./hosts/desktop
             ./modules
             ./home
           ];
