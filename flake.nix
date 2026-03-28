@@ -11,7 +11,7 @@
   };
 
   outputs =
-    { nixpkgs, ... }:
+    { nixpkgs, home-manager, ... }:
     let
       system = "x86_64-linux";
     in
@@ -20,6 +20,8 @@
         laptop = nixpkgs.lib.nixosSystem {
           inherit system;
           modules = [
+            home-manager.nixosModules.home-manager
+
             {
               nixpkgs.config.allowUnfree = true;
               home-manager.useGlobalPkgs = true;
@@ -34,6 +36,8 @@
         desktop = nixpkgs.lib.nixosSystem {
           inherit system;
           modules = [
+            home-manager.nixosModules.home-manager
+
             {
               nixpkgs.config.allowUnfree = true;
               nixpkgs.config.cudaSupport = true;
