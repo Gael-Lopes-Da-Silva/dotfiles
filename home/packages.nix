@@ -3,8 +3,6 @@
 {
   home.packages = with pkgs; [
     p7zip
-    p7zip-rar
-
     udiskie
     pulseaudio
     brightnessctl
