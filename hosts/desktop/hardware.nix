@@ -39,6 +39,11 @@
     { device = "/dev/disk/by-uuid/de483c4f-08b7-421e-9d50-2831de4f1dd0"; }
   ];
 
+  services.xserver.videoDrivers = [
+    "nvidia"
+    "modesetting"
+  ];
+
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
   hardware = {
@@ -58,10 +63,5 @@
       nvidiaSettings = true;
       package = config.boot.kernelPackages.nvidiaPackages.stable;
     };
-
-    services.xserver.videoDrivers = [
-      "nvidia"
-      "modesetting"
-    ];
   };
 }
