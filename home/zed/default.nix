@@ -53,14 +53,18 @@
       };
 
       agent = {
-        default_view = "text_thread";
+        default_view = "thread";
         default_model = {
           provider = "ollama";
+          model = "";
         };
       };
 
       edit_predictions = {
         provider = "ollama";
+        ollama = {
+          model = "";
+        };
       };
 
       collaboration_panel = {
