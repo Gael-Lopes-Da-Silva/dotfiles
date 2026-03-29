@@ -2,13 +2,11 @@
 
 {
   home.packages = with pkgs; [
-    ouch
-    wine
     p7zip
+    p7zip-rar
+
     udiskie
     pulseaudio
-    winetricks
-    wine-wayland
     brightnessctl
     xdg-user-dirs
     xdg-user-dirs-gtk

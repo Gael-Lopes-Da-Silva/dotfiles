@@ -23,8 +23,8 @@
       rm = "rm -i";
       mv = "mv -iv";
 
-      compress = "ouch compress";
-      decompress = "ouch decompress";
+      compress = "7z a -tzip";
+      decompress = "7z x";
     };
 
     sessionVariables = {
