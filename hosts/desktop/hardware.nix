@@ -58,5 +58,10 @@
       nvidiaSettings = true;
       package = config.boot.kernelPackages.nvidiaPackages.stable;
     };
+
+    services.xserver.videoDrivers = [
+      "nvidia"
+      "modesetting"
+    ];
   };
 }
