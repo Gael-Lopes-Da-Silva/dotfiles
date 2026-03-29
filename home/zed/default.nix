@@ -53,6 +53,7 @@
       };
 
       agent = {
+        default_view = "text_thread";
         default_model = {
           provider = "ollama";
         };
