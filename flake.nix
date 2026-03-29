@@ -14,41 +14,39 @@
     { nixpkgs, home-manager, ... }:
     let
       system = "x86_64-linux";
+      systemConfig = [
+        home-manager.nixosModules.home-manager
+
+        {
+          nixpkgs.config.allowUnfree = true;
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+        }
+      ];
+      systemImports = [
+        ./modules
+        ./home
+      ];
     in
     {
       nixosConfigurations = {
         laptop = nixpkgs.lib.nixosSystem {
           inherit system;
-          modules = [
-            home-manager.nixosModules.home-manager
-
-            {
-              nixpkgs.config.allowUnfree = true;
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-            }
-
-            ./hosts/laptop
-            ./modules
-            ./home
-          ];
+          modules =
+            systemConfig
+            ++ [
+              ./hosts/laptop
+            ]
+            ++ systemImports;
         };
         desktop = nixpkgs.lib.nixosSystem {
           inherit system;
-          modules = [
-            home-manager.nixosModules.home-manager
-
-            {
-              nixpkgs.config.allowUnfree = true;
-              nixpkgs.config.cudaSupport = true;
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-            }
-
-            ./hosts/desktop
-            ./modules
-            ./home
-          ];
+          modules =
+            systemConfig
+            ++ [
+              ./hosts/desktop
+            ]
+            ++ systemImports;
         };
       };
     };
