@@ -45,6 +45,9 @@ layout {
 
     border {
         width 6
+        active-color "#7A7A7A"
+        inactive-color "#505050"
+        urgent-color "#BF0000"
     }
 
     tab-indicator {
@@ -141,7 +144,7 @@ binds {
     Mod+O repeat=false { toggle-overview; }
 
     Mod+Shift+C repeat=false { close-window; }
-    Mod+Ctrl+C repeat=false { spawn-sh "kill -9 $(niri msg focused-window | grep -i pid | awk '{print $2}')"; }
+    Mod+Ctrl+C repeat=false { spawn-sh "kill -9 $(niri msg focused-window | grep -i pid | awk '{print $2}' | tr -d '\\n')"; }
     Mod+C repeat=false { spawn-sh "wl-copy $(niri msg pick-color | grep -i hex | awk '{print $2}' | tr -d '\\n')"; }
 
     XF86AudioRaiseVolume { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0"; }
