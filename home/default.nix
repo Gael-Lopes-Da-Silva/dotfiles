@@ -17,12 +17,12 @@
       ./alacritty
       ./bash
       ./clipboard
-      ./dunst
       ./git
       ./gtk
       ./kanshi
       ./niri
       ./ollama
+      ./osd
       ./qt
       ./scripts
       ./zed
