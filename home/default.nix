@@ -21,8 +21,8 @@
       ./gtk
       ./kanshi
       ./niri
+      ./notification
       ./ollama
-      ./osd
       ./qt
       ./scripts
       ./zed

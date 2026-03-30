@@ -2,7 +2,7 @@
 
 datetime=$(LC_TIME=fr_FR.UTF-8 date +"%A\n%d/%m/%Y\n%H:%M")
 
-dunstify \
+notify-send \
     -a "clock" \
     -h string:x-dunst-stack-tag:clock \
     -u low \

@@ -4,6 +4,7 @@
   home.packages = with pkgs; [
     p7zip
     udiskie
+    libnotify
     pulseaudio
     brightnessctl
     xdg-user-dirs
