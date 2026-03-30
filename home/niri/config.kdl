@@ -98,7 +98,7 @@ window-rule {
 }
 
 window-rule {
-    match app-id="^custom:(applications|cliphist|soundboard|powermenu)$"
+    match app-id="^custom:(applications|cliphist|soundboard)$"
 
     open-floating true
 

@@ -12,7 +12,7 @@
       background-color = "#060d0fff";
       border-size = 6;
       border-color = "#3B3B3Bff";
-      border-radius = 14;
+      border-radius = 12;
       progress-color = "#242424ff";
       margin = 2;
       padding = 8;
