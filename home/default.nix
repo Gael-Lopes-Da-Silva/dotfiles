@@ -19,7 +19,6 @@
       ./clipboard
       ./git
       ./gtk
-      ./hyprland
       ./kanshi
       ./mako
       ./niri

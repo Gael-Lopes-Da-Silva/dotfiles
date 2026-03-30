@@ -1,5 +1,3 @@
-spawn-sh-at-startup "udiskie --automount --notify --smart-tray"
-
 spawn-sh-at-startup "bash ~/.local/bin/soundboard_setup.sh"
 spawn-sh-at-startup "bash ~/.local/bin/audio_monitor.sh"
 spawn-sh-at-startup "bash ~/.local/bin/battery_monitor.sh"
