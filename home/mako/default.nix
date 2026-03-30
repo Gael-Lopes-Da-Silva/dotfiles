@@ -36,6 +36,9 @@
       "app-name=monitor" = {
         anchor = "bottom-center";
       };
+      "app-name=workspace" = {
+        anchor = "bottom-center";
+      };
     };
   };
 }
