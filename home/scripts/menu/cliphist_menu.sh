@@ -25,9 +25,8 @@ $TERMINAL --class custom:cliphist -e bash -c '
         case "$key" in
             __clear__)
                 cliphist wipe
-                dunstify \
+                notify-send \
                     -a "clipboard" \
-                    -u normal \
                     -t 5000 \
                     "Clipboard history" "The clipboard history was successfully cleared."
                 ;;

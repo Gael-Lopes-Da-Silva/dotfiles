@@ -27,10 +27,15 @@ $TERMINAL --class custom:applications -e bash -c '
     execute_item() {
         key="$1"
         value="$2"
+        name="$3"
 
         case "$key" in
             __item__)
                 [ -n "$value" ] && setsid bash -c "$value" >/dev/null 2>&1 &
+                notify-send \
+                    -a "clipboard" \
+                    -t 5000 \
+                    "Application launcher" "$name launched"
                 ;;
         esac
     }; export -f execute_item
@@ -100,7 +105,7 @@ $TERMINAL --class custom:applications -e bash -c '
         --preview-window=down:10%,wrap \
         --bind '\''ctrl-c:'\'' \
         --bind '\''tab:replace-query'\'' \
-        --bind '\''enter:execute(execute_item {1} {3})+abort'\''
+        --bind '\''enter:execute(execute_item {1} {3} {2})+abort'\''
 '
 
 exit 0

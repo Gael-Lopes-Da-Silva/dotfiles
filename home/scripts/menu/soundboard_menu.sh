@@ -45,9 +45,8 @@ $TERMINAL --class custom:soundboard -e bash -c '
 
                 rm "$value"
 
-                dunstify \
+                notify-send \
                     -a "soundboard" \
-                    -u normal \
                     -t 5000 \
                     "Soundboard" "Deleted $(basename "$value") successfully."
                 exit 0
@@ -73,9 +72,8 @@ $TERMINAL --class custom:soundboard -e bash -c '
                     fi
                 done
 
-                dunstify \
+                notify-send \
                     -a "soundboard" \
-                    -u normal \
                     -t 5000 \
                     "Soundboard" "Custom record successfully recorded."
                 exit 0
@@ -91,9 +89,8 @@ $TERMINAL --class custom:soundboard -e bash -c '
                 record_file="$HOME/.soundboard/custom/record.mp3"
 
                 if [ ! -f "$record_file" ]; then
-                    dunstify \
+                    notify-send \
                         -a \"soundboard\" \
-                        -u normal \
                         -t 5000 \
                         "Soundboard" "No recording found to save."
                     exit 1
@@ -108,9 +105,8 @@ $TERMINAL --class custom:soundboard -e bash -c '
                 dest="$HOME/.soundboard/${safe_name}.mp3"
 
                 if [ -f "$dest" ]; then
-                    dunstify \
+                    notify-send \
                         -a "soundboard" \
-                        -u normal \
                         -t 5000 \
                         "Soundboard" "File ${safe_name}.mp3 already exists."
                     exit 1
@@ -118,9 +114,8 @@ $TERMINAL --class custom:soundboard -e bash -c '
 
                 cp "$record_file" "$dest"
 
-                dunstify \
+                notify-send \
                     -a "soundboard" \
-                    -u normal \
                     -t 5000 \
                     "Soundboard" "File ${safe_name}.mp3 saved successfully."
                 exit 0
