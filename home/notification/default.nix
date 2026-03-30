@@ -1,7 +1,7 @@
 { ... }:
 
 {
-  services.make = {
+  services.mako = {
     enable = true;
     settings = {
 
