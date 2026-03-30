@@ -20,8 +20,8 @@
       ./git
       ./gtk
       ./kanshi
+      ./mako
       ./niri
-      ./notification
       ./ollama
       ./qt
       ./scripts
