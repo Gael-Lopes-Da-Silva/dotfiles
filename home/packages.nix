@@ -17,6 +17,7 @@
   ];
 
   services = {
+    polkit-gnome.enable = true;
     gnome-keyring.enable = true;
     ssh-agent.enable = true;
   };
