@@ -3,7 +3,7 @@
 niri msg event-stream | while read -r line; do
     case "$line" in
         Workspace\ focused:*)
-            workspace=${line#Workspace focused: }
+            workspace=$(niri msg workspaces | awk '/\*/ {print $2}')
 
             notify-send \
                 -a "workspace" \
