@@ -19,12 +19,14 @@
       ./clipboard
       ./git
       ./gtk
+      ./hyprland
       ./kanshi
       ./mako
       ./niri
       ./ollama
       ./qt
       ./scripts
+      ./udiskie
       ./zed
 
       ./packages.nix
