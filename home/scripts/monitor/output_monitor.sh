@@ -31,11 +31,10 @@ udevadm monitor --environment --udev --subsystem-match=drm | while read -r line;
                     name=$(basename "$connector")
 
                     if [ "${last_status[$name]}" != "$status" ]; then
-                        dunstify \
+                        notify-send \
                             -a "monitor" \
                             -h string:x-dunst-stack-tag:output \
-                            -u low \
-                            -t 5000 \
+                            -t 3000 \
                             "Output" "$name: $status"
 
                         last_status[$name]=$status

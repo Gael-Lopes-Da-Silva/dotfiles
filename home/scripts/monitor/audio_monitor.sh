@@ -17,29 +17,26 @@ pactl subscribe | while read -r line; do
 
             if [ "$sink_mute" != "$prev_sink_mute" ]; then
                 if [ "$sink_mute" = "yes" ]; then
-                    dunstify \
+                    notify-send \
                         -a "volume" \
                         -h string:x-dunst-stack-tag:volume \
-                        -u low \
-                        -t 5000 \
+                        -t 3000 \
                         "Speaker" "Muted"
                 else
-                    dunstify \
+                    notify-send \
                         -a "volume" \
                         -h string:x-dunst-stack-tag:volume \
-                        -u low \
-                        -t 5000 \
+                        -t 3000 \
                         "Speaker" "Unmuted"
                 fi
 
                 prev_sink_mute="$sink_mute"
             elif [ "$sink_volume" -ne "$prev_sink_volume" ]; then
-                dunstify \
+                notify-send \
                     -a "volume" \
                     -h string:x-dunst-stack-tag:volume \
-                    -h int:value:"$sink_volume" \
-                    -u low \
-                    -t 5000 \
+                    -h int:value:$sink_volume \
+                    -t 3000 \
                     "Speaker" "$sink_volume%"
 
                 prev_sink_volume="$sink_volume"
@@ -54,29 +51,26 @@ pactl subscribe | while read -r line; do
 
             if [ "$source_mute" != "$prev_source_mute" ]; then
                 if [ "$source_mute" = "yes" ]; then
-                    dunstify \
+                    notify-send \
                         -a "microphone" \
                         -h string:x-dunst-stack-tag:microphone \
-                        -u low \
-                        -t 5000 \
+                        -t 3000 \
                         "Microphone" "Muted"
                 else
-                    dunstify \
+                    notify-send \
                         -a "microphone" \
                         -h string:x-dunst-stack-tag:microphone \
-                        -u low \
-                        -t 5000 \
+                        -t 3000 \
                         "Microphone" "Unmuted"
                 fi
 
                 prev_source_mute="$source_mute"
             elif [ "$source_volume" -ne "$prev_source_volume" ]; then
-                dunstify \
+                notify-send \
                     -a "microphone" \
                     -h string:x-dunst-stack-tag:microphone \
-                    -h int:value:"$source_volume" \
-                    -u low \
-                    -t 5000 \
+                    -h int:value:$source_volume \
+                    -t 3000 \
                     "Microphone" "$source_volume%"
 
                 prev_source_volume="$source_volume"

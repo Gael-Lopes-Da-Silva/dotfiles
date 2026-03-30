@@ -86,25 +86,6 @@ recent-windows {
     off
 }
 
-layer-rule {
-    match namespace="^notifications$"
-
-    geometry-corner-radius 16
-
-    shadow {
-        on
-        softness 10
-        spread 5
-        draw-behind-window true
-    }
-}
-
-layer-rule {
-    match namespace="^wallpaper$"
-
-    place-within-backdrop true
-}
-
 window-rule {
     geometry-corner-radius 16
 

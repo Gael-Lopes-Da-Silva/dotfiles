@@ -5,7 +5,6 @@ datetime=$(LC_TIME=fr_FR.UTF-8 date +"%A\n%d/%m/%Y\n%H:%M")
 notify-send \
     -a "clock" \
     -h string:x-dunst-stack-tag:clock \
-    -u low \
     -t 5000 \
     "Time" "$datetime"
 

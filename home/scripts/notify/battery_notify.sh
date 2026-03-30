@@ -8,10 +8,10 @@ battery=$(find /sys/class/power_supply -maxdepth 1 -type l -name 'BAT[0-9]' | he
 level=$(cat "$battery/capacity")
 
 notify-send \
-    -a "power" \
+    -a "battery" \
     -h string:x-dunst-stack-tag:battery \
-    -u low \
-    -t 5000 \
+    -h int:value:$level \
+    -t 3000 \
     "Battery" "$level%"
 
 exit 0

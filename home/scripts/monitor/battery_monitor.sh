@@ -23,20 +23,18 @@ udevadm monitor --environment --udev --subsystem-match=power_supply | while read
 
                 if [ "$current" != "$prev_online" ]; then
                     if [ "$current" = "1" ]; then
-                        dunstify \
+                        notify-send \
                             -a "power" \
                             -h string:x-dunst-stack-tag:power \
-                            -u low \
-                            -t 5000 \
+                            -t 3000 \
                             "Power" "Charger plugged in"
 
                         brightness_reduced=0
                     else
-                        dunstify \
+                        notify-send \
                             -a "power" \
                             -h string:x-dunst-stack-tag:power \
-                            -u low \
-                            -t 5000 \
+                            -t 3000 \
                             "Power" "Charger unplugged"
                     fi
                     prev_online="$current"
@@ -52,40 +50,30 @@ udevadm monitor --environment --udev --subsystem-match=power_supply | while read
 
                     if [ "$status" = "Discharging" ]; then
                         if [ "$level" -le 15 ] && [ "$brightness_reduced" = "0" ]; then
-                            dunstify \
+                            notify-send \
                                 -a "power" \
                                 -h string:x-dunst-stack-tag:battery \
-                                -h int:value:"$level" \
+                                -h int:value:$level \
                                 -u critical \
-                                -t 5000 \
+                                -t 10000 \
                                 "Battery Critical" "$level% - Reducing brightness"
 
                             brightnessctl set 30%
                             brightness_reduced=1
                         elif [ "$level" -le 25 ] && [ "$prev_capacity" -gt 25 ]; then
-                            dunstify \
+                            notify-send \
                                 -a "power" \
                                 -h string:x-dunst-stack-tag:battery \
-                                -h int:value:"$level" \
-                                -u critical \
-                                -t 5000 \
+                                -h int:value:$level \
+                                -t 3000 \
                                 "Battery Low" "$level%"
                         elif [ "$level" -le 50 ] && [ "$prev_capacity" -gt 50 ]; then
-                            dunstify \
+                            notify-send \
                                 -a "power" \
                                 -h string:x-dunst-stack-tag:battery \
-                                -h int:value:"$level" \
-                                -u low \
-                                -t 5000 \
+                                -h int:value:$level \
+                                -t 3000 \
                                 "Battery" "$level%"
-                        elif [ "$level" -ge 100 ] && [ "$prev_capacity" -le 99 ]; then
-                            dunstify \
-                                -a "power" \
-                                -h string:x-dunst-stack-tag:battery \
-                                -h int:value:"$level" \
-                                -u normal \
-                                -t 5000 \
-                                "Battery Full" "$level%"
                         fi
                     fi
 
