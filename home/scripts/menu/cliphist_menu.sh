@@ -30,6 +30,21 @@ $TERMINAL --class custom:cliphist -e bash -c '
                     -t 5000 \
                     "Clipboard history" "The clipboard history was successfully cleared."
                 ;;
+            __qdelete__)
+                query=$(printf "" | fzf --print-query --prompt="Query to delete: ")
+                [ -z "$query" ] && exit 1
+
+                confirm=$(printf "No\nYes" | fzf --prompt="Delete those entries? ")
+                [ "$confirm" != "Yes" ] && exit 0
+
+                cliphist delete-query $query
+                ;;
+            __delete__)
+                confirm=$(printf "No\nYes" | fzf --prompt="Delete this entry? ")
+                [ "$confirm" != "Yes" ] && exit 0
+
+                [ -n "$value" ] && printf "%s" $value | cliphist delete
+                ;;
             __item__)
                 [ -n "$value" ] && setsid bash -c "printf \"%s\" $value | cliphist decode | wl-copy" >/dev/null 2>&1 &
                 ;;
@@ -50,6 +65,8 @@ $TERMINAL --class custom:cliphist -e bash -c '
         --delimiter=$'\''\t'\'' \
         --with-nth=2 \
         --layout=reverse \
+        --bind '\''ctrl-q:execute(execute_item __qdelete__)+reload(bash -c generate_list)'\'' \
+        --bind '\''ctrl-d:execute(execute_item __delete__ {3})+reload(bash -c generate_list)'\'' \
         --bind '\''ctrl-c:execute-silent(execute_item __clear__)+reload(bash -c generate_list)'\'' \
         --bind '\''enter:execute(execute_item {1} {3})+abort'\''
 '
