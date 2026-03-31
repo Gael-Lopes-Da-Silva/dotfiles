@@ -24,6 +24,23 @@ $TERMINAL --class custom:commands -e bash -c '
         value="$2"
 
         case "$key" in
+            __info__)
+                if [ -n "$value" ]; then
+                    section=$(
+                        whatis "$value" 2>/dev/null |
+                        awk '\''{print $2}'\'' |
+                        tr -d "()" |
+                        sed "s/[^0-9].*//g" |
+                        sort -u |
+                        fzf --prompt="Select a section: "
+                    )
+
+                    [ -z "$section" ] && exit 1
+
+                    man "$section" "$value"
+                    clear
+                fi
+                ;;
             __item__)
                 [ -n "$value" ] && setsid bash -c "$value" >/dev/null 2>&1 &
                 ;;
@@ -43,6 +60,7 @@ $TERMINAL --class custom:commands -e bash -c '
         --layout=reverse \
         --bind '\''ctrl-c:'\'' \
         --bind '\''tab:replace-query'\'' \
+        --bind '\''ctrl-i:execute(execute_item __info__ {2})'\'' \
         --bind '\''enter:execute(execute_item {1} {2})+abort'\''
 '
 
