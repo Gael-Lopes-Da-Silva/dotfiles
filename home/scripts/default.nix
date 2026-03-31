@@ -20,5 +20,7 @@
   home.file.".local/bin/brightness_monitor.sh".source = ./monitor/brightness_monitor.sh;
   home.file.".local/bin/output_monitor.sh".source = ./monitor/output_monitor.sh;
 
+  home.file.".local/bin/freeze_process.sh".source = ./utility/freeze_process.sh;
+
   home.file.".local/bin/soundboard_setup.sh".source = ./setup/soundboard_setup.sh;
 }

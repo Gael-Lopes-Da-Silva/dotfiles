@@ -119,6 +119,8 @@ binds {
     Mod+Shift+Q repeat=false { spawn-sh "bash ~/.local/bin/power_menu.sh"; }
     Ctrl+Alt+Delete repeat=false { spawn-sh "bash ~/.local/bin/power_menu.sh"; }
 
+    Mod+Ctrl+F repeat=false { spawn-sh "bash ~/.local/bin/power_menu.sh"; }
+
     Mod+O repeat=false { toggle-overview; }
 
     Mod+Shift+C repeat=false { close-window; }
