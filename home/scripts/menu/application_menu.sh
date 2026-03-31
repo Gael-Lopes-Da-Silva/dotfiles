@@ -16,7 +16,6 @@
 #       /etc/profiles/per-user/$USER/share/applications
 #       ~/.local/share/applications
 #   - Hidden apps (NoDisplay=true) are ignored
-#   - Exec placeholders (e.g. %f, %u) are stripped
 #   - Preview window shows application description when available
 
 if pgrep -f "$TERMINAL.*--class custom:applications" >/dev/null; then
@@ -86,7 +85,7 @@ $TERMINAL --class custom:applications -e bash -c '
 
         for name in "${!app_map[@]}"; do
             printf "%s\t%s\t%s\t%s\n" "__item__" "$name" "${app_map[$name]}" "${app_desc_map[$name]}"
-        done | sort
+        done | sort | awk -F'\''\t'\'' '\''{print $1 "\t" toupper(substr($2,1,1)) substr($2,2) "\t" $3 "\t" $4}'\''
     }; export -f generate_list
 
     generate_list | fzf \
