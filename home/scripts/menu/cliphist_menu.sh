@@ -4,14 +4,20 @@
 #   ↑/↓            Move selection
 #   Enter          Copy selected entry to clipboard
 #
+# Actions:
+#   Ctrl-D         Delete selected entry
+#   Ctrl-Q         Delete entries matching a query
+#   Ctrl-C         Clear entire clipboard history (irreversible)
+#
 # Behavior:
-#   - Displays clipboard history entries (most recent first)
-#   - Selecting an entry copies it back to the clipboard
+#   - Displays clipboard history (most recent first)
+#   - Uses `fzf` for interactive filtering and selection
+#   - Automatically reloads the list after modifications
 #
 # Notes:
-#   - Uses `cliphist` for history management
-#   - Uses `wl-copy` for clipboard access (Wayland)
-#   - Clearing history is irreversible
+#   - Requires: cliphist, wl-copy, fzf, notify-send
+#   - Clipboard content is decoded before being copied
+#   - Clearing history cannot be undone
 
 if pgrep -f "$TERMINAL.*--class custom:cliphist" >/dev/null; then
     exit 1
