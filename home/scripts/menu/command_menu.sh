@@ -5,6 +5,9 @@
 #   Tab            Autocomplete query with selection
 #   Enter          Execute selected command
 #
+# Actions:
+#   Ctrl-I         Browse the man page of the selected command
+#
 # Behavior:
 #   - Lists all available shell commands (from $PATH and builtins)
 #   - Executes selected command in background (detached)
