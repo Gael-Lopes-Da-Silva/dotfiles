@@ -12,6 +12,11 @@
     nerd-fonts.symbols-only
   ];
 
+  environment.systemPackages = with pkgs; [
+    man-pages
+    man-pages-posix
+  ];
+
   programs = {
     niri.enable = true;
     nix-ld.enable = true;
