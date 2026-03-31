@@ -77,7 +77,7 @@ $TERMINAL --class custom:applications -e bash -c '
                 done < "$file"
 
                 if [ -n "$name" ] && [ "$nodisplay" != "true" ]; then
-                    app_map["$name"]="$(basename $file)"
+                    app_map["$name"]="$(basename "$file")"
                     app_desc_map["$name"]="$comment"
                 fi
             done
