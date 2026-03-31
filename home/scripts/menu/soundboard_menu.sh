@@ -39,7 +39,6 @@ $TERMINAL --class custom:soundboard -e bash -c '
                 fi
 
                 confirm=$(printf "No\nYes" | fzf --prompt="Delete $(basename "$value")? ")
-
                 [ "$confirm" != "Yes" ] && exit 0
 
                 rm "$value"
@@ -93,7 +92,6 @@ $TERMINAL --class custom:soundboard -e bash -c '
                 fi
 
                 name=$(printf "" | fzf --print-query --prompt="Save as: ")
-
                 [ -z "$name" ] && exit 1
 
                 safe_name=$(echo "$name" | tr '\'' '\'' '\''-'\'' | tr -cd '\''[:alnum:]_-'\'' )
