@@ -31,7 +31,7 @@ $TERMINAL --class custom:applications -e bash -c '
 
         case "$key" in
             __item__)
-                [ -n "$value" ] && setsid bash -c "$value" >/dev/null 2>&1 &
+                [ -n "$value" ] && setsid gtk-launch "$value" >/dev/null 2>&1 &
                 notify-send \
                     -a "clipboard" \
                     -t 5000 \
@@ -57,7 +57,6 @@ $TERMINAL --class custom:applications -e bash -c '
 
                 name=""
                 nodisplay=""
-                exec_cmd=""
                 comment=""
 
                 while IFS="=" read -r key value; do
@@ -71,21 +70,15 @@ $TERMINAL --class custom:applications -e bash -c '
                         NoDisplay)
                             nodisplay=$value
                             ;;
-                        Exec)
-                            if [ -z "$exec_cmd" ]; then
-                                exec_cmd=$value
-                                exec_cmd=${exec_cmd//%[a-zA-Z]/}
-                            fi
-                            ;;
                     esac
 
-                    if [ -n "$name" ] && [ -n "$exec_cmd" ] && [ -n "$nodisplay" ] && [ -n "$comment" ]; then
+                    if [ -n "$name" ] && [ -n "$nodisplay" ] && [ -n "$comment" ]; then
                         break
                     fi
                 done < "$file"
 
-                if [ -n "$name" ] && [ "$nodisplay" != "true" ] && [ -n "$exec_cmd" ]; then
-                    app_map["$name"]="$exec_cmd"
+                if [ -n "$name" ] && [ "$nodisplay" != "true" ]; then
+                    app_map["$name"]="$(basename $file)"
                     app_desc_map["$name"]="$comment"
                 fi
             done
