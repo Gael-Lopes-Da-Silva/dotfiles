@@ -13,6 +13,7 @@
 
   home.file.".local/bin/battery_notify.sh".source = ./notify/battery_notify.sh;
   home.file.".local/bin/datetime_notify.sh".source = ./notify/datetime_notify.sh;
+  home.file.".local/bin/workspace_notify.sh".source = ./notify/workspace_notify.sh;
 
   home.file.".local/bin/audio_monitor.sh".source = ./monitor/audio_monitor.sh;
   home.file.".local/bin/battery_monitor.sh".source = ./monitor/battery_monitor.sh;

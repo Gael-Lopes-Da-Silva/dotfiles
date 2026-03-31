@@ -95,21 +95,12 @@ window-rule {
 }
 
 window-rule {
-    match app-id="^custom:(applications|cliphist|soundboard|commands)$"
+    match app-id="^custom:(applications|cliphist|soundboard|commands|powermenu)$"
 
     open-floating true
 
     default-column-width { proportion 0.50; }
     default-window-height { proportion 0.50; }
-}
-
-window-rule {
-    match app-id="^custom:powermenu$"
-
-    open-floating true
-
-    default-column-width { proportion 0.30; }
-    default-window-height { proportion 0.30; }
 }
 
 binds {
@@ -118,9 +109,9 @@ binds {
 
     Mod+N repeat=false { spawn-sh "bash ~/.local/bin/datetime_notify.sh"; }
     Mod+B repeat=false { spawn-sh "bash ~/.local/bin/battery_notify.sh"; }
+    Mod+W repeat=false { spawn-sh "bash ~/.local/bin/workspace_notify.sh"; }
     Mod+M repeat=false { spawn-sh "bash ~/.local/bin/soundboard_menu.sh"; }
     Mod+V repeat=false { spawn-sh "bash ~/.local/bin/cliphist_menu.sh"; }
-
     Mod+P repeat=false { spawn-sh "bash ~/.local/bin/application_menu.sh"; }
     Mod+Slash repeat=false { spawn-sh "bash ~/.local/bin/command_menu.sh"; }
 
