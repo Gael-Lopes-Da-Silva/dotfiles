@@ -28,6 +28,9 @@ $TERMINAL --class custom:powermenu -e bash -c '
 
         case "$key" in
             __item__)
+                confirm=$(printf "No\nYes" | fzf --prompt="Confirm choice? ")
+                [ "$confirm" != "Yes" ] && exit 0
+
                 [ -n "$value" ] && bash -c "$value"
                 ;;
         esac
