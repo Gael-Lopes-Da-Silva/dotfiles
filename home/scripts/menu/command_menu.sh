@@ -6,7 +6,7 @@
 #   Enter          Execute selected command
 #
 # Actions:
-#   Ctrl-I         Browse the man page of the selected command
+#   Ctrl-F         Browse the man page of the selected command
 #
 # Behavior:
 #   - Lists all available shell commands (from $PATH and builtins)
@@ -63,7 +63,7 @@ $TERMINAL --class custom:commands -e bash -c '
         --layout=reverse \
         --bind '\''ctrl-c:'\'' \
         --bind '\''tab:replace-query'\'' \
-        --bind '\''ctrl-i:execute(execute_item __info__ {2})'\'' \
+        --bind '\''ctrl-f:execute(execute_item __info__ {2})'\'' \
         --bind '\''enter:execute(execute_item {1} {2})+abort'\''
 '
 
