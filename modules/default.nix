@@ -92,7 +92,21 @@
     defaultCharset = "UTF-8";
   };
 
-  documentation.enable = false;
+  documentation = {
+    enable = true;
+    dev.enable = true;
+    doc.enable = true;
+    info.enable = true;
+
+    man = {
+      enable = true;
+
+      cache = {
+        enable = true;
+        generateAtRuntime = true;
+      };
+    };
+  };
 
   security = {
     protectKernelImage = true;
