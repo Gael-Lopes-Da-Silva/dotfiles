@@ -95,7 +95,7 @@ window-rule {
 }
 
 window-rule {
-    match app-id="^custom:(applications|cliphist|soundboard)$"
+    match app-id="^custom:(applications|cliphist|soundboard|commands)$"
 
     open-floating true
 
@@ -110,16 +110,6 @@ window-rule {
 
     default-column-width { proportion 0.30; }
     default-window-height { proportion 0.30; }
-}
-
-window-rule {
-    match app-id="^custom:commands$"
-
-    open-floating true
-
-    default-column-width { proportion 0.75; }
-    default-window-height { proportion 0.25; }
-    default-floating-position x=0 y=150 relative-to="top"
 }
 
 binds {

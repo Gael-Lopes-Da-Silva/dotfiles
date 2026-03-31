@@ -40,6 +40,7 @@ $TERMINAL --class custom:commands -e bash -c '
         --prompt=": " \
         --delimiter=$'\''\t'\'' \
         --with-nth=2 \
+        --layout=reverse \
         --bind '\''ctrl-c:'\'' \
         --bind '\''tab:replace-query'\'' \
         --bind '\''enter:execute(execute_item {1} {2})+abort'\''
