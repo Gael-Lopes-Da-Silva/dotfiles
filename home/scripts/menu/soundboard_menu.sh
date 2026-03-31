@@ -32,7 +32,6 @@ $TERMINAL --class custom:soundboard -e bash -c '
         case "$key" in
             __stop__)
                 pkill paplay
-                exit 0
                 ;;
             __delete__)
                 if [ "$value" = "" ] || [ ! -f "$value" ]; then
@@ -49,7 +48,6 @@ $TERMINAL --class custom:soundboard -e bash -c '
                     -a "soundboard" \
                     -t 5000 \
                     "Soundboard" "Deleted $(basename "$value") successfully."
-                exit 0
                 ;;
             __rstart__)
                 record_file="$HOME/.soundboard/custom/record.mp3"
@@ -76,14 +74,12 @@ $TERMINAL --class custom:soundboard -e bash -c '
                     -a "soundboard" \
                     -t 5000 \
                     "Soundboard" "Custom record successfully recorded."
-                exit 0
                 ;;
             __rplay__)
                 setsid bash -c "
                     paplay --device=\"SoundboardSink\" --volume=65536 \"$HOME/.soundboard/custom/record.mp3\" &
                     paplay --device=\"\$(pactl get-default-sink)\" --volume=32768 \"$HOME/.soundboard/custom/record.mp3\" &
                 " >/dev/null 2>&1 &
-                exit 0
                 ;;
             __rsave__)
                 record_file="$HOME/.soundboard/custom/record.mp3"
@@ -118,14 +114,12 @@ $TERMINAL --class custom:soundboard -e bash -c '
                     -a "soundboard" \
                     -t 5000 \
                     "Soundboard" "File ${safe_name}.mp3 saved successfully."
-                exit 0
                 ;;
             __item__)
                 setsid bash -c "
                     paplay --device=\"SoundboardSink\" --volume=65536 \"$value\" &
                     paplay --device=\"\$(pactl get-default-sink)\" --volume=32768 \"$value\" &
                 " >/dev/null 2>&1 &
-                exit 0
                 ;;
         esac
     }; export -f execute_item
