@@ -49,11 +49,11 @@ $TERMINAL --class custom:soundboard -e bash -c '
                     "Soundboard" "Deleted $(basename "$value") successfully."
                 ;;
             __rstart__)
-                record_file="$HOME/.soundboard/custom/record.mp3"
+                record_file="$HOME/.soundboard/custom/record.wav"
 
                 trap '\'''\'' INT
 
-                pw-record "$record_file" &
+                pw-record "$record_file" 2>/dev/null &
                 pid=$!
 
                 printf "Recording... Press ESC to stop.\r"
@@ -69,6 +69,8 @@ $TERMINAL --class custom:soundboard -e bash -c '
                     fi
                 done
 
+                clear
+
                 notify-send \
                     -a "soundboard" \
                     -t 5000 \
@@ -76,12 +78,12 @@ $TERMINAL --class custom:soundboard -e bash -c '
                 ;;
             __rplay__)
                 setsid bash -c "
-                    paplay --device=\"SoundboardSink\" --volume=65536 \"$HOME/.soundboard/custom/record.mp3\" &
-                    paplay --device=\"\$(pactl get-default-sink)\" --volume=32768 \"$HOME/.soundboard/custom/record.mp3\" &
+                    paplay --device=\"SoundboardSink\" --volume=65536 \"$HOME/.soundboard/custom/record.wav\" &
+                    paplay --device=\"\$(pactl get-default-sink)\" --volume=32768 \"$HOME/.soundboard/custom/record.wav\" &
                 " >/dev/null 2>&1 &
                 ;;
             __rsave__)
-                record_file="$HOME/.soundboard/custom/record.mp3"
+                record_file="$HOME/.soundboard/custom/record.wav"
 
                 if [ ! -f "$record_file" ]; then
                     notify-send \
@@ -95,14 +97,15 @@ $TERMINAL --class custom:soundboard -e bash -c '
                 [ -z "$name" ] && exit 1
 
                 safe_name=$(echo "$name" | tr '\'' '\'' '\''-'\'' | tr -cd '\''[:alnum:]_-'\'' )
+                safe_name=${safe_name,,}
 
-                dest="$HOME/.soundboard/${safe_name}.mp3"
+                dest="$HOME/.soundboard/${safe_name}.wav"
 
                 if [ -f "$dest" ]; then
                     notify-send \
                         -a "soundboard" \
                         -t 5000 \
-                        "Soundboard" "File ${safe_name}.mp3 already exists."
+                        "Soundboard" "File ${safe_name}.wav already exists."
                     exit 1
                 fi
 
@@ -111,7 +114,7 @@ $TERMINAL --class custom:soundboard -e bash -c '
                 notify-send \
                     -a "soundboard" \
                     -t 5000 \
-                    "Soundboard" "File ${safe_name}.mp3 saved successfully."
+                    "Soundboard" "File ${safe_name}.wav saved successfully."
                 ;;
             __item__)
                 setsid bash -c "
