@@ -77,7 +77,7 @@
         fi
       }
 
-      PROMPT_COMMAND="set_prompt; history -a; history -n"
+      PROMPT_COMMAND="set_prompt"
     '';
   };
 }
