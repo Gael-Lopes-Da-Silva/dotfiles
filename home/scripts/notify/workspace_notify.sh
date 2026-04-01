@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-workspace=$(niri msg workspaces | grep \* | cut -d' ' -f3)
+workspace=$(niri msg workspaces | awk '/\*/ {print $2; exit}')
 
 notify-send \
     -a "workspace" \

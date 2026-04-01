@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-pid=$(niri msg focused-window | grep -i pid | awk '{print $2}' | tr -d '\n')
-
+pid=$(niri msg focused-window | awk '/PID/ {print $2}')
 if [ -z "$pid" ] || [ "$pid" = "null" ]; then
     exit 1
 fi
@@ -24,3 +23,5 @@ else
         -t 5000 \
         "Window frozen" "PID: $pid"
 fi
+
+exit 0
