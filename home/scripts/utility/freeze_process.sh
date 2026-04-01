@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-pid=$(niri msg focused-window | awk '/PID/ {print $2}')
-if [ -z "$pid" ] || [ "$pid" = "null" ]; then
+pid=$(niri msg focused-window 2>/dev/null | awk '/PID/ {print $2}')
+if [[ -z "$pid" || "$pid" = "null" ]]; then
     exit 1
 fi
 

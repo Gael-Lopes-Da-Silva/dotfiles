@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
-workspace=$(niri msg workspaces | awk '/\*/ {print $2; exit}')
+workspace=$(niri msg workspaces 2>/dev/null | awk '/\*/ {print $2; exit}')
+if [[ -z "$workspace" || "$workspace" = "null" ]]; then
+    exit 1
+fi
 
 notify-send \
     -a "workspace" \
