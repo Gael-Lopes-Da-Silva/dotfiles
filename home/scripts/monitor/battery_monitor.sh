@@ -74,7 +74,9 @@ udevadm monitor --environment --udev --subsystem-match=power_supply | while read
                                 -h int:value:$level \
                                 -t 3000 \
                                 "Battery" "$level%"
-                        elif [ "$level" -ge 100 ] && [ "$prev_capacity" -lt 100 ]; then
+                        fi
+                    else
+                        if [ "$level" -ge 100 ] && [ "$prev_capacity" -lt 100 ]; then
                             notify-send \
                                 -a "power" \
                                 -h string:x-dunst-stack-tag:battery \
