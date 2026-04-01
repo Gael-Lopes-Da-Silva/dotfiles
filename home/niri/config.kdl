@@ -87,7 +87,7 @@ recent-windows {
 }
 
 window-rule {
-    geometry-corner-radius 16
+    geometry-corner-radius 6
 
     clip-to-geometry true
     open-maximized-to-edges false
