@@ -119,14 +119,15 @@ binds {
     Mod+Shift+Q repeat=false { spawn-sh "bash ~/.local/bin/power_menu.sh"; }
     Ctrl+Alt+Delete repeat=false { spawn-sh "bash ~/.local/bin/power_menu.sh"; }
 
-    Mod+Ctrl+F repeat=false { spawn-sh "bash ~/.local/bin/freeze_process.sh"; }
-    Mod+Ctrl+M repeat=false { spawn-sh "bash ~/.local/bin/mute_process.sh"; }
-
-    Mod+O repeat=false { toggle-overview; }
-
     Mod+Shift+C repeat=false { close-window; }
-    Mod+Ctrl+C repeat=false { spawn-sh "kill -9 $(niri msg focused-window | grep -i pid | awk '{print $2}' | tr -d '\\n')"; }
-    Mod+C repeat=false { spawn-sh "wl-copy $(niri msg pick-color | grep -i hex | awk '{print $2}' | tr -d '\\n')"; }
+    Mod+Ctrl+C repeat=false { spawn-sh "bash ~/.local/bin/kill_process.sh"; }
+    Mod+Alt+C repeat=false { spawn-sh "bash ~/.local/bin/kill_process.sh -p"; }
+
+    Mod+Ctrl+Comma repeat=false { spawn-sh "bash ~/.local/bin/freeze_process.sh"; }
+    Mod+Alt+Comma repeat=false { spawn-sh "bash ~/.local/bin/freeze_process.sh -p"; }
+    Mod+Ctrl+Period repeat=false { spawn-sh "bash ~/.local/bin/mute_process.sh"; }
+    Mod+Alt+Period repeat=false { spawn-sh "bash ~/.local/bin/mute_process.sh -p"; }
+    Mod+Ctrl+Slash repeat=false { spawn-sh "bash ~/.local/bin/pick_color.sh"; }
 
     XF86AudioRaiseVolume { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0"; }
     XF86AudioLowerVolume { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }
@@ -236,39 +237,40 @@ binds {
     Mod+Ctrl+8 { move-column-to-workspace 8; }
     Mod+Ctrl+9 { move-column-to-workspace 9; }
 
-    Mod+Tab { focus-workspace-previous; }
+    Mod+O repeat=false { toggle-overview; }
+    Mod+Tab repeat=false { focus-workspace-previous; }
 
-    Mod+BracketLeft  { consume-or-expel-window-left; }
-    Mod+BracketRight { consume-or-expel-window-right; }
-    Mod+Comma  { consume-window-into-column; }
-    Mod+Period { expel-window-from-column; }
+    Mod+R repeat=false { switch-preset-column-width; }
+    Mod+Shift+R repeat=false { switch-preset-window-height; }
 
-    Mod+R { switch-preset-column-width; }
-    Mod+Shift+R { switch-preset-window-height; }
+    Mod+T repeat=false { toggle-column-tabbed-display; }
 
-    Mod+F { maximize-window-to-edges; }
-    Mod+Shift+F { fullscreen-window; }
+    Mod+BracketLeft repeat=false { consume-or-expel-window-left; }
+    Mod+BracketRight repeat=false { consume-or-expel-window-right; }
+    Mod+Comma repeat=false { consume-window-into-column; }
+    Mod+Period repeat=false { expel-window-from-column; }
 
-    Mod+E { center-column; }
-    Mod+Ctrl+E { center-visible-columns; }
+    Mod+F repeat=false { maximize-window-to-edges; }
+    Mod+Shift+F repeat=false { fullscreen-window; }
+
+    Mod+E repeat=false { center-column; }
+    Mod+Ctrl+E repeat=false { center-visible-columns; }
 
     Mod+Minus { set-column-width "-10%"; }
     Mod+Equal { set-column-width "+10%"; }
     Mod+Shift+Minus { set-window-height "-10%"; }
     Mod+Shift+Equal { set-window-height "+10%"; }
 
-    Mod+Space { toggle-window-floating; }
-    Mod+Shift+Space { switch-focus-between-floating-and-tiling; }
+    Mod+Space repeat=false { toggle-window-floating; }
+    Mod+Shift+Space repeat=false { switch-focus-between-floating-and-tiling; }
 
-    Mod+T { toggle-column-tabbed-display; }
+    Mod+Print repeat=false { screenshot; }
+    Mod+Shift+Print repeat=false { screenshot-window; }
+    Mod+Ctrl+Print repeat=false { screenshot-screen; }
 
-    Mod+Print { screenshot; }
-    Mod+Shift+Print { screenshot-window; }
-    Mod+Ctrl+Print { screenshot-screen; }
-
-    Mod+S { screenshot show-pointer=false; }
-    Mod+Shift+S { screenshot-window write-to-disk=false; }
-    Mod+Ctrl+S { screenshot-screen show-pointer=false write-to-disk=false; }
+    Mod+S repeat=false { screenshot show-pointer=false; }
+    Mod+Shift+S repeat=false { screenshot-window write-to-disk=false; }
+    Mod+Ctrl+S repeat=false { screenshot-screen show-pointer=false write-to-disk=false; }
 
     Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 }

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-workspace=$(niri msg workspaces 2>/dev/null | awk '/\*/ {print $2; exit}')
+workspace=$(niri msg --json workspaces | jq -r '.[] | select(.is_active and .is_focused) | .idx')
 if [[ -z "$workspace" || "$workspace" = "null" ]]; then
     exit 1
 fi

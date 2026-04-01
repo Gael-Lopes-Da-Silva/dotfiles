@@ -22,5 +22,7 @@
 
   home.file.".local/bin/mute_process.sh".source = ./utility/mute_process.sh;
   home.file.".local/bin/freeze_process.sh".source = ./utility/freeze_process.sh;
+  home.file.".local/bin/kill_process.sh".source = ./utility/kill_process.sh;
+  home.file.".local/bin/pick_color.sh".source = ./utility/pick_color.sh;
   home.file.".local/bin/soundboard_setup.sh".source = ./utility/soundboard_setup.sh;
 }
