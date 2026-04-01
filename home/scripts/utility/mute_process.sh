@@ -2,42 +2,43 @@
 
 set -euo pipefail
 
-pid=$(niri msg focused-window | grep -i pid | awk '{print $2}' | tr -d '\n')
-
-if [[ -z "$pid" ]]; then
+pid=$(niri msg focused-window | awk '/PID/ {print $2}')
+if [ -z "$pid" ] || [ "$pid" = "null" ]; then
     exit 1
 fi
 
-mapfile -t streams < <(wpctl status | awk '/Sink Inputs:/ {flag=1; next} /^$/ {flag=0} flag && /^[[:space:]]*[0-9]+/ {print $1}')
-
+mapfile -t streams < <(wpctl status | awk '
+    /Audio/ {in_audio=1}
+    in_audio && /Streams:/ {in_streams=1; next}
+    in_audio && in_streams && /^[[:space:]]*[0-9]+\./ {
+        if ($2 !~ /^output_/) {
+            gsub("\\.", "", $1)
+            print $1
+        }
+    }
+    /^[^[:space:]]/ && !/Audio/ {in_audio=0; in_streams=0}
+')
 if [[ ${#streams[@]} -eq 0 ]]; then
-    notify-send "No audio streams found."
-    exit 0
+    exit 1
 fi
 
-found=0
 for id in "${streams[@]}"; do
-    info=$(wpctl inspect "$id" 2>/dev/null || true)
-
-    if echo "$info" | grep -q "application.process.id = \"$pid\""; then
-        found=1
-
-        if echo "$info" | grep -q "mute = true"; then
+    if wpctl inspect "$id" 2>/dev/null | grep -q "application.process.id = \"$pid\""; then
+        if wpctl get-volume "$id" 2>/dev/null | grep -qi MUTED; then
             notify-send \
                 -a "mute" \
                 -t 5000 \
-                "Unmuting stream" "ID: $id"
-            wpctl set-mute "$id" 0
+                "Window unmuted" "PID: $pid"
         else
             notify-send \
                 -a "mute" \
                 -t 5000 \
-                "Muting stream" "ID: $id"
-            wpctl set-mute "$id" 1
+                "Window muted" "PID: $pid"
         fi
+
+        wpctl set-mute "$id" toggle
+        break
     fi
 done
 
-if [[ "$found" -eq 0 ]]; then
-    notify-send "No audio stream found for PID $pid"
-fi
+exit 0
