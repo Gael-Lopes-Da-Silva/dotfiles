@@ -10,7 +10,18 @@
     enable = true;
 
     theme = {
-      name = "Adwaita-dark";
+      name = "Adwaita";
+      package = pkgs.gnome-themes-extra;
+    };
+
+    gtk3.extraConfig = {
+      gtk-application-prefer-dark-theme = 1;
+      gtk-error-bell = false;
+    };
+
+    gtk4.extraConfig = {
+      gtk-application-prefer-dark-theme = 1;
+      gtk-error-bell = false;
     };
   };
 }
