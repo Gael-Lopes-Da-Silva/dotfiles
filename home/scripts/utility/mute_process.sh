@@ -40,7 +40,6 @@ for id in "${streams[@]}"; do
         fi
 
         wpctl set-mute "$id" toggle
-        break
     fi
 done
 
