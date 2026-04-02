@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-
 color="$(
     niri msg --json pick-color \
         | jq -r '.rgb[]' \
