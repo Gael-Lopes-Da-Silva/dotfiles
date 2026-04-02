@@ -2,20 +2,24 @@
 
 # Navigation:
 #   ↑/↓            Move selection
-#   Tab            Autocomplete query with selection
+#   Tab            Autocomplete query with selection label
 #   Enter          Execute selected action
 #
-# Available options:
-#   Shutdown       Power off the system
-#   Reboot         Restart the system
-#   Suspend        Suspend to RAM
-#   Hibernate      Suspend to disk
-#   Logout         End current session
-#   Lock           Lock current session
+# Available actions:
+#   Pick freeze                Select and freeze a process
+#   Pick mute                  Select and mute a process
+#   Pick kill                  Select and kill a process
+#   Pick color                 Open color picker
+#   Screenshot                 Capture screen (clipboard)
+#   Screenshot window          Capture selected window (clipboard)
+#   Screenshot to file         Capture screen (saved to file)
+#   Screenshot window to file  Capture selected window (saved to file)
 #
 # Notes:
-#   - Uses systemctl and loginctl for system/session control
-#   - Requires appropriate permissions for power actions
+#   - Relies on external scripts in ~/.local/bin:
+#       freeze_process.sh, mute_process.sh, kill_process.sh, pick_color.sh
+#   - Uses niri for screenshot functionality
+#   - Prevents multiple instances using terminal class detection
 
 if pgrep -f "$TERMINAL.*--class custom:utility" >/dev/null; then
     exit 1
@@ -49,20 +53,10 @@ run() {
                 ;;
             __scrsht__)
                 setsid nohup bash -c "
-                    niri msg action screenshot --path '' --show-pointer false
-                " >/dev/null 2>&1 &
-                ;;
-            __wscrsht__)
-                setsid nohup bash -c "
                     niri msg action screenshot-window --path '' --id \$(niri msg --json pick-window | jq -r '.id')
                 " >/dev/null 2>&1 &
                 ;;
             __fscrsht__)
-                setsid nohup bash -c "
-                    niri msg action screenshot --show-pointer false
-                " >/dev/null 2>&1 &
-                ;;
-            __fwscrsht__)
                 setsid nohup bash -c "
                     niri msg action screenshot-window --id \$(niri msg --json pick-window | jq -r '.id')
                 " >/dev/null 2>&1 &
@@ -76,10 +70,8 @@ run() {
             "__mute__" "Pick mute" \
             "__kill__" "Pick kill" \
             "__color__" "Pick color" \
-            "__scrsht__" "Screenshot" \
-            "__wscrsht__" "Screenshot window" \
-            "__fscrsht__" "Screenshot to file" \
-            "__fwscrsht__" "Screenshot window to file"
+            "__scrsht__" "Screenshot window" \
+            "__fscrsht__" "Screenshot window to file"
     }; export -f generate_list
 
     generate_list | fzf \
