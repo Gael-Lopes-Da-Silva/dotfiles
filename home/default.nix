@@ -8,8 +8,6 @@
       "wheel"
       "audio"
       "video"
-      "input"
-      "uinput"
       "vboxusers"
     ];
   };
