@@ -95,7 +95,7 @@ window-rule {
 }
 
 window-rule {
-    match app-id="^custom:(applications|cliphist|soundboard|commands|powermenu)$"
+    match app-id="^custom:(applications|cliphist|soundboard|commands|powermenu|utility)$"
 
     open-floating true
 
@@ -119,6 +119,7 @@ binds {
     Mod+M repeat=false { spawn-sh "bash ~/.local/bin/soundboard_menu.sh"; }
     Mod+V repeat=false { spawn-sh "bash ~/.local/bin/cliphist_menu.sh"; }
     Mod+P repeat=false { spawn-sh "bash ~/.local/bin/application_menu.sh"; }
+    Mod+S repeat=false { spawn-sh "bash ~/.local/bin/utility_menu.sh"; }
     Mod+Slash repeat=false { spawn-sh "bash ~/.local/bin/command_menu.sh"; }
 
     Mod+Q repeat=false { spawn-sh "bash ~/.local/bin/power_menu.sh"; }
@@ -126,14 +127,10 @@ binds {
     Ctrl+Alt+Delete repeat=false { spawn-sh "bash ~/.local/bin/power_menu.sh"; }
 
     Mod+Shift+C repeat=false { close-window; }
-    Mod+Ctrl+C repeat=false { spawn-sh "bash ~/.local/bin/kill_process.sh"; }
-    Mod+Alt+C repeat=false { spawn-sh "bash ~/.local/bin/kill_process.sh -p"; }
 
-    Mod+Ctrl+Comma repeat=false { spawn-sh "bash ~/.local/bin/freeze_process.sh"; }
-    Mod+Alt+Comma repeat=false { spawn-sh "bash ~/.local/bin/freeze_process.sh -p"; }
-    Mod+Ctrl+Period repeat=false { spawn-sh "bash ~/.local/bin/mute_process.sh"; }
-    Mod+Alt+Period repeat=false { spawn-sh "bash ~/.local/bin/mute_process.sh -p"; }
-    Mod+Ctrl+Slash repeat=false { spawn-sh "bash ~/.local/bin/pick_color.sh"; }
+    Mod+Ctrl+C repeat=false { spawn-sh "bash ~/.local/bin/kill_process.sh"; }
+    Mod+Ctrl+M repeat=false { spawn-sh "bash ~/.local/bin/freeze_process.sh"; }
+    Mod+Ctrl+F repeat=false { spawn-sh "bash ~/.local/bin/mute_process.sh"; }
 
     XF86AudioRaiseVolume { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0"; }
     XF86AudioLowerVolume { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }
@@ -273,10 +270,6 @@ binds {
     Mod+Print repeat=false { screenshot; }
     Mod+Shift+Print repeat=false { screenshot-window; }
     Mod+Ctrl+Print repeat=false { screenshot-screen; }
-
-    Mod+S repeat=false { screenshot show-pointer=false; }
-    Mod+Shift+S repeat=false { screenshot-window write-to-disk=false; }
-    Mod+Ctrl+S repeat=false { screenshot-screen show-pointer=false write-to-disk=false; }
 
     Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 }
