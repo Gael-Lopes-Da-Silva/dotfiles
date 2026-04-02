@@ -21,17 +21,24 @@ if pgrep -f "$TERMINAL.*--class custom:powermenu" >/dev/null; then
     exit 1
 fi
 
-$TERMINAL --class custom:powermenu -e bash -c '
+run() {
     execute_item() {
         key="$1"
         value="$2"
 
         case "$key" in
             __item__)
-                confirm=$(printf "No\nYes" | fzf --prompt="Confirm choice? ")
-                [ "$confirm" != "Yes" ] && exit 0
+                [[ -n "$value" ]] && setsid nohup bash -c "
+                    {
+                        yad \
+                            --question \
+                            --text='Do you really want to execute this action?' \
+                            --button='OK:0' \
+                            --button='Cancel:1'
+                    } || exit 0
 
-                [ -n "$value" ] && bash -c "$value"
+                    bash -c '$value'
+                " >/dev/null 2>&1 &
                 ;;
         esac
     }; export -f execute_item
@@ -49,13 +56,15 @@ $TERMINAL --class custom:powermenu -e bash -c '
     generate_list | fzf \
         --prompt=": " \
         --layout=reverse \
-        --delimiter=$'\''\t'\'' \
+        --delimiter=$'\t' \
         --with-nth=2 \
-        --preview '\''echo {3}'\'' \
+        --preview 'echo {3}' \
         --preview-window=down:10%,wrap \
-        --bind '\''ctrl-c:'\'' \
-        --bind '\''tab:replace-query'\'' \
-        --bind '\''enter:execute(execute_item {1} {3})+abort'\''
-'
+        --bind 'ctrl-c:' \
+        --bind 'tab:replace-query' \
+        --bind 'enter:execute(execute_item {1} {3})+abort'
+}; export -f run
+
+$TERMINAL --class custom:powermenu -e bash -c run
 
 exit 0

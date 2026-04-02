@@ -21,50 +21,43 @@ if pgrep -f "$TERMINAL.*--class custom:commands" >/dev/null; then
     exit 1
 fi
 
-$TERMINAL --class custom:commands -e bash -c '
+run() {
     execute_item() {
         key="$1"
         value="$2"
 
         case "$key" in
             __info__)
-                if [ -n "$value" ]; then
-                    section=$(
-                        whatis "$value" 2>/dev/null |
-                        awk '\''{print $2}'\'' |
-                        tr -d "()" |
-                        sed "s/[^0-9].*//g" |
-                        sort -u |
-                        fzf --prompt="Select a section: "
-                    )
-
-                    [ -z "$section" ] && exit 1
-
-                    man "$section" "$value"
+                if [ -n "$value" ] && man -w "$value" >/dev/null 2>&1; then
+                    man "$value"
                     clear
                 fi
                 ;;
             __item__)
-                [ -n "$value" ] && setsid bash -c "$value" >/dev/null 2>&1 &
+                [[ -n "$value" ]] && setsid nohup bash -c "
+                    bash -c '$value'
+                " >/dev/null 2>&1 &
                 ;;
         esac
     }; export -f execute_item
 
     generate_list() {
-        compgen -c | sort -u | while IFS=$'\''\n'\'' read -r command; do
+        compgen -c | sort -u | while IFS=$'\n' read -r command; do
             printf "__item__\t%s\n" "$command"
         done
     }; export -f generate_list
 
     generate_list | fzf \
         --prompt=": " \
-        --delimiter=$'\''\t'\'' \
+        --delimiter=$'\t' \
         --with-nth=2 \
         --layout=reverse \
-        --bind '\''ctrl-c:'\'' \
-        --bind '\''tab:replace-query'\'' \
-        --bind '\''ctrl-f:execute(execute_item __info__ {2})'\'' \
-        --bind '\''enter:execute(execute_item {1} {2})+abort'\''
-'
+        --bind 'ctrl-c:' \
+        --bind 'tab:replace-query' \
+        --bind 'ctrl-f:execute(execute_item __info__ {2})' \
+        --bind 'enter:execute(execute_item {1} {2})+abort'
+}; export -f run
+
+$TERMINAL --class custom:commands -e bash -c run
 
 exit 0

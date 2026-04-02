@@ -22,7 +22,7 @@ if pgrep -f "$TERMINAL.*--class custom:applications" >/dev/null; then
     exit 1
 fi
 
-$TERMINAL --class custom:applications -e bash -c '
+run() {
     execute_item() {
         key="$1"
         value="$2"
@@ -30,7 +30,8 @@ $TERMINAL --class custom:applications -e bash -c '
 
         case "$key" in
             __item__)
-                [ -n "$value" ] && setsid gtk-launch "$value" >/dev/null 2>&1 &
+                [[ -n "$value" ]] && setsid nohup gtk-launch "$value" >/dev/null 2>&1 &
+
                 notify-send \
                     -a "clipboard" \
                     -t 5000 \
@@ -50,9 +51,9 @@ $TERMINAL --class custom:applications -e bash -c '
         declare -A app_desc_map
 
         for dir in "${desktop_dirs[@]}"; do
-            [ -d "$dir" ] || continue
+            [[ -d "$dir" ]] || continue
             for file in "$dir"/*.desktop; do
-                [ -f "$file" ] || continue
+                [[ -f "$file" ]] || continue
 
                 name=""
                 nodisplay=""
@@ -61,22 +62,22 @@ $TERMINAL --class custom:applications -e bash -c '
                 while IFS="=" read -r key value; do
                     case $key in
                         Name)
-                            [ -z "$name" ] && name=$value
+                            [[ -z "$name" ]] && name=$value
                             ;;
                         Comment)
-                            [ -z "$comment" ] && comment=$value
+                            [[ -z "$comment" ]] && comment=$value
                             ;;
                         NoDisplay)
                             nodisplay=$value
                             ;;
                     esac
 
-                    if [ -n "$name" ] && [ -n "$nodisplay" ] && [ -n "$comment" ]; then
+                    if [[ -n "$name" && -n "$nodisplay" && -n "$comment" ]]; then
                         break
                     fi
                 done < "$file"
 
-                if [ -n "$name" ] && [ "$nodisplay" != "true" ]; then
+                if [[ -n "$name" && "$nodisplay" != "true" ]]; then
                     app_map["$name"]="$(basename "$file")"
                     app_desc_map["$name"]="$comment"
                 fi
@@ -85,19 +86,21 @@ $TERMINAL --class custom:applications -e bash -c '
 
         for name in "${!app_map[@]}"; do
             printf "%s\t%s\t%s\t%s\n" "__item__" "$name" "${app_map[$name]}" "${app_desc_map[$name]}"
-        done | sort | awk -F'\''\t'\'' '\''{print $1 "\t" toupper(substr($2,1,1)) substr($2,2) "\t" $3 "\t" $4}'\''
+        done | sort | awk -F'\t' '{print $1 "\t" toupper(substr($2,1,1)) substr($2,2) "\t" $3 "\t" $4}'
     }; export -f generate_list
 
     generate_list | fzf \
         --prompt=": " \
-        --delimiter=$'\''\t'\'' \
+        --delimiter=$'\t' \
         --with-nth=2 \
         --layout=reverse \
-        --preview '\''echo {4}'\'' \
+        --preview 'echo {4}' \
         --preview-window=down:10%,wrap \
-        --bind '\''ctrl-c:'\'' \
-        --bind '\''tab:replace-query'\'' \
-        --bind '\''enter:execute(execute_item {1} {3} {2})+abort'\''
-'
+        --bind 'ctrl-c:' \
+        --bind 'tab:replace-query' \
+        --bind 'enter:execute(execute_item {1} {3} {2})+abort'
+}; export -f run
+
+$TERMINAL --class custom:applications -e bash -c run
 
 exit 0

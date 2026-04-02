@@ -24,43 +24,38 @@ if pgrep -f "$TERMINAL.*--class custom:soundboard" >/dev/null; then
     exit 1
 fi
 
-$TERMINAL --class custom:soundboard -e bash -c '
+run() {
     execute_item() {
         key="$1"
         value="$2"
+
+        rec_filename="record.wav"
 
         case "$key" in
             __stop__)
                 pkill paplay
                 ;;
             __delete__)
-                if [ "$value" = "" ] || [ ! -f "$value" ]; then
-                    exit 1
-                fi
+                {
+                    yad --question \
+                        --text='Do you really want to delete audio file?' \
+                        --button='OK:0' \
+                        --button='Cancel:1'
+                } || exit 0
 
-                confirm=$(printf "No\nYes" | fzf --prompt="Delete $(basename "$value")? ")
-                [ "$confirm" != "Yes" ] && exit 0
-
-                rm "$value"
-
-                notify-send \
-                    -a "soundboard" \
-                    -t 5000 \
-                    "Soundboard" "Deleted $(basename "$value") successfully."
+                [[ -n "$value" ]] && rm "$value"
                 ;;
             __rstart__)
-                record_file="$HOME/.soundboard/custom/record.wav"
+                trap '' INT
 
-                trap '\'''\'' INT
-
-                pw-record "$record_file" 2>/dev/null &
+                pw-record "$HOME/.soundboard/custom/$rec_filename" 2>/dev/null &
                 pid=$!
 
                 printf "Recording... Press ESC to stop.\r"
 
                 while true; do
                     read -rsn1 key
-                    if [[ $key == $'\''\e'\'' ]]; then
+                    if [[ $key == $'\e' ]]; then
                         if kill -0 "$pid" 2>/dev/null; then
                             kill "$pid"
                             wait "$pid" 2>/dev/null
@@ -74,52 +69,57 @@ $TERMINAL --class custom:soundboard -e bash -c '
                 notify-send \
                     -a "soundboard" \
                     -t 5000 \
-                    "Soundboard" "Custom record successfully recorded."
-                ;;
-            __rplay__)
-                setsid bash -c "
-                    paplay --device=\"SoundboardSink\" --volume=65536 \"$HOME/.soundboard/custom/record.wav\" &
-                    paplay --device=\"\$(pactl get-default-sink)\" --volume=32768 \"$HOME/.soundboard/custom/record.wav\" &
-                " >/dev/null 2>&1 &
+                    "Soundboard" "Microphone successfully recorded."
                 ;;
             __rsave__)
-                record_file="$HOME/.soundboard/custom/record.wav"
-
-                if [ ! -f "$record_file" ]; then
+                rec_path="$HOME/.soundboard/custom/$rec_filename"
+                if [ ! -f "$rec_path" ]; then
                     notify-send \
                         -a \"soundboard\" \
                         -t 5000 \
                         "Soundboard" "No recording found to save."
+
                     exit 1
                 fi
 
-                name=$(printf "" | fzf --print-query --prompt="Save as: ")
-                [ -z "$name" ] && exit 1
+                name=$(
+                    yad --entry \
+                        --text='Select a name to save as.' \
+                        --button='OK:0' \
+                        --button='Cancel:1'
+                )
+                [[ -z "$name" ]] && exit 1
 
-                safe_name=$(echo "$name" | tr '\'' '\'' '\''-'\'' | tr -cd '\''[:alnum:]_-'\'' )
+                safe_name=$(echo "$name" | tr ' ' '-' | tr -cd '[:alnum:]_-' )
                 safe_name=${safe_name,,}
 
                 dest="$HOME/.soundboard/${safe_name}.wav"
-
                 if [ -f "$dest" ]; then
                     notify-send \
                         -a "soundboard" \
                         -t 5000 \
                         "Soundboard" "File ${safe_name}.wav already exists."
+
                     exit 1
                 fi
 
-                cp "$record_file" "$dest"
+                cp "$rec_path" "$dest"
 
                 notify-send \
                     -a "soundboard" \
                     -t 5000 \
-                    "Soundboard" "File ${safe_name}.wav saved successfully."
+                    "Soundboard" "Microphone record successfully saved."
+                ;;
+            __rplay__)
+                setsid nohup bash -c "
+                    paplay --device='SoundboardSink' --volume=65536 '$HOME/.soundboard/custom/$rec_filename' &
+                    paplay --device='$(pactl get-default-sink)' --volume=32768 '$HOME/.soundboard/custom/$rec_filename' &
+                " >/dev/null 2>&1 &
                 ;;
             __item__)
-                setsid bash -c "
-                    paplay --device=\"SoundboardSink\" --volume=65536 \"$value\" &
-                    paplay --device=\"\$(pactl get-default-sink)\" --volume=32768 \"$value\" &
+                [[ -n "$value" ]] && setsid nohup bash -c "
+                    paplay --device='SoundboardSink' --volume=65536 '$value' &
+                    paplay --device='$(pactl get-default-sink)' --volume=32768 '$value' &
                 " >/dev/null 2>&1 &
                 ;;
         esac
@@ -130,29 +130,31 @@ $TERMINAL --class custom:soundboard -e bash -c '
             -iname "*.mp3" -o -iname "*.aac" -o -iname "*.wav" -o -iname "*.flac" \
             -o -iname "*.ogg" -o -iname "*.opus" -o -iname "*.aiff" \
             -o -iname "*.au" -o -iname "*.caf" -o -iname "*.raw" \
-        \) | sort | awk -F/ '\''{
+        \) | sort | awk -F/ '{
             name = $NF;
             sub(/\.[^.]*$/, "", name);
             gsub(/[-_]/, " ", name);
             name = toupper(substr(name,1,1)) substr(name,2);
             printf "__item__\t%s\t%s\n", name, $0
-        }'\''
+        }'
     }; export -f generate_list
 
     generate_list | fzf \
         --prompt=": " \
-        --delimiter=$'\''\t'\'' \
+        --delimiter=$'\t' \
         --with-nth=2 \
         --layout=reverse \
-        --preview '\''echo {3}'\'' \
+        --preview 'echo {3}' \
         --preview-window=down:10%,wrap \
-        --bind '\''tab:replace-query'\'' \
-        --bind '\''ctrl-f:execute-silent(execute_item __rplay__)'\'' \
-        --bind '\''ctrl-c:execute-silent(execute_item __stop__)'\'' \
-        --bind '\''ctrl-r:execute(execute_item __rstart__)'\'' \
-        --bind '\''ctrl-s:execute(execute_item __rsave__)+reload(bash -c generate_list)'\'' \
-        --bind '\''ctrl-d:execute(execute_item __delete__ {3})+reload(bash -c generate_list)'\'' \
-        --bind '\''enter:execute-silent(execute_item {1} {3})'\''
-'
+        --bind 'tab:replace-query' \
+        --bind 'ctrl-f:execute-silent(execute_item __rplay__)' \
+        --bind 'ctrl-c:execute-silent(execute_item __stop__)' \
+        --bind 'ctrl-r:execute(execute_item __rstart__)' \
+        --bind 'ctrl-s:execute(execute_item __rsave__)+reload(bash -c generate_list)' \
+        --bind 'ctrl-d:execute(execute_item __delete__ {3})+reload(bash -c generate_list)' \
+        --bind 'enter:execute-silent(execute_item {1} {3})'
+}; export -f run
+
+$TERMINAL --class custom:soundboard -e bash -c run
 
 exit 0
