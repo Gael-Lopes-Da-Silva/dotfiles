@@ -10,16 +10,13 @@
 #   Pick mute                  Select and mute a process
 #   Pick kill                  Select and kill a process
 #   Pick color                 Open color picker
-#   Screenshot                 Capture screen (clipboard)
 #   Screenshot window          Capture selected window (clipboard)
-#   Screenshot to file         Capture screen (saved to file)
 #   Screenshot window to file  Capture selected window (saved to file)
 #
 # Notes:
 #   - Relies on external scripts in ~/.local/bin:
 #       freeze_process.sh, mute_process.sh, kill_process.sh, pick_color.sh
 #   - Uses niri for screenshot functionality
-#   - Prevents multiple instances using terminal class detection
 
 if pgrep -f "$TERMINAL.*--class custom:utility" >/dev/null; then
     exit 1
