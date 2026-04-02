@@ -3,6 +3,7 @@
 {
   home.packages = with pkgs; [
     jq
+    yad
     p7zip
     udiskie
     libnotify
