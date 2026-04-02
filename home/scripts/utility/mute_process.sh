@@ -10,15 +10,13 @@ if [[ -z "$pid" || "$pid" = "null" ]]; then
     exit 1
 fi
 
-mapfile -t streams < <(wpctl status | awk '
-    /Audio/ {in_audio=1}
-    in_audio && /Streams:/ {in_streams=1; next}
-    in_streams && /^[^[:space:]]/ {in_streams=0}
-    in_audio && in_streams && /^[[:space:]]{1,8}[0-9]+\./ {
-        gsub("\\.", "", $1)
-        print $1
-    }
+mapfile -t streams < <(pw-dump | jq -r '
+    .[]
+    | select(.type == "PipeWire:Interface:Node")
+    | select((.info.props."media.class" // "") | test("^Stream/.*/Audio$"))
+    | .id
 ')
+
 if [[ ${#streams[@]} -eq 0 ]]; then
     exit 1
 fi
