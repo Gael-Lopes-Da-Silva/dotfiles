@@ -45,6 +45,23 @@ run() {
 
                 [[ -n "$value" ]] && rm "$value"
                 ;;
+            __rename__)
+                name=$(
+                    yad --entry \
+                        --text='Select a new name for the file.' \
+                        --button='OK:0' \
+                        --button='Cancel:1'
+                )
+                [[ -z "$name" ]] && exit 1
+
+                safe_name=$(echo "$name" | tr ' ' '-' | tr -cd '[:alnum:]_-' )
+                safe_name=${safe_name,,}
+
+                if [[ -n "$value" ]]; then
+                    ext="${value##*.}"
+                    mv "$value" "$HOME/.soundboard/${safe_name}.${ext}"
+                fi
+                ;;
             __rstart__)
                 trap '' INT
 
@@ -151,6 +168,7 @@ run() {
         --bind 'ctrl-c:execute-silent(execute_item __stop__)' \
         --bind 'ctrl-r:execute(execute_item __rstart__)' \
         --bind 'ctrl-s:execute(execute_item __rsave__)+reload(bash -c generate_list)' \
+        --bind 'ctrl-g:execute(execute_item __rename__ {3})+reload(bash -c generate_list)' \
         --bind 'ctrl-d:execute(execute_item __delete__ {3})+reload(bash -c generate_list)' \
         --bind 'enter:execute-silent(execute_item {1} {3})'
 }; export -f run
