@@ -13,13 +13,11 @@ fi
 mapfile -t streams < <(wpctl status | awk '
     /Audio/ {in_audio=1}
     in_audio && /Streams:/ {in_streams=1; next}
-    in_audio && in_streams && /^[[:space:]]*[0-9]+\./ {
-        if ($2 !~ /^output_/) {
-            gsub("\\.", "", $1)
-            print $1
-        }
+    in_streams && /^[^[:space:]]/ {in_streams=0}
+    in_audio && in_streams && /^[[:space:]]{1,8}[0-9]+\./ {
+        gsub("\\.", "", $1)
+        print $1
     }
-    /^[^[:space:]]/ && !/Audio/ {in_audio=0; in_streams=0}
 ')
 if [[ ${#streams[@]} -eq 0 ]]; then
     exit 1
