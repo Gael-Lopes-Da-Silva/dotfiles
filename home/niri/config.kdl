@@ -132,6 +132,9 @@ binds {
     Mod+Ctrl+M repeat=false { spawn-sh "bash ~/.local/bin/freeze_process.sh"; }
     Mod+Ctrl+F repeat=false { spawn-sh "bash ~/.local/bin/mute_process.sh"; }
 
+    Mod+Shift+S repeat=false { spawn-sh "bash ~/.local/bin/input_tool.sh -s"; }
+    Mod+Ctrl+S repeat=false { spawn-sh "bash ~/.local/bin/input_tool.sh -S"; }
+
     XF86AudioRaiseVolume { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0"; }
     XF86AudioLowerVolume { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }
     XF86AudioMute { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
@@ -267,9 +270,9 @@ binds {
     Mod+Space repeat=false { toggle-window-floating; }
     Mod+Shift+Space repeat=false { switch-focus-between-floating-and-tiling; }
 
-    Mod+Print repeat=false { screenshot; }
-    Mod+Shift+Print repeat=false { screenshot-window; }
-    Mod+Ctrl+Print repeat=false { screenshot-screen; }
+    Mod+Print repeat=false { spawn-sh "niri msg action screenshot --path '' --show-pointer false"; }
+    Mod+Shift+Print repeat=false { screenshot-window write-to-disk=false; }
+    Mod+Ctrl+Print repeat=false { screenshot-screen write-to-disk=false; }
 
     Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 }
