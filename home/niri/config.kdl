@@ -3,7 +3,6 @@ spawn-sh-at-startup "bash ~/.local/bin/audio_monitor.sh"
 spawn-sh-at-startup "bash ~/.local/bin/battery_monitor.sh"
 spawn-sh-at-startup "bash ~/.local/bin/brightness_monitor.sh"
 spawn-sh-at-startup "bash ~/.local/bin/output_monitor.sh"
-spawn-sh-at-startup "bash ~/.local/bin/screenshare_monitor.sh"
 
 prefer-no-csd
 screenshot-path "~/Pictures/Screenshot_%Y-%m-%d_%H-%M-%S.png"
@@ -100,7 +99,7 @@ window-rule {
 
     border {
         active-color "#BF0000"
-        inactive-color "#A30000"
+        inactive-color "#750000"
     }
 }
 
