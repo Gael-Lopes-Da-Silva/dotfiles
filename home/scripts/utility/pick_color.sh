@@ -9,7 +9,7 @@ color="$(
 printf "#%s" "$color" | wl-copy
 
 notify-send \
-    -a "color" \
+    -a "notification" \
     -t 5000 \
     "Color picked" "You can paste the hexadecimal color from the clipboard."
 

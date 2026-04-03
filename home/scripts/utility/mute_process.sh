@@ -25,12 +25,14 @@ for id in "${streams[@]}"; do
     if wpctl inspect "$id" 2>/dev/null | grep -q "application.process.id = \"$pid\""; then
         if wpctl get-volume "$id" 2>/dev/null | grep -qi MUTED; then
             notify-send \
-                -a "mute" \
+                -a "notification" \
+                -h string:x-dunst-stack-tag:mute-unmuted \
                 -t 5000 \
                 "Window unmuted" "PID: $pid"
         else
             notify-send \
-                -a "mute" \
+                -a "notification" \
+                -h string:x-dunst-stack-tag:mute-muted \
                 -t 5000 \
                 "Window muted" "PID: $pid"
         fi

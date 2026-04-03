@@ -43,7 +43,14 @@ run() {
                         --button='Cancel:1'
                 } || exit 0
 
-                [[ -n "$value" ]] && rm "$value"
+                if [[ -n "$value" ]]; then
+                    rm "$value"
+
+                    notify-send \
+                        -a "notification" \
+                        -t 5000 \
+                        "Soundboard" "Audio successfully deleted."
+                fi
                 ;;
             __rename__)
                 name=$(
@@ -60,6 +67,11 @@ run() {
                 if [[ -n "$value" ]]; then
                     ext="${value##*.}"
                     mv "$value" "$HOME/.soundboard/${safe_name}.${ext}"
+
+                    notify-send \
+                        -a "notification" \
+                        -t 5000 \
+                        "Soundboard" "Audio successfully renamed."
                 fi
                 ;;
             __rstart__)
@@ -84,7 +96,7 @@ run() {
                 clear
 
                 notify-send \
-                    -a "soundboard" \
+                    -a "notification" \
                     -t 5000 \
                     "Soundboard" "Microphone successfully recorded."
                 ;;
@@ -92,7 +104,7 @@ run() {
                 rec_path="$HOME/.soundboard/custom/$rec_filename"
                 if [ ! -f "$rec_path" ]; then
                     notify-send \
-                        -a \"soundboard\" \
+                        -a "notification" \
                         -t 5000 \
                         "Soundboard" "No recording found to save."
 
@@ -113,9 +125,9 @@ run() {
                 dest="$HOME/.soundboard/${safe_name}.wav"
                 if [ -f "$dest" ]; then
                     notify-send \
-                        -a "soundboard" \
+                        -a "notification" \
                         -t 5000 \
-                        "Soundboard" "File ${safe_name}.wav already exists."
+                        "Soundboard" "Audio ${safe_name}.wav already exists."
 
                     exit 1
                 fi
@@ -123,7 +135,7 @@ run() {
                 cp "$rec_path" "$dest"
 
                 notify-send \
-                    -a "soundboard" \
+                    -a "notification" \
                     -t 5000 \
                     "Soundboard" "Microphone record successfully saved."
                 ;;

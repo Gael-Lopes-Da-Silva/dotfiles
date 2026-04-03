@@ -18,13 +18,13 @@ pactl subscribe | while read -r line; do
             if [ "$sink_mute" != "$prev_sink_mute" ]; then
                 if [ "$sink_mute" = "yes" ]; then
                     notify-send \
-                        -a "volume" \
+                        -a "osd" \
                         -h string:x-dunst-stack-tag:volume \
                         -t 3000 \
                         "Speaker" "Muted"
                 else
                     notify-send \
-                        -a "volume" \
+                        -a "osd" \
                         -h string:x-dunst-stack-tag:volume \
                         -t 3000 \
                         "Speaker" "Unmuted"
@@ -33,7 +33,7 @@ pactl subscribe | while read -r line; do
                 prev_sink_mute="$sink_mute"
             elif [ "$sink_volume" -ne "$prev_sink_volume" ]; then
                 notify-send \
-                    -a "volume" \
+                    -a "osd" \
                     -h string:x-dunst-stack-tag:volume \
                     -h int:value:$sink_volume \
                     -t 3000 \
@@ -52,13 +52,13 @@ pactl subscribe | while read -r line; do
             if [ "$source_mute" != "$prev_source_mute" ]; then
                 if [ "$source_mute" = "yes" ]; then
                     notify-send \
-                        -a "microphone" \
+                        -a "osd" \
                         -h string:x-dunst-stack-tag:microphone \
                         -t 3000 \
                         "Microphone" "Muted"
                 else
                     notify-send \
-                        -a "microphone" \
+                        -a "osd" \
                         -h string:x-dunst-stack-tag:microphone \
                         -t 3000 \
                         "Microphone" "Unmuted"
@@ -67,7 +67,7 @@ pactl subscribe | while read -r line; do
                 prev_source_mute="$source_mute"
             elif [ "$source_volume" -ne "$prev_source_volume" ]; then
                 notify-send \
-                    -a "microphone" \
+                    -a "osd" \
                     -h string:x-dunst-stack-tag:microphone \
                     -h int:value:$source_volume \
                     -t 3000 \

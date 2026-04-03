@@ -22,8 +22,9 @@ if [[ "$1" == "-s" ]]; then
         stop_autoclick
 
         notify-send \
-            -a "autoclick" \
-            -t 5000 \
+            -a "osd" \
+            -h string:x-dunst-stack-tag:autoclick \
+            -t 3000 \
             "Autoclick" "Off"
     else
         (
@@ -36,8 +37,9 @@ if [[ "$1" == "-s" ]]; then
 
         cps="∞"
         notify-send \
-            -a "autoclick" \
-            -t 5000 \
+            -a "osd" \
+            -h string:x-dunst-stack-tag:autoclick \
+            -t 3000 \
             "Autoclick" "On (${cps} clicks/sec)"
     fi
 fi
@@ -49,8 +51,9 @@ if [[ "$1" == "-S" ]]; then
         stop_autoclick
 
         notify-send \
-            -a "autoclick" \
-            -t 5000 \
+            -a "osd" \
+            -h string:x-dunst-stack-tag:autoclick \
+            -t 3000 \
             "Autoclick" "Off"
     else
         delay=$(
@@ -82,8 +85,9 @@ if [[ "$1" == "-S" ]]; then
         fi
 
         notify-send \
-            -a "autoclick" \
-            -t 5000 \
+            -a "osd" \
+            -h string:x-dunst-stack-tag:autoclick \
+            -t 3000 \
             "Autoclick" "On (${cps} clicks/sec)"
     fi
 fi

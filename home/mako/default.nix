@@ -6,7 +6,6 @@
 
     settings = {
       layer = "overlay";
-      anchor = "top-right";
       default-timeout = 5000;
       text-color = "#ffffffff";
       background-color = "#0D0D0Dff";
@@ -18,13 +17,8 @@
       padding = 8;
       outer-margin = 20;
 
-      "app-name=volume".anchor = "bottom-center";
-      "app-name=microphone".anchor = "bottom-center";
-      "app-name=power".anchor = "bottom-center";
-      "app-name=battery".anchor = "bottom-center";
-      "app-name=brightness".anchor = "bottom-center";
-      "app-name=monitor".anchor = "bottom-center";
-      "app-name=workspace".anchor = "bottom-center";
+      "app-name=osd".anchor = "bottom-center";
+      "app-name=notification".anchor = "top-right";
     };
   };
 }

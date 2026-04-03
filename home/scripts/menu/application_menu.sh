@@ -33,7 +33,7 @@ run() {
                 [[ -n "$value" ]] && setsid nohup gtk-launch "$value" >/dev/null 2>&1 &
 
                 notify-send \
-                    -a "clipboard" \
+                    -a "notification" \
                     -t 5000 \
                     "Application launcher" "$name launched"
                 ;;

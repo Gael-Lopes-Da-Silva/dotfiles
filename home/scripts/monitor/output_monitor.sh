@@ -32,7 +32,7 @@ udevadm monitor --environment --udev --subsystem-match=drm | while read -r line;
 
                     if [ "${last_status[$name]}" != "$status" ]; then
                         notify-send \
-                            -a "monitor" \
+                            -a "osd" \
                             -h string:x-dunst-stack-tag:output \
                             -t 3000 \
                             "Output" "$name: $status"

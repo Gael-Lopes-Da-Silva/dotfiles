@@ -18,13 +18,13 @@ state=$(ps -o state= -p "$pid" | tr -d ' ')
 if [[ "$state" == T* ]]; then
     kill -CONT "$pid"
     notify-send \
-        -a "freeze" \
+        -a "notification" \
         -t 5000 \
         "Window unfrozen" "PID: $pid"
 else
     kill -STOP "$pid"
     notify-send \
-        -a "freeze" \
+        -a "notification" \
         -t 5000 \
         "Window frozen" "PID: $pid"
 fi

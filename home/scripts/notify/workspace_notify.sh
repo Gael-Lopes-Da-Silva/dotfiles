@@ -6,7 +6,7 @@ if [[ -z "$workspace" || "$workspace" = "null" ]]; then
 fi
 
 notify-send \
-    -a "workspace" \
+    -a "osd" \
     -h string:x-dunst-stack-tag:workspace \
     -t 3000 \
     "Workspace" "$workspace"

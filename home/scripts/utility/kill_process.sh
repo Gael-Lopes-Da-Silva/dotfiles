@@ -13,7 +13,7 @@ fi
 kill -9 $pid
 
 notify-send \
-    -a "kill" \
+    -a "notification" \
     -t 5000 \
     "Window killed" "PID: $pid"
 

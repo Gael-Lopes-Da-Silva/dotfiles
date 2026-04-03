@@ -33,7 +33,7 @@ run() {
                 cliphist wipe
 
                 notify-send \
-                    -a "clipboard" \
+                    -a "notification" \
                     -t 5000 \
                     "Clipboard history" "The clipboard history was successfully cleared."
                 ;;
@@ -54,6 +54,11 @@ run() {
                 } || exit 0
 
                 cliphist delete-query $query
+
+                notify-send \
+                    -a "notification" \
+                    -t 5000 \
+                    "Clipboard history" "Deleted all entries with '$query'."
                 ;;
             __delete__)
                 {
@@ -63,12 +68,24 @@ run() {
                         --button='Cancel:1'
                 } || exit 0
 
-                [[ -n "$value" ]] && printf '%s' "$value" | cliphist delete
+                if [[ -n "$value" ]]; then
+                    printf '%s' "$value" | cliphist delete
+
+                    notify-send \
+                        -a "notification" \
+                        -t 5000 \
+                        "Clipboard history" "Entry successfully deleted."
+                fi
                 ;;
             __item__)
                 [[ -n "$value" ]] && setsid nohup bash -c "
                     printf '%s' '$value' | cliphist decode | wl-copy
                 " >/dev/null 2>&1 &
+
+                notify-send \
+                    -a "notification" \
+                    -t 5000 \
+                    "Clipboard history" "You can paste the copy from the clipboard entry."
                 ;;
         esac
     }; export -f execute_item

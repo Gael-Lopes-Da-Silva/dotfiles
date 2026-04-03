@@ -31,7 +31,7 @@ udevadm monitor --environment --udev --subsystem-match=backlight | while read -r
 
                     if [ -n "$prev_percent" ] && [ "$percent" -ne "$prev_percent" ]; then
                         notify-send \
-                            -a "brightness" \
+                            -a "osd" \
                             -h string:x-dunst-stack-tag:brightness \
                             -h int:value:$percent \
                             -t 3000 \

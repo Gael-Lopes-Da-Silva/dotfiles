@@ -24,7 +24,7 @@ udevadm monitor --environment --udev --subsystem-match=power_supply | while read
                 if [ "$current" != "$prev_online" ]; then
                     if [ "$current" = "1" ]; then
                         notify-send \
-                            -a "power" \
+                            -a "osd" \
                             -h string:x-dunst-stack-tag:power \
                             -t 3000 \
                             "Power" "Charger plugged in"
@@ -32,7 +32,7 @@ udevadm monitor --environment --udev --subsystem-match=power_supply | while read
                         brightness_reduced=0
                     else
                         notify-send \
-                            -a "power" \
+                            -a "osd" \
                             -h string:x-dunst-stack-tag:power \
                             -t 3000 \
                             "Power" "Charger unplugged"
@@ -51,7 +51,7 @@ udevadm monitor --environment --udev --subsystem-match=power_supply | while read
                     if [ "$status" = "Discharging" ]; then
                         if [ "$level" -le 15 ] && [ "$brightness_reduced" = "0" ]; then
                             notify-send \
-                                -a "power" \
+                                -a "osd" \
                                 -h string:x-dunst-stack-tag:battery \
                                 -h int:value:$level \
                                 -u critical \
@@ -62,14 +62,14 @@ udevadm monitor --environment --udev --subsystem-match=power_supply | while read
                             brightness_reduced=1
                         elif [ "$level" -le 25 ] && [ "$prev_capacity" -gt 25 ]; then
                             notify-send \
-                                -a "power" \
+                                -a "osd" \
                                 -h string:x-dunst-stack-tag:battery \
                                 -h int:value:$level \
                                 -t 3000 \
                                 "Battery Low" "$level%"
                         elif [ "$level" -le 50 ] && [ "$prev_capacity" -gt 50 ]; then
                             notify-send \
-                                -a "power" \
+                                -a "osd" \
                                 -h string:x-dunst-stack-tag:battery \
                                 -h int:value:$level \
                                 -t 3000 \
@@ -78,7 +78,7 @@ udevadm monitor --environment --udev --subsystem-match=power_supply | while read
                     else
                         if [ "$level" -ge 100 ] && [ "$prev_capacity" -lt 100 ]; then
                             notify-send \
-                                -a "power" \
+                                -a "osd" \
                                 -h string:x-dunst-stack-tag:battery \
                                 -t 3000 \
                                 "Battery" "Fully charged"
