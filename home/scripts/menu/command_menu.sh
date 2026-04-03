@@ -29,7 +29,7 @@ run() {
         case "$key" in
             __info__)
                 if [ -n "$value" ] && man -w "$value" >/dev/null 2>&1; then
-                    man "$value"
+                    bash -c "man '$value'"
                     clear
                 fi
                 ;;
