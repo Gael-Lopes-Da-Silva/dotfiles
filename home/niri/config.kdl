@@ -271,8 +271,8 @@ binds {
     Mod+Shift+Space repeat=false { switch-focus-between-floating-and-tiling; }
 
     Mod+Print repeat=false { spawn-sh "niri msg action screenshot --path '' --show-pointer false"; }
-    Mod+Shift+Print repeat=false { screenshot-window write-to-disk=false; }
-    Mod+Ctrl+Print repeat=false { screenshot-screen write-to-disk=false; }
+    Mod+Shift+Print repeat=false { spawn-sh "niri msg action screenshot-window --path ''"; }
+    Mod+Ctrl+Print repeat=false { spawn-sh "niri msg action screenshot-screen --path '' --show-pointer false"; }
 
     Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 }
