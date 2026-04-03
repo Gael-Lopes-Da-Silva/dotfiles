@@ -34,10 +34,11 @@ if [[ "$1" == "-s" ]]; then
 
         echo $! > "$pid_file"
 
+        cps="∞"
         notify-send \
             -a "autoclick" \
             -t 5000 \
-            "Autoclick" "On"
+            "Autoclick" "On (${cps} clicks/sec)"
     fi
 fi
 
@@ -74,10 +75,16 @@ if [[ "$1" == "-S" ]]; then
 
         echo $! > "$pid_file"
 
+        if (( $(awk "BEGIN {print ($delay <= 0)}") )); then
+            cps="∞"
+        else
+            cps=$(awk "BEGIN { printf \"%.2f\", 1 / $delay }")
+        fi
+
         notify-send \
             -a "autoclick" \
             -t 5000 \
-            "Autoclick" "On"
+            "Autoclick" "On (${cps} clicks/sec)"
     fi
 fi
 
