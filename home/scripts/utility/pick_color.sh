@@ -8,4 +8,9 @@ color="$(
 
 printf "#%s" "$color" | wl-copy
 
+notify-send \
+    -a "color" \
+    -t 5000 \
+    "Color picker" "You can paste the hexadecimal color from the clipboard."
+
 exit 0

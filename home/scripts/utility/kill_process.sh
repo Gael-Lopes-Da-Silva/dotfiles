@@ -12,4 +12,9 @@ fi
 
 kill -9 $pid
 
+notify-send \
+    -a "kill" \
+    -t 5000 \
+    "Window killed" "PID: $pid"
+
 exit 0
