@@ -35,12 +35,11 @@ if [[ "$1" == "-s" ]]; then
 
         echo $! > "$pid_file"
 
-        cps="∞"
         notify-send \
             -a "osd" \
             -h string:x-dunst-stack-tag:autoclick \
             -t 3000 \
-            "Autoclick" "On (${cps} clicks/sec)"
+            "Autoclick" "On"
     fi
 fi
 
