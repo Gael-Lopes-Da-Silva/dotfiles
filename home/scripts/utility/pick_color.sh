@@ -5,6 +5,7 @@ color="$(
         | jq -r '.rgb[]' \
         | awk '{printf "%02x", int($1*255 + 0.5)}'
 )"
+[[ -z "$color" ]] && exit 1
 
 printf "#%s" "$color" | wl-copy
 
