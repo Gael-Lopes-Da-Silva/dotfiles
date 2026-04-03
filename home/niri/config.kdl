@@ -49,7 +49,7 @@ layout {
     }
 
     tab-indicator {
-        gap 6
+        gap 3
         gaps-between-tabs 6
         corner-radius 8
     }
@@ -93,6 +93,15 @@ window-rule {
     clip-to-geometry true
     open-maximized-to-edges false
     draw-border-with-background false
+}
+
+window-rule {
+    match is-window-cast-target=true
+
+    border {
+        active-color "#BF0000"
+        inactive-color "#A30000"
+    }
 }
 
 window-rule {
