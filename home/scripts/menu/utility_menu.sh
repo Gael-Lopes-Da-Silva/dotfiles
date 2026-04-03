@@ -30,32 +30,38 @@ run() {
         case "$key" in
             __freeze__)
                 setsid nohup bash -c "
+                    sleep 0.1
                     bash ~/.local/bin/freeze_process.sh -p
                 " >/dev/null 2>&1 &
                 ;;
             __mute__)
                 setsid nohup bash -c "
+                    sleep 0.1
                     bash ~/.local/bin/mute_process.sh -p
                 " >/dev/null 2>&1 &
                 ;;
             __kill__)
                 setsid nohup bash -c "
+                    sleep 0.1
                     bash ~/.local/bin/kill_process.sh -p
                 " >/dev/null 2>&1 &
                 ;;
             __color__)
                 setsid nohup bash -c "
+                    sleep 0.1
                     bash ~/.local/bin/pick_color.sh
                 " >/dev/null 2>&1 &
                 ;;
             __scrsht__)
                 setsid nohup bash -c "
+                    sleep 0.1
                     pid=\$(niri msg --json pick-window | jq -r '.id')
                     niri msg action screenshot-window --path '' --id \$pid
                 " >/dev/null 2>&1 &
                 ;;
             __fscrsht__)
                 setsid nohup bash -c "
+                    sleep 0.1
                     pid=\$(niri msg --json pick-window | jq -r '.id')
                     niri msg action screenshot-window --id \$pid
                 " >/dev/null 2>&1 &
