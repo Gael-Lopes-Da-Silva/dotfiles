@@ -136,8 +136,6 @@ binds {
     Mod+Shift+Q repeat=false { spawn-sh "bash ~/.local/bin/power_menu.sh"; }
     Ctrl+Alt+Delete repeat=false { spawn-sh "bash ~/.local/bin/power_menu.sh"; }
 
-    Mod+Shift+C repeat=false { close-window; }
-
     Mod+Ctrl+C repeat=false { spawn-sh "bash ~/.local/bin/kill_process.sh"; }
     Mod+Ctrl+M repeat=false { spawn-sh "bash ~/.local/bin/mute_process.sh"; }
     Mod+Ctrl+F repeat=false { spawn-sh "bash ~/.local/bin/freeze_process.sh"; }
@@ -255,6 +253,8 @@ binds {
 
     Mod+O repeat=false { toggle-overview; }
     Mod+Tab repeat=false { focus-workspace-previous; }
+
+    Mod+Shift+C repeat=false { close-window; }
 
     Mod+R repeat=false { switch-preset-column-width; }
     Mod+Shift+R repeat=false { switch-preset-window-height; }
