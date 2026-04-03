@@ -53,7 +53,7 @@
       "exit"
     ];
 
-    initExtra = ''
+    profileExtra = ''
       export LESS_TERMCAP_md=$'\e[01;31m'
       export LESS_TERMCAP_me=$'\e[0m'
       export LESS_TERMCAP_se=$'\e[0m'
@@ -61,7 +61,9 @@
       export LESS_TERMCAP_ue=$'\e[0m'
       export LESS_TERMCAP_us=$'\e[01;32m'
       export GROFF_NO_SGR=1
+    '';
 
+    initExtra = ''
       bind "set completion-ignore-case on"
       bind "set show-all-if-ambiguous on"
       bind "TAB:menu-complete"
