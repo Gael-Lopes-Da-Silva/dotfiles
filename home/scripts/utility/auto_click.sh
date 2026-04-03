@@ -1,11 +1,25 @@
 #!/usr/bin/env bash
 
+pid_file_fast="/tmp/autoclick.pid"
+pid_file_slow="/tmp/autoclick_delayed.pid"
+
+stop_autoclick() {
+    if [[ -f "$pid_file_fast" ]]; then
+        kill "$(cat "$pid_file_fast")" 2>/dev/null
+        rm -f "$pid_file_fast"
+    fi
+
+    if [[ -f "$pid_file_slow" ]]; then
+        kill "$(cat "$pid_file_slow")" 2>/dev/null
+        rm -f "$pid_file_slow"
+    fi
+}
+
 if [[ "$1" == "-s" ]]; then
     pid_file="/tmp/autoclick.pid"
 
-    if [[ -f "$pid_file" ]]; then
-        kill "$(cat "$pid_file")" 2>/dev/null
-        rm -f "$pid_file"
+    if [[ -f "$pid_file_fast" || -f "$pid_file_slow" ]]; then
+        stop_autoclick
 
         notify-send \
             -a "autoclick" \
@@ -30,9 +44,8 @@ fi
 if [[ "$1" == "-S" ]]; then
     pid_file="/tmp/autoclick_delayed.pid"
 
-    if [[ -f "$pid_file" ]]; then
-        kill "$(cat "$pid_file")" 2>/dev/null
-        rm -f "$pid_file"
+    if [[ -f "$pid_file_slow" || -f "$pid_file_fast" ]]; then
+        stop_autoclick
 
         notify-send \
             -a "autoclick" \

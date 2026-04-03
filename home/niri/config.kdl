@@ -132,8 +132,8 @@ binds {
     Mod+Ctrl+M repeat=false { spawn-sh "bash ~/.local/bin/mute_process.sh"; }
     Mod+Ctrl+F repeat=false { spawn-sh "bash ~/.local/bin/freeze_process.sh"; }
 
-    Mod+Shift+S repeat=false { spawn-sh "bash ~/.local/bin/input_tool.sh -s"; }
-    Mod+Ctrl+S repeat=false { spawn-sh "bash ~/.local/bin/input_tool.sh -S"; }
+    Mod+Shift+S repeat=false { spawn-sh "bash ~/.local/bin/auto_click.sh -s"; }
+    Mod+Ctrl+S repeat=false { spawn-sh "bash ~/.local/bin/auto_click.sh -S"; }
 
     XF86AudioRaiseVolume { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0"; }
     XF86AudioLowerVolume { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }
