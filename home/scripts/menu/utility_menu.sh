@@ -50,12 +50,14 @@ run() {
                 ;;
             __scrsht__)
                 setsid nohup bash -c "
-                    niri msg action screenshot-window --path '' --id \$(niri msg --json pick-window | jq -r '.id')
+                    pid=\$(niri msg --json pick-window | jq -r '.id')
+                    niri msg action screenshot-window --path '' --id \$pid
                 " >/dev/null 2>&1 &
                 ;;
             __fscrsht__)
                 setsid nohup bash -c "
-                    niri msg action screenshot-window --id \$(niri msg --json pick-window | jq -r '.id')
+                    pid=\$(niri msg --json pick-window | jq -r '.id')
+                    niri msg action screenshot-window --id \$pid
                 " >/dev/null 2>&1 &
                 ;;
         esac
