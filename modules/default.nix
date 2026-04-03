@@ -198,14 +198,10 @@
     variables = {
       EDITOR = "zeditor";
       VISUAL = "zeditor";
-      GIT_EDITOR = "zeditor";
-      GIT_PAGER = "less";
       TERMINAL = "alacritty";
       BROWSER = "firefox";
       PAGER = "less";
-
-      LESS = "-R -F -X";
-      LESSHISTFILE = "-";
+      LESS = "-R --use-color";
 
       TERM = "xterm-256color";
       COLORTERM = "truecolor";
@@ -224,7 +220,7 @@
       LC_TIME = "en_US.UTF-8";
 
       GTK_THEME = "Adwaita:dark";
-      QT_QPA_PLATFORMTHEME = "qt6ct";
+      QT_QPA_PLATFORMTHEME = "adwaita";
       QT_STYLE_OVERRIDE = "adwaita-dark";
       QT_QUICK_CONTROLS_STYLE = "adwaita-dark";
     };

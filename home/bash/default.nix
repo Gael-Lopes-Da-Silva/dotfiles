@@ -54,6 +54,14 @@
     ];
 
     initExtra = ''
+      export LESS_TERMCAP_md=$'\e[01;31m'
+      export LESS_TERMCAP_me=$'\e[0m'
+      export LESS_TERMCAP_se=$'\e[0m'
+      export LESS_TERMCAP_so=$'\e[01;44;33m'
+      export LESS_TERMCAP_ue=$'\e[0m'
+      export LESS_TERMCAP_us=$'\e[01;32m'
+      export GROFF_NO_SGR=1
+
       bind "set completion-ignore-case on"
       bind "set show-all-if-ambiguous on"
       bind "TAB:menu-complete"
