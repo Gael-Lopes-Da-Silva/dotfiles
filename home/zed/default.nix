@@ -1,6 +1,10 @@
 { pkgs, ... }:
 
 {
+  imports = [
+    ./theme.nix
+  ];
+
   home.packages = with pkgs; [
     nil
     nixd
@@ -10,8 +14,6 @@
     enable = true;
 
     extensions = [
-      "yellowed"
-
       "nix"
       "php"
       "xml"
@@ -21,7 +23,6 @@
       "html"
       "sql"
       "kdl"
-      "twig"
       "make"
       "odin"
       "dockerfile"
