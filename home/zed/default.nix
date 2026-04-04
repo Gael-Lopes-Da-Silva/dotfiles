@@ -4,7 +4,6 @@
   home.packages = with pkgs; [
     nil
     nixd
-    package-version-server
   ];
 
   programs.zed-editor = {
@@ -26,7 +25,6 @@
       "make"
       "odin"
       "dockerfile"
-      "git-firefly"
     ];
 
     userSettings = {
@@ -111,12 +109,6 @@
 
       which_key = {
         enabled = true;
-      };
-
-      terminal = {
-        shell = {
-          program = "bash";
-        };
       };
 
       git = {
