@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   boot = {
@@ -44,8 +49,6 @@
     "modesetting"
   ];
 
-  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-
   hardware = {
     enableRedistributableFirmware = true;
     cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
@@ -61,7 +64,7 @@
       powerManagement.enable = false;
       powerManagement.finegrained = false;
       nvidiaSettings = true;
-      package = config.boot.kernelPackages.nvidiaPackages.stable;
+      package = config.boot.kernelPackages.nvidiaPackages.legacy_580;
     };
   };
 }
