@@ -11,6 +11,7 @@
 #   Ctrl+R         Start recording from microphone (ESC to stop)
 #   Ctrl+S         Save last recording
 #   Ctrl+D         Delete selected sound file
+#   Ctrl+G         Rename selected sound file
 #
 # Behavior:
 #   - Plays selected sounds on both "SoundboardSink" and default output
