@@ -69,22 +69,8 @@
       bind "TAB:menu-complete"
       bind "\"\e[Z\":menu-complete-backward"
 
-      function set_right_prompt() {
-        if [[ -n "$IN_NIX_SHELL" ]]; then
-          RIGHT_PROMPT="\[\e[37m\]❄\[\e[0m\]"
-        else
-          RIGHT_PROMPT=""
-        fi
-      }
-
       function set_prompt() {
-        set_right_prompt
-
-        PS1="\u@\h:\w\$ "
-
-        if [[ -n "$RIGHT_PROMPT" ]]; then
-          PS1="$PS1\[\e[s\]\[\e[999C\]$RIGHT_PROMPT\[\e[u\]"
-        fi
+        PS1="\u@\h:\w''${IN_NIX_SHELL:+ ❄}\n\$ "
       }
 
       PROMPT_COMMAND="set_prompt"
