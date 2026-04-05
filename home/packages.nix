@@ -28,10 +28,5 @@
   programs = {
     home-manager.enable = true;
     firefox.enable = true;
-
-    direnv = {
-      enable = true;
-      nix-direnv.enable = true;
-    };
   };
 }
