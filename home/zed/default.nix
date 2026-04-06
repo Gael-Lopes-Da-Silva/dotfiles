@@ -29,6 +29,8 @@
     userSettings = {
       disable_ai = false;
       middle_click_paste = false;
+      auto_signature_help = true;
+      show_signature_help_after_edits = true;
       window_decorations = "server";
       lsp_document_colors = "background";
       scroll_beyond_last_line = "off";
