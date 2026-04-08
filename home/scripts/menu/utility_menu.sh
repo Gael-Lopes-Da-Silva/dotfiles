@@ -25,46 +25,19 @@ fi
 run() {
     execute_item() {
         key="$1"
-        value="$2"
 
         case "$key" in
             __freeze__)
-                setsid nohup bash -c "
-                    sleep 0.1
-                    bash ~/.local/bin/freeze_process.sh -p
-                " >/dev/null 2>&1 &
+                setsid nohup bash ~/.local/bin/freeze_process.sh -p &
                 ;;
             __mute__)
-                setsid nohup bash -c "
-                    sleep 0.1
-                    bash ~/.local/bin/mute_process.sh -p
-                " >/dev/null 2>&1 &
+                setsid nohup bash ~/.local/bin/mute_process.sh -p &
                 ;;
             __kill__)
-                setsid nohup bash -c "
-                    sleep 0.1
-                    bash ~/.local/bin/kill_process.sh -p
-                " >/dev/null 2>&1 &
+                setsid nohup bash ~/.local/bin/kill_process.sh -p &
                 ;;
             __color__)
-                setsid nohup bash -c "
-                    sleep 0.1
-                    bash ~/.local/bin/pick_color.sh
-                " >/dev/null 2>&1 &
-                ;;
-            __scrsht__)
-                setsid nohup bash -c "
-                    sleep 0.1
-                    pid=\$(niri msg --json pick-window | jq -r '.id')
-                    niri msg action screenshot-window --path '' --id \$pid
-                " >/dev/null 2>&1 &
-                ;;
-            __fscrsht__)
-                setsid nohup bash -c "
-                    sleep 0.1
-                    pid=\$(niri msg --json pick-window | jq -r '.id')
-                    niri msg action screenshot-window --id \$pid
-                " >/dev/null 2>&1 &
+                setsid nohup bash ~/.local/bin/pick_color.sh &
                 ;;
         esac
     }; export -f execute_item
@@ -74,9 +47,7 @@ run() {
             "__freeze__" "Pick freeze" \
             "__mute__" "Pick mute" \
             "__kill__" "Pick kill" \
-            "__color__" "Pick color" \
-            "__scrsht__" "Screenshot window" \
-            "__fscrsht__" "Screenshot window to file"
+            "__color__" "Pick color"
     }; export -f generate_list
 
     generate_list | fzf \

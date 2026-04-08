@@ -30,12 +30,14 @@ run() {
 
         case "$key" in
             __item__)
-                [[ -n "$value" ]] && setsid nohup gtk-launch "$value" >/dev/null 2>&1 &
+                if [[ -n "$value" ]]; then
+                    setsid nohup gtk-launch "$value" >/dev/null 2>&1 &
 
-                notify-send \
-                    -a "notification" \
-                    -t 5000 \
-                    "Application launcher" "$name launched"
+                    notify-send \
+                        -a "notification" \
+                        -t 5000 \
+                        "Application launcher" "$name launched"
+                fi
                 ;;
         esac
     }; export -f execute_item

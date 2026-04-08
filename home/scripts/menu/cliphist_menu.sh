@@ -61,14 +61,14 @@ run() {
                     "Clipboard history" "Deleted all entries with '$query'."
                 ;;
             __delete__)
-                {
-                    yad --question \
-                        --text='Do you really want to delete this entry?' \
-                        --button='OK:0' \
-                        --button='Cancel:1'
-                } || exit 0
-
                 if [[ -n "$value" ]]; then
+                    {
+                        yad --question \
+                            --text='Do you really want to delete this entry?' \
+                            --button='OK:0' \
+                            --button='Cancel:1'
+                    } || exit 0
+
                     printf '%s' "$value" | cliphist delete
 
                     notify-send \

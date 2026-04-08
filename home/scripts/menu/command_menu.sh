@@ -34,9 +34,11 @@ run() {
                 fi
                 ;;
             __item__)
-                [[ -n "$value" ]] && setsid nohup bash -c "
-                    bash -c '$value'
-                " >/dev/null 2>&1 &
+                if [[ -n "$value" ]]; then
+                    setsid nohup bash -c "
+                        bash -c '$value'
+                    " >/dev/null 2>&1 &
+                fi
                 ;;
         esac
     }; export -f execute_item

@@ -37,14 +37,14 @@ run() {
                 pkill paplay
                 ;;
             __delete__)
-                {
-                    yad --question \
-                        --text='Do you really want to delete audio file?' \
-                        --button='OK:0' \
-                        --button='Cancel:1'
-                } || exit 0
-
                 if [[ -n "$value" ]]; then
+                    {
+                        yad --question \
+                            --text='Do you really want to delete audio file?' \
+                            --button='OK:0' \
+                            --button='Cancel:1'
+                    } || exit 0
+
                     rm "$value"
 
                     notify-send \
@@ -54,18 +54,18 @@ run() {
                 fi
                 ;;
             __rename__)
-                name=$(
-                    yad --entry \
-                        --text='Select a new name for the file.' \
-                        --button='OK:0' \
-                        --button='Cancel:1'
-                )
-                [[ -z "$name" ]] && exit 1
-
-                safe_name=$(echo "$name" | tr ' ' '-' | tr -cd '[:alnum:]_-' )
-                safe_name=${safe_name,,}
-
                 if [[ -n "$value" ]]; then
+                    name=$(
+                        yad --entry \
+                            --text='Select a new name for the file.' \
+                            --button='OK:0' \
+                            --button='Cancel:1'
+                    )
+                    [[ -z "$name" ]] && exit 1
+
+                    safe_name=$(echo "$name" | tr ' ' '-' | tr -cd '[:alnum:]_-' )
+                    safe_name=${safe_name,,}
+
                     ext="${value##*.}"
                     mv "$value" "$HOME/.soundboard/${safe_name}.${ext}"
 
@@ -141,16 +141,20 @@ run() {
                     "Soundboard" "Microphone record successfully saved."
                 ;;
             __rplay__)
+                value="$HOME/.soundboard/custom/$rec_filename"
+
                 setsid nohup bash -c "
-                    paplay --device='SoundboardSink' --volume=65536 '$HOME/.soundboard/custom/$rec_filename' &
-                    paplay --device='$(pactl get-default-sink)' --volume=32768 '$HOME/.soundboard/custom/$rec_filename' &
-                " >/dev/null 2>&1 &
-                ;;
-            __item__)
-                [[ -n "$value" ]] && setsid nohup bash -c "
                     paplay --device='SoundboardSink' --volume=65536 '$value' &
                     paplay --device='$(pactl get-default-sink)' --volume=32768 '$value' &
                 " >/dev/null 2>&1 &
+                ;;
+            __item__)
+                if [[ -n "$value" ]]; then
+                    setsid nohup bash -c "
+                        paplay --device='SoundboardSink' --volume=65536 '$value' &
+                        paplay --device='$(pactl get-default-sink)' --volume=32768 '$value' &
+                    " >/dev/null 2>&1 &
+                fi
                 ;;
         esac
     }; export -f execute_item

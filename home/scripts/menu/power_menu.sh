@@ -28,7 +28,7 @@ run() {
 
         case "$key" in
             __item__)
-                [[ -n "$value" ]] && setsid nohup bash -c "
+                if [[ -n "$value" ]]; then
                     {
                         yad \
                             --question \
@@ -37,8 +37,8 @@ run() {
                             --button='Cancel:1'
                     } || exit 0
 
-                    bash -c '$value'
-                " >/dev/null 2>&1 &
+                    bash -c "$value"
+                fi
                 ;;
         esac
     }; export -f execute_item
