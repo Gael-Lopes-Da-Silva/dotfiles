@@ -10,13 +10,16 @@
     enable = true;
 
     shellAliases = {
+      ls = "ls --color=auto --group-directories-first --sort=extension --human-readable";
+
       grep = "grep --color=auto";
       fgrep = "fgrep --color=auto";
       egrep = "egrep --color=auto";
       dir = "dir --color=auto";
       vdir = "vdir --color=auto";
 
-      la = "ls -a";
+      l = "ls -Al";
+      la = "ls -A";
       ll = "ls -l";
 
       cp = "cp -iv";
