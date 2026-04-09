@@ -30,12 +30,20 @@ udevadm monitor --environment --udev --subsystem-match=power_supply | while read
                             "Power" "Charger plugged in"
 
                         brightness_reduced=0
+
+                        setsid nohup bash -c "
+                            paplay --volume=65536 '$HOME/.local/sounds/windows-11-notify.mp3' &
+                        " >/dev/null 2>&1 &
                     else
                         notify-send \
                             -a "osd" \
                             -h string:x-dunst-stack-tag:power \
                             -t 3000 \
                             "Power" "Charger unplugged"
+
+                        setsid nohup bash -c "
+                            paplay --volume=65536 '$HOME/.local/sounds/windows-11-notify.mp3' &
+                        " >/dev/null 2>&1 &
                     fi
                     prev_online="$current"
                 fi
@@ -60,6 +68,10 @@ udevadm monitor --environment --udev --subsystem-match=power_supply | while read
 
                             brightnessctl set 30%
                             brightness_reduced=1
+
+                            setsid nohup bash -c "
+                                paplay --volume=65536 '$HOME/.local/sounds/windows-11-notify.mp3' &
+                            " >/dev/null 2>&1 &
                         elif [ "$level" -le 25 ] && [ "$prev_capacity" -gt 25 ]; then
                             notify-send \
                                 -a "osd" \
@@ -67,6 +79,10 @@ udevadm monitor --environment --udev --subsystem-match=power_supply | while read
                                 -h int:value:$level \
                                 -t 3000 \
                                 "Battery Low" "$level%"
+
+                            setsid nohup bash -c "
+                                paplay --volume=65536 '$HOME/.local/sounds/windows-11-notify.mp3' &
+                            " >/dev/null 2>&1 &
                         elif [ "$level" -le 50 ] && [ "$prev_capacity" -gt 50 ]; then
                             notify-send \
                                 -a "osd" \
@@ -74,6 +90,10 @@ udevadm monitor --environment --udev --subsystem-match=power_supply | while read
                                 -h int:value:$level \
                                 -t 3000 \
                                 "Battery" "$level%"
+
+                            setsid nohup bash -c "
+                                paplay --volume=65536 '$HOME/.local/sounds/windows-11-notify.mp3' &
+                            " >/dev/null 2>&1 &
                         fi
                     else
                         if [ "$level" -ge 100 ] && [ "$prev_capacity" -lt 100 ]; then
@@ -82,6 +102,10 @@ udevadm monitor --environment --udev --subsystem-match=power_supply | while read
                                 -h string:x-dunst-stack-tag:battery \
                                 -t 3000 \
                                 "Battery" "Fully charged"
+
+                            setsid nohup bash -c "
+                                paplay --volume=65536 '$HOME/.local/sounds/windows-11-notify.mp3' &
+                            " >/dev/null 2>&1 &
                         fi
                     fi
 

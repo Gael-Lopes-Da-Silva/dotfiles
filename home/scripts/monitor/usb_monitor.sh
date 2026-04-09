@@ -41,7 +41,7 @@ udevadm monitor --environment --udev --subsystem-match=usb | while read -r line;
                         "USB Connected" "$name"
 
                     setsid nohup bash -c "
-                        paplay --device='SoundboardSink' --volume=65536 '$HOME/.local/sounds/windows-11-usb-insert.mp3' &
+                        paplay --volume=65536 '$HOME/.local/sounds/windows-11-usb-insert.mp3' &
                     " >/dev/null 2>&1 &
                 elif [ "$action" = "remove" ]; then
                     notify-send \
@@ -51,7 +51,7 @@ udevadm monitor --environment --udev --subsystem-match=usb | while read -r line;
                         "USB Disconnected" "$name"
 
                     setsid nohup bash -c "
-                        paplay --device='SoundboardSink' --volume=65536 '$HOME/.local/sounds/windows-11-usb-disconnect.mp3' &
+                        paplay --volume=65536 '$HOME/.local/sounds/windows-11-usb-disconnect.mp3' &
                     " >/dev/null 2>&1 &
                 fi
             fi
