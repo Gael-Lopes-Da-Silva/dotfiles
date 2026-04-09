@@ -5,6 +5,8 @@
     enable = true;
   };
 
+  home.file.".local/bin/autostart.sh".source = ./autostart.sh;
+
   home.file.".local/bin/application_menu.sh".source = ./menu/application_menu.sh;
   home.file.".local/bin/cliphist_menu.sh".source = ./menu/cliphist_menu.sh;
   home.file.".local/bin/command_menu.sh".source = ./menu/command_menu.sh;

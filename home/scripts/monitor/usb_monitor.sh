@@ -39,12 +39,20 @@ udevadm monitor --environment --udev --subsystem-match=usb | while read -r line;
                         -h string:x-dunst-stack-tag:usb \
                         -t 3000 \
                         "USB Connected" "$name"
+
+                    setsid nohup bash -c "
+                        paplay --device='SoundboardSink' --volume=65536 '$HOME/.local/sounds/windows-11-usb-insert.mp3' &
+                    " >/dev/null 2>&1 &
                 elif [ "$action" = "remove" ]; then
                     notify-send \
                         -a "osd" \
                         -h string:x-dunst-stack-tag:usb \
                         -t 3000 \
                         "USB Disconnected" "$name"
+
+                    setsid nohup bash -c "
+                        paplay --device='SoundboardSink' --volume=65536 '$HOME/.local/sounds/windows-11-usb-disconnect.mp3' &
+                    " >/dev/null 2>&1 &
                 fi
             fi
 
