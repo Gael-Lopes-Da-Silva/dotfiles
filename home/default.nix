@@ -25,6 +25,7 @@
       ./ollama
       ./qt
       ./scripts
+      ./sounds
       ./udiskie
       ./zed
 
