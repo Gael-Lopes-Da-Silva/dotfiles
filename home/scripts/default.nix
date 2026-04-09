@@ -10,7 +10,6 @@
   home.file.".local/bin/command_menu.sh".source = ./menu/command_menu.sh;
   home.file.".local/bin/power_menu.sh".source = ./menu/power_menu.sh;
   home.file.".local/bin/soundboard_menu.sh".source = ./menu/soundboard_menu.sh;
-  home.file.".local/bin/utility_menu.sh".source = ./menu/utility_menu.sh;
 
   home.file.".local/bin/battery_notify.sh".source = ./notify/battery_notify.sh;
   home.file.".local/bin/datetime_notify.sh".source = ./notify/datetime_notify.sh;

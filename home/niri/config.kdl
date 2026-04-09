@@ -129,12 +129,13 @@ binds {
     Mod+M repeat=false { spawn-sh "bash ~/.local/bin/soundboard_menu.sh"; }
     Mod+V repeat=false { spawn-sh "bash ~/.local/bin/cliphist_menu.sh"; }
     Mod+P repeat=false { spawn-sh "bash ~/.local/bin/application_menu.sh"; }
-    Mod+S repeat=false { spawn-sh "bash ~/.local/bin/utility_menu.sh"; }
     Mod+Slash repeat=false { spawn-sh "bash ~/.local/bin/command_menu.sh"; }
 
     Mod+Q repeat=false { spawn-sh "bash ~/.local/bin/power_menu.sh"; }
     Mod+Shift+Q repeat=false { spawn-sh "bash ~/.local/bin/power_menu.sh"; }
     Ctrl+Alt+Delete repeat=false { spawn-sh "bash ~/.local/bin/power_menu.sh"; }
+
+    Mod+Shift+P repeat=false { spawn-sh "bash ~/.local/bin/pick_color.sh"; }
 
     Mod+Ctrl+C repeat=false { spawn-sh "bash ~/.local/bin/kill_process.sh"; }
     Mod+Ctrl+M repeat=false { spawn-sh "bash ~/.local/bin/mute_process.sh"; }

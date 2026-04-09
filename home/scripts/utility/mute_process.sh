@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
 
-if [[ "$1" == "-p" ]]; then
-    window_json=$(niri msg --json pick-window)
-else
-    window_json=$(niri msg --json focused-window)
-fi
-
+window_json=$(niri msg --json focused-window)
 app_id=$(jq -r '.app_id' <<< "$window_json")
 pid=$(jq -r '.pid' <<< "$window_json")
 
