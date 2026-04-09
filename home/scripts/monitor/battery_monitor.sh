@@ -30,20 +30,12 @@ udevadm monitor --environment --udev --subsystem-match=power_supply | while read
                             "Power" "Charger plugged in"
 
                         brightness_reduced=0
-
-                        setsid nohup bash -c "
-                            paplay --volume=65536 '$HOME/.local/sounds/windows-11-notify.mp3' &
-                        " >/dev/null 2>&1 &
                     else
                         notify-send \
                             -a "osd" \
                             -h string:x-dunst-stack-tag:power \
                             -t 3000 \
                             "Power" "Charger unplugged"
-
-                        setsid nohup bash -c "
-                            paplay --volume=65536 '$HOME/.local/sounds/windows-11-notify.mp3' &
-                        " >/dev/null 2>&1 &
                     fi
                     prev_online="$current"
                 fi
