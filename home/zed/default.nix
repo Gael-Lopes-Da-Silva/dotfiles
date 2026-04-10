@@ -43,27 +43,14 @@
       agent_ui_font_size = 18.0;
       theme = "Yellowed";
 
-      language_models = {
-        ollama = {
-          api_url = "http://localhost:11434";
-          auto_discover = true;
-          context_window = 16384;
-        };
-      };
+      language_models = { };
 
       agent = {
         default_view = "text_thread";
-        default_model = {
-          provider = "ollama";
-          model = "";
-        };
       };
 
       edit_predictions = {
-        provider = "ollama";
-        ollama = {
-          model = "";
-        };
+        provider = "none";
       };
 
       collaboration_panel = {

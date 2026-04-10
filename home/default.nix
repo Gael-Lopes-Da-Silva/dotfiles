@@ -22,7 +22,6 @@
       ./kanshi
       ./mako
       ./niri
-      ./ollama
       ./qt
       ./scripts
       ./sounds
