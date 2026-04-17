@@ -5,7 +5,6 @@
     jq
     yad
     p7zip
-    wlrctl
     udiskie
     libnotify
     pulseaudio
