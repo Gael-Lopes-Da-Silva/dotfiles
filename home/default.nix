@@ -8,7 +8,6 @@
       "wheel"
       "audio"
       "video"
-      "ydotool"
       "vboxusers"
     ];
   };

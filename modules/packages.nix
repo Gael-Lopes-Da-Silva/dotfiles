@@ -21,6 +21,5 @@
     niri.enable = true;
     nix-ld.enable = true;
     xwayland.enable = true;
-    ydotool.enable = true;
   };
 }
