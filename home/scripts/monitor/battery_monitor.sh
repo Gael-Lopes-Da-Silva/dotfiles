@@ -62,7 +62,7 @@ udevadm monitor --environment --udev --subsystem-match=power_supply | while read
                             brightness_reduced=1
 
                             setsid nohup bash -c "
-                                paplay --volume=65536 '$HOME/.local/sounds/windows-11-notify.mp3' &
+                                paplay '$HOME/.local/sounds/windows-11-notify.mp3' &
                             " >/dev/null 2>&1 &
                         elif [ "$level" -le 25 ] && [ "$prev_capacity" -gt 25 ]; then
                             notify-send \
@@ -73,7 +73,7 @@ udevadm monitor --environment --udev --subsystem-match=power_supply | while read
                                 "Battery Low" "$level%"
 
                             setsid nohup bash -c "
-                                paplay --volume=65536 '$HOME/.local/sounds/windows-11-notify.mp3' &
+                                paplay '$HOME/.local/sounds/windows-11-notify.mp3' &
                             " >/dev/null 2>&1 &
                         elif [ "$level" -le 50 ] && [ "$prev_capacity" -gt 50 ]; then
                             notify-send \
@@ -84,7 +84,7 @@ udevadm monitor --environment --udev --subsystem-match=power_supply | while read
                                 "Battery" "$level%"
 
                             setsid nohup bash -c "
-                                paplay --volume=65536 '$HOME/.local/sounds/windows-11-notify.mp3' &
+                                paplay '$HOME/.local/sounds/windows-11-notify.mp3' &
                             " >/dev/null 2>&1 &
                         fi
                     else
@@ -96,7 +96,7 @@ udevadm monitor --environment --udev --subsystem-match=power_supply | while read
                                 "Battery" "Fully charged"
 
                             setsid nohup bash -c "
-                                paplay --volume=65536 '$HOME/.local/sounds/windows-11-notify.mp3' &
+                                paplay '$HOME/.local/sounds/windows-11-notify.mp3' &
                             " >/dev/null 2>&1 &
                         fi
                     fi
