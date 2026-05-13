@@ -23,6 +23,7 @@
       "kdl"
       "make"
       "odin"
+      "svelte"
       "dockerfile"
     ];
 
@@ -46,7 +47,7 @@
       language_models = { };
 
       agent = {
-        default_view = "text_thread";
+        dock = "right";
       };
 
       edit_predictions = {
@@ -54,18 +55,17 @@
       };
 
       collaboration_panel = {
-        default_width = 300.0;
-      };
-
-      notification_panel = {
+        button = false;
         default_width = 300.0;
       };
 
       git_panel = {
+        dock = "left";
         default_width = 300.0;
       };
 
       project_panel = {
+        dock = "left";
         auto_fold_dirs = false;
         default_width = 300.0;
         hide_root = true;
@@ -120,11 +120,6 @@
         context = "Editor";
         bindings = {
           ctrl-enter = "editor::NewlineBelow";
-        };
-      }
-      {
-        context = "Editor";
-        bindings = {
           ctrl-shift-enter = "editor::NewlineAbove";
         };
       }
