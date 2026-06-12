@@ -134,14 +134,6 @@ window-rule {
     }
 }
 
-window-rule {
-    match app-id="^Alacritty$"
-
-    background-effect {
-        blur true
-    }
-}
-
 binds {
     Mod+Return repeat=false { spawn "alacritty"; }
     Mod+BackSpace repeat=false { spawn "firefox"; }
