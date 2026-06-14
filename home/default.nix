@@ -25,7 +25,6 @@
       ./qt
       ./scripts
       ./sounds
-      ./udiskie
       ./zed
 
       ./packages.nix
