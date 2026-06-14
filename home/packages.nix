@@ -15,8 +15,46 @@
     xwayland-satellite
 
     vial
-    blender
     filezilla
+
+    loupe
+    kooha
+    varia
+    papers
+    baobab
+    mousai
+    alpaca
+    turnon
+    whatip
+    curtail
+    dialect
+    komikku
+    drawing
+    foliate
+    dissent
+    decibels
+    eloquent
+    snapshot
+    nautilus
+    showtime
+    constrict
+    collision
+    apostrophe
+    eyedropper
+    impression
+
+    gnome-maps
+    gnome-boxes
+    gnome-clocks
+    gnome-decoder
+    gnome-console
+    gnome-calendar
+    gnome-calculator
+    gnome-characters
+    gnome-text-editor
+    gnome-connections
+    gnome-system-monitor
+    gnome-sound-recorder
   ];
 
   services = {

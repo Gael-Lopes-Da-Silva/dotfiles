@@ -135,7 +135,7 @@ window-rule {
 }
 
 binds {
-    Mod+Return repeat=false { spawn "alacritty"; }
+    Mod+Return repeat=false { spawn "kgx"; }
     Mod+BackSpace repeat=false { spawn "firefox"; }
 
     Mod+N repeat=false { spawn-sh "bash ~/.local/bin/datetime_notify.sh"; }
@@ -149,8 +149,6 @@ binds {
     Mod+Q repeat=false { spawn-sh "bash ~/.local/bin/power_menu.sh"; }
     Mod+Shift+Q repeat=false { spawn-sh "bash ~/.local/bin/power_menu.sh"; }
     Ctrl+Alt+Delete repeat=false { spawn-sh "bash ~/.local/bin/power_menu.sh"; }
-
-    Mod+Shift+P repeat=false { spawn-sh "bash ~/.local/bin/pick_color.sh"; }
 
     Mod+Ctrl+C repeat=false { spawn-sh "bash ~/.local/bin/kill_process.sh"; }
     Mod+Ctrl+M repeat=false { spawn-sh "bash ~/.local/bin/mute_process.sh"; }
