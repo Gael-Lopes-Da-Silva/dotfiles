@@ -16,19 +16,19 @@
     vial
     filezilla
 
+    pods
     loupe
     kooha
     varia
+    snoop
     papers
     baobab
     mousai
     alpaca
     turnon
-    whatip
     curtail
     dialect
     komikku
-    drawing
     foliate
     dissent
     cartero
@@ -37,11 +37,16 @@
     snapshot
     nautilus
     showtime
+    wildcard
     constrict
     collision
     apostrophe
     eyedropper
     impression
+    carburetor
+    livecaptions
+    quick-lookup
+    audio-sharing
 
     gnome-maps
     gnome-boxes
@@ -49,6 +54,7 @@
     gnome-decoder
     gnome-console
     gnome-calendar
+    gnome-firmware
     gnome-calculator
     gnome-characters
     gnome-text-editor
