@@ -31,6 +31,7 @@
     drawing
     foliate
     dissent
+    cartero
     decibels
     eloquent
     snapshot

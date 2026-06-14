@@ -219,7 +219,6 @@
       LC_CTYPE = "en_US.UTF-8";
       LC_TIME = "en_US.UTF-8";
 
-      GTK_THEME = "Adwaita:dark";
       QT_QPA_PLATFORMTHEME = "adwaita";
       QT_STYLE_OVERRIDE = "adwaita-dark";
       QT_QUICK_CONTROLS_STYLE = "adwaita-dark";
