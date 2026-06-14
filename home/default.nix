@@ -14,7 +14,6 @@
 
   home-manager.users.gael = {
     imports = [
-      ./alacritty
       ./bash
       ./clipboard
       ./git

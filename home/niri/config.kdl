@@ -105,7 +105,7 @@ window-rule {
 }
 
 window-rule {
-    match app-id="^custom:(applications|cliphist|soundboard|commands|powermenu|utility)$"
+    match title="^(applications|cliphist|soundboard|commands|powermenu|utility)$"
 
     open-floating true
 
@@ -140,7 +140,6 @@ binds {
 
     Mod+N repeat=false { spawn-sh "bash ~/.local/bin/datetime_notify.sh"; }
     Mod+B repeat=false { spawn-sh "bash ~/.local/bin/battery_notify.sh"; }
-    Mod+W repeat=false { spawn-sh "bash ~/.local/bin/workspace_notify.sh"; }
     Mod+M repeat=false { spawn-sh "bash ~/.local/bin/soundboard_menu.sh"; }
     Mod+V repeat=false { spawn-sh "bash ~/.local/bin/cliphist_menu.sh"; }
     Mod+P repeat=false { spawn-sh "bash ~/.local/bin/application_menu.sh"; }

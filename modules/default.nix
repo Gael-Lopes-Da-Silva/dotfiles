@@ -198,7 +198,7 @@
     variables = {
       EDITOR = "zeditor";
       VISUAL = "zeditor";
-      TERMINAL = "alacritty";
+      TERMINAL = "kgx";
       BROWSER = "firefox";
       PAGER = "less";
       LESS = "-R --use-color";

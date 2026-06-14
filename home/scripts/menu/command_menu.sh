@@ -17,7 +17,7 @@
 #   - Output is silenced (stdout/stderr redirected to /dev/null)
 #   - Useful as a quick command palette / launcher
 
-if pgrep -f "$TERMINAL.*--class custom:commands" >/dev/null; then
+if pgrep -f "$TERMINAL.*--title=commands" >/dev/null; then
     exit 1
 fi
 
@@ -49,7 +49,7 @@ run() {
         done
     }; export -f generate_list
 
-    generate_list | fzf \
+    generate_list | exec fzf \
         --prompt=": " \
         --delimiter=$'\t' \
         --with-nth=2 \
@@ -60,6 +60,6 @@ run() {
         --bind 'enter:execute(execute_item {1} {2})+abort'
 }; export -f run
 
-$TERMINAL --class custom:commands -e bash -c run
+$TERMINAL --title=commands -- bash -c run
 
 exit 0

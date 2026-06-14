@@ -18,7 +18,7 @@
 #   - Hidden apps (NoDisplay=true) are ignored
 #   - Preview window shows application description when available
 
-if pgrep -f "$TERMINAL.*--class custom:applications" >/dev/null; then
+if pgrep -f "$TERMINAL.*--title=applications" >/dev/null; then
     exit 1
 fi
 
@@ -32,11 +32,6 @@ run() {
             __item__)
                 if [[ -n "$value" ]]; then
                     setsid nohup gtk-launch "$value" >/dev/null 2>&1 &
-
-                    notify-send \
-                        -a "notification" \
-                        -t 5000 \
-                        "Application launcher" "$name launched"
                 fi
                 ;;
         esac
@@ -91,7 +86,7 @@ run() {
         done | sort | awk -F'\t' '{print $1 "\t" toupper(substr($2,1,1)) substr($2,2) "\t" $3 "\t" $4}'
     }; export -f generate_list
 
-    generate_list | fzf \
+    generate_list | exec fzf \
         --prompt=": " \
         --delimiter=$'\t' \
         --with-nth=2 \
@@ -103,6 +98,6 @@ run() {
         --bind 'enter:execute(execute_item {1} {3} {2})+abort'
 }; export -f run
 
-$TERMINAL --class custom:applications -e bash -c run
+$TERMINAL --title=applications -- bash -c run
 
 exit 0

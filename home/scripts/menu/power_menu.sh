@@ -17,7 +17,7 @@
 #   - Uses systemctl and loginctl for system/session control
 #   - Requires appropriate permissions for power actions
 
-if pgrep -f "$TERMINAL.*--class custom:powermenu" >/dev/null; then
+if pgrep -f "$TERMINAL.*--title=powermenu" >/dev/null; then
     exit 1
 fi
 
@@ -53,7 +53,7 @@ run() {
             "Lock" "loginctl lock-session"
     }; export -f generate_list
 
-    generate_list | fzf \
+    generate_list | exec fzf \
         --prompt=": " \
         --layout=reverse \
         --delimiter=$'\t' \
@@ -65,6 +65,6 @@ run() {
         --bind 'enter:execute(execute_item {1} {3})+abort'
 }; export -f run
 
-$TERMINAL --class custom:powermenu -e bash -c run
+$TERMINAL --title=powermenu -- bash -c run
 
 exit 0

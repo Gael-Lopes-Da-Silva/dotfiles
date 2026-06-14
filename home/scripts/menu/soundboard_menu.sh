@@ -21,7 +21,7 @@
 #   - Supported formats: mp3, wav, flac, ogg, opus, etc.
 #   - Files are stored in ~/.soundboard
 
-if pgrep -f "$TERMINAL.*--class custom:soundboard" >/dev/null; then
+if pgrep -f "$TERMINAL.*--title=soundboard" >/dev/null; then
     exit 1
 fi
 
@@ -173,7 +173,7 @@ run() {
         }'
     }; export -f generate_list
 
-    generate_list | fzf \
+    generate_list | exec fzf \
         --prompt=": " \
         --delimiter=$'\t' \
         --with-nth=2 \
@@ -190,6 +190,6 @@ run() {
         --bind 'enter:execute-silent(execute_item {1} {3})'
 }; export -f run
 
-$TERMINAL --class custom:soundboard -e bash -c run
+$TERMINAL --title=soundboard -- bash -c run
 
 exit 0
