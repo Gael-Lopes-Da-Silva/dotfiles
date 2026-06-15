@@ -31,6 +31,7 @@
     komikku
     foliate
     cartero
+    bottles
     decibels
     eloquent
     snapshot
@@ -39,6 +40,7 @@
     wildcard
     constrict
     collision
+    collector
     apostrophe
     eyedropper
     impression
@@ -53,7 +55,6 @@
     gnome-decoder
     gnome-console
     gnome-calendar
-    gnome-firmware
     gnome-calculator
     gnome-characters
     gnome-text-editor
