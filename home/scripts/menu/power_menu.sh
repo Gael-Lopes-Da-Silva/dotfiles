@@ -63,8 +63,8 @@ run() {
         --bind 'ctrl-c:' \
         --bind 'tab:replace-query' \
         --bind 'enter:execute(execute_item {1} {3})+abort'
-}; export -f run
+}
 
-$TERMINAL --title=powermenu -- bash -c run
+$TERMINAL --title=powermenu -- bash -c "$(declare -f run); run"
 
 exit 0

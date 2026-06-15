@@ -108,8 +108,8 @@ run() {
         --bind 'ctrl-d:execute(execute_item __delete__ {3})+reload(bash -c generate_list)' \
         --bind 'ctrl-c:execute-silent(execute_item __clear__)+reload(bash -c generate_list)' \
         --bind 'enter:execute(execute_item {1} {3})+abort'
-}; export -f run
+}
 
-$TERMINAL --title=cliphist -- bash -c run
+$TERMINAL --title=cliphist -- bash -c "$(declare -f run); run"
 
 exit 0

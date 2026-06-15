@@ -188,8 +188,8 @@ run() {
         --bind 'ctrl-g:execute(execute_item __rename__ {3})+reload(bash -c generate_list)' \
         --bind 'ctrl-d:execute(execute_item __delete__ {3})+reload(bash -c generate_list)' \
         --bind 'enter:execute-silent(execute_item {1} {3})'
-}; export -f run
+}
 
-$TERMINAL --title=soundboard -- bash -c run
+$TERMINAL --title=soundboard -- bash -c "$(declare -f run); run"
 
 exit 0

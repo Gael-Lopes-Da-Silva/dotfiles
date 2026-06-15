@@ -58,8 +58,8 @@ run() {
         --bind 'tab:replace-query' \
         --bind 'ctrl-f:execute(execute_item __info__ {2})' \
         --bind 'enter:execute(execute_item {1} {2})+abort'
-}; export -f run
+}
 
-$TERMINAL --title=commands -- bash -c run
+$TERMINAL --title=commands -- bash -c "$(declare -f run); run"
 
 exit 0
