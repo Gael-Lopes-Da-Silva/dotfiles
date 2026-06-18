@@ -16,11 +16,14 @@
     vial
     filezilla
 
+    ghex
     pods
     loupe
     kooha
     varia
     snoop
+    smile
+    pinta
     papers
     baobab
     mousai
@@ -32,6 +35,8 @@
     foliate
     cartero
     bottles
+    netpeek
+    epiphany
     decibels
     eloquent
     snapshot
@@ -40,14 +45,17 @@
     wildcard
     constrict
     collision
-    collector
+    parabolic
+    morphosis
     apostrophe
     eyedropper
     impression
     carburetor
+    ascii-draw
     livecaptions
     quick-lookup
     audio-sharing
+    field-monitor
 
     gnome-maps
     gnome-boxes
@@ -61,6 +69,7 @@
     gnome-connections
     gnome-system-monitor
     gnome-sound-recorder
+    gnome-network-displays
   ];
 
   services = {
