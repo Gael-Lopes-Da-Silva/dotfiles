@@ -214,6 +214,10 @@
       XDG_CACHE_HOME = "$HOME/.cache";
       XDG_STATE_HOME = "$HOME/.local/state";
 
+      GTK_IM_MODULE = "simple";
+      QT_IM_MODULE = "simple";
+      XMODIFIERS = "@im=simple";
+
       QT_QPA_PLATFORMTHEME = "adwaita";
       QT_STYLE_OVERRIDE = "adwaita-dark";
       QT_QUICK_CONTROLS_STYLE = "adwaita-dark";

@@ -13,7 +13,6 @@
   ];
 
   environment.systemPackages = with pkgs; [
-    ibus
     man-pages
     man-pages-posix
   ];
