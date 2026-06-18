@@ -214,11 +214,6 @@
       XDG_CACHE_HOME = "$HOME/.cache";
       XDG_STATE_HOME = "$HOME/.local/state";
 
-      LANG = "en_US.UTF-8";
-      LC_ALL = "en_US.UTF-8";
-      LC_CTYPE = "en_US.UTF-8";
-      LC_TIME = "en_US.UTF-8";
-
       QT_QPA_PLATFORMTHEME = "adwaita";
       QT_STYLE_OVERRIDE = "adwaita-dark";
       QT_QUICK_CONTROLS_STYLE = "adwaita-dark";

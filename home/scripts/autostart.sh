@@ -11,3 +11,5 @@ bash ~/.local/bin/battery_monitor.sh &
 bash ~/.local/bin/brightness_monitor.sh &
 bash ~/.local/bin/output_monitor.sh &
 bash ~/.local/bin/usb_monitor.sh &
+
+ibus start --type wayland
