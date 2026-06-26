@@ -5,7 +5,7 @@ if [[ -z "$pid" || "$pid" = "null" ]]; then
     exit 1
 fi
 
-kill -9 $pid
+kill -9 "$pid"
 
 notify-send \
     -a "notification" \

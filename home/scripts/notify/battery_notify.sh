@@ -10,7 +10,7 @@ level=$(cat "$battery/capacity")
 notify-send \
     -a "osd" \
     -h string:x-dunst-stack-tag:battery \
-    -h int:value:$level \
+    -h "int:value:$level" \
     -t 3000 \
     "Battery" "$level%"
 

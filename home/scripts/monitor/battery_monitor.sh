@@ -53,7 +53,7 @@ udevadm monitor --environment --udev --subsystem-match=power_supply | while read
                             notify-send \
                                 -a "osd" \
                                 -h string:x-dunst-stack-tag:battery \
-                                -h int:value:$level \
+                                -h "int:value:$level" \
                                 -u critical \
                                 -t 10000 \
                                 "Battery Critical" "$level% - Reducing brightness"
@@ -68,7 +68,7 @@ udevadm monitor --environment --udev --subsystem-match=power_supply | while read
                             notify-send \
                                 -a "osd" \
                                 -h string:x-dunst-stack-tag:battery \
-                                -h int:value:$level \
+                                -h "int:value:$level" \
                                 -t 3000 \
                                 "Battery Low" "$level%"
 
@@ -79,7 +79,7 @@ udevadm monitor --environment --udev --subsystem-match=power_supply | while read
                             notify-send \
                                 -a "osd" \
                                 -h string:x-dunst-stack-tag:battery \
-                                -h int:value:$level \
+                                -h "int:value:$level" \
                                 -t 3000 \
                                 "Battery" "$level%"
 

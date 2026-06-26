@@ -26,7 +26,6 @@
     pinta
     papers
     baobab
-    mousai
     alpaca
     turnon
     curtail
@@ -60,6 +59,7 @@
     gnome-maps
     gnome-boxes
     gnome-clocks
+    gnome-weather
     gnome-decoder
     gnome-console
     gnome-calendar

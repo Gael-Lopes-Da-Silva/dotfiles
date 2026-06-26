@@ -35,7 +35,7 @@ pactl subscribe | while read -r line; do
                 notify-send \
                     -a "osd" \
                     -h string:x-dunst-stack-tag:volume \
-                    -h int:value:$sink_volume \
+                    -h "int:value:$sink_volume" \
                     -t 3000 \
                     "Speaker" "$sink_volume%"
 
@@ -69,7 +69,7 @@ pactl subscribe | while read -r line; do
                 notify-send \
                     -a "osd" \
                     -h string:x-dunst-stack-tag:microphone \
-                    -h int:value:$source_volume \
+                    -h "int:value:$source_volume" \
                     -t 3000 \
                     "Microphone" "$source_volume%"
 
