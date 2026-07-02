@@ -16,13 +16,13 @@
     vial
     filezilla
 
+    warp
     ghex
     pods
     loupe
     kooha
     varia
     snoop
-    smile
     pinta
     papers
     baobab
@@ -46,11 +46,14 @@
     collision
     parabolic
     morphosis
+    speedtest
+    inspector
     apostrophe
     eyedropper
     impression
     carburetor
     ascii-draw
+    pwvucontrol
     livecaptions
     quick-lookup
     audio-sharing
