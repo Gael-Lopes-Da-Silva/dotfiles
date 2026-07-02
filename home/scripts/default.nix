@@ -1,13 +1,47 @@
-{ ... }:
+{ pkgs, ... }:
 
+let
+  applicationMenu = pkgs.python3Packages.buildPythonApplication {
+    pname = "application-menu";
+    version = "1.0.0";
+    format = "other";
+
+    src = ./menu/application_menu.py;
+    dontUnpack = true;
+
+    nativeBuildInputs = with pkgs; [
+      gobject-introspection
+      wrapGAppsHook4
+    ];
+
+    buildInputs = with pkgs; [
+      gtk4
+      libadwaita
+    ];
+
+    propagatedBuildInputs = with pkgs.python3Packages; [
+      pygobject3
+    ];
+
+    installPhase = ''
+      mkdir -p $out/bin
+      cp ${./menu/application_menu.py} $out/bin/application-menu
+      chmod +x $out/bin/application-menu
+    '';
+  };
+in
 {
   programs.fzf = {
     enable = true;
   };
 
+  home.packages = [
+    applicationMenu
+  ];
+
   home.file.".local/bin/autostart.sh".source = ./autostart.sh;
 
-  home.file.".local/bin/application_menu.sh".source = ./menu/application_menu.sh;
+  # home.file.".local/bin/application_menu.sh".source = ./menu/application_menu.sh;
   home.file.".local/bin/cliphist_menu.sh".source = ./menu/cliphist_menu.sh;
   home.file.".local/bin/command_menu.sh".source = ./menu/command_menu.sh;
   home.file.".local/bin/power_menu.sh".source = ./menu/power_menu.sh;
