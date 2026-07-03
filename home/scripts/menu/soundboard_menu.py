@@ -89,13 +89,20 @@ class SoundboardLauncher(Adw.Application):
         main_box = Gtk.Box(
             orientation=Gtk.Orientation.VERTICAL,
             spacing=12,
-            margin_top=12,
-            margin_bottom=12,
-            margin_start=12,
-            margin_end=12,
+            margin_top=6,
+            margin_bottom=6,
+            margin_start=6,
+            margin_end=6,
         )
 
+        header = Adw.HeaderBar()
+        header.set_show_title(True)
+        header.set_show_start_title_buttons(False)
+        header.set_show_end_title_buttons(True)
+        header.add_css_class("flat")
+
         self.search = Gtk.SearchEntry()
+        self.search.set_hexpand(True)
         self.search.set_key_capture_widget(self.window)
         self.search.connect("search-changed", self.on_search)
 
@@ -108,7 +115,8 @@ class SoundboardLauncher(Adw.Application):
         search_key_controller.connect("key-pressed", self.on_key_pressed)
         self.search.add_controller(search_key_controller)
 
-        main_box.append(self.search)
+        header.set_title_widget(self.search)
+        main_box.append(header)
 
         self.store = Gio.ListStore(item_type=SoundItem)
         self.selection = Gtk.SingleSelection(model=self.store)
