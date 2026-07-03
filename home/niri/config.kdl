@@ -138,18 +138,16 @@ binds {
     Mod+Return repeat=false { spawn "kgx"; }
     Mod+BackSpace repeat=false { spawn "firefox"; }
 
-    Mod+N repeat=false { spawn-sh "bash ~/.local/bin/datetime_notify.sh"; }
-    Mod+B repeat=false { spawn-sh "bash ~/.local/bin/battery_notify.sh"; }
-
     Mod+P repeat=false { spawn "application-menu"; }
     Mod+Slash repeat=false { spawn "command-menu"; }
+    Mod+M repeat=false { spawn "soundboard-menu"; }
+    Mod+V repeat=false { spawn "clipboard-menu"; }
+    Mod+Q repeat=false { spawn "power-menu"; }
+    Mod+Shift+Q repeat=false { spawn "power-menu"; }
+    Ctrl+Alt+Delete repeat=false { spawn "power-menu"; }
 
-    Mod+M repeat=false { spawn-sh "bash ~/.local/bin/soundboard_menu.sh"; }
-    Mod+V repeat=false { spawn-sh "bash ~/.local/bin/cliphist_menu.sh"; }
-    Mod+Q repeat=false { spawn-sh "bash ~/.local/bin/power_menu.sh"; }
-
-    Mod+Shift+Q repeat=false { spawn-sh "bash ~/.local/bin/power_menu.sh"; }
-    Ctrl+Alt+Delete repeat=false { spawn-sh "bash ~/.local/bin/power_menu.sh"; }
+    Mod+N repeat=false { spawn-sh "bash ~/.local/bin/datetime_notify.sh"; }
+    Mod+B repeat=false { spawn-sh "bash ~/.local/bin/battery_notify.sh"; }
 
     Mod+Ctrl+C repeat=false { spawn-sh "bash ~/.local/bin/kill_process.sh"; }
     Mod+Ctrl+M repeat=false { spawn-sh "bash ~/.local/bin/mute_process.sh"; }
