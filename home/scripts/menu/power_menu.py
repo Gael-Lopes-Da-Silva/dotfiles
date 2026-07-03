@@ -11,31 +11,56 @@ gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 gi.require_version("Gdk", "4.0")
 
-from gi.repository import Adw, Gdk, Gio, GLib, GObject, Gtk, Pango
+from gi.repository import Adw, Gdk, Gio, GLib, GObject, Gtk
 
 
 class PowerAction(GObject.Object):
-    def __init__(self, name, command, icon_name):
+    def __init__(self, name, command, icon_names):
         super().__init__()
         self.name = name
         self.command = command
-        self.icon_name = icon_name
+        self.icon_names = icon_names  # Prioritized list of icon name fallbacks
 
 
 def load_power_actions():
     current_user = os.environ.get("USER", "")
     return [
-        PowerAction("Shutdown", ["systemctl", "poweroff"], "system-shutdown-symbolic"),
-        PowerAction("Reboot", ["systemctl", "reboot"], "system-restart-symbolic"),
-        PowerAction("Suspend", ["systemctl", "suspend"], "weather-night-symbolic"),
-        PowerAction("Hibernate", ["systemctl", "hibernate"], "semi-starred-symbolic"),
+        PowerAction(
+            "Shutdown", ["systemctl", "poweroff"], ["system-shutdown-symbolic"]
+        ),
+        PowerAction(
+            "Reboot",
+            ["systemctl", "reboot"],
+            ["system-restart-symbolic", "system-reboot-symbolic"],
+        ),
+        PowerAction(
+            "Suspend",
+            ["systemctl", "suspend"],
+            [
+                "system-suspend-symbolic",
+                "night-light-symbolic",
+                "weather-night-symbolic",
+                "media-playback-pause-symbolic",
+            ],
+        ),
+        PowerAction(
+            "Hibernate",
+            ["systemctl", "hibernate"],
+            [
+                "system-hibernate-symbolic",
+                "media-playback-pause-symbolic",
+                "night-light-symbolic",
+            ],
+        ),
         PowerAction(
             "Logout",
             ["loginctl", "terminate-user", current_user],
-            "system-log-out-symbolic",
+            ["system-log-out-symbolic", "application-exit-symbolic"],
         ),
         PowerAction(
-            "Lock", ["loginctl", "lock-session"], "system-lock-screen-symbolic"
+            "Lock",
+            ["loginctl", "lock-session"],
+            ["system-lock-screen-symbolic", "changes-prevent-symbolic"],
         ),
     ]
 
@@ -43,8 +68,14 @@ def load_power_actions():
 class PowerLauncher(Adw.Application):
     def __init__(self):
         super().__init__(application_id="launcher.power")
+        self.window = None
 
     def do_activate(self):
+        if self.window:
+            self.window.present()
+            self.search.grab_focus()
+            return
+
         self.actions = load_power_actions()
 
         self.window = Adw.ApplicationWindow(application=self)
@@ -52,7 +83,6 @@ class PowerLauncher(Adw.Application):
         self.window.set_decorated(False)
         self.window.set_resizable(False)
 
-        # Main layout construction block
         main_box = Gtk.Box(
             orientation=Gtk.Orientation.VERTICAL,
             spacing=12,
@@ -67,7 +97,6 @@ class PowerLauncher(Adw.Application):
         self.search.connect("search-changed", self.on_search)
         self.search.connect("activate", self.on_search_activate)
 
-        # Bind event controller handling keys across modules
         key_controller = Gtk.EventControllerKey()
         key_controller.connect("key-pressed", self.on_key_pressed)
         self.window.add_controller(key_controller)
@@ -78,7 +107,6 @@ class PowerLauncher(Adw.Application):
 
         main_box.append(self.search)
 
-        # Internal collections data views structures
         self.store = Gio.ListStore(item_type=PowerAction)
         self.selection = Gtk.SingleSelection(model=self.store)
 
@@ -122,7 +150,15 @@ class PowerLauncher(Adw.Application):
             icon = box.get_first_child()
             label = box.get_last_child()
 
-            icon.set_from_icon_name(action_obj.icon_name)
+            # Dynamically look up the first available icon that exists in the current system theme
+            chosen_icon = "image-missing-symbolic"
+            icon_theme = Gtk.IconTheme.get_for_display(Gdk.Display.get_default())
+            for name in action_obj.icon_names:
+                if icon_theme.has_icon(name):
+                    chosen_icon = name
+                    break
+
+            icon.set_from_icon_name(chosen_icon)
             label.set_text(action_obj.name)
 
         factory.connect("setup", setup)
@@ -141,15 +177,16 @@ class PowerLauncher(Adw.Application):
         scrolled.set_vexpand(True)
         main_box.append(scrolled)
 
-        # Visual shortcuts helper text footer
+        # Action Control Footer Layout
         footer_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-        help_label = Gtk.Label(xalign=0)
-        help_label.set_markup(
-            "<span size='small' foreground='#888888'>"
-            "<b>Enter</b> Run Action | <b>Tab</b> Autocomplete Selection | <b>Esc</b> Cancel"
-            "</span>"
-        )
-        footer_box.append(help_label)
+        spacer = Gtk.Box(hexpand=True)
+
+        run_btn = Gtk.Button(label="Run")
+        run_btn.add_css_class("suggested-action")
+        run_btn.connect("clicked", self.on_run_clicked)
+
+        footer_box.append(spacer)
+        footer_box.append(run_btn)
         main_box.append(footer_box)
 
         self.window.set_content(main_box)
@@ -168,7 +205,6 @@ class PowerLauncher(Adw.Application):
             self.quit()
             return True
 
-        # Tab handling block matches autocomplete behavior parameters
         if keyval in (Gdk.KEY_Tab, Gdk.KEY_ISO_Left_Tab):
             position = self.selection.get_selected()
             if position != Gtk.INVALID_LIST_POSITION and self.store.get_n_items() > 0:
@@ -195,12 +231,16 @@ class PowerLauncher(Adw.Application):
         if self.store.get_n_items() > 0:
             self.on_activate(self.view, 0)
 
+    def on_run_clicked(self, button):
+        position = self.selection.get_selected()
+        if position != Gtk.INVALID_LIST_POSITION and self.store.get_n_items() > 0:
+            self.on_activate(self.view, position)
+
     def on_activate(self, _list_view, position):
         action = self.store.get_item(position)
         if not action:
             return
 
-        # Pop native modal verification window interface instead of yad layout
         dialog = Adw.MessageDialog(
             transient_for=self.window,
             heading="Confirm System Action",
@@ -209,7 +249,6 @@ class PowerLauncher(Adw.Application):
         dialog.add_response("cancel", "Cancel")
         dialog.add_response("execute", action.name)
 
-        # Color confirmation buttons conditionally based on action severity
         if action.name in ("Shutdown", "Reboot"):
             dialog.set_response_appearance(
                 "execute", Adw.ResponseAppearance.DESTRUCTIVE

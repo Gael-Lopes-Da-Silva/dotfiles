@@ -35,8 +35,14 @@ def load_apps():
 class Launcher(Adw.Application):
     def __init__(self):
         super().__init__(application_id="launcher.apps")
+        self.window = None
 
     def do_activate(self):
+        if self.window:
+            self.window.present()
+            self.search.grab_focus()
+            return
+
         self.apps = load_apps()
 
         self.window = Adw.ApplicationWindow(

@@ -37,8 +37,14 @@ def load_commands():
 class CommandLauncher(Adw.Application):
     def __init__(self):
         super().__init__(application_id="launcher.commands")
+        self.window = None
 
     def do_activate(self):
+        if self.window:
+            self.window.present()
+            self.search.grab_focus()
+            return
+
         self.commands = load_commands()
 
         self.window = Adw.ApplicationWindow(
@@ -133,22 +139,21 @@ class CommandLauncher(Adw.Application):
 
         main_box.append(scrolled)
 
-        bottom_box = Gtk.Box(
-            orientation=Gtk.Orientation.HORIZONTAL,
-            spacing=8,
-            halign=Gtk.Align.END,
-        )
+        footer_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
 
-        self.man_button = Gtk.Button(label="Man Page (Ctrl+F)")
-        self.man_button.connect("clicked", self.on_man_clicked)
+        man_button = Gtk.Button(label="Man Page")
+        man_button.connect("clicked", self.on_man_clicked)
 
-        self.run_button = Gtk.Button(label="Run")
-        self.run_button.add_css_class("suggested-action")
-        self.run_button.connect("clicked", self.on_run_clicked)
+        run_button = Gtk.Button(label="Run")
+        run_button.add_css_class("suggested-action")
+        run_button.connect("clicked", self.on_run_clicked)
 
-        bottom_box.append(self.man_button)
-        bottom_box.append(self.run_button)
-        main_box.append(bottom_box)
+        spacer = Gtk.Box(hexpand=True)
+
+        footer_box.append(man_button)
+        footer_box.append(spacer)
+        footer_box.append(run_button)
+        main_box.append(footer_box)
 
         self.window.set_content(main_box)
         self.window.present()
@@ -168,10 +173,6 @@ class CommandLauncher(Adw.Application):
                     self.search.set_text(cmd_obj.name)
                     self.search.set_position(-1)
                     GLib.idle_add(self.grab_search_focus)
-            return True
-
-        if (state & Gdk.ModifierType.CONTROL_MASK) and keyval in (Gdk.KEY_f, Gdk.KEY_F):
-            self.on_man_clicked(None)
             return True
 
         return False

@@ -10,8 +10,9 @@ import gi
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 gi.require_version("Gdk", "4.0")
+gi.require_version("GdkPixbuf", "2.0")
 
-from gi.repository import Adw, Gdk, Gio, GLib, GObject, Gtk, Pango
+from gi.repository import Adw, Gdk, GdkPixbuf, Gio, GLib, GObject, Gtk, Pango
 
 
 class ClipboardItem(GObject.Object):
@@ -19,11 +20,12 @@ class ClipboardItem(GObject.Object):
         super().__init__()
         self.item_id = item_id
         self.text = text
+        # Detect if the cliphist entry points to encoded binary image sets
+        self.is_image = "binary data" in text.lower()
 
 
 def load_clipboard_items():
     try:
-        # Runs cliphist list to collect all active history
         res = subprocess.run(
             ["cliphist", "list"], capture_output=True, text=True, check=True
         )
@@ -33,16 +35,21 @@ def load_clipboard_items():
                 parts = line.split("\t", 1)
                 items.append(ClipboardItem(parts[0].strip(), parts[1]))
         return items
-    except Exception as e:
-        print(f"Error loading cliphist history: {e}")
+    except Exception:
         return []
 
 
 class ClipboardLauncher(Adw.Application):
     def __init__(self):
         super().__init__(application_id="launcher.clipboard")
+        self.window = None
 
     def do_activate(self):
+        if self.window:
+            self.window.present()
+            self.search.grab_focus()
+            return
+
         self.all_items = load_clipboard_items()
 
         self.window = Adw.ApplicationWindow(application=self)
@@ -50,7 +57,6 @@ class ClipboardLauncher(Adw.Application):
         self.window.set_decorated(False)
         self.window.set_resizable(False)
 
-        # Global layout container
         main_box = Gtk.Box(
             orientation=Gtk.Orientation.VERTICAL,
             spacing=12,
@@ -60,13 +66,11 @@ class ClipboardLauncher(Adw.Application):
             margin_end=12,
         )
 
-        # Search box setup
         self.search = Gtk.SearchEntry()
         self.search.set_key_capture_widget(self.window)
         self.search.connect("search-changed", self.on_search)
         self.search.connect("activate", self.on_search_activate)
 
-        # Intercept shortcuts directly inside search entry and master window
         key_controller = Gtk.EventControllerKey()
         key_controller.connect("key-pressed", self.on_key_pressed)
         self.window.add_controller(key_controller)
@@ -77,7 +81,6 @@ class ClipboardLauncher(Adw.Application):
 
         main_box.append(self.search)
 
-        # Data store and list setup
         self.store = Gio.ListStore(item_type=ClipboardItem)
         self.selection = Gtk.SingleSelection(model=self.store)
 
@@ -96,31 +99,90 @@ class ClipboardLauncher(Adw.Application):
             box = Gtk.Box(
                 orientation=Gtk.Orientation.HORIZONTAL,
                 spacing=12,
-                margin_top=10,
-                margin_bottom=10,
+                margin_top=6,
+                margin_bottom=6,
                 margin_start=12,
                 margin_end=12,
             )
-            icon = Gtk.Image.new_from_icon_name("edit-copy-symbolic")
-            label = Gtk.Label(xalign=0)
-            label.set_ellipsize(Pango.EllipsizeMode.END)
-            label.set_hexpand(True)
 
-            box.append(icon)
-            box.append(label)
+            content_area = Gtk.Box(
+                orientation=Gtk.Orientation.HORIZONTAL, spacing=12, hexpand=True
+            )
+
+            box.append(content_area)
             item.set_child(box)
 
             gesture = Gtk.GestureClick()
             gesture.connect("released", on_row_clicked, item)
-            box.add_controller(gesture)
+            content_area.add_controller(gesture)
 
         def bind(_, item):
             item_obj = item.get_item()
             box = item.get_child()
-            label = box.get_last_child()
-            # Replace newlines with spaces for a single line preview
-            clean_text = item_obj.text.replace("\n", " ").strip()
-            label.set_text(clean_text)
+            content_area = box.get_first_child()
+
+            # Clean up old elements from the recycled row container
+            if box.get_last_child() != content_area:
+                box.remove(box.get_last_child())
+
+            while child := content_area.get_first_child():
+                content_area.remove(child)
+
+            # Conditional Layout Formatting Engine
+            if getattr(item_obj, "is_image", False):
+                img_widget = Gtk.Image()
+                img_widget.set_pixel_size(
+                    80
+                )  # Clean bounding frame size for thumbnails
+                img_widget.set_hexpand(False)
+                img_widget.set_halign(Gtk.Align.START)
+
+                try:
+                    # Capture raw binary stdout pipeline without text decoding wrappers
+                    res = subprocess.run(
+                        ["cliphist", "decode", item_obj.item_id],
+                        capture_output=True,
+                        check=True,
+                    )
+
+                    # Use a robust PixbufLoader to turn terminal stdout bytes into standard image formats
+                    loader = GdkPixbuf.PixbufLoader()
+                    loader.write(res.stdout)
+                    loader.close()
+
+                    pixbuf = loader.get_pixbuf()
+                    if pixbuf:
+                        texture = Gdk.Texture.new_for_pixbuf(pixbuf)
+                        img_widget.set_from_paintable(texture)
+                    else:
+                        img_widget.set_from_icon_name("image-missing-symbolic")
+                except Exception:
+                    img_widget.set_from_icon_name("image-missing-symbolic")
+
+                content_area.append(img_widget)
+            else:
+                # Text Entry Layout: Restored Copy Icon + Wrapped Description String
+                icon = Gtk.Image.new_from_icon_name("edit-copy-symbolic")
+                icon.set_valign(Gtk.Align.CENTER)
+
+                label = Gtk.Label(xalign=0)
+                label.set_ellipsize(Pango.EllipsizeMode.END)
+                label.set_hexpand(True)
+                label.set_valign(Gtk.Align.CENTER)
+
+                clean_text = item_obj.text.replace("\n", " ").strip()
+                label.set_text(clean_text)
+
+                content_area.append(icon)
+                content_area.append(label)
+
+            # Append individual inline item delete button
+            del_btn = Gtk.Button.new_from_icon_name("user-trash-symbolic")
+            del_btn.add_css_class("flat")
+            del_btn.add_css_class("destructive-action")
+            del_btn.set_valign(Gtk.Align.CENTER)
+            del_btn.connect("clicked", lambda _: self.action_delete_item(item_obj))
+            box.append(del_btn)
 
         factory.connect("setup", setup)
         factory.connect("bind", bind)
@@ -138,16 +200,26 @@ class ClipboardLauncher(Adw.Application):
         scrolled.set_vexpand(True)
         main_box.append(scrolled)
 
-        # Help context footer showing active map keys
-        footer_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-        help_label = Gtk.Label(xalign=0)
-        help_label.set_markup(
-            "<span size='small' foreground='#888888'>"
-            "<b>Enter</b> Copy | <b>Ctrl+D</b> Delete | "
-            "<b>Ctrl+Q</b> Query Delete | <b>Ctrl+C</b> Clear History"
-            "</span>"
-        )
-        footer_box.append(help_label)
+        footer_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+
+        clear_history_btn = Gtk.Button(label="Clear History")
+        clear_history_btn.add_css_class("destructive-action")
+        clear_history_btn.connect("clicked", lambda _: self.action_clear_all())
+
+        query_clear_btn = Gtk.Button(label="Query Clear")
+        query_clear_btn.connect("clicked", lambda _: self.action_delete_by_query())
+
+        spacer = Gtk.Box(hexpand=True)
+
+        copy_btn = Gtk.Button(label="Copy")
+        copy_btn.add_css_class("suggested-action")
+        copy_btn.connect("clicked", self.on_copy_footer_clicked)
+
+        footer_box.append(clear_history_btn)
+        footer_box.append(query_clear_btn)
+        footer_box.append(spacer)
+        footer_box.append(copy_btn)
+
         main_box.append(footer_box)
 
         self.window.set_content(main_box)
@@ -155,7 +227,6 @@ class ClipboardLauncher(Adw.Application):
         self.search.grab_focus()
 
     def reload_store_view(self):
-        """Refreshes the displayed items matching current text filter input"""
         text = self.search.get_text().lower()
         self.store.remove_all()
         for item in self.all_items:
@@ -166,20 +237,6 @@ class ClipboardLauncher(Adw.Application):
         if keyval == Gdk.KEY_Escape:
             self.quit()
             return True
-
-        # Check for Ctrl modifier actions
-        is_ctrl = (state & Gdk.ModifierType.CONTROL_MASK) != 0
-        if is_ctrl:
-            if keyval == Gdk.KEY_d:
-                self.action_delete_selected()
-                return True
-            elif keyval == Gdk.KEY_q:
-                self.action_delete_by_query()
-                return True
-            elif keyval == Gdk.KEY_c:
-                self.action_clear_all()
-                return True
-
         return False
 
     def on_search(self, entry):
@@ -196,55 +253,35 @@ class ClipboardLauncher(Adw.Application):
         if self.store.get_n_items() > 0:
             self.on_activate(self.view, 0)
 
+    def on_copy_footer_clicked(self, button):
+        position = self.selection.get_selected()
+        if position != Gtk.INVALID_LIST_POSITION and self.store.get_n_items() > 0:
+            self.on_activate(self.view, position)
+
     def on_activate(self, _list_view, position):
         item = self.store.get_item(position)
         if not item:
             return
 
         try:
-            # Replicates: cliphist decode | wl-copy
             decode_proc = subprocess.Popen(
                 ["cliphist", "decode", item.item_id], stdout=subprocess.PIPE
             )
             subprocess.run(["wl-copy"], stdin=decode_proc.stdout, check=True)
             self.send_notification(
-                "Clipboard history", "You can paste the copy from the clipboard entry."
+                "Clipboard history", "Item copied to the system clipboard."
             )
             GLib.timeout_add(100, self.quit_app)
         except Exception as e:
             print(f"Failed to write to system clipboard: {e}")
 
-    # --- Actions and Modals ---
-
-    def action_delete_selected(self):
-        position = self.selection.get_selected()
-        if position == Gtk.INVALID_LIST_POSITION or self.store.get_n_items() == 0:
-            return
-
-        item = self.store.get_item(position)
-
-        dialog = Adw.MessageDialog(
-            transient_for=self.window,
-            heading="Delete Entry?",
-            body="Do you really want to delete this entry from your clipboard history?",
+    def action_delete_item(self, item):
+        proc = subprocess.Popen(
+            ["cliphist", "delete"], stdin=subprocess.PIPE, text=True
         )
-        dialog.add_response("cancel", "Cancel")
-        dialog.add_response("delete", "Delete")
-        dialog.set_response_appearance("delete", Adw.ResponseAppearance.DESTRUCTIVE)
-
-        def handle_response(_, response_id):
-            if response_id == "delete":
-                proc = subprocess.Popen(
-                    ["cliphist", "delete"], stdin=subprocess.PIPE, text=True
-                )
-                proc.communicate(input=f"{item.item_id}\t{item.text}")
-                self.send_notification(
-                    "Clipboard history", "Entry successfully deleted."
-                )
-                self.refresh_data()
-
-        dialog.connect("response", handle_response)
-        dialog.present()
+        proc.communicate(input=f"{item.item_id}\t{item.text}")
+        self.send_notification("Clipboard history", "Entry successfully deleted.")
+        self.refresh_data()
 
     def action_delete_by_query(self):
         dialog = Adw.MessageDialog(
@@ -295,7 +332,6 @@ class ClipboardLauncher(Adw.Application):
         dialog.present()
 
     def refresh_data(self):
-        """Forces data structural rebuild and refreshes UI layer updates"""
         self.all_items = load_clipboard_items()
         self.reload_store_view()
         GLib.idle_add(self.grab_search_focus)
