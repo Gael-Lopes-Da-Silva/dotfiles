@@ -225,5 +225,6 @@ class Launcher(Adw.Application):
         return GLib.SOURCE_REMOVE
 
 
-app = Launcher()
-app.run()
+if __name__ == "__main__":
+    app = Launcher()
+    app.run()

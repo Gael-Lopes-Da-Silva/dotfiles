@@ -19,7 +19,7 @@ class PowerAction(GObject.Object):
         super().__init__()
         self.name = name
         self.command = command
-        self.icon_names = icon_names  # Prioritized list of icon name fallbacks
+        self.icon_names = icon_names
 
 
 def load_power_actions():
@@ -150,7 +150,6 @@ class PowerLauncher(Adw.Application):
             icon = box.get_first_child()
             label = box.get_last_child()
 
-            # Dynamically look up the first available icon that exists in the current system theme
             chosen_icon = "image-missing-symbolic"
             icon_theme = Gtk.IconTheme.get_for_display(Gdk.Display.get_default())
             for name in action_obj.icon_names:
@@ -177,7 +176,6 @@ class PowerLauncher(Adw.Application):
         scrolled.set_vexpand(True)
         main_box.append(scrolled)
 
-        # Action Control Footer Layout
         footer_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         spacer = Gtk.Box(hexpand=True)
 
@@ -246,8 +244,8 @@ class PowerLauncher(Adw.Application):
             heading="Confirm System Action",
             body=f"Do you really want to execute this action: {action.name}?",
         )
-        dialog.add_response("cancel", "Cancel")
         dialog.add_response("execute", action.name)
+        dialog.add_response("cancel", "Cancel")
 
         if action.name in ("Shutdown", "Reboot"):
             dialog.set_response_appearance(

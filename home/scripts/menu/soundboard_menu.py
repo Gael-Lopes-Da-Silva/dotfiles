@@ -18,7 +18,6 @@ from gi.repository import Adw, Gdk, Gio, GLib, GObject, Gtk, Pango
 
 
 class SoundItem(GObject.Object):
-    # GObject Property to dynamically track playing state across widgets
     is_playing = GObject.Property(type=bool, default=False)
 
     def __init__(self, display_name, file_path):
@@ -68,10 +67,9 @@ class SoundboardLauncher(Adw.Application):
         self.rec_filename = Path.home() / ".soundboard" / "custom" / "record.wav"
         self.window = None
 
-        # Track active playing backends
-        self.playing_sounds = {}  # {path_str: (proc, item_obj)} -> Exclusive playback
-        self.overlapping_sounds = {}  # {path_str: [proc1, proc2, ...]} -> Multi-layered playback
-        self.signal_handlers = {}  # {list_item: (item_obj, handler_id)} -> Signal cleanup cache
+        self.playing_sounds = {}
+        self.overlapping_sounds = {}
+        self.signal_handlers = {}
 
         GLib.timeout_add(250, self.check_playing_sounds)
 
@@ -138,7 +136,6 @@ class SoundboardLauncher(Adw.Application):
             label.set_ellipsize(Pango.EllipsizeMode.END)
             label.set_hexpand(True)
 
-            # Active status playback spinner
             spinner = Gtk.Spinner()
             spinner.set_visible(False)
 
@@ -146,18 +143,15 @@ class SoundboardLauncher(Adw.Application):
             box.append(label)
             box.append(spinner)
 
-            # Action button controls
             btn_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=4)
 
-            # Consolidated Unified Single Instance Play/Stop Toggle
             btn_toggle = Gtk.Button.new_from_icon_name("media-playback-start-symbolic")
             btn_toggle.connect("clicked", lambda _: self.toggle_row_item(item))
 
-            # Overlapping / Multi-Instance Playback control
             btn_overlap_play = Gtk.Button.new_from_icon_name(
                 "media-playlist-repeat-symbolic"
             )
-            btn_overlap_play.set_tooltip_text("Play Overlapping (Multiple)")
+            btn_overlap_play.set_tooltip_text("Play Overlapping")
             btn_overlap_play.connect(
                 "clicked", lambda _: self.play_overlap_row_item(item)
             )
@@ -188,7 +182,6 @@ class SoundboardLauncher(Adw.Application):
             if not item_obj:
                 return
 
-            # Robust Structural UI Tree Traversal
             box = item.get_child()
             icon = box.get_first_child()
             label = icon.get_next_sibling()
@@ -238,7 +231,6 @@ class SoundboardLauncher(Adw.Application):
         scrolled.set_vexpand(True)
         main_box.append(scrolled)
 
-        # Control footer box layout
         footer_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
 
         btn_stop_all = Gtk.Button(label="Stop All Sounds")
@@ -281,20 +273,15 @@ class SoundboardLauncher(Adw.Application):
                 self.store.append(item)
 
     def on_key_pressed(self, controller, keyval, keycode, state):
-        # Escape key
         if keyval == Gdk.KEY_Escape:
             self.quit()
             return True
 
-        # Intercept Return / Enter globally
         if keyval in (Gdk.KEY_Return, Gdk.KEY_KP_Enter):
-            # If the search bar has focus, it should behave normally.
-            # Otherwise, trigger playback.
             if not self.search.has_focus():
                 self.play_currently_selected()
                 return True
 
-        # Tab navigation to jump back to search
         if keyval in (Gdk.KEY_Tab, Gdk.KEY_ISO_Left_Tab):
             position = self.selection.get_selected()
             if position != Gtk.INVALID_LIST_POSITION and self.store.get_n_items() > 0:

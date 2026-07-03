@@ -253,5 +253,6 @@ class CommandLauncher(Adw.Application):
         return GLib.SOURCE_REMOVE
 
 
-app = CommandLauncher()
-app.run()
+if __name__ == "__main__":
+    app = CommandLauncher()
+    app.run()

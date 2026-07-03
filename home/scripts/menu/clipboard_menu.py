@@ -20,7 +20,6 @@ class ClipboardItem(GObject.Object):
         super().__init__()
         self.item_id = item_id
         self.text = text
-        # Detect if the cliphist entry points to encoded binary image sets
         self.is_image = "binary data" in text.lower()
 
 
@@ -33,7 +32,12 @@ def load_clipboard_items():
         for line in res.stdout.splitlines():
             if "\t" in line:
                 parts = line.split("\t", 1)
-                items.append(ClipboardItem(parts[0].strip(), parts[1]))
+                item_text = parts[1]
+
+                if "<meta http-equiv" in item_text.lower():
+                    continue
+
+                items.append(ClipboardItem(parts[0].strip(), item_text))
         return items
     except Exception:
         return []
@@ -105,9 +109,7 @@ class ClipboardLauncher(Adw.Application):
                 margin_end=12,
             )
 
-            content_area = Gtk.Box(
-                orientation=Gtk.Orientation.HORIZONTAL, spacing=12, hexpand=True
-            )
+            content_area = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
 
             box.append(content_area)
             item.set_child(box)
@@ -121,31 +123,28 @@ class ClipboardLauncher(Adw.Application):
             box = item.get_child()
             content_area = box.get_first_child()
 
-            # Clean up old elements from the recycled row container
-            if box.get_last_child() != content_area:
+            while box.get_last_child() != content_area:
                 box.remove(box.get_last_child())
 
             while child := content_area.get_first_child():
                 content_area.remove(child)
 
-            # Conditional Layout Formatting Engine
+            icon = Gtk.Image.new_from_icon_name("edit-copy-symbolic")
+            icon.set_valign(Gtk.Align.CENTER)
+            content_area.append(icon)
+
             if getattr(item_obj, "is_image", False):
                 img_widget = Gtk.Image()
-                img_widget.set_pixel_size(
-                    80
-                )  # Clean bounding frame size for thumbnails
-                img_widget.set_hexpand(False)
+                img_widget.set_pixel_size(80)
+                img_widget.set_hexpand(True)
                 img_widget.set_halign(Gtk.Align.START)
 
                 try:
-                    # Capture raw binary stdout pipeline without text decoding wrappers
                     res = subprocess.run(
                         ["cliphist", "decode", item_obj.item_id],
                         capture_output=True,
                         check=True,
                     )
-
-                    # Use a robust PixbufLoader to turn terminal stdout bytes into standard image formats
                     loader = GdkPixbuf.PixbufLoader()
                     loader.write(res.stdout)
                     loader.close()
@@ -161,10 +160,6 @@ class ClipboardLauncher(Adw.Application):
 
                 content_area.append(img_widget)
             else:
-                # Text Entry Layout: Restored Copy Icon + Wrapped Description String
-                icon = Gtk.Image.new_from_icon_name("edit-copy-symbolic")
-                icon.set_valign(Gtk.Align.CENTER)
-
                 label = Gtk.Label(xalign=0)
                 label.set_ellipsize(Pango.EllipsizeMode.END)
                 label.set_hexpand(True)
@@ -173,16 +168,25 @@ class ClipboardLauncher(Adw.Application):
                 clean_text = item_obj.text.replace("\n", " ").strip()
                 label.set_text(clean_text)
 
-                content_area.append(icon)
                 content_area.append(label)
 
-            # Append individual inline item delete button
+            copy_btn = Gtk.Button.new_from_icon_name("edit-copy-symbolic")
+            copy_btn.set_tooltip_text("Copy to Clipboard")
+            copy_btn.set_valign(Gtk.Align.CENTER)
+            copy_btn.connect(
+                "clicked", lambda _: self.on_activate(None, item.get_position())
+            )
+
             del_btn = Gtk.Button.new_from_icon_name("user-trash-symbolic")
-            del_btn.add_css_class("flat")
             del_btn.add_css_class("destructive-action")
+            del_btn.set_tooltip_text("Delete")
             del_btn.set_valign(Gtk.Align.CENTER)
             del_btn.connect("clicked", lambda _: self.action_delete_item(item_obj))
-            box.append(del_btn)
+
+            btn_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=4)
+            btn_box.append(copy_btn)
+            btn_box.append(del_btn)
+            box.append(btn_box)
 
         factory.connect("setup", setup)
         factory.connect("bind", bind)
@@ -271,17 +275,35 @@ class ClipboardLauncher(Adw.Application):
             self.send_notification(
                 "Clipboard history", "Item copied to the system clipboard."
             )
-            GLib.timeout_add(100, self.quit_app)
         except Exception as e:
             print(f"Failed to write to system clipboard: {e}")
 
     def action_delete_item(self, item):
-        proc = subprocess.Popen(
-            ["cliphist", "delete"], stdin=subprocess.PIPE, text=True
+        dialog = Adw.MessageDialog(
+            transient_for=self.window,
+            heading="Delete Item",
+            body="Are you sure you want to delete this item from your history?",
         )
-        proc.communicate(input=f"{item.item_id}\t{item.text}")
-        self.send_notification("Clipboard history", "Entry successfully deleted.")
-        self.refresh_data()
+        dialog.add_response("cancel", "Cancel")
+        dialog.add_response("delete", "Delete")
+        dialog.set_response_appearance("delete", Adw.ResponseAppearance.DESTRUCTIVE)
+
+        def handle_response(_, response_id):
+            if response_id == "delete":
+                try:
+                    proc = subprocess.Popen(
+                        ["cliphist", "delete"], stdin=subprocess.PIPE, text=True
+                    )
+                    proc.communicate(input=f"{item.item_id}\t{item.text}")
+                    self.send_notification(
+                        "Clipboard history", "Entry successfully deleted."
+                    )
+                    self.refresh_data()
+                except Exception as e:
+                    print(f"Failed to delete item: {e}")
+
+        dialog.connect("response", handle_response)
+        dialog.present()
 
     def action_delete_by_query(self):
         dialog = Adw.MessageDialog(
