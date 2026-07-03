@@ -4,13 +4,11 @@ udevadm monitor --environment --udev --subsystem-match=usb | while read -r line;
     case "$line" in
         ACTION=add)
             action="add"
-            device=""
             vendor=""
             model=""
             ;;
         ACTION=remove)
             action="remove"
-            device=""
             vendor=""
             model=""
             ;;
@@ -25,9 +23,6 @@ udevadm monitor --environment --udev --subsystem-match=usb | while read -r line;
             ;;
         ID_MODEL=*)
             model=${line#*=}
-            ;;
-        DEVNAME=*)
-            device=${line#*=}
             ;;
         "")
             if [ "$is_device" = "1" ] && [ -n "$action" ]; then
