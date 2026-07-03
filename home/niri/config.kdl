@@ -145,6 +145,7 @@ binds {
     Mod+Q repeat=false { spawn "power-menu"; }
     Mod+Shift+Q repeat=false { spawn "power-menu"; }
     Ctrl+Alt+Delete repeat=false { spawn "power-menu"; }
+    Mod+Shift+S repeat=false { spawn "macros-menu"; }
 
     Mod+N repeat=false { spawn-sh "bash ~/.local/bin/datetime_notify.sh"; }
     Mod+B repeat=false { spawn-sh "bash ~/.local/bin/battery_notify.sh"; }
@@ -152,9 +153,6 @@ binds {
     Mod+Ctrl+C repeat=false { spawn-sh "bash ~/.local/bin/kill_process.sh"; }
     Mod+Ctrl+M repeat=false { spawn-sh "bash ~/.local/bin/mute_process.sh"; }
     Mod+Ctrl+F repeat=false { spawn-sh "bash ~/.local/bin/freeze_process.sh"; }
-
-    Mod+Shift+S repeat=false { spawn-sh "bash ~/.local/bin/auto_click.sh"; }
-    Mod+Ctrl+S repeat=false { spawn-sh "bash ~/.local/bin/auto_click.sh -d"; }
 
     XF86AudioRaiseVolume { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0"; }
     XF86AudioLowerVolume { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }
