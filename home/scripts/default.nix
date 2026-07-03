@@ -39,8 +39,6 @@ let
   application-menu = mkGtkApp "application-menu" ./menu/application_menu.py;
 in
 {
-  programs.fzf.enable = true;
-
   home.packages = [
     power-menu
     command-menu

@@ -82,5 +82,6 @@
   programs = {
     home-manager.enable = true;
     firefox.enable = true;
+    fzf.enable = true;
   };
 }
