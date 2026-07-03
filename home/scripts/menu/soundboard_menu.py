@@ -100,9 +100,9 @@ class SoundboardLauncher(Adw.Application):
         self.search = Gtk.SearchEntry()
         self.search.set_key_capture_widget(self.window)
         self.search.connect("search-changed", self.on_search)
-        self.search.connect("activate", self.on_search_activate)
 
         key_controller = Gtk.EventControllerKey()
+        key_controller.set_propagation_phase(Gtk.PropagationPhase.CAPTURE)
         key_controller.connect("key-pressed", self.on_key_pressed)
         self.window.add_controller(key_controller)
 
@@ -242,6 +242,7 @@ class SoundboardLauncher(Adw.Application):
         footer_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
 
         btn_stop_all = Gtk.Button(label="Stop All Sounds")
+        btn_stop_all.add_css_class("destructive-action")
         btn_stop_all.connect("clicked", lambda _: self.action_stop_all())
         footer_box.append(btn_stop_all)
 
@@ -280,10 +281,20 @@ class SoundboardLauncher(Adw.Application):
                 self.store.append(item)
 
     def on_key_pressed(self, controller, keyval, keycode, state):
+        # Escape key
         if keyval == Gdk.KEY_Escape:
             self.quit()
             return True
 
+        # Intercept Return / Enter globally
+        if keyval in (Gdk.KEY_Return, Gdk.KEY_KP_Enter):
+            # If the search bar has focus, it should behave normally.
+            # Otherwise, trigger playback.
+            if not self.search.has_focus():
+                self.play_currently_selected()
+                return True
+
+        # Tab navigation to jump back to search
         if keyval in (Gdk.KEY_Tab, Gdk.KEY_ISO_Left_Tab):
             position = self.selection.get_selected()
             if position != Gtk.INVALID_LIST_POSITION and self.store.get_n_items() > 0:
@@ -306,9 +317,16 @@ class SoundboardLauncher(Adw.Application):
         self.search.set_position(-1)
         return GLib.SOURCE_REMOVE
 
-    def on_search_activate(self, entry):
+    def play_currently_selected(self):
         if self.store.get_n_items() > 0:
-            item = self.store.get_item(0)
+            position = self.selection.get_selected()
+            if (
+                position == Gtk.INVALID_LIST_POSITION
+                or position >= self.store.get_n_items()
+            ):
+                position = 0
+
+            item = self.store.get_item(position)
             if item:
                 self.play_audio_file(item)
 
