@@ -33,6 +33,7 @@ let
     };
 
   power-menu = mkGtkApp "power-menu" ./menu/power_menu.py;
+  macros-menu = mkGtkApp "macros-menu" ./menu/macros_menu.py;
   command-menu = mkGtkApp "command-menu" ./menu/command_menu.py;
   clipboard-menu = mkGtkApp "clipboard-menu" ./menu/clipboard_menu.py;
   soundboard-menu = mkGtkApp "soundboard-menu" ./menu/soundboard_menu.py;
@@ -41,6 +42,7 @@ in
 {
   home.packages = [
     power-menu
+    macros-menu
     command-menu
     clipboard-menu
     soundboard-menu
@@ -67,7 +69,6 @@ in
         "output_monitor.sh" = ./monitor/output_monitor.sh;
         "usb_monitor.sh" = ./monitor/usb_monitor.sh;
 
-        "auto_click.sh" = ./utility/auto_click.sh;
         "mute_process.sh" = ./utility/mute_process.sh;
         "freeze_process.sh" = ./utility/freeze_process.sh;
         "kill_process.sh" = ./utility/kill_process.sh;

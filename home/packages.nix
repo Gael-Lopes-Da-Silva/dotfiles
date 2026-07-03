@@ -3,8 +3,8 @@
 {
   home.packages = with pkgs; [
     jq
-    yad
     p7zip
+    wtype
     wlrctl
     libnotify
     pulseaudio
