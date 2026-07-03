@@ -140,12 +140,14 @@ binds {
 
     Mod+N repeat=false { spawn-sh "bash ~/.local/bin/datetime_notify.sh"; }
     Mod+B repeat=false { spawn-sh "bash ~/.local/bin/battery_notify.sh"; }
+
+    Mod+P repeat=false { spawn "application-menu"; }
+    Mod+Slash repeat=false { spawn "command-menu"; }
+
     Mod+M repeat=false { spawn-sh "bash ~/.local/bin/soundboard_menu.sh"; }
     Mod+V repeat=false { spawn-sh "bash ~/.local/bin/cliphist_menu.sh"; }
-    Mod+P repeat=false { spawn-sh "bash ~/.local/bin/application_menu.sh"; }
-    Mod+Slash repeat=false { spawn-sh "bash ~/.local/bin/command_menu.sh"; }
-
     Mod+Q repeat=false { spawn-sh "bash ~/.local/bin/power_menu.sh"; }
+
     Mod+Shift+Q repeat=false { spawn-sh "bash ~/.local/bin/power_menu.sh"; }
     Ctrl+Alt+Delete repeat=false { spawn-sh "bash ~/.local/bin/power_menu.sh"; }
 

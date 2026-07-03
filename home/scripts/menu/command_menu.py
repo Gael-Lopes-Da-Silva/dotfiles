@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import subprocess
 
 os.environ["GSK_RENDERER"] = "gl"
 
@@ -13,31 +14,32 @@ gi.require_version("Gdk", "4.0")
 from gi.repository import Adw, Gdk, Gio, GLib, GObject, Gtk
 
 
-class App(GObject.Object):
-    def __init__(self, app_info):
+class CommandItem(GObject.Object):
+    def __init__(self, name):
         super().__init__()
-        self.name = app_info.get_name()
-        self.app_info = app_info
+        self.name = name
 
 
-def load_apps():
-    apps = {}
+def load_commands():
+    try:
+        result = subprocess.run(
+            ["bash", "-c", "compgen -c"], capture_output=True, text=True, check=True
+        )
+        unique_cmds = sorted(list(set(result.stdout.splitlines())), key=str.lower)
 
-    for app_info in Gio.AppInfo.get_all():
-        if app_info.should_show():
-            name = app_info.get_name()
-            if name:
-                apps[name] = App(app_info)
-
-    return sorted(apps.values(), key=lambda x: x.name.lower())
+        return [
+            CommandItem(cmd) for cmd in unique_cmds if cmd and not cmd.startswith(".")
+        ]
+    except Exception:
+        return []
 
 
-class Launcher(Adw.Application):
+class CommandLauncher(Adw.Application):
     def __init__(self):
-        super().__init__(application_id="launcher.apps")
+        super().__init__(application_id="launcher.commands")
 
     def do_activate(self):
-        self.apps = load_apps()
+        self.commands = load_commands()
 
         self.window = Adw.ApplicationWindow(
             application=self,
@@ -70,9 +72,9 @@ class Launcher(Adw.Application):
 
         main_box.append(self.search)
 
-        self.store = Gio.ListStore(item_type=App)
-        for app in self.apps:
-            self.store.append(app)
+        self.store = Gio.ListStore(item_type=CommandItem)
+        for cmd in self.commands:
+            self.store.append(cmd)
 
         self.selection = Gtk.SingleSelection(model=self.store)
 
@@ -89,20 +91,19 @@ class Launcher(Adw.Application):
             box = Gtk.Box(
                 orientation=Gtk.Orientation.HORIZONTAL,
                 spacing=12,
-                margin_top=10,
-                margin_bottom=10,
+                margin_top=8,
+                margin_bottom=8,
                 margin_start=12,
                 margin_end=12,
             )
 
-            icon = Gtk.Image()
-            icon.set_pixel_size(32)
+            icon = Gtk.Image.new_from_icon_name("utilities-terminal")
+            icon.set_pixel_size(24)
 
             label = Gtk.Label(xalign=0)
 
             box.append(icon)
             box.append(label)
-
             item.set_child(box)
 
             gesture = Gtk.GestureClick()
@@ -110,19 +111,10 @@ class Launcher(Adw.Application):
             box.add_controller(gesture)
 
         def bind(_, item):
-            app_obj = item.get_item()
+            cmd_obj = item.get_item()
             box = item.get_child()
-
-            icon = box.get_first_child()
             label = box.get_last_child()
-
-            gicon = app_obj.app_info.get_icon()
-            if gicon:
-                icon.set_from_gicon(gicon)
-            else:
-                icon.set_from_icon_name("application-x-executable")
-
-            label.set_text(app_obj.name)
+            label.set_text(cmd_obj.name)
 
         factory.connect("setup", setup)
         factory.connect("bind", bind)
@@ -132,7 +124,6 @@ class Launcher(Adw.Application):
             factory=factory,
             single_click_activate=False,
         )
-
         self.view.connect("activate", self.on_activate)
         self.view.add_css_class("navigation-sidebar")
 
@@ -144,13 +135,18 @@ class Launcher(Adw.Application):
 
         bottom_box = Gtk.Box(
             orientation=Gtk.Orientation.HORIZONTAL,
+            spacing=8,
             halign=Gtk.Align.END,
         )
+
+        self.man_button = Gtk.Button(label="Man Page (Ctrl+F)")
+        self.man_button.connect("clicked", self.on_man_clicked)
 
         self.run_button = Gtk.Button(label="Run")
         self.run_button.add_css_class("suggested-action")
         self.run_button.connect("clicked", self.on_run_clicked)
 
+        bottom_box.append(self.man_button)
         bottom_box.append(self.run_button)
         main_box.append(bottom_box)
 
@@ -167,23 +163,25 @@ class Launcher(Adw.Application):
         if keyval in (Gdk.KEY_Tab, Gdk.KEY_ISO_Left_Tab):
             position = self.selection.get_selected()
             if position != Gtk.INVALID_LIST_POSITION and self.store.get_n_items() > 0:
-                app_obj = self.store.get_item(position)
-                if app_obj:
-                    self.search.set_text(app_obj.name)
+                cmd_obj = self.store.get_item(position)
+                if cmd_obj:
+                    self.search.set_text(cmd_obj.name)
                     self.search.set_position(-1)
                     GLib.idle_add(self.grab_search_focus)
+            return True
+
+        if (state & Gdk.ModifierType.CONTROL_MASK) and keyval in (Gdk.KEY_f, Gdk.KEY_F):
+            self.on_man_clicked(None)
             return True
 
         return False
 
     def on_search(self, entry):
         text = entry.get_text().lower()
-
         self.store.remove_all()
-
-        for app in self.apps:
-            if text in app.name.lower():
-                self.store.append(app)
+        for cmd in self.commands:
+            if text in cmd.name.lower():
+                self.store.append(cmd)
 
         if not entry.has_focus():
             GLib.idle_add(self.grab_search_focus)
@@ -199,18 +197,53 @@ class Launcher(Adw.Application):
 
     def on_run_clicked(self, button):
         position = self.selection.get_selected()
-
         if position != Gtk.INVALID_LIST_POSITION and self.store.get_n_items() > 0:
             self.on_activate(self.view, position)
 
-    def on_activate(self, _list_view, position):
-        app = self.store.get_item(position)
-
-        if not app:
+    def on_man_clicked(self, button):
+        position = self.selection.get_selected()
+        if position == Gtk.INVALID_LIST_POSITION or self.store.get_n_items() == 0:
             return
 
-        context = Gdk.Display.get_default().get_app_launch_context()
-        app.app_info.launch([], context)
+        cmd_obj = self.store.get_item(position)
+        if not cmd_obj:
+            return
+
+        terminal = os.environ.get("TERMINAL")
+        man_cmd = f"man '{cmd_obj.name}'"
+
+        if terminal:
+            subprocess.Popen(
+                [terminal, "--title=Manual Page", "--", "bash", "-c", man_cmd]
+            )
+        else:
+            for term in [
+                "xdg-terminal-exec",
+                "gnome-terminal",
+                "kitty",
+                "alacritty",
+                "foot",
+            ]:
+                if GLib.find_program_in_path(term):
+                    if term in ["gnome-terminal"]:
+                        subprocess.Popen([term, "--", "bash", "-c", man_cmd])
+                    else:
+                        subprocess.Popen([term, "-e", "bash", "-c", man_cmd])
+                    break
+
+        GLib.timeout_add(100, self.quit_app)
+
+    def on_activate(self, _list_view, position):
+        cmd_obj = self.store.get_item(position)
+        if not cmd_obj:
+            return
+
+        subprocess.Popen(
+            ["bash", "-c", cmd_obj.name],
+            start_new_session=True,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
 
         GLib.timeout_add(100, self.quit_app)
 
@@ -219,5 +252,5 @@ class Launcher(Adw.Application):
         return GLib.SOURCE_REMOVE
 
 
-app = Launcher()
+app = CommandLauncher()
 app.run()
