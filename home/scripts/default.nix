@@ -32,17 +32,21 @@ let
       '';
     };
 
-  application-menu = mkGtkApp "application-menu" ./menu/application_menu.py;
+  power-menu = mkGtkApp "power-menu" ./menu/power_menu.py;
   command-menu = mkGtkApp "command-menu" ./menu/command_menu.py;
   clipboard-menu = mkGtkApp "clipboard-menu" ./menu/clipboard_menu.py;
+  soundboard-menu = mkGtkApp "soundboard-menu" ./menu/soundboard_menu.py;
+  application-menu = mkGtkApp "application-menu" ./menu/application_menu.py;
 in
 {
   programs.fzf.enable = true;
 
   home.packages = [
-    application-menu
+    power-menu
     command-menu
     clipboard-menu
+    soundboard-menu
+    application-menu
   ];
 
   home.file =
@@ -55,10 +59,6 @@ in
       })
       {
         "autostart.sh" = ./autostart.sh;
-
-        "cliphist_menu.sh" = ./menu/cliphist_menu.sh;
-        "power_menu.sh" = ./menu/power_menu.sh;
-        "soundboard_menu.sh" = ./menu/soundboard_menu.sh;
 
         "battery_notify.sh" = ./notify/battery_notify.sh;
         "datetime_notify.sh" = ./notify/datetime_notify.sh;
@@ -73,6 +73,7 @@ in
         "mute_process.sh" = ./utility/mute_process.sh;
         "freeze_process.sh" = ./utility/freeze_process.sh;
         "kill_process.sh" = ./utility/kill_process.sh;
+
         "soundboard_setup.sh" = ./utility/soundboard_setup.sh;
       };
 }
