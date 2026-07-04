@@ -4,8 +4,6 @@
   home.packages = with pkgs; [
     jq
     p7zip
-    wtype
-    wlrctl
     libnotify
     pulseaudio
     brightnessctl

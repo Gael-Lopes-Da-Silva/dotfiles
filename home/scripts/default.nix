@@ -4,7 +4,7 @@ let
   mkGtkApp =
     name: scriptPath:
     pkgs.python3Packages.buildPythonApplication {
-      pname = name;
+      inherit name;
       version = "1.0.0";
       format = "other";
 
@@ -23,6 +23,7 @@ let
 
       propagatedBuildInputs = with pkgs.python3Packages; [
         pygobject3
+        evdev
       ];
 
       installPhase = ''

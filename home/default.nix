@@ -5,6 +5,7 @@
     isNormalUser = true;
     extraGroups = [
       "disk"
+      "input"
       "wheel"
       "audio"
       "video"

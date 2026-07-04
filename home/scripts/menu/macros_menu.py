@@ -1,18 +1,120 @@
 #!/usr/bin/env python3
 
 import os
-import subprocess
 import threading
 import time
 
 os.environ["GSK_RENDERER"] = "gl"
 
+import evdev
 import gi
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
+from evdev import ecodes as e
 from gi.repository import Adw, Gdk, GLib, Gtk
+
+KEY_MAP = {
+    "a": e.KEY_A,
+    "b": e.KEY_B,
+    "c": e.KEY_C,
+    "d": e.KEY_D,
+    "e": e.KEY_E,
+    "f": e.KEY_F,
+    "g": e.KEY_G,
+    "h": e.KEY_H,
+    "i": e.KEY_I,
+    "j": e.KEY_J,
+    "k": e.KEY_K,
+    "l": e.KEY_L,
+    "m": e.KEY_M,
+    "n": e.KEY_N,
+    "o": e.KEY_O,
+    "p": e.KEY_P,
+    "q": e.KEY_Q,
+    "r": e.KEY_R,
+    "s": e.KEY_S,
+    "t": e.KEY_T,
+    "u": e.KEY_U,
+    "v": e.KEY_V,
+    "w": e.KEY_W,
+    "x": e.KEY_X,
+    "y": e.KEY_Y,
+    "z": e.KEY_Z,
+    "1": e.KEY_1,
+    "2": e.KEY_2,
+    "3": e.KEY_3,
+    "4": e.KEY_4,
+    "5": e.KEY_5,
+    "6": e.KEY_6,
+    "7": e.KEY_7,
+    "8": e.KEY_8,
+    "9": e.KEY_9,
+    "0": e.KEY_0,
+    " ": e.KEY_SPACE,
+    "-": e.KEY_MINUS,
+    "=": e.KEY_EQUAL,
+    "[": e.KEY_LEFTBRACE,
+    "]": e.KEY_RIGHTBRACE,
+    "\\": e.KEY_BACKSLASH,
+    ";": e.KEY_SEMICOLON,
+    "'": e.KEY_APOSTROPHE,
+    "`": e.KEY_GRAVE,
+    ",": e.KEY_COMMA,
+    ".": e.KEY_DOT,
+    "/": e.KEY_SLASH,
+}
+
+SHIFT_MAP = {
+    "A": e.KEY_A,
+    "B": e.KEY_B,
+    "C": e.KEY_C,
+    "D": e.KEY_D,
+    "E": e.KEY_E,
+    "F": e.KEY_F,
+    "G": e.KEY_G,
+    "H": e.KEY_H,
+    "I": e.KEY_I,
+    "J": e.KEY_J,
+    "K": e.KEY_K,
+    "L": e.KEY_L,
+    "M": e.KEY_M,
+    "N": e.KEY_N,
+    "O": e.KEY_O,
+    "P": e.KEY_P,
+    "Q": e.KEY_Q,
+    "R": e.KEY_R,
+    "S": e.KEY_S,
+    "T": e.KEY_T,
+    "U": e.KEY_U,
+    "V": e.KEY_V,
+    "W": e.KEY_W,
+    "X": e.KEY_X,
+    "Y": e.KEY_Y,
+    "Z": e.KEY_Z,
+    "!": e.KEY_1,
+    "@": e.KEY_2,
+    "#": e.KEY_3,
+    "$": e.KEY_4,
+    "%": e.KEY_5,
+    "^": e.KEY_6,
+    "&": e.KEY_7,
+    "*": e.KEY_8,
+    "(": e.KEY_9,
+    ")": e.KEY_0,
+    "_": e.KEY_MINUS,
+    "+": e.KEY_EQUAL,
+    "{": e.KEY_LEFTBRACE,
+    "}": e.KEY_RIGHTBRACE,
+    "|": e.KEY_BACKSLASH,
+    ":": e.KEY_SEMICOLON,
+    '"': e.KEY_APOSTROPHE,
+    "~": e.KEY_GRAVE,
+    "<": e.KEY_COMMA,
+    ">": e.KEY_DOT,
+    "?": e.KEY_SLASH,
+}
 
 
 class MacrosMenu(Adw.Application):
@@ -21,45 +123,48 @@ class MacrosMenu(Adw.Application):
         self.is_running = False
         self.automation_thread = None
         self.window = None
+        self.ui = None
 
         self.special_keys_map = [
-            ("Return (Enter)", "Return"),
-            ("Tab", "Tab"),
-            ("Space", "space"),
-            ("Backspace", "BackSpace"),
-            ("Escape", "Escape"),
-            ("Arrow Up", "Up"),
-            ("Arrow Down", "Down"),
-            ("Arrow Left", "Left"),
-            ("Arrow Right", "Right"),
-            ("Home", "Home"),
-            ("End", "End"),
-            ("Page Up", "Prior"),
-            ("Page Down", "Next"),
-            ("Insert", "Insert"),
-            ("Delete", "Delete"),
-            ("F1", "F1"),
-            ("F2", "F2"),
-            ("F3", "F3"),
-            ("F4", "F4"),
-            ("F5", "F5"),
-            ("F6", "F6"),
-            ("F7", "F7"),
-            ("F8", "F8"),
-            ("F9", "F9"),
-            ("F10", "F10"),
-            ("F11", "F11"),
-            ("F12", "F12"),
+            ("Return (Enter)", e.KEY_ENTER),
+            ("Tab", e.KEY_TAB),
+            ("Space", e.KEY_SPACE),
+            ("Backspace", e.KEY_BACKSPACE),
+            ("Escape", e.KEY_ESC),
+            ("Arrow Up", e.KEY_UP),
+            ("Arrow Down", e.KEY_DOWN),
+            ("Arrow Left", e.KEY_LEFT),
+            ("Arrow Right", e.KEY_RIGHT),
+            ("Home", e.KEY_HOME),
+            ("End", e.KEY_END),
+            ("Page Up", e.KEY_PAGEUP),
+            ("Page Down", e.KEY_PAGEDOWN),
+            ("Insert", e.KEY_INSERT),
+            ("Delete", e.KEY_DELETE),
+            ("F1", e.KEY_F1),
+            ("F2", e.KEY_F2),
+            ("F3", e.KEY_F3),
+            ("F4", e.KEY_F4),
+            ("F5", e.KEY_F5),
+            ("F6", e.KEY_F6),
+            ("F7", e.KEY_F7),
+            ("F8", e.KEY_F8),
+            ("F9", e.KEY_F9),
+            ("F10", e.KEY_F10),
+            ("F11", e.KEY_F11),
+            ("F12", e.KEY_F12),
         ]
+
+        self.connect("shutdown", self.on_app_shutdown)
+
+        threading.Thread(target=self.init_virtual_device, daemon=True).start()
 
     def do_activate(self):
         if self.window:
             self.window.present()
             return
 
-        self.window = Adw.ApplicationWindow(
-            application=self, title="Clicker (wlrctl & wtype)"
-        )
+        self.window = Adw.ApplicationWindow(application=self)
         self.window.set_default_size(600, 420)
         self.window.set_decorated(False)
         self.window.set_resizable(False)
@@ -92,14 +197,15 @@ class MacrosMenu(Adw.Application):
 
         self.start_btn = Gtk.Button()
         self.start_btn.set_icon_name("media-playback-start-symbolic")
-        self.start_btn.set_tooltip_text("Start")
+        self.start_btn.set_tooltip_text("Start (F5)")
+        self.start_btn.set_sensitive(False)
         self.start_btn.add_css_class("suggested-action")
         self.start_btn.set_valign(Gtk.Align.CENTER)
         self.start_btn.connect("clicked", self.on_start_clicked)
 
         self.stop_btn = Gtk.Button()
         self.stop_btn.set_icon_name("media-playback-stop-symbolic")
-        self.stop_btn.set_tooltip_text("Stop")
+        self.stop_btn.set_tooltip_text("Stop (F6)")
         self.stop_btn.add_css_class("destructive-action")
         self.stop_btn.set_valign(Gtk.Align.CENTER)
         self.stop_btn.set_sensitive(False)
@@ -195,6 +301,9 @@ class MacrosMenu(Adw.Application):
         duration_box.append(Gtk.Label(label="secs"))
         main_box.append(duration_box)
 
+        if self.ui:
+            self.start_btn.set_sensitive(True)
+
         self.window.set_content(main_box)
         self.window.present()
 
@@ -205,20 +314,18 @@ class MacrosMenu(Adw.Application):
             self.kb_stack.set_visible_child_name("special")
 
     def on_key_pressed(self, controller, keyval, keycode, state):
-        focused_widget = self.window.get_focus()
-
         if keyval == Gdk.KEY_Escape:
-            self.window.close()
+            self.quit_app()
             return True
 
-        elif keyval in (Gdk.KEY_space, Gdk.KEY_Return, Gdk.KEY_KP_Enter):
-            if focused_widget and isinstance(focused_widget, (Gtk.Text, Gtk.Editable)):
-                return False
-
-            if self.is_running:
-                self.on_stop_clicked(self.stop_btn)
-            else:
+        elif keyval == Gdk.KEY_F5:
+            if not self.is_running and self.start_btn.get_sensitive():
                 self.on_start_clicked(self.start_btn)
+            return True
+
+        elif keyval == Gdk.KEY_F6:
+            if self.is_running and self.stop_btn.get_sensitive():
+                self.on_stop_clicked(self.stop_btn)
             return True
 
         return False
@@ -234,6 +341,11 @@ class MacrosMenu(Adw.Application):
             self.stop_btn.set_sensitive(False)
             self.start_btn.set_sensitive(True)
             self.stop_automation()
+
+    def on_app_shutdown(self, app):
+        if self.ui:
+            self.ui.close()
+            self.ui = None
 
     def start_automation(self):
         self.is_running = True
@@ -273,57 +385,148 @@ class MacrosMenu(Adw.Application):
         time.sleep(start_delay)
         end_time = time.time() + duration if duration > 0 else float("inf")
 
-        mod_map = {
-            "shift": kb_info["shift"],
-            "ctrl": kb_info["ctrl"],
-            "alt": kb_info["alt"],
-            "logo": kb_info["super"],
-        }
+        if not self.ui:
+            GLib.idle_add(self.reset_ui)
+            return
+
+        mod_map_keys = []
+        if kb_info["shift"]:
+            mod_map_keys.append(e.KEY_LEFTSHIFT)
+        if kb_info["ctrl"]:
+            mod_map_keys.append(e.KEY_LEFTCTRL)
+        if kb_info["alt"]:
+            mod_map_keys.append(e.KEY_LEFTALT)
+        if kb_info["super"]:
+            mod_map_keys.append(e.KEY_LEFTMETA)
+
+        mouse_btn_code = e.BTN_LEFT
+        if mouse_btn_str == "middle":
+            mouse_btn_code = e.BTN_MIDDLE
+        elif mouse_btn_str == "right":
+            mouse_btn_code = e.BTN_RIGHT
 
         while self.is_running and time.time() < end_time:
             if mode == "mouse":
-                subprocess.run(
-                    ["wlrctl", "pointer", "click", mouse_btn_str],
-                    stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL,
-                )
+                self.ui.write(e.EV_KEY, mouse_btn_code, 1)
+                self.ui.syn()
+                self.ui.write(e.EV_KEY, mouse_btn_code, 0)
+                self.ui.syn()
+
             elif mode == "kb":
-                try:
-                    cmd = ["wtype"]
+                for mod in mod_map_keys:
+                    self.ui.write(e.EV_KEY, mod, 1)
+                if mod_map_keys:
+                    self.ui.syn()
 
-                    for mod_name, is_active in mod_map.items():
-                        if is_active:
-                            cmd.extend(["-M", mod_name])
+                if kb_info["action_type"] == 0:
+                    text = kb_info["text"]
+                    if text:
+                        for char in text:
+                            shift_needed = False
+                            code = None
 
-                    if kb_info["action_type"] == 0:
-                        if kb_info["text"]:
-                            cmd.append(kb_info["text"])
-                        else:
-                            time.sleep(interval if interval > 0 else 0.001)
-                            continue
-                    else:
-                        cmd.extend(["-k", kb_info["keysym"]])
+                            if char in KEY_MAP:
+                                code = KEY_MAP[char]
+                            elif char in SHIFT_MAP:
+                                code = SHIFT_MAP[char]
+                                shift_needed = True
 
-                    for mod_name, is_active in mod_map.items():
-                        if is_active:
-                            cmd.extend(["-m", mod_name])
+                            if code:
+                                if shift_needed:
+                                    self.ui.write(e.EV_KEY, e.KEY_LEFTSHIFT, 1)
+                                    self.ui.syn()
 
-                    subprocess.run(
-                        cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
-                    )
-                except Exception as e:
-                    print(f"wtype execution error: {e}")
-                    break
+                                self.ui.write(e.EV_KEY, code, 1)
+                                self.ui.syn()
+                                self.ui.write(e.EV_KEY, code, 0)
+                                self.ui.syn()
+
+                                if shift_needed:
+                                    self.ui.write(e.EV_KEY, e.KEY_LEFTSHIFT, 0)
+                                    self.ui.syn()
+                else:
+                    code = kb_info["keysym"]
+                    self.ui.write(e.EV_KEY, code, 1)
+                    self.ui.syn()
+                    self.ui.write(e.EV_KEY, code, 0)
+                    self.ui.syn()
+
+                for mod in reversed(mod_map_keys):
+                    self.ui.write(e.EV_KEY, mod, 0)
+                if mod_map_keys:
+                    self.ui.syn()
 
             time.sleep(interval if interval > 0 else 0.001)
 
         GLib.idle_add(self.reset_ui)
+
+    def init_virtual_device(self):
+        cap = {
+            e.EV_KEY: [
+                e.KEY_ENTER,
+                e.KEY_TAB,
+                e.KEY_SPACE,
+                e.KEY_BACKSPACE,
+                e.KEY_ESC,
+                e.KEY_UP,
+                e.KEY_DOWN,
+                e.KEY_LEFT,
+                e.KEY_RIGHT,
+                e.KEY_HOME,
+                e.KEY_END,
+                e.KEY_PAGEUP,
+                e.KEY_PAGEDOWN,
+                e.KEY_INSERT,
+                e.KEY_DELETE,
+                e.KEY_F1,
+                e.KEY_F2,
+                e.KEY_F3,
+                e.KEY_F4,
+                e.KEY_F5,
+                e.KEY_F6,
+                e.KEY_F7,
+                e.KEY_F8,
+                e.KEY_F9,
+                e.KEY_F10,
+                e.KEY_F11,
+                e.KEY_F12,
+                e.KEY_LEFTSHIFT,
+                e.KEY_LEFTCTRL,
+                e.KEY_LEFTALT,
+                e.KEY_LEFTMETA,
+                e.BTN_LEFT,
+                e.BTN_RIGHT,
+                e.BTN_MIDDLE,
+            ]
+            + list(range(1, 120))
+        }
+
+        try:
+            new_ui = evdev.UInput(cap, name="macros-menu-virtual")
+            GLib.idle_add(self.set_ui_device, new_ui)
+        except Exception as err:
+            print(f"\n[ERROR] Failed to create virtual device.")
+            print(f"Ensure you have write permissions to /dev/uinput: {err}")
+            print(
+                f"Adding user to 'input' group handles /dev/input, but /dev/uinput might need a udev rule.\n"
+            )
+            GLib.idle_add(self.reset_ui)
+
+    def set_ui_device(self, ui_device):
+        self.ui = ui_device
+        if self.window and hasattr(self, "start_btn"):
+            self.start_btn.set_sensitive(True)
+        return False
 
     def reset_ui(self):
         self.start_btn.set_sensitive(True)
         self.stop_btn.set_sensitive(False)
         self.is_running = False
         return False
+
+    def quit_app(self):
+        self.quit()
+        return GLib.SOURCE_REMOVE
 
 
 if __name__ == "__main__":
