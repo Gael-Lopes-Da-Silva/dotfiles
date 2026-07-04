@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 
+import os
 import subprocess
 import threading
 import time
+
+os.environ["GSK_RENDERER"] = "gl"
 
 import gi
 
