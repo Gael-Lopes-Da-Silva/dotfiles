@@ -88,12 +88,26 @@ class MacrosMenu(Adw.Application):
         interval_box.append(Gtk.Label(label="ms"))
         header.pack_start(interval_box)
 
-        self.toggle_btn = Gtk.ToggleButton()
-        self.toggle_btn.set_icon_name("media-playback-start-symbolic")
-        self.toggle_btn.add_css_class("suggested-action")
-        self.toggle_btn.set_valign(Gtk.Align.CENTER)
-        self.toggle_btn.connect("toggled", self.on_toggle_clicked)
-        header.pack_end(self.toggle_btn)
+        btn_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+
+        self.start_btn = Gtk.Button()
+        self.start_btn.set_icon_name("media-playback-start-symbolic")
+        self.start_btn.set_tooltip_text("Start")
+        self.start_btn.add_css_class("suggested-action")
+        self.start_btn.set_valign(Gtk.Align.CENTER)
+        self.start_btn.connect("clicked", self.on_start_clicked)
+
+        self.stop_btn = Gtk.Button()
+        self.stop_btn.set_icon_name("media-playback-stop-symbolic")
+        self.stop_btn.set_tooltip_text("Stop")
+        self.stop_btn.add_css_class("destructive-action")
+        self.stop_btn.set_valign(Gtk.Align.CENTER)
+        self.stop_btn.set_sensitive(False)
+        self.stop_btn.connect("clicked", self.on_stop_clicked)
+
+        btn_box.append(self.start_btn)
+        btn_box.append(self.stop_btn)
+        header.pack_end(btn_box)
 
         main_box.append(header)
 
@@ -201,25 +215,25 @@ class MacrosMenu(Adw.Application):
             if focused_widget and isinstance(focused_widget, (Gtk.Text, Gtk.Editable)):
                 return False
 
-            current_state = self.toggle_btn.get_active()
-            self.toggle_btn.set_active(not current_state)
+            if self.is_running:
+                self.on_stop_clicked(self.stop_btn)
+            else:
+                self.on_start_clicked(self.start_btn)
             return True
 
         return False
 
-    def on_toggle_clicked(self, btn):
-        if btn.get_active():
-            btn.set_icon_name("media-playback-stop-symbolic")
-            btn.remove_css_class("suggested-action")
-            btn.add_css_class("destructive-action")
-            if not self.is_running:
-                self.start_automation()
-        else:
-            btn.set_icon_name("media-playback-start-symbolic")
-            btn.remove_css_class("destructive-action")
-            btn.add_css_class("suggested-action")
-            if self.is_running:
-                self.stop_automation()
+    def on_start_clicked(self, btn):
+        if not self.is_running:
+            self.start_btn.set_sensitive(False)
+            self.stop_btn.set_sensitive(True)
+            self.start_automation()
+
+    def on_stop_clicked(self, btn):
+        if self.is_running:
+            self.stop_btn.set_sensitive(False)
+            self.start_btn.set_sensitive(True)
+            self.stop_automation()
 
     def start_automation(self):
         self.is_running = True
@@ -306,8 +320,9 @@ class MacrosMenu(Adw.Application):
         GLib.idle_add(self.reset_ui)
 
     def reset_ui(self):
-        if self.toggle_btn.get_active():
-            self.toggle_btn.set_active(False)
+        self.start_btn.set_sensitive(True)
+        self.stop_btn.set_sensitive(False)
+        self.is_running = False
         return False
 
 
