@@ -23,27 +23,7 @@ class ClipboardItem(GObject.Object):
         self.is_image = "binary data" in text.lower()
 
 
-def load_clipboard_items():
-    try:
-        res = subprocess.run(
-            ["cliphist", "list"], capture_output=True, text=True, check=True
-        )
-        items = []
-        for line in res.stdout.splitlines():
-            if "\t" in line:
-                parts = line.split("\t", 1)
-                item_text = parts[1]
-
-                if "<meta http-equiv" in item_text.lower():
-                    continue
-
-                items.append(ClipboardItem(parts[0].strip(), item_text))
-        return items
-    except Exception:
-        return []
-
-
-class ClipboardLauncher(Adw.Application):
+class ClipboardMenu(Adw.Application):
     def __init__(self):
         super().__init__(application_id="launcher.clipboard")
         self.window = None
@@ -54,7 +34,7 @@ class ClipboardLauncher(Adw.Application):
             self.search.grab_focus()
             return
 
-        self.all_items = load_clipboard_items()
+        self.all_items = self.load_clipboard_items()
 
         self.window = Adw.ApplicationWindow(application=self)
         self.window.set_default_size(700, 500)
@@ -362,7 +342,7 @@ class ClipboardLauncher(Adw.Application):
         dialog.present()
 
     def refresh_data(self):
-        self.all_items = load_clipboard_items()
+        self.all_items = self.load_clipboard_items()
         self.reload_store_view()
         GLib.idle_add(self.grab_search_focus)
 
@@ -374,11 +354,30 @@ class ClipboardLauncher(Adw.Application):
         except Exception as e:
             print(f"Notification error: {e}")
 
+    def load_clipboard_items(self):
+        try:
+            res = subprocess.run(
+                ["cliphist", "list"], capture_output=True, text=True, check=True
+            )
+            items = []
+            for line in res.stdout.splitlines():
+                if "\t" in line:
+                    parts = line.split("\t", 1)
+                    item_text = parts[1]
+
+                    if "<meta http-equiv" in item_text.lower():
+                        continue
+
+                    items.append(ClipboardItem(parts[0].strip(), item_text))
+            return items
+        except Exception:
+            return []
+
     def quit_app(self):
         self.quit()
         return GLib.SOURCE_REMOVE
 
 
 if __name__ == "__main__":
-    app = ClipboardLauncher()
+    app = ClipboardMenu()
     app.run()

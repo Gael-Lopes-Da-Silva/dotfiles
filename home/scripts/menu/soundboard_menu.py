@@ -17,7 +17,7 @@ gi.require_version("Gdk", "4.0")
 from gi.repository import Adw, Gdk, Gio, GLib, GObject, Gtk, Pango
 
 
-class SoundItem(GObject.Object):
+class SoundboardItem(GObject.Object):
     is_playing = GObject.Property(type=bool, default=False)
 
     def __init__(self, display_name, file_path):
@@ -26,40 +26,7 @@ class SoundItem(GObject.Object):
         self.file_path = file_path
 
 
-def load_sound_items():
-    soundboard_dir = Path.home() / ".soundboard"
-    soundboard_dir.mkdir(parents=True, exist_ok=True)
-    (soundboard_dir / "custom").mkdir(parents=True, exist_ok=True)
-
-    extensions = {
-        ".mp3",
-        ".aac",
-        ".wav",
-        ".flac",
-        ".ogg",
-        ".opus",
-        ".aiff",
-        ".au",
-        ".caf",
-        ".raw",
-    }
-    items = []
-
-    try:
-        for path in soundboard_dir.iterdir():
-            if path.is_file() and path.suffix.lower() in extensions:
-                name_attr = path.stem.replace("-", " ").replace("_", " ")
-                display_name = name_attr.strip().capitalize()
-                items.append(SoundItem(display_name, str(path)))
-
-        items.sort(key=lambda x: x.display_name.lower())
-    except Exception:
-        return []
-
-    return items
-
-
-class SoundboardLauncher(Adw.Application):
+class SoundboardMenu(Adw.Application):
     def __init__(self):
         super().__init__(application_id="launcher.soundboard")
         self.recording_process = None
@@ -79,7 +46,7 @@ class SoundboardLauncher(Adw.Application):
             self.search.grab_focus()
             return
 
-        self.all_items = load_sound_items()
+        self.all_items = self.load_sound_items()
 
         self.window = Adw.ApplicationWindow(application=self)
         self.window.set_default_size(780, 520)
@@ -118,7 +85,7 @@ class SoundboardLauncher(Adw.Application):
         header.set_title_widget(self.search)
         main_box.append(header)
 
-        self.store = Gio.ListStore(item_type=SoundItem)
+        self.store = Gio.ListStore(item_type=SoundboardItem)
         self.selection = Gtk.SingleSelection(model=self.store)
         self.reload_store_view()
 
@@ -621,12 +588,44 @@ class SoundboardLauncher(Adw.Application):
         dialog.connect("response", handle_response)
         dialog.present()
 
+    def load_sound_items(self):
+        soundboard_dir = Path.home() / ".soundboard"
+        soundboard_dir.mkdir(parents=True, exist_ok=True)
+        (soundboard_dir / "custom").mkdir(parents=True, exist_ok=True)
+
+        extensions = {
+            ".mp3",
+            ".aac",
+            ".wav",
+            ".flac",
+            ".ogg",
+            ".opus",
+            ".aiff",
+            ".au",
+            ".caf",
+            ".raw",
+        }
+        items = []
+
+        try:
+            for path in soundboard_dir.iterdir():
+                if path.is_file() and path.suffix.lower() in extensions:
+                    name_attr = path.stem.replace("-", " ").replace("_", " ")
+                    display_name = name_attr.strip().capitalize()
+                    items.append(SoundboardItem(display_name, str(path)))
+
+            items.sort(key=lambda x: x.display_name.lower())
+        except Exception:
+            return []
+
+        return items
+
     def refresh_data(self):
-        self.all_items = load_sound_items()
+        self.all_items = self.load_sound_items()
         self.reload_store_view()
         GLib.idle_add(self.grab_search_focus)
 
 
 if __name__ == "__main__":
-    app = SoundboardLauncher()
+    app = SoundboardMenu()
     app.run()

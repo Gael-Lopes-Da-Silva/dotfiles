@@ -138,8 +138,8 @@ binds {
     Mod+Return repeat=false { spawn "kgx"; }
     Mod+BackSpace repeat=false { spawn "firefox"; }
 
-    Mod+P repeat=false { spawn "application-menu"; }
-    Mod+Slash repeat=false { spawn "command-menu"; }
+    Mod+P repeat=false { spawn "applications-menu"; }
+    Mod+Slash repeat=false { spawn "commands-menu"; }
     Mod+M repeat=false { spawn "soundboard-menu"; }
     Mod+V repeat=false { spawn "clipboard-menu"; }
     Mod+Q repeat=false { spawn "power-menu"; }

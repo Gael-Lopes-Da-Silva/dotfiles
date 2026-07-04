@@ -22,50 +22,7 @@ class PowerAction(GObject.Object):
         self.icon_names = icon_names
 
 
-def load_power_actions():
-    current_user = os.environ.get("USER", "")
-    return [
-        PowerAction(
-            "Shutdown", ["systemctl", "poweroff"], ["system-shutdown-symbolic"]
-        ),
-        PowerAction(
-            "Reboot",
-            ["systemctl", "reboot"],
-            ["system-restart-symbolic", "system-reboot-symbolic"],
-        ),
-        PowerAction(
-            "Suspend",
-            ["systemctl", "suspend"],
-            [
-                "system-suspend-symbolic",
-                "night-light-symbolic",
-                "weather-night-symbolic",
-                "media-playback-pause-symbolic",
-            ],
-        ),
-        PowerAction(
-            "Hibernate",
-            ["systemctl", "hibernate"],
-            [
-                "system-hibernate-symbolic",
-                "media-playback-pause-symbolic",
-                "night-light-symbolic",
-            ],
-        ),
-        PowerAction(
-            "Logout",
-            ["loginctl", "terminate-user", current_user],
-            ["system-log-out-symbolic", "application-exit-symbolic"],
-        ),
-        PowerAction(
-            "Lock",
-            ["loginctl", "lock-session"],
-            ["system-lock-screen-symbolic", "changes-prevent-symbolic"],
-        ),
-    ]
-
-
-class PowerLauncher(Adw.Application):
+class PowerMenu(Adw.Application):
     def __init__(self):
         super().__init__(application_id="launcher.power")
         self.window = None
@@ -76,7 +33,7 @@ class PowerLauncher(Adw.Application):
             self.search.grab_focus()
             return
 
-        self.actions = load_power_actions()
+        self.actions = self.load_power_actions()
 
         self.window = Adw.ApplicationWindow(application=self)
         self.window.set_default_size(700, 500)
@@ -273,7 +230,49 @@ class PowerLauncher(Adw.Application):
         dialog.connect("response", handle_response)
         dialog.present()
 
+    def load_power_actions(self):
+        current_user = os.environ.get("USER", "")
+        return [
+            PowerAction(
+                "Shutdown", ["systemctl", "poweroff"], ["system-shutdown-symbolic"]
+            ),
+            PowerAction(
+                "Reboot",
+                ["systemctl", "reboot"],
+                ["system-restart-symbolic", "system-reboot-symbolic"],
+            ),
+            PowerAction(
+                "Suspend",
+                ["systemctl", "suspend"],
+                [
+                    "system-suspend-symbolic",
+                    "night-light-symbolic",
+                    "weather-night-symbolic",
+                    "media-playback-pause-symbolic",
+                ],
+            ),
+            PowerAction(
+                "Hibernate",
+                ["systemctl", "hibernate"],
+                [
+                    "system-hibernate-symbolic",
+                    "media-playback-pause-symbolic",
+                    "night-light-symbolic",
+                ],
+            ),
+            PowerAction(
+                "Logout",
+                ["loginctl", "terminate-user", current_user],
+                ["system-log-out-symbolic", "application-exit-symbolic"],
+            ),
+            PowerAction(
+                "Lock",
+                ["loginctl", "lock-session"],
+                ["system-lock-screen-symbolic", "changes-prevent-symbolic"],
+            ),
+        ]
+
 
 if __name__ == "__main__":
-    app = PowerLauncher()
+    app = PowerMenu()
     app.run()

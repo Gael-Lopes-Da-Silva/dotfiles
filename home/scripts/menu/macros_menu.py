@@ -12,9 +12,9 @@ gi.require_version("Adw", "1")
 from gi.repository import Adw, Gdk, GLib, Gtk
 
 
-class ClickerApp(Adw.Application):
+class MacrosMenu(Adw.Application):
     def __init__(self):
-        super().__init__(application_id="org.example.clicker")
+        super().__init__(application_id="launcher.macros")
         self.is_running = False
         self.automation_thread = None
         self.window = None
@@ -309,5 +309,5 @@ class ClickerApp(Adw.Application):
 
 
 if __name__ == "__main__":
-    app = ClickerApp()
+    app = MacrosMenu()
     app.run()

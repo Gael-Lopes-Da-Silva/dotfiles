@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import os
-import subprocess
 
 os.environ["GSK_RENDERER"] = "gl"
 
@@ -14,29 +13,16 @@ gi.require_version("Gdk", "4.0")
 from gi.repository import Adw, Gdk, Gio, GLib, GObject, Gtk
 
 
-class CommandItem(GObject.Object):
-    def __init__(self, name):
+class ApplicationItem(GObject.Object):
+    def __init__(self, app_info):
         super().__init__()
-        self.name = name
+        self.name = app_info.get_name()
+        self.app_info = app_info
 
 
-def load_commands():
-    try:
-        result = subprocess.run(
-            ["bash", "-c", "compgen -c"], capture_output=True, text=True, check=True
-        )
-        unique_cmds = sorted(list(set(result.stdout.splitlines())), key=str.lower)
-
-        return [
-            CommandItem(cmd) for cmd in unique_cmds if cmd and not cmd.startswith(".")
-        ]
-    except Exception:
-        return []
-
-
-class CommandLauncher(Adw.Application):
+class ApplicationMenu(Adw.Application):
     def __init__(self):
-        super().__init__(application_id="launcher.commands")
+        super().__init__(application_id="launcher.applications")
         self.window = None
 
     def do_activate(self):
@@ -45,7 +31,7 @@ class CommandLauncher(Adw.Application):
             self.search.grab_focus()
             return
 
-        self.commands = load_commands()
+        self.apps = self.load_apps()
 
         self.window = Adw.ApplicationWindow(
             application=self,
@@ -86,9 +72,9 @@ class CommandLauncher(Adw.Application):
         header.set_title_widget(self.search)
         main_box.append(header)
 
-        self.store = Gio.ListStore(item_type=CommandItem)
-        for cmd in self.commands:
-            self.store.append(cmd)
+        self.store = Gio.ListStore(item_type=ApplicationItem)
+        for app in self.apps:
+            self.store.append(app)
 
         self.selection = Gtk.SingleSelection(model=self.store)
 
@@ -105,19 +91,20 @@ class CommandLauncher(Adw.Application):
             box = Gtk.Box(
                 orientation=Gtk.Orientation.HORIZONTAL,
                 spacing=12,
-                margin_top=8,
-                margin_bottom=8,
+                margin_top=10,
+                margin_bottom=10,
                 margin_start=12,
                 margin_end=12,
             )
 
-            icon = Gtk.Image.new_from_icon_name("utilities-terminal")
-            icon.set_pixel_size(24)
+            icon = Gtk.Image()
+            icon.set_pixel_size(32)
 
             label = Gtk.Label(xalign=0)
 
             box.append(icon)
             box.append(label)
+
             item.set_child(box)
 
             gesture = Gtk.GestureClick()
@@ -125,10 +112,19 @@ class CommandLauncher(Adw.Application):
             box.add_controller(gesture)
 
         def bind(_, item):
-            cmd_obj = item.get_item()
+            app_obj = item.get_item()
             box = item.get_child()
+
+            icon = box.get_first_child()
             label = box.get_last_child()
-            label.set_text(cmd_obj.name)
+
+            gicon = app_obj.app_info.get_icon()
+            if gicon:
+                icon.set_from_gicon(gicon)
+            else:
+                icon.set_from_icon_name("application-x-executable")
+
+            label.set_text(app_obj.name)
 
         factory.connect("setup", setup)
         factory.connect("bind", bind)
@@ -138,6 +134,7 @@ class CommandLauncher(Adw.Application):
             factory=factory,
             single_click_activate=False,
         )
+
         self.view.connect("activate", self.on_activate)
         self.view.add_css_class("navigation-sidebar")
 
@@ -147,21 +144,17 @@ class CommandLauncher(Adw.Application):
 
         main_box.append(scrolled)
 
-        footer_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+        bottom_box = Gtk.Box(
+            orientation=Gtk.Orientation.HORIZONTAL,
+            halign=Gtk.Align.END,
+        )
 
-        man_button = Gtk.Button(label="Man Page")
-        man_button.connect("clicked", self.on_man_clicked)
+        self.run_button = Gtk.Button(label="Run")
+        self.run_button.add_css_class("suggested-action")
+        self.run_button.connect("clicked", self.on_run_clicked)
 
-        run_button = Gtk.Button(label="Run")
-        run_button.add_css_class("suggested-action")
-        run_button.connect("clicked", self.on_run_clicked)
-
-        spacer = Gtk.Box(hexpand=True)
-
-        footer_box.append(man_button)
-        footer_box.append(spacer)
-        footer_box.append(run_button)
-        main_box.append(footer_box)
+        bottom_box.append(self.run_button)
+        main_box.append(bottom_box)
 
         self.window.set_content(main_box)
         self.window.present()
@@ -176,9 +169,9 @@ class CommandLauncher(Adw.Application):
         if keyval in (Gdk.KEY_Tab, Gdk.KEY_ISO_Left_Tab):
             position = self.selection.get_selected()
             if position != Gtk.INVALID_LIST_POSITION and self.store.get_n_items() > 0:
-                cmd_obj = self.store.get_item(position)
-                if cmd_obj:
-                    self.search.set_text(cmd_obj.name)
+                app_obj = self.store.get_item(position)
+                if app_obj:
+                    self.search.set_text(app_obj.name)
                     self.search.set_position(-1)
                     GLib.idle_add(self.grab_search_focus)
             return True
@@ -187,18 +180,15 @@ class CommandLauncher(Adw.Application):
 
     def on_search(self, entry):
         text = entry.get_text().lower()
+
         self.store.remove_all()
-        for cmd in self.commands:
-            if text in cmd.name.lower():
-                self.store.append(cmd)
+
+        for app in self.apps:
+            if text in app.name.lower():
+                self.store.append(app)
 
         if not entry.has_focus():
             GLib.idle_add(self.grab_search_focus)
-
-    def grab_search_focus(self):
-        self.search.grab_focus()
-        self.search.set_position(-1)
-        return GLib.SOURCE_REMOVE
 
     def on_search_activate(self, entry):
         if self.store.get_n_items() > 0:
@@ -206,55 +196,36 @@ class CommandLauncher(Adw.Application):
 
     def on_run_clicked(self, button):
         position = self.selection.get_selected()
+
         if position != Gtk.INVALID_LIST_POSITION and self.store.get_n_items() > 0:
             self.on_activate(self.view, position)
 
-    def on_man_clicked(self, button):
-        position = self.selection.get_selected()
-        if position == Gtk.INVALID_LIST_POSITION or self.store.get_n_items() == 0:
-            return
-
-        cmd_obj = self.store.get_item(position)
-        if not cmd_obj:
-            return
-
-        terminal = os.environ.get("TERMINAL")
-        man_cmd = f"man '{cmd_obj.name}'"
-
-        if terminal:
-            subprocess.Popen(
-                [terminal, "--title=Manual Page", "--", "bash", "-c", man_cmd]
-            )
-        else:
-            for term in [
-                "xdg-terminal-exec",
-                "gnome-terminal",
-                "kitty",
-                "alacritty",
-                "foot",
-            ]:
-                if GLib.find_program_in_path(term):
-                    if term in ["gnome-terminal"]:
-                        subprocess.Popen([term, "--", "bash", "-c", man_cmd])
-                    else:
-                        subprocess.Popen([term, "-e", "bash", "-c", man_cmd])
-                    break
-
-        GLib.timeout_add(100, self.quit_app)
-
     def on_activate(self, _list_view, position):
-        cmd_obj = self.store.get_item(position)
-        if not cmd_obj:
+        app = self.store.get_item(position)
+
+        if not app:
             return
 
-        subprocess.Popen(
-            ["bash", "-c", cmd_obj.name],
-            start_new_session=True,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-        )
+        context = Gdk.Display.get_default().get_app_launch_context()
+        app.app_info.launch([], context)
 
         GLib.timeout_add(100, self.quit_app)
+
+    def grab_search_focus(self):
+        self.search.grab_focus()
+        self.search.set_position(-1)
+        return GLib.SOURCE_REMOVE
+
+    def load_apps(self):
+        apps = {}
+
+        for app_info in Gio.AppInfo.get_all():
+            if app_info.should_show():
+                name = app_info.get_name()
+                if name:
+                    apps[name] = ApplicationItem(app_info)
+
+        return sorted(apps.values(), key=lambda x: x.name.lower())
 
     def quit_app(self):
         self.quit()
@@ -262,5 +233,5 @@ class CommandLauncher(Adw.Application):
 
 
 if __name__ == "__main__":
-    app = CommandLauncher()
+    app = ApplicationMenu()
     app.run()

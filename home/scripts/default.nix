@@ -34,19 +34,19 @@ let
 
   power-menu = mkGtkApp "power-menu" ./menu/power_menu.py;
   macros-menu = mkGtkApp "macros-menu" ./menu/macros_menu.py;
-  command-menu = mkGtkApp "command-menu" ./menu/command_menu.py;
+  commands-menu = mkGtkApp "commands-menu" ./menu/commands_menu.py;
   clipboard-menu = mkGtkApp "clipboard-menu" ./menu/clipboard_menu.py;
   soundboard-menu = mkGtkApp "soundboard-menu" ./menu/soundboard_menu.py;
-  application-menu = mkGtkApp "application-menu" ./menu/application_menu.py;
+  applications-menu = mkGtkApp "applications-menu" ./menu/applications_menu.py;
 in
 {
   home.packages = [
     power-menu
     macros-menu
-    command-menu
+    commands-menu
     clipboard-menu
     soundboard-menu
-    application-menu
+    applications-menu
   ];
 
   home.file =
