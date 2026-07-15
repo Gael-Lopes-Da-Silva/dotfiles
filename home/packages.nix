@@ -14,6 +14,7 @@
     vial
     filezilla
 
+    rtk
     opencode
     opencode-desktop
 
