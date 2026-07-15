@@ -12,9 +12,10 @@
     xwayland-satellite
 
     vial
+    filezilla
+
     opencode
     opencode-desktop
-    filezilla
 
     warp
     ghex
@@ -26,7 +27,6 @@
     pinta
     papers
     baobab
-    alpaca
     turnon
     curtail
     dialect
