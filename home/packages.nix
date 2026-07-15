@@ -12,6 +12,8 @@
     xwayland-satellite
 
     vial
+    opencode
+    opencode-desktop
     filezilla
 
     warp
