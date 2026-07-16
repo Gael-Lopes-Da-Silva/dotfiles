@@ -20,7 +20,6 @@
       "log"
       "html"
       "sql"
-      "kdl"
       "make"
       "odin"
       "svelte"
