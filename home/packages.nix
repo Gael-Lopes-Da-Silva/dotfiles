@@ -21,6 +21,8 @@
     warp
     ghex
     pods
+    lact
+    coulr
     loupe
     kooha
     varia
@@ -28,16 +30,12 @@
     pinta
     papers
     baobab
-    turnon
     curtail
     dialect
-    komikku
-    foliate
     cartero
     netpeek
     epiphany
     decibels
-    eloquent
     snapshot
     nautilus
     showtime
@@ -46,16 +44,12 @@
     collision
     parabolic
     morphosis
-    speedtest
     inspector
+    resources
     apostrophe
-    eyedropper
     impression
-    carburetor
-    ascii-draw
     pwvucontrol
     livecaptions
-    quick-lookup
     audio-sharing
     field-monitor
 
@@ -69,7 +63,6 @@
     gnome-characters
     gnome-text-editor
     gnome-connections
-    gnome-system-monitor
     gnome-sound-recorder
     gnome-network-displays
   ];
@@ -78,6 +71,7 @@
     polkit-gnome.enable = true;
     gnome-keyring.enable = true;
     ssh-agent.enable = true;
+    ollama.enable = true;
   };
 
   programs = {
