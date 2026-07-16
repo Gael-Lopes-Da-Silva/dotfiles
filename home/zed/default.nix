@@ -10,6 +10,7 @@
     enable = true;
 
     extensions = [
+      "mc-dp-icons-theme"
       "yellowed"
 
       "nix"
