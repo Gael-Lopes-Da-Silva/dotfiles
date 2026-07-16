@@ -3,6 +3,7 @@
 {
   home.packages = with pkgs; [
     jq
+    rtk
     p7zip
     libnotify
     pulseaudio
@@ -12,11 +13,8 @@
     xwayland-satellite
 
     vial
-    filezilla
-
-    rtk
     opencode
-    opencode-desktop
+    filezilla
 
     warp
     ghex
