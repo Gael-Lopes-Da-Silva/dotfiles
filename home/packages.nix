@@ -13,7 +13,6 @@
     xwayland-satellite
 
     vial
-    opencode
     filezilla
 
     warp
@@ -74,6 +73,7 @@
 
   programs = {
     home-manager.enable = true;
+    opencode.enable = true;
     firefox.enable = true;
     fzf.enable = true;
   };
