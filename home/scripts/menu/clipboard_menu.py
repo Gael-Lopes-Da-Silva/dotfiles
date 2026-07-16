@@ -10,9 +10,10 @@ import gi
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 gi.require_version("Gdk", "4.0")
-gi.require_version("GdkPixbuf", "2.0")
+gi.require_version("Gio", "2.0")
+gi.require_version("Pango", "1.0")
 
-from gi.repository import Adw, Gdk, GdkPixbuf, Gio, GLib, GObject, Gtk, Pango
+from gi.repository import Adw, Gdk, Gio, GLib, GObject, Gtk, Pango
 
 
 class ClipboardItem(GObject.Object):
@@ -133,16 +134,9 @@ class ClipboardMenu(Adw.Application):
                         capture_output=True,
                         check=True,
                     )
-                    loader = GdkPixbuf.PixbufLoader()
-                    loader.write(res.stdout)
-                    loader.close()
-
-                    pixbuf = loader.get_pixbuf()
-                    if pixbuf:
-                        texture = Gdk.Texture.new_for_pixbuf(pixbuf)
-                        img_widget.set_from_paintable(texture)
-                    else:
-                        img_widget.set_from_icon_name("image-missing-symbolic")
+                    bytes_data = GLib.Bytes.new(res.stdout)
+                    texture = Gdk.Texture.new_from_bytes(bytes_data)
+                    img_widget.set_from_paintable(texture)
                 except Exception:
                     img_widget.set_from_icon_name("image-missing-symbolic")
 
