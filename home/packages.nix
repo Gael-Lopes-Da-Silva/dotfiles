@@ -15,6 +15,8 @@
     vial
     filezilla
 
+    pi-coding-agent
+
     warp
     ghex
     pods
@@ -73,7 +75,6 @@
 
   programs = {
     home-manager.enable = true;
-    opencode.enable = true;
     firefox.enable = true;
     fzf.enable = true;
   };
