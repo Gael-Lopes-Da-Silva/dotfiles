@@ -48,6 +48,7 @@
       agent = {
         dock = "right";
         sidebar_side = "right";
+        thinking_display = "always_collapsed";
       };
 
       edit_predictions = {
