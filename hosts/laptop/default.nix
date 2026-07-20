@@ -14,7 +14,6 @@
 
     wg-quick.interfaces.wg0 = {
       address = [ "10.8.0.3/32" ];
-      dns = [ "10.0.0.1" ];
       mtu = 1420;
 
       privateKeyFile = "/home/gael/.config/wireguard/gael.key";
