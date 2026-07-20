@@ -21,6 +21,7 @@ input {
 
 layout {
     gaps 10
+    empty-workspace-above-first
     center-focused-column "never"
 
     preset-column-widths {
