@@ -47,6 +47,7 @@
 
       agent = {
         dock = "right";
+        sidebar_side = "right";
       };
 
       edit_predictions = {

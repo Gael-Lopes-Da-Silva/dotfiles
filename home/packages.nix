@@ -3,7 +3,6 @@
 {
   home.packages = with pkgs; [
     jq
-    rtk
     p7zip
     libnotify
     pulseaudio
@@ -14,8 +13,6 @@
 
     vial
     filezilla
-
-    pi-coding-agent
 
     warp
     ghex
