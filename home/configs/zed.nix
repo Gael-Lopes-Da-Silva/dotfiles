@@ -13,17 +13,6 @@
       "yellowed"
 
       "nix"
-      "php"
-      "xml"
-      "lua"
-      "toml"
-      "log"
-      "html"
-      "sql"
-      "make"
-      "odin"
-      "svelte"
-      "dockerfile"
     ];
 
     userSettings = {
