@@ -16,17 +16,18 @@
 
   home-manager.users.gael = {
     imports = [
-      ./bash
-      ./clipboard
-      ./git
-      ./gtk
-      ./kanshi
-      ./mako
-      ./niri
-      ./qt
-      ./scripts
-      ./sounds
-      ./zed
+      ./configs/niri
+      ./configs/scripts
+      ./configs/sounds
+
+      ./configs/bash.nix
+      ./configs/clipboard.nix
+      ./configs/git.nix
+      ./configs/gtk.nix
+      ./configs/kanshi.nix
+      ./configs/mako.nix
+      ./configs/qt.nix
+      ./configs/zed.nix
 
       ./packages.nix
     ];
