@@ -51,6 +51,7 @@
         thinking_display = "always_collapsed";
         expand_edit_card = false;
         expand_terminal_card = false;
+        default_width = 300.0;
       };
 
       edit_predictions = {
@@ -115,6 +116,7 @@
       telemetry = {
         diagnostics = false;
         metrics = false;
+        anthropic_retention = false;
       };
     };
 
