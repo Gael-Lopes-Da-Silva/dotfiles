@@ -71,7 +71,6 @@
   };
 
   programs = {
-    pi-coding-agent.enable = true;
     home-manager.enable = true;
     firefox.enable = true;
     fzf.enable = true;
