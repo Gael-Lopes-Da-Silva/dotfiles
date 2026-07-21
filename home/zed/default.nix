@@ -49,6 +49,8 @@
         dock = "right";
         sidebar_side = "right";
         thinking_display = "always_collapsed";
+        expand_edit_card = false;
+        expand_terminal_card = false;
       };
 
       edit_predictions = {
