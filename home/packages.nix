@@ -27,6 +27,7 @@
     pinta
     papers
     baobab
+    alpaca
     curtail
     dialect
     cartero
@@ -46,6 +47,7 @@
     apostrophe
     impression
     pwvucontrol
+    file-roller
     livecaptions
     audio-sharing
     field-monitor

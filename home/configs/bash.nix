@@ -25,9 +25,6 @@
       cp = "cp -iv";
       rm = "rm -i";
       mv = "mv -iv";
-
-      compress = "7z a -tzip";
-      decompress = "7z x";
     };
 
     sessionVariables = {
