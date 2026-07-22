@@ -101,7 +101,7 @@
     dev.enable = true;
     doc.enable = true;
     info.enable = true;
-    nixos.enable = true;
+    nixos.enable = false;
 
     man = {
       enable = true;
