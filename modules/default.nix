@@ -78,7 +78,9 @@
     };
   };
 
-  console.earlySetup = true;
+  console = {
+    earlySetup = true;
+  };
 
   networking = {
     networkmanager.enable = true;
