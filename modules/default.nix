@@ -139,7 +139,9 @@
     virtualbox.host.enable = true;
   };
 
-  systemd.oomd.enable = false;
+  systemd = {
+    oomd.enable = false;
+  };
 
   services = {
     printing.enable = true;
