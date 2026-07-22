@@ -54,6 +54,7 @@
       "ls"
       "cd"
       "exit"
+      "clear"
     ];
 
     profileExtra = ''
