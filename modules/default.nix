@@ -246,9 +246,13 @@
   ];
 
   programs = {
-    niri.enable = true;
     nix-ld.enable = true;
     xwayland.enable = true;
+
+    niri = {
+      enable = true;
+      useNautilus = true;
+    };
   };
 
   system.stateVersion = "25.11";
