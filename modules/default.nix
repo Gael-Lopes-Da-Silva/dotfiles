@@ -52,7 +52,7 @@
 
     consoleLogLevel = 3;
 
-    kernelPackages = pkgs.linuxPackages_6_18;
+    kernelPackages = pkgs.linuxPackages_7_1;
     kernelModules = [ "v4l2loopback" ];
     kernelParams = [
       "quiet"
