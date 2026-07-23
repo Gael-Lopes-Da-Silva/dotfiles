@@ -44,7 +44,6 @@
     morphosis
     inspector
     resources
-    apostrophe
     impression
     pwvucontrol
     file-roller
