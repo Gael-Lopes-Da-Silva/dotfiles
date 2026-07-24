@@ -64,7 +64,7 @@
     gnome-sound-recorder
     gnome-network-displays
 
-    pi-coding-agent
+    opencode-desktop
   ];
 
   services = {
@@ -75,6 +75,7 @@
 
   programs = {
     home-manager.enable = true;
+    opencode.enable = true;
     firefox.enable = true;
     fzf.enable = true;
   };
