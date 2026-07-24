@@ -63,8 +63,6 @@
     gnome-connections
     gnome-sound-recorder
     gnome-network-displays
-
-    opencode-desktop
   ];
 
   services = {
@@ -75,7 +73,6 @@
 
   programs = {
     home-manager.enable = true;
-    opencode.enable = true;
     firefox.enable = true;
     fzf.enable = true;
   };
