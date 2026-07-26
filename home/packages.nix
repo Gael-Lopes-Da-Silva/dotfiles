@@ -27,7 +27,6 @@
     pinta
     papers
     baobab
-    alpaca
     curtail
     dialect
     cartero
