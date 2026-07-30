@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 
 {
   imports = [
@@ -6,13 +6,6 @@
   ];
 
   networking.hostName = "windows11";
-
-  services = {
-    ollama = {
-      enable = true;
-      package = pkgs.ollama-vulkan;
-    };
-  };
 
   programs.steam = {
     enable = true;
