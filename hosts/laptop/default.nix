@@ -1,9 +1,13 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   imports = [
     ./hardware.nix
     ./security.nix
+  ];
+
+  environment.systemPackages = with pkgs; [
+    llama-cpp
   ];
 
   services = {

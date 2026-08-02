@@ -7,6 +7,10 @@
 
   networking.hostName = "windows11";
 
+  environment.systemPackages = with pkgs; [
+    llama-cpp-vulkan
+  ];
+
   services.llama-cpp = {
     enable = true;
     package = pkgs.llama-cpp-vulkan;
