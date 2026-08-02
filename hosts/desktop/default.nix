@@ -11,11 +11,6 @@
     llama-cpp-vulkan
   ];
 
-  services.llama-cpp = {
-    enable = true;
-    package = pkgs.llama-cpp-vulkan;
-  };
-
   programs.steam = {
     enable = true;
     remotePlay.openFirewall = true;
