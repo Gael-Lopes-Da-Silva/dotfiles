@@ -9,5 +9,6 @@
   services = {
     tlp.enable = true;
     auto-cpufreq.enable = true;
+    llama-cpp.enable = true;
   };
 }

@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -6,6 +6,11 @@
   ];
 
   networking.hostName = "windows11";
+
+  services.llama-cpp = {
+    enable = true;
+    package = pkgs.llama-cpp-vulkan;
+  };
 
   programs.steam = {
     enable = true;

@@ -15,6 +15,8 @@
     vial
     filezilla
 
+    llama-cpp
+
     warp
     ghex
     pods
