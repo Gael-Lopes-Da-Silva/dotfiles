@@ -8,6 +8,12 @@
 
   environment.systemPackages = with pkgs; [
     llama-cpp
+
+    cursor-cli
+    code-cursor
+
+    opencode
+    opencode-desktop
   ];
 
   services = {

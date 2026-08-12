@@ -15,9 +15,6 @@
     vial
     filezilla
 
-    cursor-cli
-    code-cursor
-
     warp
     ghex
     pods
@@ -75,7 +72,6 @@
 
   programs = {
     home-manager.enable = true;
-    opencode.enable = true;
     firefox.enable = true;
     fzf.enable = true;
   };
