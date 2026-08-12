@@ -15,6 +15,9 @@
     vial
     filezilla
 
+    cursor-cli
+    code-cursor
+
     warp
     ghex
     pods
