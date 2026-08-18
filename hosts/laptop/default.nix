@@ -8,8 +8,7 @@
 
   environment.systemPackages = with pkgs; [
     llama-cpp
-
-    code-cursor
+    cursor-cli
   ];
 
   services = {
