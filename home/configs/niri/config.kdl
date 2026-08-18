@@ -43,10 +43,7 @@ layout {
     }
 
     border {
-        width 6
-        active-color "#7A7A7A"
-        inactive-color "#505050"
-        urgent-color "#BF0000"
+        off
     }
 
     tab-indicator {
@@ -89,7 +86,7 @@ recent-windows {
 }
 
 window-rule {
-    geometry-corner-radius 6
+    geometry-corner-radius 12
 
     clip-to-geometry true
     open-maximized-to-edges false
