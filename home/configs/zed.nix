@@ -30,6 +30,7 @@
       ui_font_size = 18.0;
       buffer_font_size = 18.0;
       agent_ui_font_size = 18.0;
+      agent_buffer_font_size = 18.0;
       theme = "Yellowed";
 
       language_models = { };
