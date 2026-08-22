@@ -94,30 +94,6 @@ window-rule {
 }
 
 window-rule {
-    match is-window-cast-target=true
-
-    border {
-        active-color "#BF0000"
-        inactive-color "#750000"
-    }
-}
-
-window-rule {
-    match title="^(applications|cliphist|soundboard|commands|powermenu|utility)$"
-
-    open-floating true
-
-    default-column-width { proportion 0.50; }
-    default-window-height { proportion 0.50; }
-}
-
-window-rule {
-    match app-id="^yad$"
-
-    open-floating true
-}
-
-window-rule {
     match app-id="steam" title="^notificationtoasts"
 
     geometry-corner-radius 0
