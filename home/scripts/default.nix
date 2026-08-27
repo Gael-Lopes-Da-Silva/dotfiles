@@ -1,55 +1,6 @@
 { pkgs, ... }:
 
-let
-  mkGtkApp =
-    name: scriptPath:
-    pkgs.python3Packages.buildPythonApplication {
-      inherit name;
-      version = "1.0.0";
-      format = "other";
-
-      src = scriptPath;
-      dontUnpack = true;
-
-      nativeBuildInputs = with pkgs; [
-        gobject-introspection
-        wrapGAppsHook4
-      ];
-
-      buildInputs = with pkgs; [
-        gtk4
-        libadwaita
-      ];
-
-      propagatedBuildInputs = with pkgs.python3Packages; [
-        pygobject3
-        evdev
-      ];
-
-      installPhase = ''
-        mkdir -p $out/bin
-        cp ${scriptPath} $out/bin/${name}
-        chmod +x $out/bin/${name}
-      '';
-    };
-
-  power-menu = mkGtkApp "power-menu" ./menu/power_menu.py;
-  macros-menu = mkGtkApp "macros-menu" ./menu/macros_menu.py;
-  commands-menu = mkGtkApp "commands-menu" ./menu/commands_menu.py;
-  clipboard-menu = mkGtkApp "clipboard-menu" ./menu/clipboard_menu.py;
-  soundboard-menu = mkGtkApp "soundboard-menu" ./menu/soundboard_menu.py;
-  applications-menu = mkGtkApp "applications-menu" ./menu/applications_menu.py;
-in
 {
-  home.packages = [
-    power-menu
-    macros-menu
-    commands-menu
-    clipboard-menu
-    soundboard-menu
-    applications-menu
-  ];
-
   home.file =
     pkgs.lib.mapAttrs'
       (filename: srcPath: {
