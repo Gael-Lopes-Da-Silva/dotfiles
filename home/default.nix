@@ -16,19 +16,19 @@
 
   home-manager.users.gael = {
     imports = [
-      ./configs/niri
-      ./configs/scripts
-      ./configs/sounds
+      ./desktop/niri
+      ./desktop/theme.nix
+      ./desktop/clipboard.nix
+      ./desktop/kanshi.nix
+      ./desktop/mako.nix
 
-      ./configs/bash.nix
-      ./configs/clipboard.nix
-      ./configs/git.nix
-      ./configs/gtk.nix
-      ./configs/kanshi.nix
-      ./configs/mako.nix
-      ./configs/qt.nix
-      ./configs/zed.nix
+      ./programs/apps.nix
+      ./programs/bash.nix
+      ./programs/git.nix
+      ./programs/zed.nix
 
+      ./scripts
+      ./sounds
       ./packages.nix
     ];
 
@@ -38,14 +38,6 @@
       sessionPath = [
         "$HOME/.local/bin"
       ];
-
-      pointerCursor = {
-        enable = true;
-        gtk.enable = true;
-        package = pkgs.adwaita-icon-theme;
-        name = "Adwaita";
-        size = 24;
-      };
     };
 
     xdg.portal = {
@@ -59,11 +51,6 @@
       config.common.default = [
         "gnome"
       ];
-    };
-
-    dconf.settings = {
-      "org/gnome/desktop/interface".color-scheme = "prefer-dark";
-      "org/gnome/desktop/wm/preferences".button-layout = ":close";
     };
   };
 }

@@ -14,40 +14,28 @@
     { nixpkgs, home-manager, ... }:
     let
       system = "x86_64-linux";
-      systemConfig = [
-        home-manager.nixosModules.home-manager
 
-        {
-          nixpkgs.config.allowUnfree = true;
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-        }
-      ];
-      systemImports = [
-        ./modules
-        ./home
-      ];
+      mkHost =
+        hostPath:
+        nixpkgs.lib.nixosSystem {
+          inherit system;
+          modules = [
+            home-manager.nixosModules.home-manager
+            {
+              nixpkgs.config.allowUnfree = true;
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+            }
+            hostPath
+            ./modules
+            ./home
+          ];
+        };
     in
     {
       nixosConfigurations = {
-        laptop = nixpkgs.lib.nixosSystem {
-          inherit system;
-          modules =
-            systemConfig
-            ++ [
-              ./hosts/laptop
-            ]
-            ++ systemImports;
-        };
-        desktop = nixpkgs.lib.nixosSystem {
-          inherit system;
-          modules =
-            systemConfig
-            ++ [
-              ./hosts/desktop
-            ]
-            ++ systemImports;
-        };
+        laptop = mkHost ./hosts/laptop;
+        desktop = mkHost ./hosts/desktop;
       };
     };
 }

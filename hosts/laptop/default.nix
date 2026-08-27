@@ -3,7 +3,7 @@
 {
   imports = [
     ./hardware.nix
-    ./security.nix
+    ./wireguard.nix
   ];
 
   environment.systemPackages = with pkgs; [
