@@ -1,5 +1,10 @@
 use clap::Parser;
 use component::Component;
+use gtk4::gdk;
+use gtk4::gio;
+use gtk4::glib;
+use gtk4::prelude::*;
+use gtk4::{self as gtk};
 use libadwaita as adw;
 use libadwaita::prelude::*;
 
@@ -109,19 +114,75 @@ fn build_ui(app: &adw::Application, focused_id: &str) {
         .content(&toolbar)
         .build();
 
+    let escape = gtk::EventControllerKey::new();
+    escape.set_propagation_phase(gtk::PropagationPhase::Capture);
+    escape.connect_key_pressed(glib::clone!(
+        #[weak]
+        app,
+        #[upgrade_or]
+        glib::Propagation::Proceed,
+        move |_, key, _, _| {
+            if key == gdk::Key::Escape {
+                app.quit();
+                glib::Propagation::Stop
+            } else {
+                glib::Propagation::Proceed
+            }
+        }
+    ));
+    window.add_controller(escape);
+
     window.present();
 }
 
-fn main() {
-    let cli = Cli::parse();
-    let focused_id = cli.focused_id();
+fn focus_component(window: &gtk::Window, focused_id: &str) {
+    let Some(adw_win) = window.downcast_ref::<adw::ApplicationWindow>() else {
+        return;
+    };
+    let Some(content) = adw_win.content() else {
+        return;
+    };
+    let Some(toolbar) = content.downcast_ref::<adw::ToolbarView>() else {
+        return;
+    };
+    let Some(stack_widget) = toolbar.content() else {
+        return;
+    };
+    let Some(stack) = stack_widget.downcast_ref::<adw::ViewStack>() else {
+        return;
+    };
+    stack.set_visible_child_name(focused_id);
+}
 
-    let app = adw::Application::builder().application_id(APP_ID).build();
-
-    app.connect_activate(move |app| {
+fn open_or_focus(app: &adw::Application, focused_id: &str) {
+    let windows = app.windows();
+    if windows.is_empty() {
         build_ui(app, focused_id);
+        return;
+    }
+
+    for window in windows {
+        focus_component(&window, focused_id);
+        window.present();
+    }
+}
+
+fn main() {
+    let app = adw::Application::builder()
+        .application_id(APP_ID)
+        .flags(gio::ApplicationFlags::HANDLES_COMMAND_LINE)
+        .build();
+
+    app.connect_command_line(|app, cmdline| {
+        let args = cmdline.arguments();
+        let cli = Cli::parse_from(args);
+        open_or_focus(app, cli.focused_id());
+        glib::ExitCode::SUCCESS
     });
 
-    // Clap already consumed argv; do not let GTK re-parse unknown flags.
-    app.run_with_args(&[] as &[&str]);
+    app.connect_activate(|app| {
+        open_or_focus(app, "applications");
+    });
+
+    app.run();
 }
