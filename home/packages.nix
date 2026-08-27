@@ -35,6 +35,7 @@ in
     p7zip
     libsecret
     libnotify
+    playerctl
     pulseaudio
     brightnessctl
     xdg-user-dirs
