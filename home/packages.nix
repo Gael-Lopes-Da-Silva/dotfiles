@@ -43,7 +43,6 @@
     constrict
     parabolic
     morphosis
-    inspector
     resources
     impression
     pwvucontrol
