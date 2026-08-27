@@ -68,9 +68,7 @@ in
     parabolic
     morphosis
     resources
-    overskride
     impression
-    pwvucontrol
     file-roller
     livecaptions
     audio-sharing
