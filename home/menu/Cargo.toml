@@ -31,5 +31,5 @@ members = [
 
 [workspace.dependencies]
 clap = { version = "4", features = ["derive"] }
-gtk4 = { version = "0.11", package = "gtk4" }
+gtk4 = { version = "0.11", package = "gtk4", features = ["v4_12"] }
 libadwaita = { version = "0.9", features = ["v1_7"] }
