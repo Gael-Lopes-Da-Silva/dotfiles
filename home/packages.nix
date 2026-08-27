@@ -44,6 +44,7 @@
     parabolic
     morphosis
     resources
+    overskride
     impression
     pwvucontrol
     file-roller

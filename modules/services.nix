@@ -7,7 +7,6 @@
 
   services = {
     printing.enable = true;
-    blueman.enable = true;
     gvfs.enable = true;
     lact.enable = true;
 
