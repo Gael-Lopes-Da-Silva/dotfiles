@@ -15,30 +15,26 @@
     vial
     filezilla
 
-    warp
     ghex
     pods
     lact
     coulr
     loupe
     kooha
-    varia
     snoop
     pinta
+    iotas
+    packet
     papers
     baobab
     curtail
-    dialect
     cartero
     netpeek
-    epiphany
     decibels
     snapshot
     nautilus
     showtime
-    wildcard
     constrict
-    collision
     parabolic
     morphosis
     inspector
@@ -58,7 +54,6 @@
     gnome-calendar
     gnome-calculator
     gnome-characters
-    gnome-text-editor
     gnome-connections
     gnome-sound-recorder
     gnome-network-displays
