@@ -2,6 +2,12 @@
 
 {
   home.packages = with pkgs; [
+    uv
+    php
+    bun
+    clang
+    rustup
+
     jq
     p7zip
     libsecret
