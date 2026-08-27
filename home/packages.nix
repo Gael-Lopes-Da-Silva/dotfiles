@@ -1,7 +1,30 @@
 { pkgs, ... }:
 
+let
+  menu = pkgs.rustPlatform.buildRustPackage {
+    pname = "menu";
+    version = "0.1.0";
+
+    src = ./menu;
+
+    cargoLock.lockFile = ./menu/Cargo.lock;
+
+    nativeBuildInputs = with pkgs; [
+      pkg-config
+      wrapGAppsHook4
+    ];
+
+    buildInputs = with pkgs; [
+      gtk4
+      libadwaita
+    ];
+  };
+in
 {
-  home.packages = with pkgs; [
+  home.packages = [
+    menu
+  ]
+  ++ (with pkgs; [
     uv
     php
     bun
@@ -63,5 +86,5 @@
     gnome-connections
     gnome-sound-recorder
     gnome-network-displays
-  ];
+  ]);
 }

@@ -1,0 +1,8 @@
+[package]
+name = "component"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+gtk4 = { workspace = true }
+libadwaita = { workspace = true }
