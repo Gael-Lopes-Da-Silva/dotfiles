@@ -53,7 +53,6 @@ in
     kooha
     snoop
     pinta
-    iotas
     packet
     papers
     baobab
