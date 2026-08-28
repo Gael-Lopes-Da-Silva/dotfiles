@@ -1,19 +1,10 @@
 { pkgs, ... }:
 
 {
-  systemd = {
-    oomd.enable = false;
-  };
-
   services = {
     printing.enable = true;
     gvfs.enable = true;
     lact.enable = true;
-
-    earlyoom = {
-      enable = true;
-      enableNotifications = true;
-    };
 
     udev = {
       packages = with pkgs; [

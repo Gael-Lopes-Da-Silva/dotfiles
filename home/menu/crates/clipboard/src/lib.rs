@@ -5,8 +5,8 @@ use std::io::Write;
 use std::process::{Command, Stdio};
 use std::rc::Rc;
 
-use clipboard_item::ClipboardItem;
-use component::Component;
+use clipboard_item::{ClipboardItem, ClipboardItemData};
+use component::{Component, spawn_background};
 use gtk4::gdk;
 use gtk4::gio;
 use gtk4::glib;
@@ -27,7 +27,6 @@ pub fn component() -> Component {
 
 fn build() -> gtk::Widget {
     let store = gio::ListStore::new::<ClipboardItem>();
-    refill_store(&store);
 
     let query = Rc::new(RefCell::new(String::new()));
     let filter = gtk::CustomFilter::new(glib::clone!(
@@ -174,13 +173,26 @@ fn build() -> gtk::Widget {
                 .pixel_size(80)
                 .hexpand(true)
                 .halign(gtk::Align::Start)
+                .icon_name("image-x-generic-symbolic")
                 .build();
-
-            match load_image_texture(clip.item_id()) {
-                Some(texture) => img.set_paintable(Some(&texture)),
-                None => img.set_icon_name(Some("image-missing-symbolic")),
-            }
             content_area.append(&img);
+
+            let item_id = clip.item_id().to_string();
+            let img_w = img.downgrade();
+            spawn_background(
+                move || load_image_bytes(&item_id),
+                move |bytes| {
+                    let Some(img) = img_w.upgrade() else {
+                        return;
+                    };
+                    match bytes.and_then(|b| {
+                        gdk::Texture::from_bytes(&glib::Bytes::from_owned(b)).ok()
+                    }) {
+                        Some(texture) => img.set_paintable(Some(&texture)),
+                        None => img.set_icon_name(Some("image-missing-symbolic")),
+                    }
+                },
+            );
         } else {
             let clean_text = clip.text().replace('\n', " ").trim().to_string();
             let label = gtk::Label::builder()
@@ -327,6 +339,35 @@ fn build() -> gtk::Widget {
             search.set_position(-1);
         }
     ));
+
+    let loading = gtk::Spinner::builder()
+        .margin_top(12)
+        .halign(gtk::Align::Center)
+        .build();
+    loading.start();
+    page.prepend(&loading);
+
+    spawn_background(
+        load_clipboard_item_data,
+        glib::clone!(
+            #[strong]
+            store,
+            #[weak]
+            selection,
+            #[weak]
+            loading,
+            move |items| {
+                for data in items {
+                    store.append(&ClipboardItem::from_data(&data));
+                }
+                if selection.n_items() > 0 {
+                    selection.set_selected(0);
+                }
+                loading.stop();
+                loading.set_visible(false);
+            }
+        ),
+    );
 
     page.upcast()
 }
@@ -539,28 +580,37 @@ fn delete_item(item: &ClipboardItem) -> bool {
 }
 
 fn refresh_ui(store: &gio::ListStore, selection: &gtk::SingleSelection, search: &gtk::SearchEntry) {
-    refill_store(store);
-    if selection.n_items() > 0 {
-        selection.set_selected(0);
-    }
-    glib::idle_add_local_once(glib::clone!(
-        #[weak]
-        search,
-        move || {
-            search.grab_focus();
-            search.set_position(-1);
-        }
-    ));
+    spawn_background(
+        load_clipboard_item_data,
+        glib::clone!(
+            #[strong]
+            store,
+            #[weak]
+            selection,
+            #[weak]
+            search,
+            move |items| {
+                store.remove_all();
+                for data in items {
+                    store.append(&ClipboardItem::from_data(&data));
+                }
+                if selection.n_items() > 0 {
+                    selection.set_selected(0);
+                }
+                glib::idle_add_local_once(glib::clone!(
+                    #[weak]
+                    search,
+                    move || {
+                        search.grab_focus();
+                        search.set_position(-1);
+                    }
+                ));
+            }
+        ),
+    );
 }
 
-fn refill_store(store: &gio::ListStore) {
-    store.remove_all();
-    for item in load_clipboard_items() {
-        store.append(&item);
-    }
-}
-
-fn load_image_texture(item_id: &str) -> Option<gdk::Texture> {
+fn load_image_bytes(item_id: &str) -> Option<Vec<u8>> {
     let output = Command::new("cliphist")
         .args(["decode", item_id])
         .output()
@@ -568,8 +618,7 @@ fn load_image_texture(item_id: &str) -> Option<gdk::Texture> {
     if !output.status.success() {
         return None;
     }
-    let bytes = glib::Bytes::from_owned(output.stdout);
-    gdk::Texture::from_bytes(&bytes).ok()
+    Some(output.stdout)
 }
 
 fn notify(title: &str, message: &str) {
@@ -581,7 +630,7 @@ fn notify(title: &str, message: &str) {
     }
 }
 
-fn load_clipboard_items() -> Vec<ClipboardItem> {
+fn load_clipboard_item_data() -> Vec<ClipboardItemData> {
     let output = match Command::new("cliphist").arg("list").output() {
         Ok(output) if output.status.success() => output,
         _ => return Vec::new(),
@@ -597,7 +646,12 @@ fn load_clipboard_items() -> Vec<ClipboardItem> {
         if text.to_lowercase().contains("<meta http-equiv") {
             continue;
         }
-        items.push(ClipboardItem::new(id.trim(), text));
+        let text = text.to_string();
+        items.push(ClipboardItemData {
+            item_id: id.trim().to_string(),
+            text: text.clone(),
+            is_image: text.to_lowercase().contains("binary data"),
+        });
     }
 
     items

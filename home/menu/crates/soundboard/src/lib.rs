@@ -9,7 +9,7 @@ use std::process::{Child, Command, Stdio};
 use std::rc::Rc;
 use std::time::Duration;
 
-use component::Component;
+use component::{Component, spawn_background};
 use gtk4::gdk;
 use gtk4::gio;
 use gtk4::glib;
@@ -18,7 +18,7 @@ use gtk4::prelude::*;
 use gtk4::{self as gtk, GestureClick};
 use libadwaita as adw;
 use libadwaita::prelude::*;
-use sound_item::SoundboardItem;
+use sound_item::{SoundboardItem, SoundboardItemData};
 
 const AUDIO_EXTENSIONS: &[&str] = &[
     ".mp3", ".aac", ".wav", ".flac", ".ogg", ".opus", ".aiff", ".au", ".caf", ".raw",
@@ -63,7 +63,6 @@ pub fn component() -> Component {
 
 fn build() -> gtk::Widget {
     let store = gio::ListStore::new::<SoundboardItem>();
-    refill_store(&store);
 
     let query = Rc::new(RefCell::new(String::new()));
     let filter = gtk::CustomFilter::new(glib::clone!(
@@ -439,6 +438,35 @@ fn build() -> gtk::Widget {
             search.set_position(-1);
         }
     ));
+
+    let loading = gtk::Spinner::builder()
+        .margin_top(12)
+        .halign(gtk::Align::Center)
+        .build();
+    loading.start();
+    page.prepend(&loading);
+
+    spawn_background(
+        load_sound_item_data,
+        glib::clone!(
+            #[strong]
+            store,
+            #[weak]
+            selection,
+            #[weak]
+            loading,
+            move |items| {
+                for data in items {
+                    store.append(&SoundboardItem::from_data(&data));
+                }
+                if selection.n_items() > 0 {
+                    selection.set_selected(0);
+                }
+                loading.stop();
+                loading.set_visible(false);
+            }
+        ),
+    );
 
     glib::timeout_add_local(
         Duration::from_millis(250),
@@ -1011,33 +1039,41 @@ fn refresh_ui(
     search: &gtk::SearchEntry,
     playback: &Rc<RefCell<PlaybackState>>,
 ) {
-    refill_store(store);
-    for i in 0..store.n_items() {
-        if let Some(item) = store.item(i).and_downcast::<SoundboardItem>() {
-            update_item_playing_state(playback, &item);
-        }
-    }
-    if selection.n_items() > 0 {
-        selection.set_selected(0);
-    }
-    glib::idle_add_local_once(glib::clone!(
-        #[weak]
-        search,
-        move || {
-            search.grab_focus();
-            search.set_position(-1);
-        }
-    ));
+    spawn_background(
+        load_sound_item_data,
+        glib::clone!(
+            #[strong]
+            store,
+            #[strong]
+            playback,
+            #[weak]
+            selection,
+            #[weak]
+            search,
+            move |items| {
+                store.remove_all();
+                for data in &items {
+                    let item = SoundboardItem::from_data(data);
+                    store.append(&item);
+                    update_item_playing_state(&playback, &item);
+                }
+                if selection.n_items() > 0 {
+                    selection.set_selected(0);
+                }
+                glib::idle_add_local_once(glib::clone!(
+                    #[weak]
+                    search,
+                    move || {
+                        search.grab_focus();
+                        search.set_position(-1);
+                    }
+                ));
+            }
+        ),
+    );
 }
 
-fn refill_store(store: &gio::ListStore) {
-    store.remove_all();
-    for item in load_sound_items() {
-        store.append(&item);
-    }
-}
-
-fn load_sound_items() -> Vec<SoundboardItem> {
+fn load_sound_item_data() -> Vec<SoundboardItemData> {
     let dir = dirs_soundboard();
     let mut items = Vec::new();
 
@@ -1064,12 +1100,12 @@ fn load_sound_items() -> Vec<SoundboardItem> {
             .and_then(|s| s.to_str())
             .unwrap_or_default();
         let display_name = display_name_from_stem(stem);
-        items.push(SoundboardItem::new(
-            &display_name,
-            &path.to_string_lossy(),
-        ));
+        items.push(SoundboardItemData {
+            display_name,
+            file_path: path.to_string_lossy().into_owned(),
+        });
     }
 
-    items.sort_by_key(|item| item.display_name().to_lowercase());
+    items.sort_by_key(|item| item.display_name.to_lowercase());
     items
 }

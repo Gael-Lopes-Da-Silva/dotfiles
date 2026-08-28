@@ -39,11 +39,15 @@ glib::wrapper! {
 
 impl SoundboardItem {
     pub fn new(display_name: &str, file_path: &str) -> Self {
-        let obj: Self = glib::Object::builder().build();
-        let _ = obj.imp().data.set(SoundboardItemData {
+        Self::from_data(&SoundboardItemData {
             display_name: display_name.to_string(),
             file_path: file_path.to_string(),
-        });
+        })
+    }
+
+    pub fn from_data(data: &SoundboardItemData) -> Self {
+        let obj: Self = glib::Object::builder().build();
+        let _ = obj.imp().data.set(data.clone());
         obj
     }
 

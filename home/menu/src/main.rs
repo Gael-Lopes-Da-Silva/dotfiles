@@ -1,5 +1,9 @@
+use std::cell::RefCell;
+use std::collections::HashMap;
+use std::rc::Rc;
+
 use clap::Parser;
-use component::Component;
+use component::{Component, loading_page};
 use gtk4::gdk;
 use gtk4::gio;
 use gtk4::glib;
@@ -76,20 +80,92 @@ fn components() -> [Component; 7] {
     ]
 }
 
+struct PageSlot {
+    placeholder: gtk::Widget,
+    component: Component,
+    loaded: bool,
+}
+
 fn build_ui(app: &adw::Application, focused_id: &str) {
     let stack = adw::ViewStack::new();
+    let slots: Rc<RefCell<HashMap<&'static str, PageSlot>>> = Rc::new(RefCell::new(HashMap::new()));
 
     for component in components() {
-        let page = (component.build)();
+        let placeholder = loading_page(component.title);
         stack.add_titled_with_icon(
-            &page,
+            &placeholder,
             Some(component.id),
             component.title,
             component.icon,
         );
+        slots.borrow_mut().insert(
+            component.id,
+            PageSlot {
+                placeholder,
+                component,
+                loaded: false,
+            },
+        );
     }
 
     stack.set_visible_child_name(focused_id);
+
+    let stack_w = stack.downgrade();
+
+    let ensure_loaded = glib::clone!(
+        #[strong]
+        stack_w,
+        #[strong]
+        slots,
+        move |id: &str| {
+            let Some(stack) = stack_w.upgrade() else {
+                return;
+            };
+
+            let should_show = stack.visible_child_name().as_deref() == Some(id);
+            let (placeholder, component) = {
+                let mut map = slots.borrow_mut();
+                let Some(slot) = map.get_mut(id) else {
+                    return;
+                };
+                if slot.loaded {
+                    return;
+                }
+                slot.loaded = true;
+                (slot.placeholder.clone(), slot.component)
+            };
+
+            let widget = (component.build)();
+            stack.remove(&placeholder);
+            stack.add_titled_with_icon(&widget, Some(component.id), component.title, component.icon);
+            if should_show {
+                stack.set_visible_child_name(id);
+            }
+        }
+    );
+
+    stack.connect_visible_child_name_notify(glib::clone!(
+        #[strong]
+        ensure_loaded,
+        move |stack| {
+            if let Some(name) = stack.visible_child_name() {
+                ensure_loaded(name.as_str());
+            }
+        }
+    ));
+
+    ensure_loaded(focused_id);
+
+    for component in components() {
+        if component.id != focused_id {
+            let id = component.id;
+            glib::idle_add_local_once(glib::clone!(
+                #[strong]
+                ensure_loaded,
+                move || ensure_loaded(id)
+            ));
+        }
+    }
 
     let switcher = adw::ViewSwitcherBar::builder()
         .stack(&stack)

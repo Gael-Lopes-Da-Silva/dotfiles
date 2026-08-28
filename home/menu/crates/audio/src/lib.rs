@@ -4,7 +4,7 @@ use std::process::Command;
 use std::rc::Rc;
 use std::time::Duration;
 
-use component::Component;
+use component::{Component, spawn_background};
 use gtk4::glib;
 use gtk4::pango;
 use gtk4::prelude::*;
@@ -36,6 +36,13 @@ struct UiState {
     device_ids: Vec<u32>,
     stream_ids: Vec<u32>,
     updating: bool,
+    refreshing: bool,
+}
+
+struct AudioSnapshot {
+    sinks: Vec<Endpoint>,
+    sources: Vec<Endpoint>,
+    streams: Vec<Stream>,
 }
 
 pub fn component() -> Component {
@@ -98,31 +105,73 @@ fn build() -> gtk::Widget {
     root.append(&switcher);
     root.append(&stack);
 
+    let output_devices_w = output_devices.downgrade();
+    let output_streams_w = output_streams.downgrade();
+    let input_devices_w = input_devices.downgrade();
+    let input_streams_w = input_streams.downgrade();
+
     let state = Rc::new(RefCell::new(UiState {
         dragging: HashSet::new(),
         device_ids: Vec::new(),
         stream_ids: Vec::new(),
         updating: false,
+        refreshing: false,
     }));
 
     let refresh = Rc::new(glib::clone!(
-        #[weak]
-        output_devices,
-        #[weak]
-        output_streams,
-        #[weak]
-        input_devices,
-        #[weak]
-        input_streams,
+        #[strong]
+        output_devices_w,
+        #[strong]
+        output_streams_w,
+        #[strong]
+        input_devices_w,
+        #[strong]
+        input_streams_w,
         #[strong]
         state,
         move || {
-            refresh_ui(
-                &output_devices,
-                &output_streams,
-                &input_devices,
-                &input_streams,
-                &state,
+            if state.borrow().refreshing {
+                return;
+            }
+            state.borrow_mut().refreshing = true;
+
+            spawn_background(
+                fetch_audio_snapshot,
+                glib::clone!(
+                    #[strong]
+                    output_devices_w,
+                    #[strong]
+                    output_streams_w,
+                    #[strong]
+                    input_devices_w,
+                    #[strong]
+                    input_streams_w,
+                    #[strong]
+                    state,
+                    move |snapshot| {
+                        state.borrow_mut().refreshing = false;
+                        let Some(output_devices) = output_devices_w.upgrade() else {
+                            return;
+                        };
+                        let Some(output_streams) = output_streams_w.upgrade() else {
+                            return;
+                        };
+                        let Some(input_devices) = input_devices_w.upgrade() else {
+                            return;
+                        };
+                        let Some(input_streams) = input_streams_w.upgrade() else {
+                            return;
+                        };
+                        apply_snapshot(
+                            &output_devices,
+                            &output_streams,
+                            &input_devices,
+                            &input_streams,
+                            &state,
+                            snapshot,
+                        );
+                    }
+                ),
             );
         }
     ));
@@ -183,16 +232,25 @@ fn build_tab_page(
         .build()
 }
 
-fn refresh_ui(
+fn fetch_audio_snapshot() -> AudioSnapshot {
+    AudioSnapshot {
+        sinks: list_endpoints(true),
+        sources: list_endpoints(false),
+        streams: list_streams(),
+    }
+}
+
+fn apply_snapshot(
     output_devices: &gtk::Box,
     output_streams: &gtk::Box,
     input_devices: &gtk::Box,
     input_streams: &gtk::Box,
     state: &Rc<RefCell<UiState>>,
+    snapshot: AudioSnapshot,
 ) {
-    let sinks = list_endpoints(true);
-    let sources = list_endpoints(false);
-    let streams = list_streams();
+    let sinks = snapshot.sinks;
+    let sources = snapshot.sources;
+    let streams = snapshot.streams;
 
     let mut device_ids: Vec<u32> = sinks.iter().map(|e| e.id).collect();
     device_ids.extend(sources.iter().map(|e| e.id));

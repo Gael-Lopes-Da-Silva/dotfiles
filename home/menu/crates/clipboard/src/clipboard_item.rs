@@ -32,12 +32,16 @@ glib::wrapper! {
 
 impl ClipboardItem {
     pub fn new(item_id: &str, text: &str) -> Self {
-        let obj: Self = glib::Object::builder().build();
-        let _ = obj.imp().data.set(ClipboardItemData {
+        Self::from_data(&ClipboardItemData {
             item_id: item_id.to_string(),
             text: text.to_string(),
             is_image: text.to_lowercase().contains("binary data"),
-        });
+        })
+    }
+
+    pub fn from_data(data: &ClipboardItemData) -> Self {
+        let obj: Self = glib::Object::builder().build();
+        let _ = obj.imp().data.set(data.clone());
         obj
     }
 

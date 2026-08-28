@@ -4,7 +4,7 @@ use std::process::{Command, Stdio};
 use std::rc::Rc;
 use std::time::Duration;
 
-use component::Component;
+use component::{Component, spawn_background};
 use gtk4::gio;
 use gtk4::glib;
 use gtk4::pango;
@@ -43,6 +43,12 @@ struct UiState {
     fingerprint: String,
     scanning: bool,
     updating: bool,
+    refreshing: bool,
+}
+
+struct BluetoothSnapshot {
+    adapter: AdapterInfo,
+    devices: Vec<BtDevice>,
 }
 
 pub fn component() -> Component {
@@ -145,10 +151,21 @@ fn build() -> gtk::Widget {
     root.append(&search);
     root.append(&scrolled);
 
+    let power_switch_w = power_switch.downgrade();
+    let scan_btn_w = scan_btn.downgrade();
+    let scan_spinner_w = scan_spinner.downgrade();
+    let connected_box_w = connected_box.downgrade();
+    let paired_box_w = paired_box.downgrade();
+    let other_box_w = other_box.downgrade();
+    let connected_label_w = connected_label.downgrade();
+    let paired_label_w = paired_label.downgrade();
+    let other_label_w = other_label.downgrade();
+
     let state = Rc::new(RefCell::new(UiState {
         fingerprint: String::new(),
         scanning: false,
         updating: false,
+        refreshing: false,
     }));
 
     let query = Rc::new(RefCell::new(String::new()));
@@ -156,24 +173,24 @@ fn build() -> gtk::Widget {
     let refresh: Rc<RefCell<Option<Rc<dyn Fn()>>>> = Rc::new(RefCell::new(None));
 
     let do_refresh = Rc::new(glib::clone!(
-        #[weak]
-        power_switch,
-        #[weak]
-        scan_btn,
-        #[weak]
-        scan_spinner,
-        #[weak]
-        connected_box,
-        #[weak]
-        paired_box,
-        #[weak]
-        other_box,
-        #[weak]
-        connected_label,
-        #[weak]
-        paired_label,
-        #[weak]
-        other_label,
+        #[strong]
+        power_switch_w,
+        #[strong]
+        scan_btn_w,
+        #[strong]
+        scan_spinner_w,
+        #[strong]
+        connected_box_w,
+        #[strong]
+        paired_box_w,
+        #[strong]
+        other_box_w,
+        #[strong]
+        connected_label_w,
+        #[strong]
+        paired_label_w,
+        #[strong]
+        other_label_w,
         #[strong]
         state,
         #[strong]
@@ -181,23 +198,87 @@ fn build() -> gtk::Widget {
         #[strong]
         refresh,
         move || {
-            let refresh_cb = refresh
-                .borrow()
-                .clone()
-                .unwrap_or_else(|| Rc::new(|| {}) as Rc<dyn Fn()>);
-            refresh_ui(
-                &power_switch,
-                &scan_btn,
-                &scan_spinner,
-                &connected_box,
-                &paired_box,
-                &other_box,
-                &connected_label,
-                &paired_label,
-                &other_label,
-                &state,
-                &query.borrow(),
-                refresh_cb,
+            if state.borrow().refreshing {
+                return;
+            }
+            state.borrow_mut().refreshing = true;
+
+            let query_text = query.borrow().clone();
+            spawn_background(
+                fetch_bluetooth_snapshot,
+                glib::clone!(
+                    #[strong]
+                    power_switch_w,
+                    #[strong]
+                    scan_btn_w,
+                    #[strong]
+                    scan_spinner_w,
+                    #[strong]
+                    connected_box_w,
+                    #[strong]
+                    paired_box_w,
+                    #[strong]
+                    other_box_w,
+                    #[strong]
+                    connected_label_w,
+                    #[strong]
+                    paired_label_w,
+                    #[strong]
+                    other_label_w,
+                    #[strong]
+                    state,
+                    #[strong]
+                    refresh,
+                    move |snapshot| {
+                        state.borrow_mut().refreshing = false;
+                        let refresh_cb = refresh
+                            .borrow()
+                            .clone()
+                            .unwrap_or_else(|| Rc::new(|| {}) as Rc<dyn Fn()>);
+                        let Some(power_switch) = power_switch_w.upgrade() else {
+                            return;
+                        };
+                        let Some(scan_btn) = scan_btn_w.upgrade() else {
+                            return;
+                        };
+                        let Some(scan_spinner) = scan_spinner_w.upgrade() else {
+                            return;
+                        };
+                        let Some(connected_box) = connected_box_w.upgrade() else {
+                            return;
+                        };
+                        let Some(paired_box) = paired_box_w.upgrade() else {
+                            return;
+                        };
+                        let Some(other_box) = other_box_w.upgrade() else {
+                            return;
+                        };
+                        let Some(connected_label) = connected_label_w.upgrade() else {
+                            return;
+                        };
+                        let Some(paired_label) = paired_label_w.upgrade() else {
+                            return;
+                        };
+                        let Some(other_label) = other_label_w.upgrade() else {
+                            return;
+                        };
+                        apply_snapshot(
+                            &power_switch,
+                            &scan_btn,
+                            &scan_spinner,
+                            &connected_box,
+                            &paired_box,
+                            &other_box,
+                            &connected_label,
+                            &paired_label,
+                            &other_label,
+                            &state,
+                            &query_text,
+                            refresh_cb,
+                            snapshot,
+                        );
+                    }
+                ),
             );
         }
     ));
@@ -234,11 +315,16 @@ fn build() -> gtk::Widget {
 
     scan_btn.connect_clicked(glib::clone!(
         #[strong]
+        power_switch_w,
+        #[strong]
         state,
         #[strong]
         do_refresh,
         move |_| {
-            if !adapter_info().powered {
+            let Some(power_switch) = power_switch_w.upgrade() else {
+                return;
+            };
+            if !power_switch.is_active() {
                 return;
             }
             let scanning = state.borrow().scanning;
@@ -307,7 +393,14 @@ fn section_label(text: &str) -> gtk::Label {
         .build()
 }
 
-fn refresh_ui(
+fn fetch_bluetooth_snapshot() -> BluetoothSnapshot {
+    BluetoothSnapshot {
+        adapter: adapter_info(),
+        devices: list_devices(),
+    }
+}
+
+fn apply_snapshot(
     power_switch: &gtk::Switch,
     scan_btn: &gtk::Button,
     scan_spinner: &gtk::Spinner,
@@ -320,9 +413,10 @@ fn refresh_ui(
     state: &Rc<RefCell<UiState>>,
     query: &str,
     refresh: Rc<dyn Fn()>,
+    snapshot: BluetoothSnapshot,
 ) {
-    let adapter = adapter_info();
-    let devices = list_devices();
+    let adapter = snapshot.adapter;
+    let devices = snapshot.devices;
 
     let fingerprint = devices_fingerprint(&devices);
     let scanning = state.borrow().scanning || adapter.discovering;

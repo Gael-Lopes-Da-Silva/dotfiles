@@ -5,7 +5,7 @@ use std::collections::HashMap;
 use std::rc::Rc;
 
 use app_item::AppItem;
-use component::Component;
+use component::{Component, defer_idle};
 use gtk4::gdk;
 use gtk4::gio;
 use gtk4::glib;
@@ -22,12 +22,7 @@ pub fn component() -> Component {
 }
 
 fn build() -> gtk::Widget {
-    let apps = load_apps();
-
     let store = gio::ListStore::new::<AppItem>();
-    for app in &apps {
-        store.append(app);
-    }
 
     let query = Rc::new(RefCell::new(String::new()));
     let filter = gtk::CustomFilter::new(glib::clone!(
@@ -44,7 +39,7 @@ fn build() -> gtk::Widget {
         }
     ));
 
-    let filter_model = gtk::FilterListModel::new(Some(store), Some(filter.clone()));
+    let filter_model = gtk::FilterListModel::new(Some(store.clone()), Some(filter.clone()));
     let selection = gtk::SingleSelection::new(Some(filter_model));
     if selection.n_items() > 0 {
         selection.set_selected(0);
@@ -211,6 +206,33 @@ fn build() -> gtk::Widget {
         move |_| {
             search.grab_focus();
             search.set_position(-1);
+        }
+    ));
+
+    let loading = gtk::Spinner::builder()
+        .margin_top(12)
+        .halign(gtk::Align::Center)
+        .build();
+    loading.start();
+    page.prepend(&loading);
+
+    defer_idle(glib::clone!(
+        #[strong]
+        store,
+        #[weak]
+        selection,
+        #[weak]
+        loading,
+        move || {
+            let apps = load_apps();
+            for app in &apps {
+                store.append(app);
+            }
+            if selection.n_items() > 0 {
+                selection.set_selected(0);
+            }
+            loading.stop();
+            loading.set_visible(false);
         }
     ));
 
