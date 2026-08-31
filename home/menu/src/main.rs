@@ -94,10 +94,11 @@ struct PageSlot {
 }
 
 fn build_ui(app: &adw::Application, focused_id: &str) {
+    let components = components();
     let stack = adw::ViewStack::new();
     let slots: Rc<RefCell<HashMap<&'static str, PageSlot>>> = Rc::new(RefCell::new(HashMap::new()));
 
-    for component in components() {
+    for component in components {
         let placeholder = loading_page(component.title);
         stack.add_titled_with_icon(
             &placeholder,
@@ -156,19 +157,6 @@ fn build_ui(app: &adw::Application, focused_id: &str) {
         }
     ));
 
-    ensure_loaded(focused_id);
-
-    for component in components() {
-        if component.id != focused_id {
-            let id = component.id;
-            glib::idle_add_local_once(glib::clone!(
-                #[strong]
-                ensure_loaded,
-                move || ensure_loaded(id)
-            ));
-        }
-    }
-
     let switcher = adw::ViewSwitcherBar::builder()
         .stack(&stack)
         .reveal(true)
@@ -211,6 +199,13 @@ fn build_ui(app: &adw::Application, focused_id: &str) {
     window.add_controller(escape);
 
     window.present();
+
+    let focused_id = focused_id.to_owned();
+    glib::idle_add_local_once(glib::clone!(
+        #[strong]
+        ensure_loaded,
+        move || ensure_loaded(&focused_id)
+    ));
 }
 
 fn focus_component(window: &gtk::Window, focused_id: &str) {
