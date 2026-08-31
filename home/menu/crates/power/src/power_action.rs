@@ -42,7 +42,10 @@ impl PowerAction {
     }
 
     fn data(&self) -> &PowerActionData {
-        self.imp().data.get().expect("PowerAction data set at construction")
+        self.imp()
+            .data
+            .get()
+            .expect("PowerAction data set at construction")
     }
 
     pub fn name(&self) -> &str {

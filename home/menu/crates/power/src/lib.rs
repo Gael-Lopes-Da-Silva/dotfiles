@@ -285,16 +285,12 @@ fn confirm_action(parent: &impl IsA<gtk::Widget>, action: &PowerAction) {
     dialog.set_default_response(Some("cancel"));
 
     let action = action.clone();
-    dialog.choose(
-        Some(parent),
-        None::<&gio::Cancellable>,
-        move |response| {
-            if response != "execute" {
-                return;
-            }
-            run_action(&action);
-        },
-    );
+    dialog.choose(Some(parent), None::<&gio::Cancellable>, move |response| {
+        if response != "execute" {
+            return;
+        }
+        run_action(&action);
+    });
 }
 
 fn run_action(action: &PowerAction) {

@@ -185,9 +185,9 @@ fn build() -> gtk::Widget {
                     let Some(img) = img_w.upgrade() else {
                         return;
                     };
-                    match bytes.and_then(|b| {
-                        gdk::Texture::from_bytes(&glib::Bytes::from_owned(b)).ok()
-                    }) {
+                    match bytes
+                        .and_then(|b| gdk::Texture::from_bytes(&glib::Bytes::from_owned(b)).ok())
+                    {
                         Some(texture) => img.set_paintable(Some(&texture)),
                         None => img.set_icon_name(Some("image-missing-symbolic")),
                     }
@@ -438,10 +438,7 @@ fn copy_item(item: &ClipboardItem) {
 
     match Command::new("wl-copy").stdin(Stdio::from(stdout)).status() {
         Ok(status) if status.success() => {
-            notify(
-                "Clipboard history",
-                "Item copied to the system clipboard.",
-            );
+            notify("Clipboard history", "Item copied to the system clipboard.");
         }
         Ok(_) | Err(_) => eprintln!("Failed to write to system clipboard"),
     }
@@ -449,7 +446,11 @@ fn copy_item(item: &ClipboardItem) {
     let _ = decode.wait();
 }
 
-fn confirm_delete_item(parent: &impl IsA<gtk::Widget>, item: &ClipboardItem, refresh: Rc<dyn Fn()>) {
+fn confirm_delete_item(
+    parent: &impl IsA<gtk::Widget>,
+    item: &ClipboardItem,
+    refresh: Rc<dyn Fn()>,
+) {
     let dialog = adw::AlertDialog::new(
         Some("Delete Item"),
         Some("Are you sure you want to delete this item from your history?"),
@@ -462,19 +463,15 @@ fn confirm_delete_item(parent: &impl IsA<gtk::Widget>, item: &ClipboardItem, ref
     dialog.set_default_response(Some("cancel"));
 
     let item = item.clone();
-    dialog.choose(
-        Some(parent),
-        None::<&gio::Cancellable>,
-        move |response| {
-            if response != "delete" {
-                return;
-            }
-            if delete_item(&item) {
-                notify("Clipboard history", "Entry successfully deleted.");
-                refresh();
-            }
-        },
-    );
+    dialog.choose(Some(parent), None::<&gio::Cancellable>, move |response| {
+        if response != "delete" {
+            return;
+        }
+        if delete_item(&item) {
+            notify("Clipboard history", "Entry successfully deleted.");
+            refresh();
+        }
+    });
 }
 
 fn confirm_clear_all(parent: &impl IsA<gtk::Widget>, refresh: Rc<dyn Fn()>) {
@@ -489,24 +486,20 @@ fn confirm_clear_all(parent: &impl IsA<gtk::Widget>, refresh: Rc<dyn Fn()>) {
     dialog.set_close_response("cancel");
     dialog.set_default_response(Some("cancel"));
 
-    dialog.choose(
-        Some(parent),
-        None::<&gio::Cancellable>,
-        move |response| {
-            if response != "clear" {
-                return;
-            }
-            if let Err(err) = Command::new("cliphist").arg("wipe").status() {
-                eprintln!("Failed to wipe clipboard history: {err}");
-                return;
-            }
-            notify(
-                "Clipboard history",
-                "The clipboard history was successfully cleared.",
-            );
-            refresh();
-        },
-    );
+    dialog.choose(Some(parent), None::<&gio::Cancellable>, move |response| {
+        if response != "clear" {
+            return;
+        }
+        if let Err(err) = Command::new("cliphist").arg("wipe").status() {
+            eprintln!("Failed to wipe clipboard history: {err}");
+            return;
+        }
+        notify(
+            "Clipboard history",
+            "The clipboard history was successfully cleared.",
+        );
+        refresh();
+    });
 }
 
 fn confirm_delete_by_query(parent: &impl IsA<gtk::Widget>, refresh: Rc<dyn Fn()>) {
@@ -526,28 +519,24 @@ fn confirm_delete_by_query(parent: &impl IsA<gtk::Widget>, refresh: Rc<dyn Fn()>
     dialog.set_close_response("cancel");
     dialog.set_default_response(Some("cancel"));
 
-    dialog.choose(
-        Some(parent),
-        None::<&gio::Cancellable>,
-        move |response| {
-            let query = entry.text().trim().to_string();
-            if response != "delete" || query.is_empty() {
-                return;
-            }
-            if let Err(err) = Command::new("cliphist")
-                .args(["delete-query", &query])
-                .status()
-            {
-                eprintln!("Failed to delete by query: {err}");
-                return;
-            }
-            notify(
-                "Clipboard history",
-                &format!("Deleted all entries matching '{query}'."),
-            );
-            refresh();
-        },
-    );
+    dialog.choose(Some(parent), None::<&gio::Cancellable>, move |response| {
+        let query = entry.text().trim().to_string();
+        if response != "delete" || query.is_empty() {
+            return;
+        }
+        if let Err(err) = Command::new("cliphist")
+            .args(["delete-query", &query])
+            .status()
+        {
+            eprintln!("Failed to delete by query: {err}");
+            return;
+        }
+        notify(
+            "Clipboard history",
+            &format!("Deleted all entries matching '{query}'."),
+        );
+        refresh();
+    });
 }
 
 fn delete_item(item: &ClipboardItem) -> bool {

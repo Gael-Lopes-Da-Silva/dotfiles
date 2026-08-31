@@ -1,5 +1,5 @@
-use gtk4 as gtk;
 use gtk::prelude::*;
+use gtk4 as gtk;
 use libadwaita as adw;
 
 pub struct Component {
@@ -55,7 +55,7 @@ where
     F: FnOnce() -> T + Send + 'static,
     C: FnOnce(T) + 'static,
 {
-    use std::sync::mpsc::{sync_channel, TryRecvError};
+    use std::sync::mpsc::{TryRecvError, sync_channel};
     use std::time::Duration;
 
     let (tx, rx) = sync_channel(1);
@@ -64,17 +64,15 @@ where
     });
 
     let mut callback = Some(callback);
-    gtk::glib::timeout_add_local(Duration::ZERO, move || {
-        match rx.try_recv() {
-            Ok(result) => {
-                if let Some(cb) = callback.take() {
-                    cb(result);
-                }
-                gtk::glib::ControlFlow::Break
+    gtk::glib::timeout_add_local(Duration::ZERO, move || match rx.try_recv() {
+        Ok(result) => {
+            if let Some(cb) = callback.take() {
+                cb(result);
             }
-            Err(TryRecvError::Empty) => gtk::glib::ControlFlow::Continue,
-            Err(TryRecvError::Disconnected) => gtk::glib::ControlFlow::Break,
+            gtk::glib::ControlFlow::Break
         }
+        Err(TryRecvError::Empty) => gtk::glib::ControlFlow::Continue,
+        Err(TryRecvError::Disconnected) => gtk::glib::ControlFlow::Break,
     });
 }
 

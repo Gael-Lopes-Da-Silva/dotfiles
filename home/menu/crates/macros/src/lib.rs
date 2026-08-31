@@ -393,24 +393,22 @@ fn build() -> gtk::Widget {
 }
 
 fn init_virtual_device(state: Arc<DeviceState>, start_btn: SendWeakRef<gtk::Button>) {
-    thread::spawn(move || {
-        match create_virtual_device() {
-            Ok(device) => {
-                *state.device.lock().expect("device lock") = Some(device);
-                state.ready.store(true, Ordering::SeqCst);
-                glib::MainContext::default().invoke(move || {
-                    if let Some(btn) = start_btn.upgrade() {
-                        btn.set_sensitive(true);
-                    }
-                });
-            }
-            Err(err) => {
-                eprintln!("\n[ERROR] Failed to create virtual device.");
-                eprintln!("Ensure you have write permissions to /dev/uinput: {err}");
-                eprintln!(
-                    "Adding user to 'input' group handles /dev/input, but /dev/uinput might need a udev rule.\n"
-                );
-            }
+    thread::spawn(move || match create_virtual_device() {
+        Ok(device) => {
+            *state.device.lock().expect("device lock") = Some(device);
+            state.ready.store(true, Ordering::SeqCst);
+            glib::MainContext::default().invoke(move || {
+                if let Some(btn) = start_btn.upgrade() {
+                    btn.set_sensitive(true);
+                }
+            });
+        }
+        Err(err) => {
+            eprintln!("\n[ERROR] Failed to create virtual device.");
+            eprintln!("Ensure you have write permissions to /dev/uinput: {err}");
+            eprintln!(
+                "Adding user to 'input' group handles /dev/input, but /dev/uinput might need a udev rule.\n"
+            );
         }
     });
 }

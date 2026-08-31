@@ -178,23 +178,22 @@ fn build() -> gtk::Widget {
 
     refresh();
 
-    glib::timeout_add_local(Duration::from_millis(1000), glib::clone!(
-        #[strong]
-        refresh,
-        move || {
-            refresh();
-            glib::ControlFlow::Continue
-        }
-    ));
+    glib::timeout_add_local(
+        Duration::from_millis(1000),
+        glib::clone!(
+            #[strong]
+            refresh,
+            move || {
+                refresh();
+                glib::ControlFlow::Continue
+            }
+        ),
+    );
 
     root.upcast()
 }
 
-fn build_tab_page(
-    devices: &gtk::Box,
-    streams: &gtk::Box,
-    is_output: bool,
-) -> gtk::ScrolledWindow {
+fn build_tab_page(devices: &gtk::Box, streams: &gtk::Box, is_output: bool) -> gtk::ScrolledWindow {
     let content = gtk::Box::builder()
         .orientation(gtk::Orientation::Vertical)
         .spacing(12)
@@ -690,7 +689,9 @@ fn list_endpoints(sinks: bool) -> Vec<Endpoint> {
 
     for line in output.lines() {
         let trimmed = strip_tree_chars(line);
-        if trimmed.ends_with("Sinks:") || trimmed.ends_with("Sources:") || trimmed.ends_with("Filters:")
+        if trimmed.ends_with("Sinks:")
+            || trimmed.ends_with("Sources:")
+            || trimmed.ends_with("Filters:")
             || trimmed.ends_with("Streams:")
             || trimmed.ends_with("Devices:")
         {
@@ -782,10 +783,7 @@ fn list_streams() -> Vec<Stream> {
     let mut streams = Vec::new();
     for (id, fallback_name) in stream_ids {
         let details = inspect_stream(id);
-        let is_output = details
-            .as_ref()
-            .map(|d| d.is_output)
-            .unwrap_or(true);
+        let is_output = details.as_ref().map(|d| d.is_output).unwrap_or(true);
         let (volume, muted) = get_volume(id).unwrap_or((1.0, false));
         let app_name = details
             .as_ref()
@@ -882,11 +880,7 @@ fn get_volume(id: u32) -> Option<(f64, bool)> {
 
     // "Volume: 0.54" or "Volume: 0.54 [MUTED]"
     let muted = output.contains("[MUTED]");
-    let volume = output
-        .split_whitespace()
-        .nth(1)?
-        .parse::<f64>()
-        .ok()?;
+    let volume = output.split_whitespace().nth(1)?.parse::<f64>().ok()?;
     Some((volume, muted))
 }
 
@@ -911,7 +905,11 @@ fn set_default(id: u32) {
 
 fn strip_tree_chars(line: &str) -> String {
     line.chars()
-        .filter(|c| c.is_ascii() || c.is_alphanumeric() || matches!(c, '*' | '.' | ':' | '[' | ']' | '/' | '-' | '_' | ' ' | '%'))
+        .filter(|c| {
+            c.is_ascii()
+                || c.is_alphanumeric()
+                || matches!(c, '*' | '.' | ':' | '[' | ']' | '/' | '-' | '_' | ' ' | '%')
+        })
         .collect::<String>()
         .trim()
         .to_string()

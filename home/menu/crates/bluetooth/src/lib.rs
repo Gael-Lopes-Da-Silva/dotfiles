@@ -299,16 +299,19 @@ fn build() -> gtk::Widget {
                 state.borrow_mut().scanning = false;
             }
             // Defer refresh so switch animation completes.
-            glib::timeout_add_local_once(Duration::from_millis(200), glib::clone!(
-                #[strong]
-                do_refresh,
-                #[weak]
-                switch,
-                move || {
-                    let _ = &switch;
-                    do_refresh();
-                }
-            ));
+            glib::timeout_add_local_once(
+                Duration::from_millis(200),
+                glib::clone!(
+                    #[strong]
+                    do_refresh,
+                    #[weak]
+                    switch,
+                    move || {
+                        let _ = &switch;
+                        do_refresh();
+                    }
+                ),
+            );
             glib::Propagation::Proceed
         }
     ));
@@ -335,19 +338,22 @@ fn build() -> gtk::Widget {
                 let _ = bt(&["scan", "on"]);
                 state.borrow_mut().scanning = true;
                 // Auto-stop after 30s.
-                glib::timeout_add_local_once(Duration::from_secs(30), glib::clone!(
-                    #[strong]
-                    state,
-                    #[strong]
-                    do_refresh,
-                    move || {
-                        if state.borrow().scanning {
-                            let _ = bt(&["scan", "off"]);
-                            state.borrow_mut().scanning = false;
-                            do_refresh();
+                glib::timeout_add_local_once(
+                    Duration::from_secs(30),
+                    glib::clone!(
+                        #[strong]
+                        state,
+                        #[strong]
+                        do_refresh,
+                        move || {
+                            if state.borrow().scanning {
+                                let _ = bt(&["scan", "off"]);
+                                state.borrow_mut().scanning = false;
+                                do_refresh();
+                            }
                         }
-                    }
-                ));
+                    ),
+                );
             }
             do_refresh();
         }
@@ -444,8 +450,7 @@ fn apply_snapshot(
             if query.is_empty() {
                 return true;
             }
-            d.name.to_lowercase().contains(query)
-                || d.address.to_lowercase().contains(query)
+            d.name.to_lowercase().contains(query) || d.address.to_lowercase().contains(query)
         })
         .collect();
 
@@ -909,11 +914,14 @@ fn confirm_remove(
 fn show_device_info(parent: &impl IsA<gtk::Widget>, device: &BtDevice) {
     let mut lines = vec![
         format!("Address: {}", device.address),
-        format!("Type: {}", if device.address_type.is_empty() {
-            "unknown"
-        } else {
-            &device.address_type
-        }),
+        format!(
+            "Type: {}",
+            if device.address_type.is_empty() {
+                "unknown"
+            } else {
+                &device.address_type
+            }
+        ),
         format!("Paired: {}", yes_no(device.paired)),
         format!("Bonded: {}", yes_no(device.bonded)),
         format!("Trusted: {}", yes_no(device.trusted)),
@@ -952,11 +960,7 @@ fn show_device_info(parent: &impl IsA<gtk::Widget>, device: &BtDevice) {
 }
 
 fn yes_no(v: bool) -> &'static str {
-    if v {
-        "yes"
-    } else {
-        "no"
-    }
+    if v { "yes" } else { "no" }
 }
 
 fn empty_label(text: &str) -> gtk::Label {
@@ -1024,9 +1028,7 @@ fn devices_fingerprint(devices: &[BtDevice]) -> String {
 }
 
 fn bt_stdout(args: &[&str]) -> String {
-    String::from_utf8_lossy(&bt(args).stdout)
-        .trim()
-        .to_string()
+    String::from_utf8_lossy(&bt(args).stdout).trim().to_string()
 }
 
 fn set_powered(on: bool) {

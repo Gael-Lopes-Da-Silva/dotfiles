@@ -44,6 +44,10 @@ struct Cli {
     /// Focus the Soundboard page
     #[arg(long, group = "component")]
     soundboard: bool,
+
+    /// Focus the Network page
+    #[arg(long, group = "component")]
+    wifi: bool,
 }
 
 impl Cli {
@@ -62,17 +66,20 @@ impl Cli {
             "power"
         } else if self.soundboard {
             "soundboard"
+        } else if self.wifi {
+            "wifi"
         } else {
             "applications"
         }
     }
 }
 
-fn components() -> [Component; 7] {
+fn components() -> [Component; 8] {
     [
         applications::component(),
         audio::component(),
         bluetooth::component(),
+        wifi::component(),
         clipboard::component(),
         macros::component(),
         power::component(),
@@ -137,7 +144,12 @@ fn build_ui(app: &adw::Application, focused_id: &str) {
 
             let widget = (component.build)();
             stack.remove(&placeholder);
-            stack.add_titled_with_icon(&widget, Some(component.id), component.title, component.icon);
+            stack.add_titled_with_icon(
+                &widget,
+                Some(component.id),
+                component.title,
+                component.icon,
+            );
             if should_show {
                 stack.set_visible_child_name(id);
             }

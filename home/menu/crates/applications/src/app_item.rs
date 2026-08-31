@@ -31,7 +31,11 @@ impl AppItem {
     }
 
     pub fn app_info(&self) -> gio::AppInfo {
-        self.imp().info.get().expect("AppItem info set at construction").clone()
+        self.imp()
+            .info
+            .get()
+            .expect("AppItem info set at construction")
+            .clone()
     }
 
     pub fn name(&self) -> glib::GString {

@@ -282,11 +282,11 @@ fn build() -> gtk::Widget {
         let list_item = item
             .downcast_ref::<gtk::ListItem>()
             .expect("ListItem in unbind");
-        let handler = unsafe { list_item.steal_data::<glib::SignalHandlerId>("is-playing-handler") };
-        if let (Some(handler), Some(sound)) = (
-            handler,
-            list_item.item().and_downcast::<SoundboardItem>(),
-        ) {
+        let handler =
+            unsafe { list_item.steal_data::<glib::SignalHandlerId>("is-playing-handler") };
+        if let (Some(handler), Some(sound)) =
+            (handler, list_item.item().and_downcast::<SoundboardItem>())
+        {
             sound.disconnect(handler);
         }
     });
@@ -593,9 +593,7 @@ fn check_playing_sounds(playback: &Rc<RefCell<PlaybackState>>, store: &gio::List
             overlap_changed.push(path.clone());
         }
     }
-    state
-        .overlapping
-        .retain(|_, procs| !procs.is_empty());
+    state.overlapping.retain(|_, procs| !procs.is_empty());
     drop(state);
 
     for item in finished_items {
@@ -901,28 +899,24 @@ fn confirm_save_recording(parent: &impl IsA<gtk::Widget>, refresh: Rc<dyn Fn()>)
     dialog.set_close_response("cancel");
     dialog.set_default_response(Some("cancel"));
 
-    dialog.choose(
-        Some(parent),
-        None::<&gio::Cancellable>,
-        move |response| {
-            let name = entry.text().trim().to_string();
-            if response != "save" || name.is_empty() {
-                return;
-            }
+    dialog.choose(Some(parent), None::<&gio::Cancellable>, move |response| {
+        let name = entry.text().trim().to_string();
+        if response != "save" || name.is_empty() {
+            return;
+        }
 
-            let safe_name = sanitize_name(&name);
-            let dest = dirs_soundboard().join(format!("{safe_name}.wav"));
-            if dest.exists() {
-                return;
-            }
+        let safe_name = sanitize_name(&name);
+        let dest = dirs_soundboard().join(format!("{safe_name}.wav"));
+        if dest.exists() {
+            return;
+        }
 
-            if let Err(err) = fs::copy(record_path(), &dest) {
-                eprintln!("Error copying recording: {err}");
-                return;
-            }
-            refresh();
-        },
-    );
+        if let Err(err) = fs::copy(record_path(), &dest) {
+            eprintln!("Error copying recording: {err}");
+            return;
+        }
+        refresh();
+    });
 }
 
 fn confirm_rename(parent: &impl IsA<gtk::Widget>, item: &SoundboardItem, refresh: Rc<dyn Fn()>) {
@@ -935,9 +929,7 @@ fn confirm_rename(parent: &impl IsA<gtk::Widget>, item: &SoundboardItem, refresh
         )),
     );
 
-    let entry = gtk::Entry::builder()
-        .text(item.display_name())
-        .build();
+    let entry = gtk::Entry::builder().text(item.display_name()).build();
     dialog.set_extra_child(Some(&entry));
 
     dialog.add_response("cancel", "Cancel");
@@ -946,33 +938,29 @@ fn confirm_rename(parent: &impl IsA<gtk::Widget>, item: &SoundboardItem, refresh
     dialog.set_close_response("cancel");
     dialog.set_default_response(Some("cancel"));
 
-    dialog.choose(
-        Some(parent),
-        None::<&gio::Cancellable>,
-        move |response| {
-            let name = entry.text().trim().to_string();
-            if response != "rename" || name.is_empty() {
-                return;
-            }
+    dialog.choose(Some(parent), None::<&gio::Cancellable>, move |response| {
+        let name = entry.text().trim().to_string();
+        if response != "rename" || name.is_empty() {
+            return;
+        }
 
-            let safe_name = sanitize_name(&name);
-            let dest = source.with_file_name(format!(
-                "{}{}",
-                safe_name,
-                source
-                    .extension()
-                    .and_then(|e| e.to_str())
-                    .map(|e| format!(".{e}"))
-                    .unwrap_or_default()
-            ));
+        let safe_name = sanitize_name(&name);
+        let dest = source.with_file_name(format!(
+            "{}{}",
+            safe_name,
+            source
+                .extension()
+                .and_then(|e| e.to_str())
+                .map(|e| format!(".{e}"))
+                .unwrap_or_default()
+        ));
 
-            if let Err(err) = fs::rename(&source, &dest) {
-                eprintln!("Error renaming sound: {err}");
-                return;
-            }
-            refresh();
-        },
-    );
+        if let Err(err) = fs::rename(&source, &dest) {
+            eprintln!("Error renaming sound: {err}");
+            return;
+        }
+        refresh();
+    });
 }
 
 fn confirm_delete(
@@ -997,22 +985,18 @@ fn confirm_delete(
 
     let item = item.clone();
     let playback = playback.clone();
-    dialog.choose(
-        Some(parent),
-        None::<&gio::Cancellable>,
-        move |response| {
-            if response != "delete" {
-                return;
-            }
-            stop_audio_file(&playback, &item);
-            stop_overlapping(&playback, &item);
-            if let Err(err) = fs::remove_file(item.file_path()) {
-                eprintln!("Error deleting sound: {err}");
-                return;
-            }
-            refresh();
-        },
-    );
+    dialog.choose(Some(parent), None::<&gio::Cancellable>, move |response| {
+        if response != "delete" {
+            return;
+        }
+        stop_audio_file(&playback, &item);
+        stop_overlapping(&playback, &item);
+        if let Err(err) = fs::remove_file(item.file_path()) {
+            eprintln!("Error deleting sound: {err}");
+            return;
+        }
+        refresh();
+    });
 }
 
 fn sanitize_name(name: &str) -> String {
