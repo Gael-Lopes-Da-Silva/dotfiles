@@ -28,6 +28,12 @@ pub fn status_page(title: &str, icon: &str, description: &str) -> gtk::Widget {
 pub fn loading_page(title: &str) -> gtk::Widget {
     let page = gtk::Box::builder()
         .orientation(gtk::Orientation::Vertical)
+        .vexpand(true)
+        .hexpand(true)
+        .build();
+
+    let centered = gtk::Box::builder()
+        .orientation(gtk::Orientation::Vertical)
         .valign(gtk::Align::Center)
         .vexpand(true)
         .spacing(12)
@@ -43,8 +49,9 @@ pub fn loading_page(title: &str) -> gtk::Widget {
         .halign(gtk::Align::Center)
         .build();
 
-    page.append(&spinner);
-    page.append(&label);
+    centered.append(&spinner);
+    centered.append(&label);
+    page.append(&centered);
     page.upcast()
 }
 

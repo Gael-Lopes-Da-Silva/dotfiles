@@ -76,13 +76,13 @@ impl Cli {
 
 fn components() -> [Component; 8] {
     [
+        power::component(),
         applications::component(),
         audio::component(),
         bluetooth::component(),
         wifi::component(),
         clipboard::component(),
         macros::component(),
-        power::component(),
         soundboard::component(),
     ]
 }
@@ -117,19 +117,10 @@ fn build_ui(app: &adw::Application, focused_id: &str) {
 
     stack.set_visible_child_name(focused_id);
 
-    let stack_w = stack.downgrade();
-
     let ensure_loaded = glib::clone!(
-        #[strong]
-        stack_w,
         #[strong]
         slots,
         move |id: &str| {
-            let Some(stack) = stack_w.upgrade() else {
-                return;
-            };
-
-            let should_show = stack.visible_child_name().as_deref() == Some(id);
             let (placeholder, component) = {
                 let mut map = slots.borrow_mut();
                 let Some(slot) = map.get_mut(id) else {
@@ -143,15 +134,14 @@ fn build_ui(app: &adw::Application, focused_id: &str) {
             };
 
             let widget = (component.build)();
-            stack.remove(&placeholder);
-            stack.add_titled_with_icon(
-                &widget,
-                Some(component.id),
-                component.title,
-                component.icon,
-            );
-            if should_show {
-                stack.set_visible_child_name(id);
+            if let Some(container) = placeholder.downcast_ref::<gtk::Box>() {
+                while let Some(child) = container.first_child() {
+                    container.remove(&child);
+                }
+                container.set_spacing(0);
+                widget.set_vexpand(true);
+                widget.set_hexpand(true);
+                container.append(&widget);
             }
         }
     );
