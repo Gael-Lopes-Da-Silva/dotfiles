@@ -2,7 +2,6 @@
 
 {
   services = {
-    printing.enable = true;
     gvfs.enable = true;
     lact.enable = true;
 
