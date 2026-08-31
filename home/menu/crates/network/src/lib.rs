@@ -79,7 +79,7 @@ struct SectionWidgets<'a> {
 
 pub fn component() -> Component {
     Component {
-        id: "wifi",
+        id: "network",
         title: "Network",
         icon: "network-wireless-symbolic",
         build,
@@ -777,6 +777,10 @@ fn build_connected_row(
         .margin_bottom(4)
         .build();
 
+    let icon = gtk::Image::from_icon_name(signal_icon(signal));
+    icon.set_pixel_size(28);
+    icon.set_valign(gtk::Align::Center);
+
     let text_col = gtk::Box::builder()
         .orientation(gtk::Orientation::Vertical)
         .spacing(2)
@@ -808,6 +812,7 @@ fn build_connected_row(
     text_col.append(&name);
     text_col.append(&meta);
 
+    row.append(&icon);
     row.append(&text_col);
     row.append(&signal_indicator(signal));
 
@@ -1285,6 +1290,9 @@ fn update_connected_signal(container: &gtk::Box, signal: i32) {
     let Some(row) = row.downcast_ref::<gtk::Box>() else {
         return;
     };
+    if let Some(icon) = row.first_child().and_downcast::<gtk::Image>() {
+        icon.set_icon_name(Some(signal_icon(signal)));
+    }
     if let Some(bar) = find_signal_bar(row) {
         apply_signal_bar(&bar, signal);
     }

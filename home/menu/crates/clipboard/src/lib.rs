@@ -276,22 +276,14 @@ fn build() -> gtk::Widget {
         .vexpand(true)
         .build();
 
-    let clear_history_btn = gtk::Button::with_label("Clear History");
+    let clear_history_btn = gtk::Button::from_icon_name("edit-clear-all-symbolic");
     clear_history_btn.add_css_class("destructive-action");
+    clear_history_btn.set_tooltip_text(Some("Clear history"));
     clear_history_btn.connect_clicked(glib::clone!(
         #[strong]
         refresh,
         move |btn| {
             confirm_clear_all(btn, refresh.clone());
-        }
-    ));
-
-    let query_clear_btn = gtk::Button::with_label("Query Clear");
-    query_clear_btn.connect_clicked(glib::clone!(
-        #[strong]
-        refresh,
-        move |btn| {
-            confirm_delete_by_query(btn, refresh.clone());
         }
     ));
 
@@ -312,7 +304,6 @@ fn build() -> gtk::Widget {
         .spacing(8)
         .build();
     footer.append(&clear_history_btn);
-    footer.append(&query_clear_btn);
     footer.append(&spacer);
     footer.append(&copy_footer_btn);
 
@@ -497,43 +488,6 @@ fn confirm_clear_all(parent: &impl IsA<gtk::Widget>, refresh: Rc<dyn Fn()>) {
         notify(
             "Clipboard history",
             "The clipboard history was successfully cleared.",
-        );
-        refresh();
-    });
-}
-
-fn confirm_delete_by_query(parent: &impl IsA<gtk::Widget>, refresh: Rc<dyn Fn()>) {
-    let dialog = adw::AlertDialog::new(
-        Some("Delete by Query"),
-        Some("Enter a search term. Every history item matching this string will be wiped:"),
-    );
-
-    let entry = gtk::Entry::builder()
-        .placeholder_text("Type pattern query here...")
-        .build();
-    dialog.set_extra_child(Some(&entry));
-
-    dialog.add_response("cancel", "Cancel");
-    dialog.add_response("delete", "Delete All");
-    dialog.set_response_appearance("delete", adw::ResponseAppearance::Destructive);
-    dialog.set_close_response("cancel");
-    dialog.set_default_response(Some("cancel"));
-
-    dialog.choose(Some(parent), None::<&gio::Cancellable>, move |response| {
-        let query = entry.text().trim().to_string();
-        if response != "delete" || query.is_empty() {
-            return;
-        }
-        if let Err(err) = Command::new("cliphist")
-            .args(["delete-query", &query])
-            .status()
-        {
-            eprintln!("Failed to delete by query: {err}");
-            return;
-        }
-        notify(
-            "Clipboard history",
-            &format!("Deleted all entries matching '{query}'."),
         );
         refresh();
     });

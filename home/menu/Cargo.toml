@@ -15,7 +15,7 @@ clipboard = { path = "crates/clipboard" }
 macros = { path = "crates/macros" }
 power = { path = "crates/power" }
 soundboard = { path = "crates/soundboard" }
-wifi = { path = "crates/wifi" }
+network = { path = "crates/network" }
 
 [workspace]
 resolver = "3"
@@ -28,7 +28,7 @@ members = [
     "crates/macros",
     "crates/power",
     "crates/soundboard",
-    "crates/wifi",
+    "crates/network",
 ]
 
 [workspace.dependencies]

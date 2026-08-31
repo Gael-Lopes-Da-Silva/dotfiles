@@ -47,7 +47,7 @@ struct Cli {
 
     /// Focus the Network page
     #[arg(long, group = "component")]
-    wifi: bool,
+    network: bool,
 }
 
 impl Cli {
@@ -66,8 +66,8 @@ impl Cli {
             "power"
         } else if self.soundboard {
             "soundboard"
-        } else if self.wifi {
-            "wifi"
+        } else if self.network {
+            "network"
         } else {
             "applications"
         }
@@ -80,7 +80,7 @@ fn components() -> [Component; 8] {
         applications::component(),
         audio::component(),
         bluetooth::component(),
-        wifi::component(),
+        network::component(),
         clipboard::component(),
         macros::component(),
         soundboard::component(),
