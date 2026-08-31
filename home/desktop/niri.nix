@@ -10,7 +10,7 @@
       spawn-sh-at-startup = "bash ~/.local/bin/autostart.sh";
 
       prefer-no-csd = { };
-      screenshot-path = "~/Pictures/Screenshot_%Y-%m-%d_%H-%M-%S.png";
+      screenshot-path = null;
 
       input.keyboard.xkb.layout = "us";
       input.keyboard.xkb.variant = "intl";
