@@ -25,6 +25,8 @@
       cp = "cp -iv";
       rm = "rm -i";
       mv = "mv -iv";
+
+      cd = "z";
     };
 
     sessionVariables = {
