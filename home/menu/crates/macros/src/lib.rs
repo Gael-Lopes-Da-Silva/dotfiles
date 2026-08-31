@@ -68,7 +68,7 @@ pub fn component() -> Component {
         id: "macros",
         title: "Macros",
         icon: "input-keyboard-symbolic",
-        build: build,
+        build,
     }
 }
 
@@ -318,12 +318,14 @@ fn build() -> gtk::Widget {
                 state.clone(),
                 SendWeakRef::from(start_btn.downgrade()),
                 SendWeakRef::from(stop_btn.downgrade()),
-                mode,
-                start_delay,
-                interval_ms,
-                duration_secs,
-                mouse_btn,
-                kb_info,
+                AutomationConfig {
+                    mode,
+                    start_delay,
+                    interval_ms,
+                    duration_secs,
+                    mouse_btn,
+                    kb_info,
+                },
             );
         }
     ));
@@ -428,51 +430,55 @@ fn create_virtual_device() -> std::io::Result<VirtualDevice> {
         .build()
 }
 
-fn start_automation(
-    state: Arc<DeviceState>,
-    start_btn: SendWeakRef<gtk::Button>,
-    stop_btn: SendWeakRef<gtk::Button>,
+struct AutomationConfig {
     mode: String,
     start_delay: u64,
     interval_ms: f64,
     duration_secs: f64,
     mouse_btn: u32,
     kb_info: KbInfo,
+}
+
+fn start_automation(
+    state: Arc<DeviceState>,
+    start_btn: SendWeakRef<gtk::Button>,
+    stop_btn: SendWeakRef<gtk::Button>,
+    config: AutomationConfig,
 ) {
     state.running.store(true, Ordering::SeqCst);
 
     thread::spawn(move || {
-        thread::sleep(Duration::from_secs(start_delay));
+        thread::sleep(Duration::from_secs(config.start_delay));
 
-        let end = if duration_secs > 0.0 {
-            Some(Instant::now() + Duration::from_secs_f64(duration_secs))
+        let end = if config.duration_secs > 0.0 {
+            Some(Instant::now() + Duration::from_secs_f64(config.duration_secs))
         } else {
             None
         };
 
-        let interval = if interval_ms > 0.0 {
-            Duration::from_secs_f64(interval_ms / 1000.0)
+        let interval = if config.interval_ms > 0.0 {
+            Duration::from_secs_f64(config.interval_ms / 1000.0)
         } else {
             Duration::from_millis(1)
         };
 
-        let mouse_code = match mouse_btn {
+        let mouse_code = match config.mouse_btn {
             1 => KeyCode::BTN_MIDDLE,
             2 => KeyCode::BTN_RIGHT,
             _ => KeyCode::BTN_LEFT,
         };
 
         let mut mods = Vec::new();
-        if kb_info.shift {
+        if config.kb_info.shift {
             mods.push(KeyCode::KEY_LEFTSHIFT);
         }
-        if kb_info.ctrl {
+        if config.kb_info.ctrl {
             mods.push(KeyCode::KEY_LEFTCTRL);
         }
-        if kb_info.alt {
+        if config.kb_info.alt {
             mods.push(KeyCode::KEY_LEFTALT);
         }
-        if kb_info.super_key {
+        if config.kb_info.super_key {
             mods.push(KeyCode::KEY_LEFTMETA);
         }
 
@@ -480,10 +486,10 @@ fn start_automation(
         let shift_map = shift_map();
 
         while state.running.load(Ordering::SeqCst) {
-            if let Some(end) = end {
-                if Instant::now() >= end {
-                    break;
-                }
+            if let Some(end) = end
+                && Instant::now() >= end
+            {
+                break;
             }
 
             {
@@ -495,16 +501,16 @@ fn start_automation(
                     break;
                 };
 
-                if mode == "mouse" {
+                if config.mode == "mouse" {
                     let _ = emit_key(device, mouse_code, 1);
                     let _ = emit_key(device, mouse_code, 0);
-                } else if mode == "kb" {
+                } else if config.mode == "kb" {
                     for &mod_key in &mods {
                         let _ = emit_key(device, mod_key, 1);
                     }
 
-                    if kb_info.action_type == 0 {
-                        for ch in kb_info.text.chars() {
+                    if config.kb_info.action_type == 0 {
+                        for ch in config.kb_info.text.chars() {
                             let (code, need_shift) = if let Some(&code) = key_map.get(&ch) {
                                 (Some(code), false)
                             } else if let Some(&code) = shift_map.get(&ch) {
@@ -527,8 +533,8 @@ fn start_automation(
                             }
                         }
                     } else {
-                        let _ = emit_key(device, kb_info.key, 1);
-                        let _ = emit_key(device, kb_info.key, 0);
+                        let _ = emit_key(device, config.kb_info.key, 1);
+                        let _ = emit_key(device, config.kb_info.key, 0);
                     }
 
                     for &mod_key in mods.iter().rev() {

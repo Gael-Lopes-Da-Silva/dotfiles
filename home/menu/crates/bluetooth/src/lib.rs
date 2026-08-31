@@ -46,6 +46,23 @@ struct UiState {
     refreshing: bool,
 }
 
+type RefreshHandle = Rc<RefCell<Option<Rc<dyn Fn()>>>>;
+
+struct HeaderWidgets<'a> {
+    power_switch: &'a gtk::Switch,
+    scan_btn: &'a gtk::Button,
+    scan_spinner: &'a gtk::Spinner,
+}
+
+struct SectionWidgets<'a> {
+    connected_box: &'a gtk::Box,
+    paired_box: &'a gtk::Box,
+    other_box: &'a gtk::Box,
+    connected_label: &'a gtk::Label,
+    paired_label: &'a gtk::Label,
+    other_label: &'a gtk::Label,
+}
+
 struct BluetoothSnapshot {
     adapter: AdapterInfo,
     devices: Vec<BtDevice>,
@@ -56,7 +73,7 @@ pub fn component() -> Component {
         id: "bluetooth",
         title: "Bluetooth",
         icon: "bluetooth-active-symbolic",
-        build: build,
+        build,
     }
 }
 
@@ -170,7 +187,7 @@ fn build() -> gtk::Widget {
 
     let query = Rc::new(RefCell::new(String::new()));
 
-    let refresh: Rc<RefCell<Option<Rc<dyn Fn()>>>> = Rc::new(RefCell::new(None));
+    let refresh: RefreshHandle = Rc::new(RefCell::new(None));
 
     let do_refresh = Rc::new(glib::clone!(
         #[strong]
@@ -263,15 +280,19 @@ fn build() -> gtk::Widget {
                             return;
                         };
                         apply_snapshot(
-                            &power_switch,
-                            &scan_btn,
-                            &scan_spinner,
-                            &connected_box,
-                            &paired_box,
-                            &other_box,
-                            &connected_label,
-                            &paired_label,
-                            &other_label,
+                            HeaderWidgets {
+                                power_switch: &power_switch,
+                                scan_btn: &scan_btn,
+                                scan_spinner: &scan_spinner,
+                            },
+                            SectionWidgets {
+                                connected_box: &connected_box,
+                                paired_box: &paired_box,
+                                other_box: &other_box,
+                                connected_label: &connected_label,
+                                paired_label: &paired_label,
+                                other_label: &other_label,
+                            },
                             &state,
                             &query_text,
                             refresh_cb,
@@ -407,15 +428,8 @@ fn fetch_bluetooth_snapshot() -> BluetoothSnapshot {
 }
 
 fn apply_snapshot(
-    power_switch: &gtk::Switch,
-    scan_btn: &gtk::Button,
-    scan_spinner: &gtk::Spinner,
-    connected_box: &gtk::Box,
-    paired_box: &gtk::Box,
-    other_box: &gtk::Box,
-    connected_label: &gtk::Label,
-    paired_label: &gtk::Label,
-    other_label: &gtk::Label,
+    header: HeaderWidgets<'_>,
+    sections: SectionWidgets<'_>,
     state: &Rc<RefCell<UiState>>,
     query: &str,
     refresh: Rc<dyn Fn()>,
@@ -428,19 +442,21 @@ fn apply_snapshot(
     let scanning = state.borrow().scanning || adapter.discovering;
 
     state.borrow_mut().updating = true;
-    if power_switch.is_active() != adapter.powered {
-        power_switch.set_active(adapter.powered);
+    if header.power_switch.is_active() != adapter.powered {
+        header.power_switch.set_active(adapter.powered);
     }
-    scan_btn.set_sensitive(adapter.powered);
-    scan_spinner.set_visible(scanning);
+    header.scan_btn.set_sensitive(adapter.powered);
+    header.scan_spinner.set_visible(scanning);
     if scanning {
-        scan_spinner.start();
-        scan_btn.set_icon_name("media-playback-stop-symbolic");
-        scan_btn.set_tooltip_text(Some("Stop scanning"));
+        header.scan_spinner.start();
+        header
+            .scan_btn
+            .set_icon_name("media-playback-stop-symbolic");
+        header.scan_btn.set_tooltip_text(Some("Stop scanning"));
     } else {
-        scan_spinner.stop();
-        scan_btn.set_icon_name("edit-find-symbolic");
-        scan_btn.set_tooltip_text(Some("Scan for devices"));
+        header.scan_spinner.stop();
+        header.scan_btn.set_icon_name("edit-find-symbolic");
+        header.scan_btn.set_tooltip_text(Some("Scan for devices"));
     }
     state.borrow_mut().updating = false;
 
@@ -473,22 +489,22 @@ fn apply_snapshot(
     state.borrow_mut().fingerprint = filter_key;
 
     rebuild_section(
-        connected_box,
-        connected_label,
+        sections.connected_box,
+        sections.connected_label,
         &connected,
         "No connected devices",
         &refresh,
     );
     rebuild_section(
-        paired_box,
-        paired_label,
+        sections.paired_box,
+        sections.paired_label,
         &paired,
         "No paired devices",
         &refresh,
     );
     rebuild_section(
-        other_box,
-        other_label,
+        sections.other_box,
+        sections.other_label,
         &other,
         "No available devices",
         &refresh,
@@ -558,7 +574,7 @@ fn build_device_row(device: &BtDevice, refresh: Rc<dyn Fn()>) -> gtk::Box {
     }
 
     let meta = gtk::Label::builder()
-        .label(&meta_parts.join(" · "))
+        .label(meta_parts.join(" · "))
         .xalign(0.0)
         .ellipsize(pango::EllipsizeMode::End)
         .css_classes(["dim-label", "caption"])
@@ -821,8 +837,7 @@ fn build_actions_popover(
         }
     }));
 
-    let popover = gtk::Popover::builder().child(&box_).build();
-    popover
+    gtk::Popover::builder().child(&box_).build()
 }
 
 fn popover_btn(label: &str, destructive: bool, on_click: impl Fn() + 'static) -> gtk::Button {
@@ -831,10 +846,10 @@ fn popover_btn(label: &str, destructive: bool, on_click: impl Fn() + 'static) ->
         .has_frame(false)
         .halign(gtk::Align::Fill)
         .build();
-    if let Some(child) = btn.child() {
-        if let Some(lbl) = child.downcast_ref::<gtk::Label>() {
-            lbl.set_xalign(0.0);
-        }
+    if let Some(child) = btn.child()
+        && let Some(lbl) = child.downcast_ref::<gtk::Label>()
+    {
+        lbl.set_xalign(0.0);
     }
     if destructive {
         btn.add_css_class("destructive-action");

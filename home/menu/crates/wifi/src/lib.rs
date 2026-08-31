@@ -27,7 +27,6 @@ struct WifiNetwork {
 struct SavedNetwork {
     name: String,
     uuid: String,
-    device: String,
     active: bool,
     autoconnect: bool,
 }
@@ -59,12 +58,31 @@ struct UiState {
     refreshing: bool,
 }
 
+type RefreshHandle = Rc<RefCell<Option<Rc<dyn Fn()>>>>;
+
+struct HeaderWidgets<'a> {
+    power_switch: &'a gtk::Switch,
+    scan_btn: &'a gtk::Button,
+    scan_spinner: &'a gtk::Spinner,
+}
+
+struct SectionWidgets<'a> {
+    ethernet_box: &'a gtk::Box,
+    connected_box: &'a gtk::Box,
+    known_box: &'a gtk::Box,
+    available_box: &'a gtk::Box,
+    ethernet_label: &'a gtk::Label,
+    connected_label: &'a gtk::Label,
+    known_label: &'a gtk::Label,
+    available_label: &'a gtk::Label,
+}
+
 pub fn component() -> Component {
     Component {
         id: "wifi",
         title: "Network",
         icon: "network-wireless-symbolic",
-        build: build,
+        build,
     }
 }
 
@@ -190,7 +208,7 @@ fn build() -> gtk::Widget {
 
     let query = Rc::new(RefCell::new(String::new()));
 
-    let refresh: Rc<RefCell<Option<Rc<dyn Fn()>>>> = Rc::new(RefCell::new(None));
+    let refresh: RefreshHandle = Rc::new(RefCell::new(None));
 
     let do_refresh = Rc::new(glib::clone!(
         #[strong]
@@ -297,17 +315,21 @@ fn build() -> gtk::Widget {
                             return;
                         };
                         apply_snapshot(
-                            &power_switch,
-                            &scan_btn,
-                            &scan_spinner,
-                            &ethernet_box,
-                            &connected_box,
-                            &known_box,
-                            &available_box,
-                            &ethernet_label,
-                            &connected_label,
-                            &known_label,
-                            &available_label,
+                            HeaderWidgets {
+                                power_switch: &power_switch,
+                                scan_btn: &scan_btn,
+                                scan_spinner: &scan_spinner,
+                            },
+                            SectionWidgets {
+                                ethernet_box: &ethernet_box,
+                                connected_box: &connected_box,
+                                known_box: &known_box,
+                                available_box: &available_box,
+                                ethernet_label: &ethernet_label,
+                                connected_label: &connected_label,
+                                known_label: &known_label,
+                                available_label: &available_label,
+                            },
                             &state,
                             &query_text,
                             refresh_cb,
@@ -430,17 +452,8 @@ fn fetch_snapshot() -> WifiSnapshot {
 }
 
 fn apply_snapshot(
-    power_switch: &gtk::Switch,
-    scan_btn: &gtk::Button,
-    scan_spinner: &gtk::Spinner,
-    ethernet_box: &gtk::Box,
-    connected_box: &gtk::Box,
-    known_box: &gtk::Box,
-    available_box: &gtk::Box,
-    ethernet_label: &gtk::Label,
-    connected_label: &gtk::Label,
-    known_label: &gtk::Label,
-    available_label: &gtk::Label,
+    header: HeaderWidgets<'_>,
+    sections: SectionWidgets<'_>,
     state: &Rc<RefCell<UiState>>,
     query: &str,
     refresh: Rc<dyn Fn()>,
@@ -449,15 +462,15 @@ fn apply_snapshot(
     let scanning = state.borrow().scanning;
 
     state.borrow_mut().updating = true;
-    if power_switch.is_active() != snapshot.wifi_enabled {
-        power_switch.set_active(snapshot.wifi_enabled);
+    if header.power_switch.is_active() != snapshot.wifi_enabled {
+        header.power_switch.set_active(snapshot.wifi_enabled);
     }
-    scan_btn.set_sensitive(snapshot.wifi_enabled);
-    scan_spinner.set_visible(scanning);
+    header.scan_btn.set_sensitive(snapshot.wifi_enabled);
+    header.scan_spinner.set_visible(scanning);
     if scanning {
-        scan_spinner.start();
+        header.scan_spinner.start();
     } else {
-        scan_spinner.stop();
+        header.scan_spinner.stop();
     }
     state.borrow_mut().updating = false;
 
@@ -502,14 +515,19 @@ fn apply_snapshot(
 
     if state.borrow().ethernet_fp != ethernet_fp {
         state.borrow_mut().ethernet_fp = ethernet_fp;
-        rebuild_ethernet_section(ethernet_box, ethernet_label, &snapshot.ethernet, &refresh);
+        rebuild_ethernet_section(
+            sections.ethernet_box,
+            sections.ethernet_label,
+            &snapshot.ethernet,
+            &refresh,
+        );
     }
 
     if state.borrow().connected_fp != connected_fp {
         state.borrow_mut().connected_fp = connected_fp;
         rebuild_connected_section(
-            connected_box,
-            connected_label,
+            sections.connected_box,
+            sections.connected_label,
             &snapshot.active_ssid,
             connected_scan.as_ref(),
             &snapshot.wifi_device,
@@ -518,19 +536,24 @@ fn apply_snapshot(
         );
     } else {
         let signal = connected_scan.map(|n| n.signal).unwrap_or(0);
-        update_connected_signal(connected_box, signal);
+        update_connected_signal(sections.connected_box, signal);
     }
 
     if state.borrow().known_fp != known_fp {
         state.borrow_mut().known_fp = known_fp;
-        rebuild_known_section(known_box, known_label, &known, &refresh);
+        rebuild_known_section(sections.known_box, sections.known_label, &known, &refresh);
     }
 
     if state.borrow().available_fp != available_fp {
         state.borrow_mut().available_fp = available_fp;
-        rebuild_available_section(available_box, available_label, &available, &refresh);
+        rebuild_available_section(
+            sections.available_box,
+            sections.available_label,
+            &available,
+            &refresh,
+        );
     } else {
-        update_available_signals(available_box, &available);
+        update_available_signals(sections.available_box, &available);
     }
 }
 
@@ -709,7 +732,7 @@ fn build_ethernet_row(device: &EthernetInfo, refresh: Rc<dyn Fn()>) -> gtk::Box 
         meta_parts.push(device.ip4.clone());
     }
     let meta = gtk::Label::builder()
-        .label(&meta_parts.join(" · "))
+        .label(meta_parts.join(" · "))
         .xalign(0.0)
         .ellipsize(pango::EllipsizeMode::End)
         .css_classes(["dim-label", "caption"])
@@ -776,7 +799,7 @@ fn build_connected_row(
     }
 
     let meta = gtk::Label::builder()
-        .label(&meta_parts.join(" · "))
+        .label(meta_parts.join(" · "))
         .xalign(0.0)
         .ellipsize(pango::EllipsizeMode::End)
         .css_classes(["dim-label", "caption"])
@@ -928,7 +951,7 @@ fn build_available_row(network: &WifiNetwork, refresh: Rc<dyn Fn()>) -> gtk::Box
     meta_parts.push(format!("{}%", network.signal));
 
     let meta = gtk::Label::builder()
-        .label(&meta_parts.join(" · "))
+        .label(meta_parts.join(" · "))
         .xalign(0.0)
         .ellipsize(pango::EllipsizeMode::End)
         .css_classes(["dim-label", "caption"])
@@ -1029,10 +1052,10 @@ fn popover_btn(label: &str, destructive: bool, on_click: impl Fn() + 'static) ->
         .has_frame(false)
         .halign(gtk::Align::Fill)
         .build();
-    if let Some(child) = btn.child() {
-        if let Some(lbl) = child.downcast_ref::<gtk::Label>() {
-            lbl.set_xalign(0.0);
-        }
+    if let Some(child) = btn.child()
+        && let Some(lbl) = child.downcast_ref::<gtk::Label>()
+    {
+        lbl.set_xalign(0.0);
     }
     if destructive {
         btn.add_css_class("destructive-action");
@@ -1234,10 +1257,10 @@ fn ensure_signal_css() {
 fn find_signal_bar(row: &gtk::Box) -> Option<gtk::ProgressBar> {
     let mut child = row.last_child();
     while let Some(widget) = child {
-        if let Some(bar) = widget.downcast_ref::<gtk::ProgressBar>() {
-            if bar.has_css_class("wifi-signal-bar") {
-                return Some(bar.clone());
-            }
+        if let Some(bar) = widget.downcast_ref::<gtk::ProgressBar>()
+            && bar.has_css_class("wifi-signal-bar")
+        {
+            return Some(bar.clone());
         }
         child = widget.prev_sibling();
     }
@@ -1512,16 +1535,10 @@ fn list_saved_networks() -> Vec<SavedNetwork> {
         if fields[2] != "802-11-wireless" {
             continue;
         }
-        let device = fields[3].clone();
         let state = fields[4].clone();
         networks.push(SavedNetwork {
             name: fields[0].clone(),
             uuid: fields[1].clone(),
-            device: if device == "--" {
-                String::new()
-            } else {
-                device
-            },
             active: state == "activated",
             autoconnect: fields[5].eq_ignore_ascii_case("yes"),
         });

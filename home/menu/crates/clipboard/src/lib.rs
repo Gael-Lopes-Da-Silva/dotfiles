@@ -21,7 +21,7 @@ pub fn component() -> Component {
         id: "clipboard",
         title: "Clipboard",
         icon: "edit-copy-symbolic",
-        build: build,
+        build,
     }
 }
 
@@ -552,11 +552,11 @@ fn delete_item(item: &ClipboardItem) -> bool {
         }
     };
 
-    if let Some(mut stdin) = child.stdin.take() {
-        if let Err(err) = write!(stdin, "{}\t{}", item.item_id(), item.text()) {
-            eprintln!("Failed to write delete payload: {err}");
-            return false;
-        }
+    if let Some(mut stdin) = child.stdin.take()
+        && let Err(err) = write!(stdin, "{}\t{}", item.item_id(), item.text())
+    {
+        eprintln!("Failed to write delete payload: {err}");
+        return false;
     }
 
     match child.wait() {

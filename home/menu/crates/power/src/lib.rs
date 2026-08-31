@@ -19,7 +19,7 @@ pub fn component() -> Component {
         id: "power",
         title: "Power",
         icon: "system-shutdown-symbolic",
-        build: build,
+        build,
     }
 }
 

@@ -57,7 +57,7 @@ pub fn component() -> Component {
         id: "soundboard",
         title: "Soundboard",
         icon: "audio-headphones-symbolic",
-        build: build,
+        build,
     }
 }
 
@@ -503,19 +503,20 @@ fn handle_nav_key(
     }
     if key == gdk::Key::Tab || key == gdk::Key::ISO_Left_Tab {
         let position = selection.selected();
-        if position != gtk::INVALID_LIST_POSITION && selection.n_items() > 0 {
-            if let Some(item) = selection.item(position).and_downcast::<SoundboardItem>() {
-                search.set_text(item.display_name());
-                search.set_position(-1);
-                glib::idle_add_local_once(glib::clone!(
-                    #[weak]
-                    search,
-                    move || {
-                        search.grab_focus();
-                        search.set_position(-1);
-                    }
-                ));
-            }
+        if position != gtk::INVALID_LIST_POSITION
+            && selection.n_items() > 0
+            && let Some(item) = selection.item(position).and_downcast::<SoundboardItem>()
+        {
+            search.set_text(item.display_name());
+            search.set_position(-1);
+            glib::idle_add_local_once(glib::clone!(
+                #[weak]
+                search,
+                move || {
+                    search.grab_focus();
+                    search.set_position(-1);
+                }
+            ));
         }
         return glib::Propagation::Stop;
     }
@@ -601,10 +602,10 @@ fn check_playing_sounds(playback: &Rc<RefCell<PlaybackState>>, store: &gio::List
     }
 
     for i in 0..store.n_items() {
-        if let Some(item) = store.item(i).and_downcast::<SoundboardItem>() {
-            if overlap_changed.iter().any(|p| p == item.file_path()) {
-                update_item_playing_state(playback, &item);
-            }
+        if let Some(item) = store.item(i).and_downcast::<SoundboardItem>()
+            && overlap_changed.iter().any(|p| p == item.file_path())
+        {
+            update_item_playing_state(playback, &item);
         }
     }
 }
@@ -858,11 +859,11 @@ fn open_recording_popup(parent: &impl IsA<gtk::Widget>, recording: &Rc<RefCell<R
 fn stop_recording(recording: &Rc<RefCell<RecordingState>>) {
     let mut state = recording.borrow_mut();
 
-    if let Some(mut child) = state.process.take() {
-        if child.try_wait().ok().flatten().is_none() {
-            let _ = child.kill();
-            let _ = child.wait();
-        }
+    if let Some(mut child) = state.process.take()
+        && child.try_wait().ok().flatten().is_none()
+    {
+        let _ = child.kill();
+        let _ = child.wait();
     }
 
     if let Some(popup) = state.popup.take() {
@@ -1008,7 +1009,7 @@ fn sanitize_name(name: &str) -> String {
 }
 
 fn display_name_from_stem(stem: &str) -> String {
-    let name = stem.replace('-', " ").replace('_', " ");
+    let name = stem.replace(['-', '_'], " ");
     let trimmed = name.trim();
     let mut chars = trimmed.chars();
     match chars.next() {

@@ -17,7 +17,7 @@ pub fn component() -> Component {
         id: "applications",
         title: "Applications",
         icon: "view-app-grid-symbolic",
-        build: build,
+        build,
     }
 }
 

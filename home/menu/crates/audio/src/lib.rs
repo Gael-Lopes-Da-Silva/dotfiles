@@ -50,7 +50,7 @@ pub fn component() -> Component {
         id: "audio",
         title: "Audio",
         icon: "audio-volume-high-symbolic",
-        build: build,
+        build,
     }
 }
 
@@ -475,22 +475,21 @@ fn update_device_rows(
             continue;
         };
         if let Some(row) = widget.downcast_ref::<gtk::Box>() {
-            if let Some(check) = find_child_as::<gtk::CheckButton>(row) {
-                if check.is_active() != endpoint.is_default {
-                    check.set_active(endpoint.is_default);
-                }
+            if let Some(check) = find_child_as::<gtk::CheckButton>(row)
+                && check.is_active() != endpoint.is_default
+            {
+                check.set_active(endpoint.is_default);
             }
-            if let Some(name) = find_named_as::<gtk::Label>(row, "name") {
-                if name.label() != endpoint.name.as_str() {
-                    name.set_label(&endpoint.name);
-                }
+            if let Some(name) = find_named_as::<gtk::Label>(row, "name")
+                && name.label() != endpoint.name.as_str()
+            {
+                name.set_label(&endpoint.name);
             }
-            if !state.borrow().dragging.contains(&id) {
-                if let Some(scale) = find_named_as::<gtk::Scale>(row, "scale") {
-                    if (scale.value() - endpoint.volume).abs() > 0.005 {
-                        scale.set_value(endpoint.volume);
-                    }
-                }
+            if !state.borrow().dragging.contains(&id)
+                && let Some(scale) = find_named_as::<gtk::Scale>(row, "scale")
+                && (scale.value() - endpoint.volume).abs() > 0.005
+            {
+                scale.set_value(endpoint.volume);
             }
             if let Some(mute) = find_named_as::<gtk::Button>(row, "mute") {
                 set_mute_icon(&mute, endpoint.muted, is_output);
@@ -520,10 +519,10 @@ fn update_stream_rows(
             continue;
         };
         if let Some(row) = widget.downcast_ref::<gtk::Box>() {
-            if let Some(app) = find_named_as::<gtk::Label>(row, "app") {
-                if app.label() != stream.app_name.as_str() {
-                    app.set_label(&stream.app_name);
-                }
+            if let Some(app) = find_named_as::<gtk::Label>(row, "app")
+                && app.label() != stream.app_name.as_str()
+            {
+                app.set_label(&stream.app_name);
             }
             if let Some(media) = find_named_as::<gtk::Label>(row, "media") {
                 let text = if stream.media_name.is_empty() {
@@ -535,12 +534,11 @@ fn update_stream_rows(
                     media.set_label(text);
                 }
             }
-            if !state.borrow().dragging.contains(&id) {
-                if let Some(scale) = find_named_as::<gtk::Scale>(row, "scale") {
-                    if (scale.value() - stream.volume).abs() > 0.005 {
-                        scale.set_value(stream.volume);
-                    }
-                }
+            if !state.borrow().dragging.contains(&id)
+                && let Some(scale) = find_named_as::<gtk::Scale>(row, "scale")
+                && (scale.value() - stream.volume).abs() > 0.005
+            {
+                scale.set_value(stream.volume);
             }
             if let Some(mute) = find_named_as::<gtk::Button>(row, "mute") {
                 set_mute_icon(&mute, stream.muted, is_output);
@@ -654,10 +652,10 @@ fn find_named_as<T: IsA<gtk::Widget>>(parent: &gtk::Box, name: &str) -> Option<T
         if widget.widget_name() == name {
             return widget.downcast::<T>().ok();
         }
-        if let Some(box_) = widget.downcast_ref::<gtk::Box>() {
-            if let Some(found) = find_named_as::<T>(box_, name) {
-                return Some(found);
-            }
+        if let Some(box_) = widget.downcast_ref::<gtk::Box>()
+            && let Some(found) = find_named_as::<T>(box_, name)
+        {
+            return Some(found);
         }
         child = widget.next_sibling();
     }
