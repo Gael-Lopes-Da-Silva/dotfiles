@@ -64,12 +64,10 @@ in
     nautilus
     showtime
     constrict
-    parabolic
     morphosis
     resources
     impression
     file-roller
-    livecaptions
     audio-sharing
     field-monitor
 
