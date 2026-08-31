@@ -16,7 +16,8 @@
 
   home-manager.users.gael = {
     imports = [
-      ./desktop/niri
+      ./desktop/niri.nix
+      ./desktop/hyprland.nix
       ./desktop/theme.nix
       ./desktop/clipboard.nix
       ./desktop/kanshi.nix

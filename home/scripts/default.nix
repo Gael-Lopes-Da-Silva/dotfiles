@@ -21,7 +21,6 @@
         "output_monitor.sh" = ./monitor/output_monitor.sh;
         "usb_monitor.sh" = ./monitor/usb_monitor.sh;
 
-        "mute_process.sh" = ./utility/mute_process.sh;
         "freeze_process.sh" = ./utility/freeze_process.sh;
         "kill_process.sh" = ./utility/kill_process.sh;
 
