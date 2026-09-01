@@ -22,12 +22,20 @@ pactl subscribe | while read -r line; do
                         -h string:x-dunst-stack-tag:volume \
                         -t 3000 \
                         "Speaker" "Muted"
+
+                    setsid nohup bash -c "
+                        paplay '$HOME/.local/sounds/on-entend-plus-rien.wav' &
+                    " >/dev/null 2>&1 &
                 else
                     notify-send \
                         -a "osd" \
                         -h string:x-dunst-stack-tag:volume \
                         -t 3000 \
                         "Speaker" "Unmuted"
+
+                    setsid nohup bash -c "
+                        paplay '$HOME/.local/sounds/cest-trop-fort.wav' &
+                    " >/dev/null 2>&1 &
                 fi
 
                 prev_sink_mute="$sink_mute"
@@ -56,12 +64,20 @@ pactl subscribe | while read -r line; do
                         -h string:x-dunst-stack-tag:microphone \
                         -t 3000 \
                         "Microphone" "Muted"
+
+                    setsid nohup bash -c "
+                        paplay '$HOME/.local/sounds/on-entend-plus-rien.wav' &
+                    " >/dev/null 2>&1 &
                 else
                     notify-send \
                         -a "osd" \
                         -h string:x-dunst-stack-tag:microphone \
                         -t 3000 \
                         "Microphone" "Unmuted"
+
+                    setsid nohup bash -c "
+                        paplay '$HOME/.local/sounds/cest-trop-fort.wav' &
+                    " >/dev/null 2>&1 &
                 fi
 
                 prev_source_mute="$source_mute"
@@ -72,6 +88,10 @@ pactl subscribe | while read -r line; do
                     -h "int:value:$source_volume" \
                     -t 3000 \
                     "Microphone" "$source_volume%"
+
+                setsid nohup bash -c "
+                    paplay '$HOME/.local/sounds/le-son.wav' &
+                " >/dev/null 2>&1 &
 
                 prev_source_volume="$source_volume"
             fi

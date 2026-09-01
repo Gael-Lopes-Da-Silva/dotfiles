@@ -40,7 +40,7 @@ udevadm monitor --environment --udev --subsystem-match=drm | while read -r line;
                         last_status[$name]=$status
 
                         setsid nohup bash -c "
-                            paplay '$HOME/.local/sounds/windows-11-notify.mp3' &
+                            paplay '$HOME/.local/sounds/mes-nouvelles-lunettes.wav' &
                         " >/dev/null 2>&1 &
                     fi
                 done

@@ -17,4 +17,8 @@ notify-send \
     -t 5000 \
     "Window killed" "PID: $pid"
 
+setsid nohup bash -c "
+    paplay '$HOME/.local/sounds/cest-grille.wav' &
+" >/dev/null 2>&1 &
+
 exit 0

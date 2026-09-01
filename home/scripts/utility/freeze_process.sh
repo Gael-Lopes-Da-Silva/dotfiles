@@ -21,12 +21,20 @@ if [[ "$state" == T* ]]; then
         -a "notification" \
         -t 5000 \
         "Window unfrozen" "PID: $pid"
+
+    setsid nohup bash -c "
+        paplay '$HOME/.local/sounds/on-est-reparti.wav' &
+    " >/dev/null 2>&1 &
 else
     kill -STOP "$pid"
     notify-send \
         -a "notification" \
         -t 5000 \
         "Window frozen" "PID: $pid"
+
+    setsid nohup bash -c "
+        paplay '$HOME/.local/sounds/jai-dis-stop.wav' &
+    " >/dev/null 2>&1 &
 fi
 
 exit 0

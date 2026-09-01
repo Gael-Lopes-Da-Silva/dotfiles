@@ -36,6 +36,10 @@ udevadm monitor --environment --udev --subsystem-match=backlight | while read -r
                             -h "int:value:$percent" \
                             -t 3000 \
                             "Brightness" "$percent%"
+
+                        setsid nohup bash -c "
+                            paplay '$HOME/.local/sounds/il-va-faire-tout-noir.wav' &
+                        " >/dev/null 2>&1 &
                     fi
 
                     prev_percent="$percent"
