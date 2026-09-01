@@ -84,7 +84,8 @@
             { geometry-corner-radius = 12; }
             { clip-to-geometry = true; }
             { open-maximized-to-edges = false; }
-            { draw-border-with-background = false; }
+            { open-maximized = false; }
+            { open-fullscreen = false; }
           ];
         }
         {
