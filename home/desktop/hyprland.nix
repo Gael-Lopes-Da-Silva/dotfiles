@@ -3,7 +3,7 @@
 let
   inherit (lib.generators) mkLuaInline;
 
-  screenshot = mode: ''hl.dsp.exec_cmd("hyprshot -m ${mode} -z --clipboard-only")'';
+  screenshot = mode: ''hl.dsp.exec_cmd("hyprshot -m ${mode} -z -s --clipboard-only")'';
 
   bindMod = key: action: {
     _args = [
