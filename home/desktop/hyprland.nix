@@ -153,6 +153,8 @@ in
         {
           gestures = {
             workspace_swipe_touch = true;
+            workspace_swipe_create_new = false;
+            workspace_swipe_forever = false;
           };
         }
       ];
@@ -301,6 +303,31 @@ in
         })
       ];
 
+      window_rule = [
+        {
+          name = "suppress-maximize-events";
+          match = {
+            class = ".*";
+          };
+          suppress_event = "maximize";
+        }
+        {
+          name = "steam-notifications";
+          match = {
+            class = "^steam$";
+            title = "^notificationtoasts";
+          };
+          rounding = 0;
+          no_initial_focus = true;
+          float = true;
+          move = [
+            "monitor_w - window_w"
+            "monitor_h - window_h"
+          ];
+          border_size = 0;
+        }
+      ];
+
       bind = [
         (bindMod "RETURN" ''hl.dsp.exec_cmd("kgx")'')
         (bindMod "BackSpace" ''hl.dsp.exec_cmd("firefox")'')
@@ -430,16 +457,6 @@ in
         (bindMod "escape" ''hl.dsp.global("shortcuts:inhibit")'')
       ]
       ++ workspaceBinds;
-
-      window_rule = [
-        {
-          name = "suppress-maximize-events";
-          match = {
-            class = ".*";
-          };
-          suppress_event = "maximize";
-        }
-      ];
     };
   };
 }
