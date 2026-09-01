@@ -23,7 +23,7 @@ if [[ "$state" == T* ]]; then
         "Window unfrozen" "PID: $pid"
 
     setsid nohup bash -c "
-        paplay '$HOME/.local/sounds/on-est-reparti.wav' &
+        paplay '$HOME/.local/sounds/prop_unfrozen.wav' &
     " >/dev/null 2>&1 &
 else
     kill -STOP "$pid"
@@ -33,7 +33,7 @@ else
         "Window frozen" "PID: $pid"
 
     setsid nohup bash -c "
-        paplay '$HOME/.local/sounds/jai-dis-stop.wav' &
+        paplay '$HOME/.local/sounds/prop_frozen.wav' &
     " >/dev/null 2>&1 &
 fi
 

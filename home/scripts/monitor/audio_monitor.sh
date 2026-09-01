@@ -24,7 +24,7 @@ pactl subscribe | while read -r line; do
                         "Speaker" "Muted"
 
                     setsid nohup bash -c "
-                        paplay '$HOME/.local/sounds/on-entend-plus-rien.wav' &
+                        paplay '$HOME/.local/sounds/prop_muted.wav' &
                     " >/dev/null 2>&1 &
                 else
                     notify-send \
@@ -34,7 +34,7 @@ pactl subscribe | while read -r line; do
                         "Speaker" "Unmuted"
 
                     setsid nohup bash -c "
-                        paplay '$HOME/.local/sounds/cest-trop-fort.wav' &
+                        paplay '$HOME/.local/sounds/prop_unmuted.wav' &
                     " >/dev/null 2>&1 &
                 fi
 
@@ -48,7 +48,7 @@ pactl subscribe | while read -r line; do
                     "Speaker" "$sink_volume%"
 
                 setsid nohup bash -c "
-                    paplay '$HOME/.local/sounds/le-son.wav' &
+                    paplay '$HOME/.local/sounds/prop_sound.wav' &
                 " >/dev/null 2>&1 &
 
                 prev_sink_volume="$sink_volume"
@@ -70,7 +70,7 @@ pactl subscribe | while read -r line; do
                         "Microphone" "Muted"
 
                     setsid nohup bash -c "
-                        paplay '$HOME/.local/sounds/on-entend-plus-rien.wav' &
+                        paplay '$HOME/.local/sounds/prop_muted.wav' &
                     " >/dev/null 2>&1 &
                 else
                     notify-send \
@@ -80,7 +80,7 @@ pactl subscribe | while read -r line; do
                         "Microphone" "Unmuted"
 
                     setsid nohup bash -c "
-                        paplay '$HOME/.local/sounds/cest-trop-fort.wav' &
+                        paplay '$HOME/.local/sounds/prop_unmuted.wav' &
                     " >/dev/null 2>&1 &
                 fi
 
@@ -94,7 +94,7 @@ pactl subscribe | while read -r line; do
                     "Microphone" "$source_volume%"
 
                 setsid nohup bash -c "
-                    paplay '$HOME/.local/sounds/le-son.wav' &
+                    paplay '$HOME/.local/sounds/prop_sound.wav' &
                 " >/dev/null 2>&1 &
 
                 prev_source_volume="$source_volume"

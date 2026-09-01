@@ -15,7 +15,7 @@ notify-send \
     "Battery" "$level%"
 
 setsid nohup bash -c "
-    paplay '$HOME/.local/sounds/la-pile.wav' &
+    paplay '$HOME/.local/sounds/prop_battery.wav' &
 " >/dev/null 2>&1 &
 
 exit 0
