@@ -49,7 +49,6 @@ in
     pods
     lact
     loupe
-    kooha
     snoop
     pinta
     packet
