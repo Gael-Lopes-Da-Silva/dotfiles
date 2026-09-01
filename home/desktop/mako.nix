@@ -9,8 +9,8 @@
       default-timeout = 5000;
       text-color = "#ffffffff";
       background-color = "#0D0D0Dff";
-      border-size = 0;
-      border-color = "#3B3B3Bff";
+      border-size = 1;
+      border-color = "#404040ff";
       border-radius = 10;
       progress-color = "#242424ff";
       margin = 2;
