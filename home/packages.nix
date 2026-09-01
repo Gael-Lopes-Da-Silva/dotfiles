@@ -48,7 +48,6 @@ in
     ghex
     pods
     lact
-    coulr
     loupe
     kooha
     snoop
