@@ -1,8 +1,6 @@
 { ... }:
 
 {
-  # wayland.systemd.target = "niri.service";
-
   wayland.windowManager.niri = {
     enable = true;
 

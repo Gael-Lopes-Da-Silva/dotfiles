@@ -61,8 +61,6 @@ let
   );
 in
 {
-  # wayland.systemd.target = "hyprland-session.target";
-
   home.packages = with pkgs; [
     hyprshot
   ];
