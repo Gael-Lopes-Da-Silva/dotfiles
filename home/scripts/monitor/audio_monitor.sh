@@ -47,6 +47,10 @@ pactl subscribe | while read -r line; do
                     -t 3000 \
                     "Speaker" "$sink_volume%"
 
+                setsid nohup bash -c "
+                    paplay '$HOME/.local/sounds/le-son.wav' &
+                " >/dev/null 2>&1 &
+
                 prev_sink_volume="$sink_volume"
             fi
 
