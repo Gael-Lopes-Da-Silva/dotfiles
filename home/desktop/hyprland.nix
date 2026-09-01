@@ -59,13 +59,6 @@ in
         _var = "SUPER";
       };
 
-      monitor = {
-        output = "";
-        mode = "preferred";
-        position = "auto";
-        scale = "auto";
-      };
-
       on = {
         _args = [
           "hyprland.start"
