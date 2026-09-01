@@ -22,13 +22,13 @@
     enable = true;
 
     settings = {
-      animation = "colormix";
+      animation = "none";
       session_log = ".cache/ly/session.log";
       clock = null;
       bigclock = true;
       blank_password = true;
-      blank_box = true;
-      hide_borders = false;
+      blank_box = false;
+      hide_borders = true;
       hide_key_hints = true;
       hide_version_string = true;
       load = true;
@@ -63,6 +63,8 @@
       QT_QPA_PLATFORMTHEME = "adwaita";
       QT_STYLE_OVERRIDE = "adwaita-dark";
       QT_QUICK_CONTROLS_STYLE = "adwaita-dark";
+
+      GDK_SCALE = "1";
     };
 
     systemPackages = with pkgs; [
