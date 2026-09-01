@@ -276,9 +276,8 @@ fn build() -> gtk::Widget {
         .vexpand(true)
         .build();
 
-    let clear_history_btn = gtk::Button::from_icon_name("edit-clear-all-symbolic");
+    let clear_history_btn = gtk::Button::with_label("Empty");
     clear_history_btn.add_css_class("destructive-action");
-    clear_history_btn.set_tooltip_text(Some("Clear history"));
     clear_history_btn.connect_clicked(glib::clone!(
         #[strong]
         refresh,
