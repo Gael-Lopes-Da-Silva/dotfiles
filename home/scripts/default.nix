@@ -1,6 +1,8 @@
 { pkgs, ... }:
 
 {
+  imports = [ ./monitor.nix ];
+
   home.file =
     pkgs.lib.mapAttrs'
       (filename: srcPath: {

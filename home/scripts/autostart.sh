@@ -5,9 +5,3 @@ setsid nohup bash -c "
 " >/dev/null 2>&1 &
 
 bash ~/.local/bin/soundboard_setup.sh &
-
-bash ~/.local/bin/audio_monitor.sh &
-bash ~/.local/bin/battery_monitor.sh &
-bash ~/.local/bin/brightness_monitor.sh &
-bash ~/.local/bin/output_monitor.sh &
-bash ~/.local/bin/usb_monitor.sh &
