@@ -54,9 +54,7 @@
         };
 
         tab-indicator = {
-          gap = 3;
-          gaps-between-tabs = 6;
-          corner-radius = 8;
+          off = { };
         };
 
         shadow = {
@@ -323,11 +321,6 @@
         "Mod+Shift+R" = {
           _props.repeat = false;
           switch-preset-window-height = { };
-        };
-
-        "Mod+T" = {
-          _props.repeat = false;
-          toggle-column-tabbed-display = { };
         };
 
         "Mod+BracketLeft" = {
