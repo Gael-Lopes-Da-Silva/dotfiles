@@ -422,6 +422,7 @@ in
         (bindMod "SHIFT + CTRL + mouse_up" ''hl.dsp.layout("swapcol l")'')
 
         (bindMod "mouse:272" "hl.dsp.window.drag()")
+        (bindMod "mouse:273" "hl.dsp.window.resize()")
 
         (bindMod "S" ''hl.dsp.workspace.toggle_special("magic")'')
         (bindMod "SHIFT + S" ''hl.dsp.window.move({ workspace = "special:magic" })'')
