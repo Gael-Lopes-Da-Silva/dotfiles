@@ -73,7 +73,7 @@ in
       config = [
         {
           general = {
-            gaps_in = 10;
+            gaps_in = 5;
             gaps_out = 10;
             layout = "scrolling";
             resize_on_border = false;
@@ -97,9 +97,7 @@ in
             };
           };
 
-          animations = {
-            enabled = true;
-          };
+          animations.enabled = true;
         }
         {
           scrolling = {
@@ -120,13 +118,7 @@ in
               border_inactive = "0";
             };
 
-            groupbar = {
-              enabled = true;
-              gaps_in = 3;
-              gaps_out = 6;
-              height = 0;
-              rounding = 8;
-            };
+            groupbar.enabled = false;
           };
         }
         {
@@ -414,14 +406,12 @@ in
 
         (bindMod "R" ''hl.dsp.layout("colresize +conf")'')
 
-        (bindMod "T" "hl.dsp.group.toggle()")
-
         (bindMod "bracketleft" ''hl.dsp.layout("consume_or_expel prev")'')
         (bindMod "bracketright" ''hl.dsp.layout("consume_or_expel next")'')
         (bindMod "comma" ''hl.dsp.layout("consume")'')
         (bindMod "period" ''hl.dsp.layout("expel")'')
 
-        (bindMod "F" ''hl.dsp.layout("fit expand")'')
+        (bindMod "F" ''hl.dsp.window.fullscreen({ mode = "maximized" })'')
         (bindMod "SHIFT + F" ''hl.dsp.window.fullscreen({ mode = "fullscreen" })'')
 
         (bindMod "E" ''hl.dsp.layout("fit active")'')
