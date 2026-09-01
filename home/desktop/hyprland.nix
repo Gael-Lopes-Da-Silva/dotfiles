@@ -411,7 +411,9 @@ in
 
         (bindMod "mouse:272" "hl.dsp.window.drag()")
 
-        (bindMod "S" "hl.dsp.workspace.toggle_special()")
+        (bindMod "S" ''hl.dsp.workspace.toggle_special("magic")'')
+        (bindMod "SHIFT + S" ''hl.dsp.window.move({ workspace = "special:magic" })'')
+        (bindMod "CTRL + S" ''hl.dsp.window.move({ workspace = "special:magic", follow = false })'')
 
         (bindMod "Tab" ''hl.dsp.focus({ workspace = "previous" })'')
 
