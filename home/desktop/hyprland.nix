@@ -82,10 +82,13 @@ in
           general = {
             gaps_in = 10;
             gaps_out = 10;
-            border_size = 0;
             layout = "scrolling";
             resize_on_border = false;
             allow_tearing = false;
+
+            border_size = 1;
+            col.active_border = "rgb(404040)";
+            col.inactive_border = "rgb(303030)";
           };
 
           decoration = {
@@ -93,11 +96,11 @@ in
 
             shadow = {
               enabled = true;
-              render_power = 2;
-              range = 2;
-              color = "0x00000070";
-              color_inactive = "0x00000050";
-              offset = "0 5";
+              render_power = 4;
+              range = 10;
+              color = "rgba(00000070)";
+              color_inactive = "rgba(00000050)";
+              offset = "0 2";
             };
           };
 
@@ -405,6 +408,8 @@ in
         (bindMod "SHIFT + mouse_up" ''hl.dsp.layout("focus l")'')
         (bindMod "SHIFT + CTRL + mouse_down" ''hl.dsp.layout("swapcol r")'')
         (bindMod "SHIFT + CTRL + mouse_up" ''hl.dsp.layout("swapcol l")'')
+
+        (bindMod "mouse:272" "hl.dsp.window.drag()")
 
         (bindMod "S" "hl.dsp.workspace.toggle_special()")
 

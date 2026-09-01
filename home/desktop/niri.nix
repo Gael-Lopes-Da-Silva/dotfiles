@@ -45,7 +45,13 @@
         ];
 
         focus-ring.off = { };
-        border.off = { };
+
+        border = {
+          on = { };
+          width = 1;
+          active-color = "#404040";
+          inactive-color = "#303030";
+        };
 
         tab-indicator = {
           gap = 3;
@@ -55,13 +61,13 @@
 
         shadow = {
           on = { };
-          softness = 8;
+          softness = 4;
           spread = 2;
           color = "#00000070";
           inactive-color = "#00000054";
           offset._props = {
             x = 0;
-            y = 5;
+            y = 2;
           };
         };
       };
