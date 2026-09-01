@@ -10,42 +10,61 @@
       prefer-no-csd = { };
       screenshot-path = null;
 
-      input.keyboard.xkb.layout = "us";
-      input.keyboard.xkb.variant = "intl";
-      input.touchpad.tap = { };
-      input.touchpad.natural-scroll = { };
-      input.focus-follows-mouse._props = {
-        max-scroll-amount = "0%";
+      input = {
+        keyboard.xkb.layout = "us";
+        keyboard.xkb.variant = "intl";
+
+        touchpad = {
+          tap = { };
+          natural-scroll = { };
+        };
+
+        focus-follows-mouse._props = {
+          max-scroll-amount = "0%";
+        };
       };
 
-      layout.gaps = 10;
-      layout.empty-workspace-above-first = { };
-      layout.center-focused-column = "never";
+      layout = {
+        gaps = 10;
+        background-color = "#303030";
+        empty-workspace-above-first = { };
+        center-focused-column = "never";
 
-      layout.preset-column-widths._children = [
-        { proportion = 0.5; }
-        { proportion = 1.0; }
-      ];
+        preset-column-widths._children = [
+          { proportion = 0.5; }
+          { proportion = 1.0; }
+        ];
 
-      layout.preset-window-heights._children = [
-        { proportion = 0.5; }
-        { proportion = 1.0; }
-      ];
+        preset-window-heights._children = [
+          { proportion = 0.5; }
+          { proportion = 1.0; }
+        ];
 
-      layout.default-column-width._children = [
-        { proportion = 1.0; }
-      ];
+        default-column-width._children = [
+          { proportion = 1.0; }
+        ];
 
-      layout.focus-ring.off = { };
-      layout.border.off = { };
+        focus-ring.off = { };
+        border.off = { };
 
-      layout.tab-indicator.gap = 3;
-      layout.tab-indicator.gaps-between-tabs = 6;
-      layout.tab-indicator.corner-radius = 8;
+        tab-indicator = {
+          gap = 3;
+          gaps-between-tabs = 6;
+          corner-radius = 8;
+        };
 
-      layout.shadow.on = { };
-      layout.shadow.softness = 10;
-      layout.shadow.spread = 5;
+        shadow = {
+          on = { };
+          softness = 8;
+          spread = 2;
+          color = "#00000070";
+          inactive-color = "#00000054";
+          offset._props = {
+            x = 0;
+            y = 5;
+          };
+        };
+      };
 
       overview.zoom = 0.45;
 

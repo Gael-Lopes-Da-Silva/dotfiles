@@ -3,6 +3,8 @@
 let
   inherit (lib.generators) mkLuaInline;
 
+  screenshot = mode: ''hl.dsp.exec_cmd("hyprshot -m ${mode} -z --clipboard-only")'';
+
   bindMod = key: action: {
     _args = [
       (mkLuaInline ''mod .. " + ${key}"'')
@@ -28,23 +30,6 @@ let
       inherit fingers direction action;
       mods = mods;
     };
-
-  gestureDispatch =
-    {
-      fingers ? 3,
-      direction,
-      dispatch,
-    }:
-    gesture {
-      inherit fingers direction;
-      action = mkLuaInline ''
-        function()
-          hl.dispatch(${dispatch})
-        end
-      '';
-    };
-
-  screenshot = mode: ''hl.dsp.exec_cmd("hyprshot -m ${mode} -z --clipboard-only")'';
 
   workspaceBinds = lib.concatLists (
     lib.genList (
@@ -108,16 +93,11 @@ in
 
             shadow = {
               enabled = true;
-              range = 10;
-              render_power = 3;
+              render_power = 2;
+              range = 2;
+              color = "0x00000070";
+              color_inactive = "0x00000050";
               offset = "0 5";
-            };
-
-            blur = {
-              enabled = true;
-              size = 3;
-              render_power = 3;
-              vibrancy = 0.1696;
             };
           };
 
@@ -158,6 +138,7 @@ in
             force_default_wallpaper = 0;
             disable_hyprland_logo = true;
             disable_splash_rendering = true;
+            background_color = "#303030";
             focus_on_activate = true;
             mouse_move_enables_dpms = true;
             key_press_enables_dpms = true;
@@ -188,6 +169,138 @@ in
         }
       ];
 
+      curve = [
+        {
+          _args = [
+            "easeOutExpo"
+            {
+              type = "bezier";
+              points = [
+                [
+                  0.16
+                  1
+                ]
+                [
+                  0.3
+                  1
+                ]
+              ];
+            }
+          ];
+        }
+        {
+          _args = [
+            "easeOutQuad"
+            {
+              type = "bezier";
+              points = [
+                [
+                  0.5
+                  1
+                ]
+                [
+                  0.25
+                  1
+                ]
+              ];
+            }
+          ];
+        }
+        {
+          _args = [
+            "niriMove"
+            {
+              type = "spring";
+              mass = 1;
+              stiffness = 800;
+              dampening = 56.57;
+            }
+          ];
+        }
+        {
+          _args = [
+            "niriWorkspace"
+            {
+              type = "spring";
+              mass = 1;
+              stiffness = 1000;
+              dampening = 63.25;
+            }
+          ];
+        }
+      ];
+
+      animation = [
+        {
+          leaf = "global";
+          enabled = true;
+          speed = 1.5;
+          spring = "niriMove";
+        }
+        {
+          leaf = "windows";
+          enabled = true;
+          speed = 1.5;
+          spring = "niriMove";
+          style = "slide";
+        }
+        {
+          leaf = "windowsIn";
+          enabled = true;
+          speed = 1.5;
+          bezier = "easeOutExpo";
+        }
+        {
+          leaf = "windowsOut";
+          enabled = true;
+          speed = 1.5;
+          bezier = "easeOutQuad";
+        }
+        {
+          leaf = "windowsMove";
+          enabled = true;
+          speed = 1.5;
+          spring = "niriMove";
+        }
+        {
+          leaf = "workspaces";
+          enabled = true;
+          speed = 1.5;
+          spring = "niriWorkspace";
+          style = "slidevert";
+        }
+        {
+          leaf = "fade";
+          enabled = true;
+          speed = 1.5;
+          bezier = "easeOutQuad";
+        }
+        {
+          leaf = "fadeIn";
+          enabled = true;
+          speed = 1.5;
+          bezier = "easeOutExpo";
+        }
+        {
+          leaf = "fadeOut";
+          enabled = true;
+          speed = 1.5;
+          bezier = "easeOutQuad";
+        }
+        {
+          leaf = "border";
+          enabled = true;
+          speed = 1.5;
+          bezier = "easeOutQuad";
+        }
+        {
+          leaf = "zoomFactor";
+          enabled = true;
+          speed = 2.0;
+          spring = "niriMove";
+        }
+      ];
+
       gesture = [
         (gesture {
           direction = "vertical";
@@ -197,18 +310,6 @@ in
         (gesture {
           direction = "horizontal";
           action = "scroll_move";
-        })
-
-        (gestureDispatch {
-          fingers = 4;
-          direction = "up";
-          dispatch = ''hl.dsp.layout("fit all")'';
-        })
-
-        (gestureDispatch {
-          fingers = 4;
-          direction = "down";
-          dispatch = ''hl.dsp.layout("fit active")'';
         })
       ];
 
@@ -307,13 +408,11 @@ in
 
         (bindMod "S" "hl.dsp.workspace.toggle_special()")
 
-        (bindMod "O" ''hl.dsp.layout("fit all")'')
         (bindMod "Tab" ''hl.dsp.focus({ workspace = "previous" })'')
 
         (bindMod "SHIFT + C" "hl.dsp.window.close()")
 
         (bindMod "R" ''hl.dsp.layout("colresize +conf")'')
-        (bindMod "SHIFT + R" ''hl.dsp.window.resize({ y = "50%", relative = false })'')
 
         (bindMod "T" "hl.dsp.group.toggle()")
 
@@ -330,8 +429,6 @@ in
 
         (bindMod "minus" ''hl.dsp.layout("colresize -0.1")'')
         (bindMod "equal" ''hl.dsp.layout("colresize +0.1")'')
-        (bindMod "SHIFT + minus" ''hl.dsp.window.resize({ y = "-10%", relative = true })'')
-        (bindMod "SHIFT + equal" ''hl.dsp.window.resize({ y = "10%", relative = true })'')
 
         (bindMod "Space" ''hl.dsp.window.float({ action = "toggle" })'')
         (bindMod "SHIFT + Space" ''hl.dsp.focus({ window = "floating" })'')
