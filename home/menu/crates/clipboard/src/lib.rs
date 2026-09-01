@@ -51,6 +51,14 @@ fn build() -> gtk::Widget {
 
     let search = gtk::SearchEntry::builder().hexpand(true).build();
 
+    let empty = component::empty_list_label("No clipboard history");
+    empty.set_visible(false);
+    let loading = gtk::Spinner::builder()
+        .margin_top(12)
+        .halign(gtk::Align::Center)
+        .build();
+    loading.start();
+
     let refresh: Rc<dyn Fn()> = Rc::new(glib::clone!(
         #[weak]
         store,
@@ -58,8 +66,12 @@ fn build() -> gtk::Widget {
         selection,
         #[weak]
         search,
+        #[weak]
+        empty,
+        #[weak]
+        loading,
         move || {
-            refresh_ui(&store, &selection, &search);
+            refresh_ui(&store, &selection, &search, &empty, &loading);
         }
     ));
 
@@ -232,12 +244,17 @@ fn build() -> gtk::Widget {
         selection,
         #[weak]
         search,
+        #[weak]
+        empty,
+        #[weak]
+        loading,
         move |entry| {
             *query.borrow_mut() = entry.text().to_lowercase();
             filter.changed(gtk::FilterChange::Different);
             if selection.n_items() > 0 {
                 selection.set_selected(0);
             }
+            component::update_list_empty_state(&selection, &empty, &loading);
             if !entry.has_focus() {
                 glib::idle_add_local_once(glib::clone!(
                     #[weak]
@@ -275,6 +292,10 @@ fn build() -> gtk::Widget {
         .child(&view)
         .vexpand(true)
         .build();
+
+    let list_container = gtk::Overlay::new();
+    list_container.set_child(Some(&scrolled));
+    list_container.add_overlay(&empty);
 
     let clear_history_btn = gtk::Button::with_label("Empty");
     clear_history_btn.add_css_class("destructive-action");
@@ -316,7 +337,7 @@ fn build() -> gtk::Widget {
         .build();
 
     page.append(&search);
-    page.append(&scrolled);
+    page.append(&list_container);
     page.append(&footer);
 
     search.set_key_capture_widget(Some(&page));
@@ -330,11 +351,6 @@ fn build() -> gtk::Widget {
         }
     ));
 
-    let loading = gtk::Spinner::builder()
-        .margin_top(12)
-        .halign(gtk::Align::Center)
-        .build();
-    loading.start();
     page.prepend(&loading);
 
     spawn_background(
@@ -346,6 +362,8 @@ fn build() -> gtk::Widget {
             selection,
             #[weak]
             loading,
+            #[weak]
+            empty,
             move |items| {
                 for data in items {
                     store.append(&ClipboardItem::from_data(&data));
@@ -355,6 +373,7 @@ fn build() -> gtk::Widget {
                 }
                 loading.stop();
                 loading.set_visible(false);
+                component::update_list_empty_state(&selection, &empty, &loading);
             }
         ),
     );
@@ -521,7 +540,13 @@ fn delete_item(item: &ClipboardItem) -> bool {
     }
 }
 
-fn refresh_ui(store: &gio::ListStore, selection: &gtk::SingleSelection, search: &gtk::SearchEntry) {
+fn refresh_ui(
+    store: &gio::ListStore,
+    selection: &gtk::SingleSelection,
+    search: &gtk::SearchEntry,
+    empty: &gtk::Label,
+    loading: &gtk::Spinner,
+) {
     spawn_background(
         load_clipboard_item_data,
         glib::clone!(
@@ -531,6 +556,10 @@ fn refresh_ui(store: &gio::ListStore, selection: &gtk::SingleSelection, search: 
             selection,
             #[weak]
             search,
+            #[weak]
+            empty,
+            #[weak]
+            loading,
             move |items| {
                 store.remove_all();
                 for data in items {
@@ -539,6 +568,7 @@ fn refresh_ui(store: &gio::ListStore, selection: &gtk::SingleSelection, search: 
                 if selection.n_items() > 0 {
                     selection.set_selected(0);
                 }
+                component::update_list_empty_state(&selection, &empty, &loading);
                 glib::idle_add_local_once(glib::clone!(
                     #[weak]
                     search,

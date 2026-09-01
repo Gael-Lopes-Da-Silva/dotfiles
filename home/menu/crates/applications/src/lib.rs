@@ -133,6 +133,14 @@ fn build() -> gtk::Widget {
 
     let search = gtk::SearchEntry::builder().hexpand(true).build();
 
+    let empty = component::empty_list_label("No applications");
+    empty.set_visible(false);
+    let loading = gtk::Spinner::builder()
+        .margin_top(12)
+        .halign(gtk::Align::Center)
+        .build();
+    loading.start();
+
     search.connect_search_changed(glib::clone!(
         #[strong]
         query,
@@ -142,12 +150,17 @@ fn build() -> gtk::Widget {
         selection,
         #[weak]
         search,
+        #[weak]
+        empty,
+        #[weak]
+        loading,
         move |entry| {
             *query.borrow_mut() = entry.text().to_lowercase();
             filter.changed(gtk::FilterChange::Different);
             if selection.n_items() > 0 {
                 selection.set_selected(0);
             }
+            component::update_list_empty_state(&selection, &empty, &loading);
             if !entry.has_focus() {
                 glib::idle_add_local_once(glib::clone!(
                     #[weak]
@@ -186,6 +199,10 @@ fn build() -> gtk::Widget {
         .vexpand(true)
         .build();
 
+    let list_container = gtk::Overlay::new();
+    list_container.set_child(Some(&scrolled));
+    list_container.add_overlay(&empty);
+
     let page = gtk::Box::builder()
         .orientation(gtk::Orientation::Vertical)
         .spacing(12)
@@ -196,7 +213,7 @@ fn build() -> gtk::Widget {
         .build();
 
     page.append(&search);
-    page.append(&scrolled);
+    page.append(&list_container);
 
     search.set_key_capture_widget(Some(&page));
 
@@ -209,11 +226,6 @@ fn build() -> gtk::Widget {
         }
     ));
 
-    let loading = gtk::Spinner::builder()
-        .margin_top(12)
-        .halign(gtk::Align::Center)
-        .build();
-    loading.start();
     page.prepend(&loading);
 
     defer_idle(glib::clone!(
@@ -223,6 +235,8 @@ fn build() -> gtk::Widget {
         selection,
         #[weak]
         loading,
+        #[weak]
+        empty,
         move || {
             let apps = load_apps();
             for app in &apps {
@@ -233,6 +247,7 @@ fn build() -> gtk::Widget {
             }
             loading.stop();
             loading.set_visible(false);
+            component::update_list_empty_state(&selection, &empty, &loading);
         }
     ));
 

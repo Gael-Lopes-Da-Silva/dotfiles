@@ -90,3 +90,21 @@ where
 {
     gtk::glib::idle_add_local_once(func);
 }
+
+pub fn empty_list_label(text: &str) -> gtk::Label {
+    gtk::Label::builder()
+        .label(text)
+        .halign(gtk::Align::Center)
+        .valign(gtk::Align::Center)
+        .vexpand(true)
+        .css_classes(["dim-label"])
+        .build()
+}
+
+pub fn update_list_empty_state(
+    selection: &gtk::SingleSelection,
+    empty: &gtk::Label,
+    loading: &gtk::Spinner,
+) {
+    empty.set_visible(!loading.is_visible() && selection.n_items() == 0);
+}
