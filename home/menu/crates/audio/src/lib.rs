@@ -547,13 +547,14 @@ fn update_stream_rows(
     }
 }
 
+const VOLUME_SCALE_WIDTH: i32 = 320;
+
 fn volume_scale(id: u32, volume: f64, state: &Rc<RefCell<UiState>>) -> gtk::Scale {
     let scale = gtk::Scale::with_range(gtk::Orientation::Horizontal, 0.0, 1.5, 0.01);
     scale.set_value(volume.clamp(0.0, 1.5));
     scale.set_draw_value(true);
     scale.set_value_pos(gtk::PositionType::Right);
-    scale.set_size_request(180, -1);
-    scale.set_hexpand(true);
+    scale.set_size_request(VOLUME_SCALE_WIDTH, -1);
     scale.set_valign(gtk::Align::Center);
     scale.set_format_value_func(|_, value| format!("{:.0}%", value * 100.0));
 
