@@ -104,7 +104,7 @@ fn build() -> gtk::Widget {
         .build();
 
     let scan_btn = gtk::Button::builder()
-        .icon_name("view-refresh-symbolic")
+        .icon_name("edit-find-symbolic")
         .tooltip_text("Scan for networks")
         .valign(gtk::Align::Center)
         .build();
@@ -352,6 +352,9 @@ fn build() -> gtk::Widget {
                 return glib::Propagation::Proceed;
             }
             set_wifi_enabled(active);
+            if !active {
+                state.borrow_mut().scanning = false;
+            }
             glib::timeout_add_local_once(
                 Duration::from_millis(200),
                 glib::clone!(
@@ -383,22 +386,29 @@ fn build() -> gtk::Widget {
             if !power_switch.is_active() {
                 return;
             }
-            state.borrow_mut().scanning = true;
-            let _ = nm(&["device", "wifi", "rescan"]);
+            let scanning = state.borrow().scanning;
+            if scanning {
+                state.borrow_mut().scanning = false;
+            } else {
+                state.borrow_mut().scanning = true;
+                let _ = nm(&["device", "wifi", "rescan"]);
+                glib::timeout_add_local_once(
+                    Duration::from_secs(30),
+                    glib::clone!(
+                        #[strong]
+                        state,
+                        #[strong]
+                        do_refresh,
+                        move || {
+                            if state.borrow().scanning {
+                                state.borrow_mut().scanning = false;
+                                do_refresh();
+                            }
+                        }
+                    ),
+                );
+            }
             do_refresh();
-            glib::timeout_add_local_once(
-                Duration::from_secs(3),
-                glib::clone!(
-                    #[strong]
-                    state,
-                    #[strong]
-                    do_refresh,
-                    move || {
-                        state.borrow_mut().scanning = false;
-                        do_refresh();
-                    }
-                ),
-            );
         }
     ));
 
@@ -469,8 +479,14 @@ fn apply_snapshot(
     header.scan_spinner.set_visible(scanning);
     if scanning {
         header.scan_spinner.start();
+        header
+            .scan_btn
+            .set_icon_name("media-playback-stop-symbolic");
+        header.scan_btn.set_tooltip_text(Some("Stop scanning"));
     } else {
         header.scan_spinner.stop();
+        header.scan_btn.set_icon_name("edit-find-symbolic");
+        header.scan_btn.set_tooltip_text(Some("Scan for networks"));
     }
     state.borrow_mut().updating = false;
 
@@ -841,7 +857,7 @@ fn build_connected_row(
             .tooltip_text("Network actions")
             .direction(gtk::ArrowType::Down)
             .build();
-        menu_btn.set_popover(Some(&build_known_popover(saved, &row, refresh, true)));
+        menu_btn.set_popover(Some(&build_known_popover(saved, &row, refresh)));
         row.append(&menu_btn);
     }
 
@@ -913,7 +929,7 @@ fn build_known_row(network: &SavedNetwork, refresh: Rc<dyn Fn()>) -> gtk::Box {
         .tooltip_text("Network actions")
         .direction(gtk::ArrowType::Down)
         .build();
-    menu_btn.set_popover(Some(&build_known_popover(network, &row, refresh, false)));
+    menu_btn.set_popover(Some(&build_known_popover(network, &row, refresh)));
 
     row.append(&menu_btn);
     row
@@ -991,7 +1007,6 @@ fn build_known_popover(
     network: &SavedNetwork,
     parent: &gtk::Box,
     refresh: Rc<dyn Fn()>,
-    connected: bool,
 ) -> gtk::Popover {
     let box_ = gtk::Box::builder()
         .orientation(gtk::Orientation::Vertical)
@@ -1004,17 +1019,6 @@ fn build_known_popover(
 
     let uuid = network.uuid.clone();
     let name = network.name.clone();
-
-    if !connected {
-        box_.append(&popover_btn("Connect", false, {
-            let uuid = uuid.clone();
-            let refresh = refresh.clone();
-            move || {
-                let _ = nm(&["connection", "up", &uuid]);
-                refresh();
-            }
-        }));
-    }
 
     if network.autoconnect {
         box_.append(&popover_btn("Disable auto-connect", false, {

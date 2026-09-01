@@ -734,16 +734,6 @@ fn build_actions_popover(
     let address = device.address.clone();
     let name = device.name.clone();
 
-    if device.paired && !device.connected {
-        box_.append(&popover_btn("Connect", false, {
-            let address = address.clone();
-            let refresh = refresh.clone();
-            move || {
-                let _ = bt(&["connect", &address]);
-                refresh();
-            }
-        }));
-    }
     if device.connected {
         box_.append(&popover_btn("Disconnect", false, {
             let address = address.clone();
