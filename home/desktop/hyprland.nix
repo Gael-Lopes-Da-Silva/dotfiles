@@ -352,6 +352,7 @@ in
 
         (bindMod "N" ''hl.dsp.exec_cmd("bash ~/.local/bin/datetime_notify.sh")'')
         (bindMod "B" ''hl.dsp.exec_cmd("bash ~/.local/bin/battery_notify.sh")'')
+        (bindMod "W" ''hl.dsp.exec_cmd("bash ~/.local/bin/workspace_notify.sh")'')
 
         (bindMod "CTRL + C" ''hl.dsp.exec_cmd("bash ~/.local/bin/kill_process.sh")'')
         (bindMod "CTRL + F" ''hl.dsp.exec_cmd("bash ~/.local/bin/freeze_process.sh")'')

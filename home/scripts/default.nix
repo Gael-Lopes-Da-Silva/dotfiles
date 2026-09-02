@@ -16,6 +16,7 @@
 
         "battery_notify.sh" = ./notify/battery_notify.sh;
         "datetime_notify.sh" = ./notify/datetime_notify.sh;
+        "workspace_notify.sh" = ./notify/workspace_notify.sh;
 
         "audio_monitor.sh" = ./monitor/audio_monitor.sh;
         "battery_monitor.sh" = ./monitor/battery_monitor.sh;
