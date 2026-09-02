@@ -45,7 +45,6 @@ in
     vial
     filezilla
 
-    ghex
     pods
     lact
     loupe
