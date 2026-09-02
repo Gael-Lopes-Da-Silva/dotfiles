@@ -96,7 +96,7 @@ in
         (onEvent "screenshare.state" ''
           function(active, shareType, name)
             local function isLocalCapture()
-              local proc = io.popen("pgrep -x grim >/dev/null 2>&1 || pgrep -x hyprpicker >/dev/null 2>&1 || pgrep -x slurp >/dev/null 2>&1 || pgrep -f hyprshot >/dev/null 2>&1; echo $?")
+              local proc = io.popen("pgrep -x hyprpicker >/dev/null 2>&1 || pgrep -f hyprshot >/dev/null 2>&1; echo $?")
               if not proc then
                 return false
               end
@@ -445,7 +445,7 @@ in
 
       layer_rule = [
         {
-          name = "mako-notifications";
+          name = "notifications-animation";
           match = {
             namespace = "notifications";
           };
