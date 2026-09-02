@@ -31,11 +31,26 @@ let
       fingers ? 3,
       direction,
       mods ? null,
+      scale ? null,
       action,
     }:
     lib.filterAttrs (_: v: v != null) {
       inherit fingers direction action;
       mods = mods;
+      scale = scale;
+    };
+
+  gestureFn =
+    {
+      fingers ? 4,
+      direction,
+      scale ? null,
+      body,
+    }:
+    gesture {
+      inherit fingers direction;
+      scale = scale;
+      action = mkLuaInline body;
     };
 
   workspaceBinds = lib.concatLists (
@@ -170,6 +185,9 @@ in
             workspace_swipe_touch = true;
             workspace_swipe_create_new = false;
             workspace_swipe_forever = false;
+            workspace_swipe_distance = 180;
+            workspace_swipe_cancel_ratio = 0.3;
+            workspace_swipe_min_speed_to_force = 15;
           };
         }
       ];
@@ -406,18 +424,6 @@ in
         }
       ];
 
-      gesture = [
-        (gesture {
-          direction = "vertical";
-          action = "workspace";
-        })
-
-        (gesture {
-          direction = "horizontal";
-          action = "scroll_move";
-        })
-      ];
-
       window_rule = [
         {
           name = "suppress-maximize-events";
@@ -441,6 +447,40 @@ in
           ];
           border_size = 0;
         }
+      ];
+
+      gesture = [
+        (gesture {
+          direction = "vertical";
+          action = "workspace";
+        })
+        (gesture {
+          direction = "horizontal";
+          action = "scroll_move";
+          scale = 1.8;
+        })
+        (gestureFn {
+          direction = "up";
+          body = ''
+            function()
+              local ws = hl.get_workspace("special:magic")
+              if ws ~= nil and not ws.active then
+                hl.dispatch(hl.dsp.workspace.toggle_special("magic"))
+              end
+            end
+          '';
+        })
+        (gestureFn {
+          direction = "down";
+          body = ''
+            function()
+              local ws = hl.get_workspace("special:magic")
+              if ws ~= nil and ws.active then
+                hl.dispatch(hl.dsp.workspace.toggle_special("magic"))
+              end
+            end
+          '';
+        })
       ];
 
       bind = [
