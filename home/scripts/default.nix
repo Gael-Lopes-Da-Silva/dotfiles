@@ -25,6 +25,7 @@
 
         "freeze_process.sh" = ./utility/freeze_process.sh;
         "kill_process.sh" = ./utility/kill_process.sh;
+        "show_workspace.sh" = ./utility/show_workspace.sh;
 
         "soundboard_setup.sh" = ./utility/soundboard_setup.sh;
       };
