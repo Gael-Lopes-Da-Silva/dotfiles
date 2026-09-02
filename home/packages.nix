@@ -44,6 +44,7 @@ in
 
     vial
     filezilla
+    obs-studio
 
     pods
     lact
