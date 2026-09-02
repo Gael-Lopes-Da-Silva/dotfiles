@@ -27,9 +27,10 @@
       ./programs/git.nix
       ./programs/zed.nix
 
+      ./packages.nix
+
       ./scripts
       ./sounds
-      ./packages.nix
     ];
 
     home = {
@@ -51,13 +52,6 @@
       ];
 
       config = {
-        niri = {
-          default = [
-            "gnome"
-            "gtk"
-          ];
-        };
-
         hyprland = {
           default = [
             "hyprland"
