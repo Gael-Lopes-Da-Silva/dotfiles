@@ -356,6 +356,54 @@ in
           speed = 4;
           spring = "move";
         }
+        {
+          leaf = "layers";
+          enabled = true;
+          speed = 2.5;
+          bezier = "easeOutQuint";
+        }
+        {
+          leaf = "layersIn";
+          enabled = true;
+          speed = 2.2;
+          spring = "move";
+          style = "slide";
+        }
+        {
+          leaf = "layersOut";
+          enabled = true;
+          speed = 1.8;
+          spring = "move";
+          style = "slide";
+        }
+        {
+          leaf = "fadeLayers";
+          enabled = true;
+          speed = 2;
+          bezier = "quick";
+        }
+        {
+          leaf = "fadeLayersIn";
+          enabled = true;
+          speed = 1.8;
+          bezier = "easeOutExpo";
+        }
+        {
+          leaf = "fadeLayersOut";
+          enabled = true;
+          speed = 1.5;
+          bezier = "almostLinear";
+        }
+      ];
+
+      layer_rule = [
+        {
+          name = "mako-notifications";
+          match = {
+            namespace = "notifications";
+          };
+          animation = "slide";
+        }
       ];
 
       gesture = [
