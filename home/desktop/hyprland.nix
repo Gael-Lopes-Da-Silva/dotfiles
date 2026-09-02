@@ -125,6 +125,8 @@ in
               color_inactive = "rgba(00000050)";
               offset = "0 2";
             };
+
+            motion_blur.enabled = true;
           };
 
           animations.enabled = true;
@@ -187,7 +189,6 @@ in
             workspace_swipe_forever = false;
             workspace_swipe_distance = 180;
             workspace_swipe_cancel_ratio = 0.3;
-            workspace_swipe_min_speed_to_force = 15;
           };
         }
       ];
@@ -453,6 +454,7 @@ in
         (gesture {
           direction = "vertical";
           action = "workspace";
+          scale = 0.4;
         })
         (gesture {
           direction = "horizontal";
@@ -461,6 +463,7 @@ in
         })
         (gestureFn {
           direction = "up";
+          scale = 1.0;
           body = ''
             function()
               local ws = hl.get_workspace("special:magic")
@@ -472,6 +475,7 @@ in
         })
         (gestureFn {
           direction = "down";
+          scale = 1.0;
           body = ''
             function()
               local ws = hl.get_workspace("special:magic")
