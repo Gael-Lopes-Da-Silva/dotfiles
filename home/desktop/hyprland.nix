@@ -195,16 +195,16 @@ in
         }
         {
           _args = [
-            "easeOutQuad"
+            "easeOutQuint"
             {
               type = "bezier";
               points = [
                 [
-                  0.5
+                  0.23
                   1
                 ]
                 [
-                  0.25
+                  0.32
                   1
                 ]
               ];
@@ -213,23 +213,59 @@ in
         }
         {
           _args = [
-            "niriMove"
+            "almostLinear"
             {
-              type = "spring";
-              mass = 1;
-              stiffness = 800;
-              dampening = 56.57;
+              type = "bezier";
+              points = [
+                [
+                  0.5
+                  0.5
+                ]
+                [
+                  0.75
+                  1
+                ]
+              ];
             }
           ];
         }
         {
           _args = [
-            "niriWorkspace"
+            "quick"
+            {
+              type = "bezier";
+              points = [
+                [
+                  0.15
+                  0
+                ]
+                [
+                  0.1
+                  1
+                ]
+              ];
+            }
+          ];
+        }
+        {
+          _args = [
+            "move"
             {
               type = "spring";
               mass = 1;
-              stiffness = 1000;
-              dampening = 63.25;
+              stiffness = 280;
+              dampening = 33.47;
+            }
+          ];
+        }
+        {
+          _args = [
+            "workspace"
+            {
+              type = "spring";
+              mass = 1;
+              stiffness = 360;
+              dampening = 37.95;
             }
           ];
         }
@@ -239,70 +275,86 @@ in
         {
           leaf = "global";
           enabled = true;
-          speed = 1.5;
-          spring = "niriMove";
+          speed = 3;
+          spring = "move";
         }
         {
           leaf = "windows";
           enabled = true;
-          speed = 1.5;
-          spring = "niriMove";
+          speed = 3.2;
+          spring = "move";
           style = "slide";
         }
         {
           leaf = "windowsIn";
           enabled = true;
-          speed = 1.5;
-          bezier = "easeOutExpo";
+          speed = 2.8;
+          spring = "move";
+          style = "slide";
         }
         {
           leaf = "windowsOut";
           enabled = true;
-          speed = 1.5;
-          bezier = "easeOutQuad";
+          speed = 2;
+          spring = "move";
+          style = "slide";
         }
         {
           leaf = "windowsMove";
           enabled = true;
-          speed = 1.5;
-          spring = "niriMove";
+          speed = 3.2;
+          spring = "move";
         }
         {
           leaf = "workspaces";
           enabled = true;
-          speed = 1.5;
-          spring = "niriWorkspace";
+          speed = 2.4;
+          spring = "workspace";
+          style = "slidevert";
+        }
+        {
+          leaf = "workspacesIn";
+          enabled = true;
+          speed = 2;
+          spring = "workspace";
+          style = "slidevert";
+        }
+        {
+          leaf = "workspacesOut";
+          enabled = true;
+          speed = 2.6;
+          spring = "workspace";
           style = "slidevert";
         }
         {
           leaf = "fade";
           enabled = true;
-          speed = 1.5;
-          bezier = "easeOutQuad";
+          speed = 2.5;
+          bezier = "quick";
         }
         {
           leaf = "fadeIn";
           enabled = true;
-          speed = 1.5;
-          bezier = "easeOutExpo";
+          speed = 2;
+          bezier = "almostLinear";
         }
         {
           leaf = "fadeOut";
           enabled = true;
-          speed = 1.5;
-          bezier = "easeOutQuad";
+          speed = 1.6;
+          bezier = "almostLinear";
         }
         {
           leaf = "border";
           enabled = true;
-          speed = 1.5;
-          bezier = "easeOutQuad";
+          speed = 3;
+          bezier = "easeOutQuint";
         }
         {
           leaf = "zoomFactor";
           enabled = true;
-          speed = 2.0;
-          spring = "niriMove";
+          speed = 4;
+          spring = "move";
         }
       ];
 
