@@ -193,6 +193,12 @@ in
             workspace_swipe_cancel_ratio = 0.3;
           };
         }
+        {
+          ecosystem = {
+            no_update_news = true;
+            no_donation_nag = true;
+          };
+        }
       ];
 
       curve = [
