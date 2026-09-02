@@ -160,7 +160,6 @@ in
             disable_splash_rendering = true;
             background_color = "rgb(303030)";
             middle_click_paste = false;
-            bell_sound = "none";
             disable_watchdog_warning = true;
             focus_on_activate = true;
             mouse_move_enables_dpms = true;
