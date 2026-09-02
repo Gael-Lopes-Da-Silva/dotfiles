@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-workspace=$(hyprctl activeworkspace -j | jq -r '.id')
-if [[ -z "$workspace" || "$workspace" = "null" ]]; then
+workspace="$1"
+if [[ -z "$workspace" ]]; then
     exit 1
 fi
 

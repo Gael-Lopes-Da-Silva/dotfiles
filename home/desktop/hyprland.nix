@@ -74,8 +74,8 @@ in
           end
         '')
         (onEvent "workspace.active" ''
-          function()
-            hl.exec_cmd("bash ~/.local/bin/active_workspace.sh")
+          function(ws)
+            hl.exec_cmd("bash ~/.local/bin/active_workspace.sh " .. ws.id)
           end
         '')
       ];
