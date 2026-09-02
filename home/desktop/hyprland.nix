@@ -158,7 +158,7 @@ in
             force_default_wallpaper = 0;
             disable_hyprland_logo = true;
             disable_splash_rendering = true;
-            background_color = "#303030";
+            background_color = "rgb(303030)";
             focus_on_activate = true;
             mouse_move_enables_dpms = true;
             key_press_enables_dpms = true;
