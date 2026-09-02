@@ -78,6 +78,11 @@ in
             hl.exec_cmd("bash ~/.local/bin/active_workspace.sh " .. ws.id)
           end
         '')
+        (onEvent "screenshare.state" ''
+          function(active, shareType, name)
+            hl.exec_cmd(string.format("bash ~/.local/bin/screenshare_state.sh %s %d %q", active and "true" or "false", shareType, name))
+          end
+        '')
       ];
 
       config = [

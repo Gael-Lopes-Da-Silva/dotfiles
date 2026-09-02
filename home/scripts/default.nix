@@ -23,11 +23,11 @@
         "output_monitor.sh" = ./monitor/output_monitor.sh;
         "usb_monitor.sh" = ./monitor/usb_monitor.sh;
 
-        "freeze_process.sh" = ./utility/freeze_process.sh;
         "kill_process.sh" = ./utility/kill_process.sh;
+        "freeze_process.sh" = ./utility/freeze_process.sh;
         "soundboard_setup.sh" = ./utility/soundboard_setup.sh;
 
         "active_workspace.sh" = ./events/active_workspace.sh;
-
+        "screenshare_state.sh" = ./events/screenshare_state.sh;
       };
 }
