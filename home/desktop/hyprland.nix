@@ -19,6 +19,13 @@ let
     ];
   };
 
+  onEvent = event: handler: {
+    _args = [
+      event
+      (mkLuaInline handler)
+    ];
+  };
+
   gesture =
     {
       fingers ? 3,
@@ -60,16 +67,18 @@ in
         _var = "SUPER";
       };
 
-      on = {
-        _args = [
-          "hyprland.start"
-          (mkLuaInline ''
-            function()
-              hl.exec_cmd("bash ~/.local/bin/autostart.sh")
-            end
-          '')
-        ];
-      };
+      on = [
+        (onEvent "hyprland.start" ''
+          function()
+            hl.exec_cmd("bash ~/.local/bin/autostart.sh")
+          end
+        '')
+        (onEvent "workspace.active" ''
+          function()
+            hl.exec_cmd("bash ~/.local/bin/active_workspace.sh")
+          end
+        '')
+      ];
 
       config = [
         {

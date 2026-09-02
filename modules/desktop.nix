@@ -87,8 +87,11 @@
   programs = {
     nix-ld.enable = true;
     xwayland.enable = true;
-    hyprland.enable = true;
-    niri.enable = true;
+
+    hyprland = {
+      enable = true;
+      withUWSM = false;
+    };
   };
 
   system.stateVersion = "25.11";

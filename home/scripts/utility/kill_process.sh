@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
 
-if [[ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]]; then
-    pid=$(hyprctl activewindow -j | jq -r '.pid')
-else
-    pid=$(niri msg --json focused-window | jq -r '.pid')
-fi
-
+pid=$(hyprctl activewindow -j | jq -r '.pid')
 if [[ -z "$pid" || "$pid" = "null" ]]; then
     exit 1
 fi

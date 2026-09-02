@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
 
-if [[ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]]; then
-    workspace=$(hyprctl activeworkspace -j | jq -r '.id')
-else
-    workspace=$(niri msg --json workspaces | jq -r '.[] | select(.is_focused) | .idx')
-fi
-
+workspace=$(hyprctl activeworkspace -j | jq -r '.id')
 if [[ -z "$workspace" || "$workspace" = "null" ]]; then
     exit 1
 fi
@@ -13,7 +8,7 @@ fi
 notify-send \
     -a "osd" \
     -h string:x-dunst-stack-tag:workspace \
-    -t 5000 \
+    -t 3000 \
     "Workspace" "$workspace"
 
 # setsid nohup bash -c "
