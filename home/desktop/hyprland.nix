@@ -95,6 +95,26 @@ in
         '')
         (onEvent "screenshare.state" ''
           function(active, shareType, name)
+            local function isLocalCapture()
+              local proc = io.popen("pgrep -x grim >/dev/null 2>&1 || pgrep -x hyprpicker >/dev/null 2>&1 || pgrep -x slurp >/dev/null 2>&1 || pgrep -f hyprshot >/dev/null 2>&1; echo $?")
+              if not proc then
+                return false
+              end
+              local code = proc:read("*a")
+              proc:close()
+              return code:match("^0") ~= nil
+            end
+
+            if active then
+              if isLocalCapture() then
+                localCaptureSessions = (localCaptureSessions or 0) + 1
+                return
+              end
+            elseif (localCaptureSessions or 0) > 0 then
+              localCaptureSessions = localCaptureSessions - 1
+              return
+            end
+
             hl.exec_cmd(string.format("bash ~/.local/bin/screenshare_state.sh %s %d %q", active and "true" or "false", shareType, name))
           end
         '')
@@ -430,6 +450,20 @@ in
             namespace = "notifications";
           };
           animation = "slide";
+        }
+        {
+          name = "no-anim-selection";
+          match = {
+            namespace = "selection";
+          };
+          no_anim = true;
+        }
+        {
+          name = "no-anim-hyprpicker";
+          match = {
+            namespace = "hyprpicker";
+          };
+          no_anim = true;
         }
       ];
 
