@@ -48,6 +48,7 @@ in
 {
   home.packages = with pkgs; [
     hyprshot
+    hyprpicker
   ];
 
   wayland.windowManager.hyprland = {
@@ -431,6 +432,9 @@ in
         (bindMod "Tab" ''hl.dsp.focus({ workspace = "previous" })'')
 
         (bindMod "SHIFT + C" "hl.dsp.window.close()")
+
+        (bindMod "O" ''hl.dsp.exec_cmd("hyprpicker -a -f hex")'')
+        (bindMod "SHIFT + O" ''hl.dsp.exec_cmd("hyprpicker -a -f rgb")'')
 
         (bindMod "R" ''hl.dsp.layout("colresize +conf")'')
 
