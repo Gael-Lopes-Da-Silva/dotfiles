@@ -77,6 +77,7 @@ in
     gnome-calculator
     gnome-characters
     gnome-connections
+    gnome-text-editor
     gnome-sound-recorder
     gnome-network-displays
   ]);
