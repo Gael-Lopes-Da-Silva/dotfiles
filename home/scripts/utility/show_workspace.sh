@@ -12,6 +12,7 @@ fi
 
 notify-send \
     -a "osd" \
+    -h string:x-dunst-stack-tag:workspace \
     -t 5000 \
     "Workspace" "$workspace"
 
