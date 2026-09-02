@@ -11,8 +11,8 @@ notify-send \
     -t 3000 \
     "Workspace" "$workspace"
 
-# setsid nohup bash -c "
-#     paplay '$HOME/.local/sounds/prop_kill.wav' &
-# " >/dev/null 2>&1 &
+setsid nohup bash -c "
+    paplay '$HOME/.local/sounds/prop_workspace.wav' &
+" >/dev/null 2>&1 &
 
 exit 0

@@ -27,9 +27,9 @@ if [[ "$active" == "true" ]]; then
         -t 5000 \
         "Screenshare Started" "$body"
 
-    # setsid nohup bash -c "
-    #     paplay '$HOME/.local/sounds/prop_kill.wav' &
-    # " >/dev/null 2>&1 &
+    setsid nohup bash -c "
+        paplay '$HOME/.local/sounds/prop_screenshare_started.wav' &
+    " >/dev/null 2>&1 &
 else
     notify-send \
         -a "notification" \
@@ -37,9 +37,9 @@ else
         -t 5000 \
         "Screenshare Stopped" "$body"
 
-    # setsid nohup bash -c "
-    #     paplay '$HOME/.local/sounds/prop_kill.wav' &
-    # " >/dev/null 2>&1 &
+    setsid nohup bash -c "
+        paplay '$HOME/.local/sounds/prop_screenshare_stopped.wav' &
+    " >/dev/null 2>&1 &
 fi
 
 exit 0
