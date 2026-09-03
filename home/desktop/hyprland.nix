@@ -42,11 +42,13 @@ let
     {
       fingers ? 4,
       direction,
+      mods ? null,
       scale ? null,
       body,
     }:
-    gesture {
+    lib.filterAttrs (_: v: v != null) {
       inherit fingers direction;
+      mods = mods;
       scale = scale;
       action = mkLuaInline body;
     };
