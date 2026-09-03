@@ -98,7 +98,8 @@
       };
 
       cursor = {
-        xcursor-size = 24;
+        xcursor-theme = "Bibata-Modern-Classic";
+        xcursor-size = 22;
       };
 
       clipboard = {

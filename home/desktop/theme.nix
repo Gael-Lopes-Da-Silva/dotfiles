@@ -7,14 +7,15 @@
     glib
     adwaita-qt
     adwaita-qt6
+    adwaita-icon-theme
   ];
 
   home.pointerCursor = {
     enable = true;
     gtk.enable = true;
-    package = pkgs.adwaita-icon-theme;
-    name = "Adwaita";
-    size = 24;
+    package = pkgs.bibata-cursors;
+    name = "Bibata-Modern-Classic";
+    size = 22;
   };
 
   gtk = {
