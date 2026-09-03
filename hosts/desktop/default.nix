@@ -35,6 +35,10 @@
 
   home-manager.users.gael = {
     wayland.windowManager.niri.settings = {
+      debug = {
+        disable-cursor-plane = { };
+      };
+
       _children = [
         {
           output = {
