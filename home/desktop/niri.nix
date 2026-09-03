@@ -87,9 +87,9 @@
 
         workspace-shadow = {
           on = { };
-          softness = 6;
-          spread = 4;
-          color = "#00000070";
+          softness = 14;
+          spread = 12;
+          color = "#00000090";
           offset._props = {
             x = 0;
             y = 4;
