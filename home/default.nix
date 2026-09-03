@@ -26,6 +26,7 @@
       ./programs/bash.nix
       ./programs/git.nix
       ./programs/zed.nix
+      ./programs/obs.nix
 
       ./packages.nix
 
