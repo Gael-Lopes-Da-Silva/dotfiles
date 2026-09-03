@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-workspace=$(hyprctl activeworkspace -j | jq -r '.id')
+workspace=$(niri msg --json workspaces | jq '.[] | select(.is_focused) | .idx')
 if [[ -z "$workspace" || "$workspace" = "null" ]]; then
     exit 1
 fi

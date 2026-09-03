@@ -27,8 +27,5 @@
         "kill_process.sh" = ./utility/kill_process.sh;
         "freeze_process.sh" = ./utility/freeze_process.sh;
         "soundboard_setup.sh" = ./utility/soundboard_setup.sh;
-
-        "active_workspace.sh" = ./events/active_workspace.sh;
-        "screenshare_state.sh" = ./events/screenshare_state.sh;
       };
 }

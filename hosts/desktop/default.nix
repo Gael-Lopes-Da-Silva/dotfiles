@@ -28,4 +28,34 @@
       DRIVER=="snd-usb-audio", \
       RUN+="/bin/sh -c 'echo %k > /sys/bus/usb/drivers/snd-usb-audio/unbind'"
   '';
+
+  home-manager.users.gael = {
+    wayland.windowManager.niri.settings = {
+      _children = [
+        {
+          output = {
+            _args = [ "HDMI-A-2" ];
+            mode = "1920x1080@60";
+            scale = 1.0;
+            position._props = {
+              x = 0;
+              y = 0;
+            };
+          };
+        }
+        {
+          output = {
+            _args = [ "HDMI-A-1" ];
+            mode = "1920x1080@100";
+            scale = 1.0;
+            focus-at-startup = { };
+            position._props = {
+              x = 0;
+              y = 1080;
+            };
+          };
+        }
+      ];
+    };
+  };
 }

@@ -60,6 +60,7 @@
       QT_IM_MODULE = "simple";
       XMODIFIERS = "@im=simple";
 
+      QT_QPA_PLATFORM = "wayland";
       QT_QPA_PLATFORMTHEME = "adwaita";
       QT_STYLE_OVERRIDE = "adwaita-dark";
       QT_QUICK_CONTROLS_STYLE = "adwaita-dark";
@@ -87,11 +88,7 @@
   programs = {
     nix-ld.enable = true;
     xwayland.enable = true;
-
-    hyprland = {
-      enable = true;
-      withUWSM = false;
-    };
+    niri.enable = true;
   };
 
   system.stateVersion = "25.11";

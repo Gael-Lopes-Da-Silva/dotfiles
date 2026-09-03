@@ -51,7 +51,6 @@ in
     loupe
     snoop
     pinta
-    gradia
     packet
     papers
     baobab
