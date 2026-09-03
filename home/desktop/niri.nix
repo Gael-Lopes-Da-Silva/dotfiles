@@ -99,7 +99,7 @@
 
       cursor = {
         xcursor-theme = "Bibata-Modern-Classic";
-        xcursor-size = 22;
+        xcursor-size = 24;
       };
 
       clipboard = {
