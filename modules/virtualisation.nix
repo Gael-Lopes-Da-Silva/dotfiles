@@ -17,7 +17,5 @@
         };
       };
     };
-
-    virtualbox.host.enable = true;
   };
 }
