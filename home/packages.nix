@@ -47,9 +47,11 @@ in
 
     pods
     lact
+    coulr
     loupe
     snoop
     pinta
+    gradia
     packet
     papers
     baobab

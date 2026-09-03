@@ -3,8 +3,6 @@
 let
   inherit (lib.generators) mkLuaInline;
 
-  screenshot = mode: ''hl.dsp.exec_cmd("hyprshot -m ${mode} -z -s --clipboard-only")'';
-
   bindMod = key: action: {
     _args = [
       (mkLuaInline ''mod .. " + ${key}"'')
@@ -71,6 +69,7 @@ in
   home.packages = with pkgs; [
     hyprshot
     hyprpicker
+    hyprland-protocols
   ];
 
   wayland.windowManager.hyprland = {
@@ -490,6 +489,14 @@ in
           ];
           border_size = 0;
         }
+        {
+          name = "make-window-float";
+          match = {
+            class = "^.*gradia$";
+            title = "^Gradia$";
+          };
+          float = true;
+        }
       ];
 
       gesture = [
@@ -634,8 +641,7 @@ in
 
         (bindMod "SHIFT + C" "hl.dsp.window.close()")
 
-        (bindMod "O" ''hl.dsp.exec_cmd("hyprpicker -a -f hex")'')
-        (bindMod "SHIFT + O" ''hl.dsp.exec_cmd("hyprpicker -a -f rgb")'')
+        (bindMod "O" ''hl.dsp.exec_cmd("coulr")'')
 
         (bindMod "R" ''hl.dsp.layout("colresize +conf")'')
 
@@ -656,9 +662,7 @@ in
         (bindMod "Space" ''hl.dsp.window.float({ action = "toggle" })'')
         (bindMod "SHIFT + Space" ''hl.dsp.focus({ window = "floating" })'')
 
-        (bindMod "Print" (screenshot "region"))
-        (bindMod "SHIFT + Print" (screenshot "window"))
-        (bindMod "CTRL + Print" (screenshot "output"))
+        (bindMod "Print" ''hl.dsp.exec_cmd("gradia --screenshot")'')
 
         (bindMod "escape" ''hl.dsp.global("shortcuts:inhibit")'')
       ]
