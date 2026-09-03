@@ -9,6 +9,7 @@
 
   programs = {
     home-manager.enable = true;
+    obs-studio.enable = true;
     firefox.enable = true;
     zoxide.enable = true;
     fzf.enable = true;
