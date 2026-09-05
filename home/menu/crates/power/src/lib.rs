@@ -299,6 +299,13 @@ fn run_action(action: &PowerAction) {
         return;
     }
 
+    if matches!(action.name(), "Shutdown" | "Reboot" | "Logout") {
+        let home = std::env::var("HOME").unwrap_or_default();
+        let _ = Command::new("bash")
+            .arg(format!("{home}/.local/bin/autostop.sh"))
+            .status();
+    }
+
     match Command::new(&command[0]).args(&command[1..]).spawn() {
         Ok(_) => {
             if let Some(app) = gio::Application::default() {

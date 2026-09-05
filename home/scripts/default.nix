@@ -13,6 +13,7 @@
       })
       {
         "autostart.sh" = ./autostart.sh;
+        "autostop.sh" = ./autostop.sh;
 
         "battery_notify.sh" = ./notify/battery_notify.sh;
         "datetime_notify.sh" = ./notify/datetime_notify.sh;

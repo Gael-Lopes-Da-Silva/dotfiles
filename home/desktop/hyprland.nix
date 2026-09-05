@@ -90,7 +90,7 @@ in
         '')
         (onEvent "hyprland.shutdown" ''
           function()
-            hl.exec_cmd("bash ~/.local/bin/autostop.sh")
+            os.execute("bash ~/.local/bin/autostop.sh")
           end
         '')
       ];
