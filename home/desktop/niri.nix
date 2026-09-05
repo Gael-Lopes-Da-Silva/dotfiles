@@ -128,26 +128,6 @@
             { open-fullscreen = false; }
           ];
         }
-        {
-          window-rule._children = [
-            {
-              match._props = {
-                app-id = "steam";
-                title = "^notificationtoasts";
-              };
-            }
-            { geometry-corner-radius = 12; }
-            { open-focused = false; }
-            { open-floating = true; }
-            {
-              default-floating-position._props = {
-                x = 5;
-                y = 5;
-                relative-to = "bottom-right";
-              };
-            }
-          ];
-        }
       ];
 
       binds = {
