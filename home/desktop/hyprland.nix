@@ -60,18 +60,17 @@ let
         ws = toString (i + 1);
       in
       [
-        (bindMod ws "hl.dsp.focus({ workspace = ${ws} })")
-        (bindMod "SHIFT + ${ws}" "hl.dsp.window.move({ workspace = ${ws} })")
-        (bindMod "CTRL + ${ws}" "hl.dsp.window.move({ workspace = ${ws}, follow = false })")
+        (bindMod ws ''hl.dsp.focus({ workspace = "r~${ws}" })'')
+        (bindMod "SHIFT + ${ws}" ''hl.dsp.window.move({ workspace = "r~${ws}" })'')
+        (bindMod "CTRL + ${ws}" ''hl.dsp.window.move({ workspace = "r~${ws}", follow = false })'')
       ]
     ) 9
   );
 in
 {
   home.packages = with pkgs; [
-    hyprshot
-    hyprpicker
-    hyprland-protocols
+    grim
+    slurp
   ];
 
   wayland.windowManager.hyprland = {
@@ -183,10 +182,10 @@ in
         {
           gestures = {
             workspace_swipe_touch = true;
-            workspace_swipe_create_new = false;
-            workspace_swipe_forever = false;
+            workspace_swipe_create_new = true;
+            workspace_swipe_forever = true;
             workspace_swipe_distance = 180;
-            workspace_swipe_cancel_ratio = 0.3;
+            workspace_swipe_cancel_ratio = 0.1;
           };
         }
         {
@@ -535,11 +534,6 @@ in
         (bindMod "CTRL + K" ''hl.dsp.window.move({ direction = "up" })'')
         (bindMod "CTRL + L" ''hl.dsp.layout("swapcol r")'')
 
-        (bindMod "Home" ''hl.dsp.layout("fit tobeg")'')
-        (bindMod "End" ''hl.dsp.layout("fit toend")'')
-        (bindMod "CTRL + Home" ''hl.dsp.layout("swapcol l")'')
-        (bindMod "CTRL + End" ''hl.dsp.layout("swapcol r")'')
-
         (bindMod "SHIFT + left" ''hl.dsp.focus({ monitor = "l" })'')
         (bindMod "SHIFT + down" ''hl.dsp.focus({ monitor = "d" })'')
         (bindMod "SHIFT + up" ''hl.dsp.focus({ monitor = "u" })'')
@@ -558,31 +552,12 @@ in
         (bindMod "SHIFT + CTRL + K" ''hl.dsp.window.move({ monitor = "u" })'')
         (bindMod "SHIFT + CTRL + L" ''hl.dsp.window.move({ monitor = "r" })'')
 
-        (bindMod "Page_Down" ''hl.dsp.focus({ workspace = "e+1" })'')
-        (bindMod "Page_Up" ''hl.dsp.focus({ workspace = "e-1" })'')
-        (bindMod "U" ''hl.dsp.focus({ workspace = "e+1" })'')
-        (bindMod "I" ''hl.dsp.focus({ workspace = "e-1" })'')
-        (bindMod "SHIFT + Page_Down" ''hl.dsp.workspace.move({ monitor = "d" })'')
-        (bindMod "SHIFT + Page_Up" ''hl.dsp.workspace.move({ monitor = "u" })'')
-        (bindMod "SHIFT + U" ''hl.dsp.workspace.move({ monitor = "d" })'')
-        (bindMod "SHIFT + I" ''hl.dsp.workspace.move({ monitor = "u" })'')
-        (bindMod "CTRL + Page_Down" ''hl.dsp.window.move({ workspace = "e+1", follow = false })'')
-        (bindMod "CTRL + Page_Up" ''hl.dsp.window.move({ workspace = "e-1", follow = false })'')
-        (bindMod "CTRL + U" ''hl.dsp.window.move({ workspace = "e+1", follow = false })'')
-        (bindMod "CTRL + I" ''hl.dsp.window.move({ workspace = "e-1", follow = false })'')
-
-        (bindMod "mouse_down" ''hl.dsp.focus({ workspace = "e+1" })'')
-        (bindMod "mouse_up" ''hl.dsp.focus({ workspace = "e-1" })'')
-        (bindMod "CTRL + mouse_down" ''hl.dsp.window.move({ workspace = "e+1", follow = false })'')
-        (bindMod "CTRL + mouse_up" ''hl.dsp.window.move({ workspace = "e-1", follow = false })'')
-        (bindMod "mouse:276" ''hl.dsp.layout("focus r")'')
-        (bindMod "mouse:275" ''hl.dsp.layout("focus l")'')
-        (bindMod "CTRL + mouse:276" ''hl.dsp.layout("swapcol r")'')
-        (bindMod "CTRL + mouse:275" ''hl.dsp.layout("swapcol l")'')
-        (bindMod "SHIFT + mouse_down" ''hl.dsp.layout("focus r")'')
-        (bindMod "SHIFT + mouse_up" ''hl.dsp.layout("focus l")'')
-        (bindMod "SHIFT + CTRL + mouse_down" ''hl.dsp.layout("swapcol r")'')
-        (bindMod "SHIFT + CTRL + mouse_up" ''hl.dsp.layout("swapcol l")'')
+        (bindMod "U" ''hl.dsp.focus({ workspace = "r+1" })'')
+        (bindMod "I" ''hl.dsp.focus({ workspace = "r-1" })'')
+        (bindMod "SHIFT + U" ''hl.dsp.window.move({ workspace = "r+1" })'')
+        (bindMod "SHIFT + I" ''hl.dsp.window.move({ workspace = "r-1" })'')
+        (bindMod "CTRL + U" ''hl.dsp.window.move({ workspace = "r+1", follow = false })'')
+        (bindMod "CTRL + I" ''hl.dsp.window.move({ workspace = "r-1", follow = false })'')
 
         (bindMod "mouse:272" "hl.dsp.window.drag()")
         (bindMod "mouse:273" "hl.dsp.window.resize()")
@@ -595,8 +570,6 @@ in
 
         (bindMod "SHIFT + C" "hl.dsp.window.close()")
 
-        (bindMod "O" ''hl.dsp.exec_cmd("coulr")'')
-
         (bindMod "R" ''hl.dsp.layout("colresize +conf")'')
 
         (bindMod "bracketleft" ''hl.dsp.layout("consume_or_expel prev")'')
@@ -607,16 +580,11 @@ in
         (bindMod "F" ''hl.dsp.window.fullscreen({ mode = "maximized" })'')
         (bindMod "SHIFT + F" ''hl.dsp.window.fullscreen({ mode = "fullscreen" })'')
 
-        (bindMod "E" ''hl.dsp.layout("fit active")'')
-        (bindMod "CTRL + E" ''hl.dsp.layout("fit visible")'')
-
         (bindMod "minus" ''hl.dsp.layout("colresize -0.1")'')
         (bindMod "equal" ''hl.dsp.layout("colresize +0.1")'')
 
         (bindMod "Space" ''hl.dsp.window.float({ action = "toggle" })'')
         (bindMod "SHIFT + Space" ''hl.dsp.focus({ window = "floating" })'')
-
-        (bindMod "Print" ''hl.dsp.exec_cmd("gradia --screenshot")'')
 
         (bindMod "escape" ''hl.dsp.global("shortcuts:inhibit")'')
       ]
