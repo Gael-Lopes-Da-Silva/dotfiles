@@ -516,7 +516,7 @@ in
         (bindKey "XF86MonBrightnessUp" ''hl.dsp.exec_cmd("brightnessctl --class=backlight set +10%")'')
         (bindKey "XF86MonBrightnessDown" ''hl.dsp.exec_cmd("brightnessctl --class=backlight set 10%-")'')
 
-        (bindKey "Print" ''hl.dsp.exec_cmd("grim -g \"$(slurp)\" - | wl-copy -t image/png")'')
+        (bindKey "Print" ''hl.dsp.exec_cmd("grim -g \"$(slurp -b#ffffff11)\" - | wl-copy -t image/png")'')
         (bindKey "SHIFT + Print" ''hl.dsp.exec_cmd("grim -g \"$(hyprctl activewindow -j | jq -r '\"\\(.at[0]),\\(.at[1]) \\(.size[0])x\\(.size[1])\"')\" - | wl-copy -t image/png")'')
         (bindKey "CTRL + Print" ''hl.dsp.exec_cmd("grim -o \"$(hyprctl monitors -j | jq -r '.[] | select(.focused) | .name')\" - | wl-copy -t image/png")'')
 
