@@ -8,8 +8,4 @@ notify-send \
     -t 5000 \
     "Time" "$datetime"
 
-setsid nohup bash -c "
-    paplay '$HOME/.local/sounds/prop_time.wav' &
-" >/dev/null 2>&1 &
-
 exit 0

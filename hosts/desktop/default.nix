@@ -34,34 +34,19 @@
   '';
 
   home-manager.users.gael = {
-    wayland.windowManager.niri.settings = {
-      debug = {
-        disable-cursor-plane = { };
-      };
-
-      _children = [
+    wayland.windowManager = {
+      hyprland.settings.monitor = [
         {
-          output = {
-            _args = [ "HDMI-A-2" ];
-            mode = "1920x1080@60";
-            scale = 1.0;
-            position._props = {
-              x = 0;
-              y = 0;
-            };
-          };
+          output = "HDMI-A-2";
+          mode = "1920x1080@60";
+          position = "0x0";
+          scale = 1.0;
         }
         {
-          output = {
-            _args = [ "HDMI-A-1" ];
-            mode = "1920x1080@100";
-            scale = 1.0;
-            focus-at-startup = { };
-            position._props = {
-              x = 0;
-              y = 1080;
-            };
-          };
+          output = "HDMI-A-1";
+          mode = "1920x1080@100";
+          position = "0x1080";
+          scale = 1.0;
         }
       ];
     };

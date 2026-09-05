@@ -38,10 +38,6 @@ udevadm monitor --environment --udev --subsystem-match=drm | while read -r line;
                             "Output" "$name: $status"
 
                         last_status[$name]=$status
-
-                        setsid nohup bash -c "
-                            paplay '$HOME/.local/sounds/prop_output.wav' &
-                        " >/dev/null 2>&1 &
                     fi
                 done
             fi

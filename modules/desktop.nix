@@ -88,7 +88,7 @@
   programs = {
     nix-ld.enable = true;
     xwayland.enable = true;
-    niri.enable = true;
+    hyprland.enable = true;
   };
 
   system.stateVersion = "25.11";

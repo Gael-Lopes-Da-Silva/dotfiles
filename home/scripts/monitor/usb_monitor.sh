@@ -35,8 +35,11 @@ udevadm monitor --environment --udev --subsystem-match=usb | while read -r line;
                         -t 3000 \
                         "USB Connected" "$name"
 
+                    sounds=("$HOME"/.local/sounds/sound_usb_connected_*.mp3)
+                    sound="${sounds[RANDOM % ${#sounds[@]}]}"
+
                     setsid nohup bash -c "
-                        paplay '$HOME/.local/sounds/prop_connected.wav' &
+                        paplay '$sound' &
                     " >/dev/null 2>&1 &
                 elif [ "$action" = "remove" ]; then
                     notify-send \
@@ -45,8 +48,11 @@ udevadm monitor --environment --udev --subsystem-match=usb | while read -r line;
                         -t 3000 \
                         "USB Disconnected" "$name"
 
+                    sounds=("$HOME"/.local/sounds/sound_usb_disconnected_*.mp3)
+                    sound="${sounds[RANDOM % ${#sounds[@]}]}"
+
                     setsid nohup bash -c "
-                        paplay '$HOME/.local/sounds/prop_disconnected.wav' &
+                        paplay '$sound' &
                     " >/dev/null 2>&1 &
                 fi
             fi

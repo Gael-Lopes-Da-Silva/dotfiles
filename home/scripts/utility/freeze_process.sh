@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-pid=$(niri msg --json focused-window | jq -r '.pid')
+pid=$(hyprctl activewindow -j | jq -r '.pid')
 if [[ -z "$pid" || "$pid" = "null" ]]; then
     exit 1
 fi
@@ -17,8 +17,11 @@ if [[ "$state" == T* ]]; then
         -t 5000 \
         "Window unfrozen" "PID: $pid"
 
+    sounds=("$HOME"/.local/sounds/sound_unfrozen_*.mp3)
+    sound="${sounds[RANDOM % ${#sounds[@]}]}"
+
     setsid nohup bash -c "
-        paplay '$HOME/.local/sounds/prop_unfrozen.wav' &
+        paplay '$sound' &
     " >/dev/null 2>&1 &
 else
     kill -STOP "$pid"
@@ -27,8 +30,11 @@ else
         -t 5000 \
         "Window frozen" "PID: $pid"
 
+    sounds=("$HOME"/.local/sounds/sound_frozen_*.mp3)
+    sound="${sounds[RANDOM % ${#sounds[@]}]}"
+
     setsid nohup bash -c "
-        paplay '$HOME/.local/sounds/prop_frozen.wav' &
+        paplay '$sound' &
     " >/dev/null 2>&1 &
 fi
 

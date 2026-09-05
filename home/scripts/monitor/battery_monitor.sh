@@ -30,7 +30,7 @@ udevadm monitor --environment --udev --subsystem-match=power_supply | while read
                             "Power" "Charger plugged in"
 
                         setsid nohup bash -c "
-                            paplay '$HOME/.local/sounds/prop_connected.wav' &
+                            paplay '$HOME/.local/sounds/sound_battery_connected_0.mp3' &
                         " >/dev/null 2>&1 &
 
                         brightness_reduced=0
@@ -42,7 +42,7 @@ udevadm monitor --environment --udev --subsystem-match=power_supply | while read
                             "Power" "Charger unplugged"
 
                         setsid nohup bash -c "
-                            paplay '$HOME/.local/sounds/prop_disconnected.wav' &
+                            paplay '$HOME/.local/sounds/sound_battery_disconnected_0.mp3' &
                         " >/dev/null 2>&1 &
                     fi
                     prev_online="$current"
@@ -70,7 +70,7 @@ udevadm monitor --environment --udev --subsystem-match=power_supply | while read
                             brightness_reduced=1
 
                             setsid nohup bash -c "
-                                paplay '$HOME/.local/sounds/prop_battery_low.wav' &
+                                paplay '$HOME/.local/sounds/sound_battery_critical_0.mp3' &
                             " >/dev/null 2>&1 &
                         elif [ "$level" -le 25 ] && [ "$prev_capacity" -gt 25 ]; then
                             notify-send \
@@ -81,7 +81,7 @@ udevadm monitor --environment --udev --subsystem-match=power_supply | while read
                                 "Battery Low" "$level%"
 
                             setsid nohup bash -c "
-                                paplay '$HOME/.local/sounds/prop_battery.wav' &
+                                paplay '$HOME/.local/sounds/sound_battery_low_0.mp3' &
                             " >/dev/null 2>&1 &
                         elif [ "$level" -le 50 ] && [ "$prev_capacity" -gt 50 ]; then
                             notify-send \
@@ -90,10 +90,6 @@ udevadm monitor --environment --udev --subsystem-match=power_supply | while read
                                 -h "int:value:$level" \
                                 -t 3000 \
                                 "Battery" "$level%"
-
-                            setsid nohup bash -c "
-                                paplay '$HOME/.local/sounds/prop_battery.wav' &
-                            " >/dev/null 2>&1 &
                         fi
                     else
                         if [ "$level" -ge 100 ] && [ "$prev_capacity" -lt 100 ]; then
@@ -104,7 +100,7 @@ udevadm monitor --environment --udev --subsystem-match=power_supply | while read
                                 "Battery" "Fully charged"
 
                             setsid nohup bash -c "
-                                paplay '$HOME/.local/sounds/prop_battery_full.wav' &
+                                paplay '$HOME/.local/sounds/sound_battery_full_0.mp3' &
                             " >/dev/null 2>&1 &
                         fi
                     fi
