@@ -469,8 +469,8 @@ in
           scale = 1.0;
           body = ''
             function()
-              local ws = hl.get_workspace("special:magic")
-              if ws ~= nil and not ws.active then
+              local sw = hl.get_active_special_workspace()
+              if sw == nil or sw.name ~= "special:magic" then
                 hl.dispatch(hl.dsp.workspace.toggle_special("magic"))
               end
             end
@@ -481,8 +481,8 @@ in
           scale = 1.0;
           body = ''
             function()
-              local ws = hl.get_workspace("special:magic")
-              if ws ~= nil and ws.active then
+              local sw = hl.get_active_special_workspace()
+              if sw ~= nil and sw.name == "special:magic" then
                 hl.dispatch(hl.dsp.workspace.toggle_special("magic"))
               end
             end
