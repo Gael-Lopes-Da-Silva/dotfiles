@@ -13,10 +13,6 @@
     dedicatedServer.openFirewall = true;
   };
 
-  virtualisation = {
-    virtualbox.host.enable = true;
-  };
-
   services.udev.extraRules = ''
     ACTION=="add|change", KERNEL=="event[0-9]*", \
       ATTRS{name}=="Sony Interactive Entertainment Wireless Controller Touchpad", \
