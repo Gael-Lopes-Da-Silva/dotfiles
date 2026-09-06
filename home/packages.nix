@@ -43,6 +43,7 @@ in
     xwayland-satellite
 
     vial
+    discord
     filezilla
 
     pods
