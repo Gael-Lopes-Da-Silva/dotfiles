@@ -75,12 +75,9 @@ in
 
   wayland.windowManager.hyprland = {
     enable = true;
-    configType = "lua";
 
     settings = {
-      mod = {
-        _var = "SUPER";
-      };
+      mod._var = "SUPER";
 
       on = [
         (onEvent "hyprland.start" ''
@@ -100,11 +97,10 @@ in
           general = {
             gaps_in = 5;
             gaps_out = 10;
-            layout = "scrolling";
-            resize_on_border = false;
-            allow_tearing = false;
-
             border_size = 1;
+            layout = "scrolling";
+            allow_tearing = false;
+            resize_on_border = false;
             col.active_border = "rgb(404040)";
             col.inactive_border = "rgb(303030)";
           };
@@ -120,11 +116,11 @@ in
 
             shadow = {
               enabled = true;
-              render_power = 4;
               range = 10;
+              offset = "0 2";
+              render_power = 4;
               color = "rgba(00000070)";
               color_inactive = "rgba(00000050)";
-              offset = "0 2";
             };
 
             motion_blur = {
@@ -134,12 +130,12 @@ in
         }
         {
           scrolling = {
+            wrap_focus = true;
             column_width = 1.0;
-            explicit_column_widths = "0.5, 1.0";
             direction = "right";
             follow_focus = true;
-            wrap_focus = true;
             wrap_swapcol = true;
+            explicit_column_widths = "0.5, 1.0";
           };
         }
         {
@@ -158,15 +154,15 @@ in
         }
         {
           misc = {
+            focus_on_activate = true;
+            middle_click_paste = false;
             force_default_wallpaper = 0;
             disable_hyprland_logo = true;
-            disable_splash_rendering = true;
-            background_color = "rgb(303030)";
-            middle_click_paste = false;
-            disable_watchdog_warning = true;
-            focus_on_activate = true;
-            mouse_move_enables_dpms = true;
             key_press_enables_dpms = true;
+            mouse_move_enables_dpms = true;
+            disable_splash_rendering = true;
+            disable_watchdog_warning = true;
+            background_color = "rgb(303030)";
           };
         }
         {
@@ -190,9 +186,9 @@ in
         {
           gestures = {
             workspace_swipe_touch = true;
-            workspace_swipe_create_new = true;
             workspace_swipe_forever = true;
             workspace_swipe_distance = 180;
+            workspace_swipe_create_new = true;
             workspace_swipe_cancel_ratio = 0.1;
           };
         }
@@ -438,13 +434,6 @@ in
           name = "no-anim-selection";
           match = {
             namespace = "selection";
-          };
-          no_anim = true;
-        }
-        {
-          name = "no-anim-colorpicker";
-          match = {
-            namespace = "hyprpicker";
           };
           no_anim = true;
         }
