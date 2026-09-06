@@ -108,7 +108,13 @@ in
             col.active_border = "rgb(404040)";
             col.inactive_border = "rgb(303030)";
           };
-
+        }
+        {
+          animations = {
+            enabled = true;
+          };
+        }
+        {
           decoration = {
             rounding = 12;
 
@@ -121,10 +127,10 @@ in
               offset = "0 2";
             };
 
-            motion_blur.enabled = true;
+            motion_blur = {
+              enabled = true;
+            };
           };
-
-          animations.enabled = true;
         }
         {
           scrolling = {
@@ -145,7 +151,9 @@ in
               border_inactive = "0";
             };
 
-            groupbar.enabled = false;
+            groupbar = {
+              enabled = false;
+            };
           };
         }
         {
