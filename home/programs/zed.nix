@@ -17,17 +17,32 @@
     ];
 
     userSettings = {
+      hard_tabs = true;
       middle_click_paste = false;
+      soft_wrap = "editor_width";
+      unnecessary_code_fade = 0.5;
       window_decorations = "server";
       scroll_beyond_last_line = "off";
-      format_on_save = "on";
-      soft_wrap = "editor_width";
       buffer_line_height = "standard";
       ui_font_size = 18.0;
       buffer_font_size = 18.0;
       agent_ui_font_size = 18.0;
       agent_buffer_font_size = 18.0;
       theme = "Yellowed";
+
+      features = {
+        edit_prediction_provider = "none";
+      };
+
+      tabs = {
+        file_icons = true;
+        git_status = true;
+        show_diagnostics = "all";
+      };
+
+      toolbar = {
+        code_actions = true;
+      };
 
       edit_predictions = {
         provider = "none";
@@ -38,8 +53,13 @@
         hide_root = true;
       };
 
+      collaboration_panel = {
+        button = false;
+      };
+
       title_bar = {
         show_sign_in = false;
+        show_onboarding_banner = false;
       };
 
       completions = {
