@@ -73,7 +73,7 @@
       bind "\"\e[Z\":menu-complete-backward"
 
       function set_prompt() {
-        PS1="\u@\h:\w''${IN_NIX_SHELL:+ ❄}\n\$ "
+        PS1='\[\e[102m\] \[\e[1m\]\w\[\e[22m\] \[\e[0m\] '
       }
 
       PROMPT_COMMAND="set_prompt"
