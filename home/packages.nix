@@ -30,6 +30,7 @@ in
     bun
     clang
     rustup
+    cursor-cli
 
     jq
     p7zip

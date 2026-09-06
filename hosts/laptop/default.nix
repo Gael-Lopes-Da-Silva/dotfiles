@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 
 {
   imports = [
@@ -7,10 +7,6 @@
   ];
 
   networking.hostName = "windows11";
-
-  environment.systemPackages = with pkgs; [
-    cursor-cli
-  ];
 
   services = {
     tlp.enable = true;

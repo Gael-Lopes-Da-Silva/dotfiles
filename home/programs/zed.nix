@@ -42,10 +42,12 @@
         expand_edit_card = false;
         expand_terminal_card = false;
         default_width = 300.0;
+        terminal_init_command = "agent";
       };
 
       edit_predictions = {
         provider = "none";
+        allow_data_collection = false;
       };
 
       collaboration_panel = {
