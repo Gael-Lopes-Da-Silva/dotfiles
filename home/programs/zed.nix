@@ -11,66 +11,33 @@
 
     extensions = [
       "yellowed"
-
       "nix"
     ];
 
     userSettings = {
-      disable_ai = false;
       middle_click_paste = false;
-      auto_signature_help = false;
-      show_signature_help_after_edits = false;
       window_decorations = "server";
-      lsp_document_colors = "background";
       scroll_beyond_last_line = "off";
       format_on_save = "on";
       soft_wrap = "editor_width";
       buffer_line_height = "standard";
-      restore_on_startup = "empty_tab";
       ui_font_size = 18.0;
       buffer_font_size = 18.0;
       agent_ui_font_size = 18.0;
       agent_buffer_font_size = 18.0;
       theme = "Yellowed";
 
-      language_models = { };
-
-      agent = {
-        dock = "right";
-        sidebar_side = "right";
-        thinking_display = "always_collapsed";
-        expand_edit_card = false;
-        expand_terminal_card = false;
-        default_width = 300.0;
-      };
-
       edit_predictions = {
         provider = "none";
       };
 
-      collaboration_panel = {
-        button = false;
-        default_width = 300.0;
-      };
-
-      git_panel = {
-        dock = "left";
-        default_width = 300.0;
-      };
-
       project_panel = {
-        dock = "left";
         auto_fold_dirs = false;
-        default_width = 300.0;
         hide_root = true;
       };
 
       title_bar = {
         show_sign_in = false;
-      };
-
-      inlay_hints = {
-        show_background = true;
       };
 
       completions = {
