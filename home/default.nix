@@ -50,11 +50,6 @@
       ];
 
       config = {
-        niri = {
-          default = [
-            "gnome"
-          ];
-        };
         hyprland = {
           default = [
             "hyprland"
