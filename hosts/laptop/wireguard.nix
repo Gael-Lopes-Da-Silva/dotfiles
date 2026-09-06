@@ -6,8 +6,6 @@
   ];
 
   networking = {
-    hostName = "windows11";
-
     wg-quick.interfaces.wg0 = {
       address = [ "10.8.0.3/32" ];
       mtu = 1420;
