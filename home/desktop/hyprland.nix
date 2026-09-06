@@ -450,6 +450,13 @@ in
           };
           suppress_event = "maximize";
         }
+        {
+          name = "float-share-picker";
+          match = {
+            title = "Select what to share";
+          };
+          float = true;
+        }
       ];
 
       gesture = [
