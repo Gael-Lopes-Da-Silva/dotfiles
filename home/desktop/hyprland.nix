@@ -448,6 +448,13 @@ in
           suppress_event = "maximize";
         }
         {
+          name = "center-floating";
+          match = {
+            float = true;
+          };
+          center = true;
+        }
+        {
           name = "float-share-picker";
           match = {
             title = "Select what to share";
