@@ -25,13 +25,6 @@ in
     menu
   ]
   ++ (with pkgs; [
-    uv
-    php
-    bun
-    clang
-    rustup
-    cursor-cli
-
     jq
     p7zip
     libsecret
@@ -46,6 +39,7 @@ in
     vial
     discord
     filezilla
+    cursor-cli
 
     pods
     lact
