@@ -4,13 +4,14 @@
   users.users.gael = {
     isNormalUser = true;
     extraGroups = [
+      "kvm"
       "disk"
       "input"
       "wheel"
       "audio"
       "video"
       "uinput"
-      "vboxusers"
+      "libvirtd"
     ];
   };
 

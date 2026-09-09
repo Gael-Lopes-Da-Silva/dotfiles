@@ -66,6 +66,7 @@ in
     field-monitor
 
     gnome-maps
+    gnome-boxes
     gnome-clocks
     gnome-weather
     gnome-decoder
