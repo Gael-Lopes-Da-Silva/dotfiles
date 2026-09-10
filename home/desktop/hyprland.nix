@@ -453,6 +453,7 @@ in
             float = true;
           };
           center = true;
+          min_size = [1000 600];
         }
         {
           name = "float-share-picker";
