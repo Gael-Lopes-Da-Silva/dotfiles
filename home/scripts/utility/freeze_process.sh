@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-pid=$(hyprctl activewindow -j | jq -r '.pid')
+pid=$(niri msg --json focused-window | jq -r '.pid')
 if [[ -z "$pid" || "$pid" = "null" ]]; then
     exit 1
 fi

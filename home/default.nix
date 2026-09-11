@@ -18,8 +18,8 @@
   home-manager.users.gael = {
     imports = [
       ./desktop/clipboard.nix
-      ./desktop/hyprland.nix
       ./desktop/mako.nix
+      ./desktop/niri.nix
       ./desktop/theme.nix
 
       ./programs/apps.nix
@@ -46,17 +46,15 @@
       xdgOpenUsePortal = true;
 
       extraPortals = with pkgs; [
-        xdg-desktop-portal-hyprland
         xdg-desktop-portal-gnome
       ];
 
       config = {
-        hyprland = {
-          default = [
-            "hyprland"
-            "gnome"
-          ];
-        };
+	     	niri = {
+	        default = [
+	          "gnome"
+	        ];
+	      };
       };
     };
   };

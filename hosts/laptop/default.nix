@@ -14,12 +14,17 @@
 
   home-manager.users.gael = {
     wayland.windowManager = {
-      hyprland.settings.monitor = [
+      niri.settings._children = [
         {
-          output = "eDP-1";
-          mode = "1920x1080@60";
-          position = "0x0";
-          scale = 1.0;
+          output = {
+            _args = [ "eDP-1" ];
+            mode = "1920x1080@60";
+            scale = 1.0;
+            position._props = {
+              x = 0;
+              y = 0;
+            };
+          };
         }
       ];
     };

@@ -13,12 +13,12 @@
       border-color = "#404040ff";
       border-radius = 10;
       progress-color = "#242424ff";
-      margin = 2;
+      margin = 6;
       padding = 10;
-      outer-margin = 14;
+      outer-margin = 16;
 
       "app-name=osd".anchor = "bottom-center";
-      "app-name=notification".anchor = "top-right";
+      "app-name=notification".anchor = "top-center";
     };
   };
 }
