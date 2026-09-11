@@ -420,6 +420,7 @@ fn rebuild_device_list(
             .hexpand(true)
             .ellipsize(pango::EllipsizeMode::End)
             .valign(gtk::Align::Center)
+            .tooltip_text(&endpoint.name)
             .build();
         name.set_widget_name("name");
 
@@ -477,6 +478,7 @@ fn rebuild_stream_list(
             .label(&stream.app_name)
             .xalign(0.0)
             .ellipsize(pango::EllipsizeMode::End)
+            .tooltip_text(&stream.app_name)
             .build();
         app.set_widget_name("app");
 
@@ -490,6 +492,9 @@ fn rebuild_stream_list(
             .ellipsize(pango::EllipsizeMode::End)
             .css_classes(["dim-label", "caption"])
             .build();
+        if !stream.media_name.is_empty() {
+            media.set_tooltip_text(Some(stream.media_name.as_str()));
+        }
         media.set_widget_name("media");
 
         text_col.append(&app);
@@ -534,6 +539,7 @@ fn update_device_rows(
                 && name.label() != endpoint.name.as_str()
             {
                 name.set_label(&endpoint.name);
+                name.set_tooltip_text(Some(endpoint.name.as_str()));
             }
             if !state.borrow().dragging.contains(&id) {
                 if let Some(scale) = find_named_as::<gtk::Scale>(row, "scale")
@@ -575,6 +581,7 @@ fn update_stream_rows(
                 && app.label() != stream.app_name.as_str()
             {
                 app.set_label(&stream.app_name);
+                app.set_tooltip_text(Some(stream.app_name.as_str()));
             }
             if let Some(media) = find_named_as::<gtk::Label>(row, "media") {
                 let text = if stream.media_name.is_empty() {
@@ -584,6 +591,11 @@ fn update_stream_rows(
                 };
                 if media.label() != text {
                     media.set_label(text);
+                    if stream.media_name.is_empty() {
+                        media.set_tooltip_text(None);
+                    } else {
+                        media.set_tooltip_text(Some(stream.media_name.as_str()));
+                    }
                 }
             }
             if !state.borrow().dragging.contains(&id) {

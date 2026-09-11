@@ -779,6 +779,7 @@ fn build_ethernet_row(device: &EthernetInfo, refresh: Rc<dyn Fn()>) -> gtk::Box 
         .label(&title)
         .xalign(0.0)
         .ellipsize(pango::EllipsizeMode::End)
+        .tooltip_text(&title)
         .build();
 
     let mut meta_parts = vec![device.device.clone(), device.state.clone()];
@@ -846,6 +847,7 @@ fn build_connected_row(
         .label(ssid)
         .xalign(0.0)
         .ellipsize(pango::EllipsizeMode::End)
+        .tooltip_text(ssid)
         .build();
 
     let mut meta_parts = vec!["Connected".to_string()];
@@ -925,6 +927,7 @@ fn build_known_row(network: &SavedNetwork, refresh: Rc<dyn Fn()>) -> gtk::Box {
         .label(&network.name)
         .xalign(0.0)
         .ellipsize(pango::EllipsizeMode::End)
+        .tooltip_text(&network.name)
         .build();
 
     let meta = gtk::Label::builder()
@@ -998,6 +1001,7 @@ fn build_available_row(network: &WifiNetwork, refresh: Rc<dyn Fn()>) -> gtk::Box
         .label(&display)
         .xalign(0.0)
         .ellipsize(pango::EllipsizeMode::End)
+        .tooltip_text(&display)
         .build();
 
     let mut meta_parts = Vec::new();

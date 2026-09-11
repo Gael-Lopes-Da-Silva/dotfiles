@@ -608,6 +608,7 @@ fn update_section_rows(container: &gtk::Box, devices: &[BtDevice]) {
             && name.label() != device.name.as_str()
         {
             name.set_label(&device.name);
+            name.set_tooltip_text(Some(device.name.as_str()));
         }
         if let Some(meta) = find_named_label(row, "meta") {
             let text = device_meta(device);
@@ -669,6 +670,7 @@ fn build_device_row(device: &BtDevice, refresh: Rc<dyn Fn()>) -> gtk::Box {
         .label(&device.name)
         .xalign(0.0)
         .ellipsize(pango::EllipsizeMode::End)
+        .tooltip_text(&device.name)
         .build();
     name.set_widget_name("name");
 
@@ -1140,6 +1142,11 @@ fn bt(args: &[&str]) -> std::process::Output {
 }
 
 fn section_fingerprint(devices: &[BtDevice]) -> String {
+    // Distinct from the initial "" fingerprint so empty sections still rebuild
+    // once and show their empty-state label.
+    if devices.is_empty() {
+        return String::from("__empty__");
+    }
     let mut parts: Vec<String> = devices
         .iter()
         .map(|d| {
