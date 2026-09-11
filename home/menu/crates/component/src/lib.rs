@@ -83,6 +83,54 @@ where
     });
 }
 
+/// Defer work until after the widget has been painted at least once.
+pub fn defer_after_paint<F>(widget: &impl IsA<gtk::Widget>, func: F)
+where
+    F: FnOnce() + 'static,
+{
+    use std::cell::{Cell, RefCell};
+    use std::rc::Rc;
+    use std::time::Duration;
+
+    let func = Rc::new(RefCell::new(Some(func)));
+    let done = Rc::new(Cell::new(false));
+
+    let run = gtk::glib::clone!(
+        #[strong]
+        func,
+        #[strong]
+        done,
+        move || {
+            if done.replace(true) {
+                return;
+            }
+            if let Some(func) = func.borrow_mut().take() {
+                func();
+            }
+        }
+    );
+
+    widget.add_tick_callback(gtk::glib::clone!(
+        #[strong]
+        run,
+        move |_, _| {
+            // Schedule after this frame so the tab switch paints first.
+            gtk::glib::idle_add_local_once(run.clone());
+            gtk::glib::ControlFlow::Break
+        }
+    ));
+
+    // Fallback if the widget does not receive a frame tick promptly.
+    gtk::glib::timeout_add_local_once(
+        Duration::from_millis(32),
+        gtk::glib::clone!(
+            #[strong]
+            run,
+            move || run()
+        ),
+    );
+}
+
 /// Defer work until the next main-loop iteration (for main-thread-only APIs).
 pub fn defer_idle<F>(func: F)
 where
@@ -107,4 +155,25 @@ pub fn update_list_empty_state(
     loading: &gtk::Spinner,
 ) {
     empty.set_visible(!loading.is_visible() && selection.n_items() == 0);
+}
+
+/// True if any MenuButton under `root` currently has its popover open.
+pub fn has_open_popover(root: &impl IsA<gtk::Widget>) -> bool {
+    fn walk(widget: &gtk::Widget) -> bool {
+        if let Ok(btn) = widget.clone().downcast::<gtk::MenuButton>()
+            && let Some(popover) = btn.popover()
+            && popover.is_visible()
+        {
+            return true;
+        }
+        let mut child = widget.first_child();
+        while let Some(c) = child {
+            if walk(&c) {
+                return true;
+            }
+            child = c.next_sibling();
+        }
+        false
+    }
+    walk(root.upcast_ref())
 }

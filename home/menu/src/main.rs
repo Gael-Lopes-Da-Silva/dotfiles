@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use std::rc::Rc;
 
 use clap::Parser;
-use component::{Component, loading_page};
+use component::{Component, defer_after_paint, loading_page};
 use gtk4::gdk;
 use gtk4::gio;
 use gtk4::glib;
@@ -134,16 +134,21 @@ fn build_ui(app: &adw::Application, focused_id: &str) {
                 (slot.placeholder.clone(), slot.component)
             };
 
-            let widget = (component.build)();
-            if let Some(container) = placeholder.downcast_ref::<gtk::Box>() {
-                while let Some(child) = container.first_child() {
-                    container.remove(&child);
+            // Wait for a painted frame so the loading placeholder is visible
+            // before any page build / first data fetch runs.
+            let placeholder_for_build = placeholder.clone();
+            defer_after_paint(&placeholder, move || {
+                let widget = (component.build)();
+                if let Some(container) = placeholder_for_build.downcast_ref::<gtk::Box>() {
+                    while let Some(child) = container.first_child() {
+                        container.remove(&child);
+                    }
+                    container.set_spacing(0);
+                    widget.set_vexpand(true);
+                    widget.set_hexpand(true);
+                    container.append(&widget);
                 }
-                container.set_spacing(0);
-                widget.set_vexpand(true);
-                widget.set_hexpand(true);
-                container.append(&widget);
-            }
+            });
         }
     );
 
@@ -200,12 +205,8 @@ fn build_ui(app: &adw::Application, focused_id: &str) {
 
     window.present();
 
-    let focused_id = focused_id.to_owned();
-    glib::idle_add_local_once(glib::clone!(
-        #[strong]
-        ensure_loaded,
-        move || ensure_loaded(&focused_id)
-    ));
+    // Initial page was selected before the notify handler was connected.
+    ensure_loaded(focused_id);
 }
 
 fn focus_component(window: &gtk::Window, focused_id: &str) {

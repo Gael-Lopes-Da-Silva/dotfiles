@@ -1,10 +1,10 @@
-use std::cell::RefCell;
+use std::cell::{Cell, RefCell};
 use std::collections::{HashMap, HashSet};
 use std::process::{Command, Stdio};
 use std::rc::Rc;
 use std::time::Duration;
 
-use component::{Component, spawn_background};
+use component::{Component, has_open_popover, spawn_background};
 use gtk4::gio;
 use gtk4::glib;
 use gtk4::pango;
@@ -207,6 +207,7 @@ fn build() -> gtk::Widget {
     }));
 
     let query = Rc::new(RefCell::new(String::new()));
+    let page_visible = Rc::new(Cell::new(false));
 
     let refresh: RefreshHandle = Rc::new(RefCell::new(None));
 
@@ -239,7 +240,12 @@ fn build() -> gtk::Widget {
         query,
         #[strong]
         refresh,
+        #[strong]
+        page_visible,
         move || {
+            if !page_visible.get() {
+                return;
+            }
             if state.borrow().refreshing {
                 return;
             }
@@ -275,8 +281,13 @@ fn build() -> gtk::Widget {
                     state,
                     #[strong]
                     refresh,
+                    #[strong]
+                    page_visible,
                     move |snapshot| {
                         state.borrow_mut().refreshing = false;
+                        if !page_visible.get() {
+                            return;
+                        }
                         let refresh_cb = refresh
                             .borrow()
                             .clone()
@@ -423,15 +434,35 @@ fn build() -> gtk::Widget {
         }
     ));
 
-    do_refresh();
+    root.connect_map(glib::clone!(
+        #[strong]
+        page_visible,
+        #[strong]
+        do_refresh,
+        move |_| {
+            page_visible.set(true);
+            do_refresh();
+        }
+    ));
+    root.connect_unmap(glib::clone!(
+        #[strong]
+        page_visible,
+        move |_| {
+            page_visible.set(false);
+        }
+    ));
 
     glib::timeout_add_local(
         Duration::from_millis(2000),
         glib::clone!(
             #[strong]
+            page_visible,
+            #[strong]
             do_refresh,
             move || {
-                do_refresh();
+                if page_visible.get() {
+                    do_refresh();
+                }
                 glib::ControlFlow::Continue
             }
         ),
@@ -529,7 +560,7 @@ fn apply_snapshot(
     let known_fp = known_fingerprint(query, &known);
     let available_fp = available_fingerprint(query, &available);
 
-    if state.borrow().ethernet_fp != ethernet_fp {
+    if state.borrow().ethernet_fp != ethernet_fp && !has_open_popover(sections.ethernet_box) {
         state.borrow_mut().ethernet_fp = ethernet_fp;
         rebuild_ethernet_section(
             sections.ethernet_box,
@@ -540,45 +571,55 @@ fn apply_snapshot(
     }
 
     if state.borrow().connected_fp != connected_fp {
-        state.borrow_mut().connected_fp = connected_fp;
-        rebuild_connected_section(
-            sections.connected_box,
-            sections.connected_label,
-            &snapshot.active_ssid,
-            connected_scan.as_ref(),
-            &snapshot.wifi_device,
-            snapshot.saved.iter().find(|s| s.active).cloned(),
-            &refresh,
-        );
+        if has_open_popover(sections.connected_box) {
+            let signal = connected_scan.as_ref().map(|n| n.signal).unwrap_or(0);
+            update_connected_signal(sections.connected_box, signal);
+        } else {
+            state.borrow_mut().connected_fp = connected_fp;
+            rebuild_connected_section(
+                sections.connected_box,
+                sections.connected_label,
+                &snapshot.active_ssid,
+                connected_scan.as_ref(),
+                &snapshot.wifi_device,
+                snapshot.saved.iter().find(|s| s.active).cloned(),
+                &refresh,
+            );
+        }
     } else {
-        let signal = connected_scan.map(|n| n.signal).unwrap_or(0);
+        let signal = connected_scan.as_ref().map(|n| n.signal).unwrap_or(0);
         update_connected_signal(sections.connected_box, signal);
     }
 
-    if state.borrow().known_fp != known_fp {
+    if state.borrow().known_fp != known_fp && !has_open_popover(sections.known_box) {
         state.borrow_mut().known_fp = known_fp;
         rebuild_known_section(sections.known_box, sections.known_label, &known, &refresh);
     }
 
     if state.borrow().available_fp != available_fp {
-        state.borrow_mut().available_fp = available_fp;
-        rebuild_available_section(
-            sections.available_box,
-            sections.available_label,
-            &available,
-            &refresh,
-        );
+        if has_open_popover(sections.available_box) {
+            update_available_signals(sections.available_box, &available);
+        } else {
+            state.borrow_mut().available_fp = available_fp;
+            rebuild_available_section(
+                sections.available_box,
+                sections.available_label,
+                &available,
+                &refresh,
+            );
+        }
     } else {
         update_available_signals(sections.available_box, &available);
     }
 }
 
 fn ethernet_fingerprint(devices: &[EthernetInfo]) -> String {
-    devices
+    let mut parts: Vec<String> = devices
         .iter()
         .map(|e| format!("{}|{}|{}|{}", e.device, e.state, e.connection, e.ip4))
-        .collect::<Vec<_>>()
-        .join(";")
+        .collect();
+    parts.sort();
+    parts.join(";")
 }
 
 fn connected_fingerprint(
@@ -588,10 +629,10 @@ fn connected_fingerprint(
     saved: Option<&SavedNetwork>,
 ) -> String {
     let security = scan_info.map(|n| n.security.as_str()).unwrap_or("");
-    let freq = scan_info.map(|n| n.freq.as_str()).unwrap_or("");
     let autoconnect = saved.map(|s| s.autoconnect as u8).unwrap_or(0);
     let uuid = saved.map(|s| s.uuid.as_str()).unwrap_or("");
-    format!("{active_ssid}|{wifi_device}|{security}|{freq}|{uuid}|{autoconnect}")
+    // Exclude signal/freq — those update in place.
+    format!("{active_ssid}|{wifi_device}|{security}|{uuid}|{autoconnect}")
 }
 
 fn known_fingerprint(query: &str, networks: &[SavedNetwork]) -> String {
@@ -599,20 +640,17 @@ fn known_fingerprint(query: &str, networks: &[SavedNetwork]) -> String {
     for s in networks {
         parts.push(format!("{}|{}|{}", s.uuid, s.autoconnect as u8, s.name));
     }
+    parts.sort();
     parts.join(";")
 }
 
 fn available_fingerprint(query: &str, networks: &[WifiNetwork]) -> String {
     let mut parts = vec![format!("q={query}")];
     for n in networks {
-        parts.push(format!(
-            "{}|{}|{}|{}",
-            network_key(n),
-            n.security,
-            n.freq,
-            n.bssid
-        ));
+        // Exclude signal — updated in place. Sort so scan order does not rebuild.
+        parts.push(format!("{}|{}|{}", network_key(n), n.security, n.bssid));
     }
+    parts.sort();
     parts.join(";")
 }
 
@@ -1303,10 +1341,8 @@ fn update_connected_signal(container: &gtk::Box, signal: i32) {
 }
 
 fn update_available_signals(container: &gtk::Box, networks: &[WifiNetwork]) {
-    let signals: HashMap<String, i32> = networks
-        .iter()
-        .map(|n| (network_key(n), n.signal))
-        .collect();
+    let by_key: HashMap<String, &WifiNetwork> =
+        networks.iter().map(|n| (network_key(n), n)).collect();
 
     let mut child = container.first_child();
     while let Some(widget) = child {
@@ -1318,11 +1354,28 @@ fn update_available_signals(container: &gtk::Box, networks: &[WifiNetwork]) {
         if key.is_empty() {
             continue;
         }
-        let Some(&signal) = signals.get(key.as_str()) else {
+        let Some(network) = by_key.get(key.as_str()) else {
             continue;
         };
         if let Some(icon) = row.first_child().and_downcast::<gtk::Image>() {
-            icon.set_icon_name(Some(signal_icon(signal)));
+            icon.set_icon_name(Some(signal_icon(network.signal)));
+        }
+        if let Some(text_col) = row.first_child().and_then(|c| c.next_sibling())
+            && let Some(text_col) = text_col.downcast_ref::<gtk::Box>()
+            && let Some(meta) = text_col.last_child().and_downcast::<gtk::Label>()
+        {
+            let mut meta_parts = Vec::new();
+            if !network.security.is_empty() {
+                meta_parts.push(network.security.clone());
+            }
+            if !network.freq.is_empty() {
+                meta_parts.push(network.freq.clone());
+            }
+            meta_parts.push(format!("{}%", network.signal));
+            let text = meta_parts.join(" · ");
+            if meta.label() != text.as_str() {
+                meta.set_label(&text);
+            }
         }
     }
 }

@@ -131,7 +131,10 @@ fn build() -> gtk::Widget {
         }
     ));
 
-    let search = gtk::SearchEntry::builder().hexpand(true).build();
+    let search = gtk::SearchEntry::builder()
+        .hexpand(true)
+        .search_delay(0)
+        .build();
 
     let empty = component::empty_list_label("No applications");
     empty.set_visible(false);
@@ -141,7 +144,7 @@ fn build() -> gtk::Widget {
         .build();
     loading.start();
 
-    search.connect_search_changed(glib::clone!(
+    let apply_query = Rc::new(glib::clone!(
         #[strong]
         query,
         #[weak]
@@ -149,18 +152,30 @@ fn build() -> gtk::Widget {
         #[weak]
         selection,
         #[weak]
-        search,
-        #[weak]
         empty,
         #[weak]
         loading,
-        move |entry| {
-            *query.borrow_mut() = entry.text().to_lowercase();
+        move |text: String| {
+            let text = text.to_lowercase();
+            if *query.borrow() == text {
+                return;
+            }
+            *query.borrow_mut() = text;
             filter.changed(gtk::FilterChange::Different);
             if selection.n_items() > 0 {
                 selection.set_selected(0);
             }
             component::update_list_empty_state(&selection, &empty, &loading);
+        }
+    ));
+
+    search.connect_search_changed(glib::clone!(
+        #[strong]
+        apply_query,
+        #[weak]
+        search,
+        move |entry| {
+            apply_query(entry.text().to_string());
             if !entry.has_focus() {
                 glib::idle_add_local_once(glib::clone!(
                     #[weak]
@@ -175,9 +190,14 @@ fn build() -> gtk::Widget {
     ));
 
     search.connect_activate(glib::clone!(
+        #[strong]
+        apply_query,
         #[weak]
         selection,
-        move |_| {
+        move |entry| {
+            // Ensure the filter matches the typed text before launching —
+            // Enter can race ahead of search-changed when typing quickly.
+            apply_query(entry.text().to_string());
             activate_selected(&selection);
         }
     ));

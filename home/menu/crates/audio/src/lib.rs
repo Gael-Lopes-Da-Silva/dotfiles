@@ -1,4 +1,4 @@
-use std::cell::RefCell;
+use std::cell::{Cell, RefCell};
 use std::collections::{HashMap, HashSet};
 use std::process::Command;
 use std::rc::Rc;
@@ -33,8 +33,10 @@ struct Stream {
 
 struct UiState {
     dragging: HashSet<u32>,
-    device_ids: Vec<u32>,
-    stream_ids: Vec<u32>,
+    sink_ids: Vec<u32>,
+    source_ids: Vec<u32>,
+    output_stream_ids: Vec<u32>,
+    input_stream_ids: Vec<u32>,
     updating: bool,
     refreshing: bool,
 }
@@ -112,11 +114,14 @@ fn build() -> gtk::Widget {
 
     let state = Rc::new(RefCell::new(UiState {
         dragging: HashSet::new(),
-        device_ids: Vec::new(),
-        stream_ids: Vec::new(),
+        sink_ids: Vec::new(),
+        source_ids: Vec::new(),
+        output_stream_ids: Vec::new(),
+        input_stream_ids: Vec::new(),
         updating: false,
         refreshing: false,
     }));
+    let page_visible = Rc::new(Cell::new(false));
 
     let refresh = Rc::new(glib::clone!(
         #[strong]
@@ -129,7 +134,12 @@ fn build() -> gtk::Widget {
         input_streams_w,
         #[strong]
         state,
+        #[strong]
+        page_visible,
         move || {
+            if !page_visible.get() {
+                return;
+            }
             if state.borrow().refreshing {
                 return;
             }
@@ -148,8 +158,13 @@ fn build() -> gtk::Widget {
                     input_streams_w,
                     #[strong]
                     state,
+                    #[strong]
+                    page_visible,
                     move |snapshot| {
                         state.borrow_mut().refreshing = false;
+                        if !page_visible.get() {
+                            return;
+                        }
                         let Some(output_devices) = output_devices_w.upgrade() else {
                             return;
                         };
@@ -176,15 +191,35 @@ fn build() -> gtk::Widget {
         }
     ));
 
-    refresh();
+    root.connect_map(glib::clone!(
+        #[strong]
+        page_visible,
+        #[strong]
+        refresh,
+        move |_| {
+            page_visible.set(true);
+            refresh();
+        }
+    ));
+    root.connect_unmap(glib::clone!(
+        #[strong]
+        page_visible,
+        move |_| {
+            page_visible.set(false);
+        }
+    ));
 
     glib::timeout_add_local(
         Duration::from_millis(1000),
         glib::clone!(
             #[strong]
+            page_visible,
+            #[strong]
             refresh,
             move || {
-                refresh();
+                if page_visible.get() {
+                    refresh();
+                }
                 glib::ControlFlow::Continue
             }
         ),
@@ -251,51 +286,68 @@ fn apply_snapshot(
     let sources = snapshot.sources;
     let streams = snapshot.streams;
 
-    let mut device_ids: Vec<u32> = sinks.iter().map(|e| e.id).collect();
-    device_ids.extend(sources.iter().map(|e| e.id));
-    let stream_ids: Vec<u32> = streams.iter().map(|s| s.id).collect();
+    let sink_ids = sorted_ids(sinks.iter().map(|e| e.id));
+    let source_ids = sorted_ids(sources.iter().map(|e| e.id));
+    let output_stream_ids = sorted_ids(streams.iter().filter(|s| s.is_output).map(|s| s.id));
+    let input_stream_ids = sorted_ids(streams.iter().filter(|s| !s.is_output).map(|s| s.id));
 
-    let needs_rebuild = {
+    let (rebuild_sinks, rebuild_sources, rebuild_out_streams, rebuild_in_streams) = {
         let mut st = state.borrow_mut();
-        let changed = st.device_ids != device_ids || st.stream_ids != stream_ids;
-        if changed {
-            st.device_ids = device_ids;
-            st.stream_ids = stream_ids;
+        let rebuild_sinks = st.sink_ids != sink_ids;
+        let rebuild_sources = st.source_ids != source_ids;
+        let rebuild_out_streams = st.output_stream_ids != output_stream_ids;
+        let rebuild_in_streams = st.input_stream_ids != input_stream_ids;
+        if rebuild_sinks {
+            st.sink_ids = sink_ids;
         }
-        changed
+        if rebuild_sources {
+            st.source_ids = source_ids;
+        }
+        if rebuild_out_streams {
+            st.output_stream_ids = output_stream_ids;
+        }
+        if rebuild_in_streams {
+            st.input_stream_ids = input_stream_ids;
+        }
+        (
+            rebuild_sinks,
+            rebuild_sources,
+            rebuild_out_streams,
+            rebuild_in_streams,
+        )
     };
 
+    let output_only: Vec<Stream> = streams.iter().filter(|s| s.is_output).cloned().collect();
+    let input_only: Vec<Stream> = streams.iter().filter(|s| !s.is_output).cloned().collect();
+
     state.borrow_mut().updating = true;
-    if needs_rebuild {
+    if rebuild_sinks {
         rebuild_device_list(output_devices, &sinks, true, state);
-        rebuild_device_list(input_devices, &sources, false, state);
-        rebuild_stream_list(
-            output_streams,
-            &streams
-                .iter()
-                .filter(|s| s.is_output)
-                .cloned()
-                .collect::<Vec<_>>(),
-            true,
-            state,
-        );
-        rebuild_stream_list(
-            input_streams,
-            &streams
-                .iter()
-                .filter(|s| !s.is_output)
-                .cloned()
-                .collect::<Vec<_>>(),
-            false,
-            state,
-        );
     } else {
         update_device_rows(output_devices, &sinks, true, state);
+    }
+    if rebuild_sources {
+        rebuild_device_list(input_devices, &sources, false, state);
+    } else {
         update_device_rows(input_devices, &sources, false, state);
+    }
+    if rebuild_out_streams {
+        rebuild_stream_list(output_streams, &output_only, true, state);
+    } else {
         update_stream_rows(output_streams, &streams, true, state);
+    }
+    if rebuild_in_streams {
+        rebuild_stream_list(input_streams, &input_only, false, state);
+    } else {
         update_stream_rows(input_streams, &streams, false, state);
     }
     state.borrow_mut().updating = false;
+}
+
+fn sorted_ids(ids: impl Iterator<Item = u32>) -> Vec<u32> {
+    let mut ids: Vec<u32> = ids.collect();
+    ids.sort_unstable();
+    ids
 }
 
 fn clear_box(container: &gtk::Box) {
@@ -371,8 +423,7 @@ fn rebuild_device_list(
             .build();
         name.set_widget_name("name");
 
-        let scale = volume_scale(endpoint.id, endpoint.volume, state);
-        scale.set_widget_name("scale");
+        let volume = volume_controls(endpoint.id, endpoint.volume, state);
 
         let mute = mute_button(endpoint.id, endpoint.muted, is_output);
         mute.set_widget_name("mute");
@@ -380,7 +431,7 @@ fn rebuild_device_list(
         row.append(&check);
         row.append(&icon);
         row.append(&name);
-        row.append(&scale);
+        row.append(&volume);
         row.append(&mute);
         container.append(&row);
     }
@@ -444,15 +495,14 @@ fn rebuild_stream_list(
         text_col.append(&app);
         text_col.append(&media);
 
-        let scale = volume_scale(stream.id, stream.volume, state);
-        scale.set_widget_name("scale");
+        let volume = volume_controls(stream.id, stream.volume, state);
 
         let mute = mute_button(stream.id, stream.muted, is_output);
         mute.set_widget_name("mute");
 
         row.append(&icon);
         row.append(&text_col);
-        row.append(&scale);
+        row.append(&volume);
         row.append(&mute);
         container.append(&row);
     }
@@ -485,11 +535,13 @@ fn update_device_rows(
             {
                 name.set_label(&endpoint.name);
             }
-            if !state.borrow().dragging.contains(&id)
-                && let Some(scale) = find_named_as::<gtk::Scale>(row, "scale")
-                && (scale.value() - endpoint.volume).abs() > 0.005
-            {
-                scale.set_value(endpoint.volume);
+            if !state.borrow().dragging.contains(&id) {
+                if let Some(scale) = find_named_as::<gtk::Scale>(row, "scale")
+                    && (scale.value() - endpoint.volume).abs() > 0.005
+                {
+                    scale.set_value(endpoint.volume);
+                }
+                sync_percent_entry(row, endpoint.volume);
             }
             if let Some(mute) = find_named_as::<gtk::Button>(row, "mute") {
                 set_mute_icon(&mute, endpoint.muted, is_output);
@@ -534,11 +586,13 @@ fn update_stream_rows(
                     media.set_label(text);
                 }
             }
-            if !state.borrow().dragging.contains(&id)
-                && let Some(scale) = find_named_as::<gtk::Scale>(row, "scale")
-                && (scale.value() - stream.volume).abs() > 0.005
-            {
-                scale.set_value(stream.volume);
+            if !state.borrow().dragging.contains(&id) {
+                if let Some(scale) = find_named_as::<gtk::Scale>(row, "scale")
+                    && (scale.value() - stream.volume).abs() > 0.005
+                {
+                    scale.set_value(stream.volume);
+                }
+                sync_percent_entry(row, stream.volume);
             }
             if let Some(mute) = find_named_as::<gtk::Button>(row, "mute") {
                 set_mute_icon(&mute, stream.muted, is_output);
@@ -547,23 +601,58 @@ fn update_stream_rows(
     }
 }
 
-const VOLUME_SCALE_WIDTH: i32 = 320;
+const VOLUME_SCALE_WIDTH: i32 = 280;
+const VOLUME_MAX: f64 = 1.5;
 
-fn volume_scale(id: u32, volume: f64, state: &Rc<RefCell<UiState>>) -> gtk::Scale {
-    let scale = gtk::Scale::with_range(gtk::Orientation::Horizontal, 0.0, 1.5, 0.01);
-    scale.set_value(volume.clamp(0.0, 1.5));
-    scale.set_draw_value(true);
-    scale.set_value_pos(gtk::PositionType::Right);
+fn volume_controls(id: u32, volume: f64, state: &Rc<RefCell<UiState>>) -> gtk::Box {
+    let controls = gtk::Box::builder()
+        .orientation(gtk::Orientation::Horizontal)
+        .spacing(6)
+        .valign(gtk::Align::Center)
+        .build();
+
+    let scale = gtk::Scale::with_range(gtk::Orientation::Horizontal, 0.0, VOLUME_MAX, 0.01);
+    scale.set_value(volume.clamp(0.0, VOLUME_MAX));
+    scale.set_draw_value(false);
     scale.set_size_request(VOLUME_SCALE_WIDTH, -1);
     scale.set_valign(gtk::Align::Center);
-    scale.set_format_value_func(|_, value| format!("{:.0}%", value * 100.0));
+    scale.set_hexpand(false);
+    scale.set_widget_name("scale");
+
+    let entry = gtk::Entry::builder()
+        .text(format_percent(volume))
+        .width_chars(4)
+        .max_width_chars(4)
+        .max_length(4)
+        .input_purpose(gtk::InputPurpose::Number)
+        .xalign(1.0)
+        .valign(gtk::Align::Center)
+        .tooltip_text("Volume percent")
+        .build();
+    entry.set_widget_name("percent");
+    entry.set_size_request(48, -1);
+
+    let suffix = gtk::Label::builder()
+        .label("%")
+        .valign(gtk::Align::Center)
+        .css_classes(["dim-label"])
+        .build();
 
     scale.connect_change_value(glib::clone!(
         #[strong]
         state,
+        #[strong]
+        entry,
         move |_, _, value| {
             state.borrow_mut().dragging.insert(id);
+            let value = value.clamp(0.0, VOLUME_MAX);
             set_volume(id, value);
+            if !entry.has_focus() {
+                let text = format_percent(value);
+                if entry.text() != text.as_str() {
+                    entry.set_text(&text);
+                }
+            }
             glib::Propagation::Proceed
         }
     ));
@@ -585,7 +674,84 @@ fn volume_scale(id: u32, volume: f64, state: &Rc<RefCell<UiState>>) -> gtk::Scal
     ));
     scale.add_controller(click);
 
-    scale
+    let apply_entry = Rc::new(glib::clone!(
+        #[strong]
+        state,
+        #[strong]
+        scale,
+        #[strong]
+        entry,
+        move || {
+            let Some(percent) = parse_percent(entry.text().as_str()) else {
+                entry.set_text(&format_percent(scale.value()));
+                return;
+            };
+            let value = (percent / 100.0).clamp(0.0, VOLUME_MAX);
+            state.borrow_mut().dragging.insert(id);
+            scale.set_value(value);
+            set_volume(id, value);
+            entry.set_text(&format_percent(value));
+            state.borrow_mut().dragging.remove(&id);
+        }
+    ));
+
+    entry.connect_activate(glib::clone!(
+        #[strong]
+        apply_entry,
+        move |_| apply_entry()
+    ));
+    entry.connect_changed(glib::clone!(
+        #[strong]
+        state,
+        move |entry| {
+            if entry.has_focus() {
+                state.borrow_mut().dragging.insert(id);
+            }
+        }
+    ));
+
+    let focus = gtk::EventControllerFocus::new();
+    focus.connect_leave(glib::clone!(
+        #[strong]
+        apply_entry,
+        #[strong]
+        state,
+        move |_| {
+            apply_entry();
+            state.borrow_mut().dragging.remove(&id);
+        }
+    ));
+    entry.add_controller(focus);
+
+    controls.append(&scale);
+    controls.append(&entry);
+    controls.append(&suffix);
+    controls
+}
+
+fn format_percent(volume: f64) -> String {
+    format!("{:.0}", (volume * 100.0).round())
+}
+
+fn parse_percent(text: &str) -> Option<f64> {
+    let trimmed = text.trim().trim_end_matches('%').trim();
+    if trimmed.is_empty() {
+        return None;
+    }
+    trimmed.parse::<f64>().ok()
+}
+
+fn sync_percent_entry(row: &gtk::Box, volume: f64) {
+    let Some(entry) = find_named_as::<gtk::Entry>(row, "percent") else {
+        return;
+    };
+    if entry.has_focus() {
+        return;
+    }
+    let text = format_percent(volume);
+    if entry.text() != text.as_str() {
+        entry.set_text(&text);
+    }
 }
 
 fn mute_button(id: u32, muted: bool, is_output: bool) -> gtk::Button {

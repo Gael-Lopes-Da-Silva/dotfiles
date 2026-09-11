@@ -1,10 +1,10 @@
-use std::cell::RefCell;
+use std::cell::{Cell, RefCell};
 use std::collections::HashMap;
 use std::process::{Command, Stdio};
 use std::rc::Rc;
 use std::time::Duration;
 
-use component::{Component, spawn_background};
+use component::{Component, has_open_popover, spawn_background};
 use gtk4::gio;
 use gtk4::glib;
 use gtk4::pango;
@@ -40,7 +40,9 @@ struct BtDevice {
 }
 
 struct UiState {
-    fingerprint: String,
+    connected_fp: String,
+    paired_fp: String,
+    other_fp: String,
     scanning: bool,
     updating: bool,
     refreshing: bool,
@@ -179,13 +181,16 @@ fn build() -> gtk::Widget {
     let other_label_w = other_label.downgrade();
 
     let state = Rc::new(RefCell::new(UiState {
-        fingerprint: String::new(),
+        connected_fp: String::new(),
+        paired_fp: String::new(),
+        other_fp: String::new(),
         scanning: false,
         updating: false,
         refreshing: false,
     }));
 
     let query = Rc::new(RefCell::new(String::new()));
+    let page_visible = Rc::new(Cell::new(false));
 
     let refresh: RefreshHandle = Rc::new(RefCell::new(None));
 
@@ -214,7 +219,12 @@ fn build() -> gtk::Widget {
         query,
         #[strong]
         refresh,
+        #[strong]
+        page_visible,
         move || {
+            if !page_visible.get() {
+                return;
+            }
             if state.borrow().refreshing {
                 return;
             }
@@ -246,8 +256,13 @@ fn build() -> gtk::Widget {
                     state,
                     #[strong]
                     refresh,
+                    #[strong]
+                    page_visible,
                     move |snapshot| {
                         state.borrow_mut().refreshing = false;
+                        if !page_visible.get() {
+                            return;
+                        }
                         let refresh_cb = refresh
                             .borrow()
                             .clone()
@@ -391,19 +406,44 @@ fn build() -> gtk::Widget {
         }
     ));
 
-    // Ensure an agent is available for pairing prompts.
-    let _ = bt(&["agent", "NoInputNoOutput"]);
-    let _ = bt(&["default-agent"]);
+    // Ensure an agent is available for pairing prompts (off the UI thread).
+    spawn_background(
+        || {
+            let _ = bt(&["agent", "NoInputNoOutput"]);
+            let _ = bt(&["default-agent"]);
+        },
+        |_| {},
+    );
 
-    do_refresh();
+    root.connect_map(glib::clone!(
+        #[strong]
+        page_visible,
+        #[strong]
+        do_refresh,
+        move |_| {
+            page_visible.set(true);
+            do_refresh();
+        }
+    ));
+    root.connect_unmap(glib::clone!(
+        #[strong]
+        page_visible,
+        move |_| {
+            page_visible.set(false);
+        }
+    ));
 
     glib::timeout_add_local(
         Duration::from_millis(1500),
         glib::clone!(
             #[strong]
+            page_visible,
+            #[strong]
             do_refresh,
             move || {
-                do_refresh();
+                if page_visible.get() {
+                    do_refresh();
+                }
                 glib::ControlFlow::Continue
             }
         ),
@@ -438,7 +478,6 @@ fn apply_snapshot(
     let adapter = snapshot.adapter;
     let devices = snapshot.devices;
 
-    let fingerprint = devices_fingerprint(&devices);
     let scanning = state.borrow().scanning || adapter.discovering;
 
     state.borrow_mut().updating = true;
@@ -482,33 +521,54 @@ fn apply_snapshot(
         .cloned()
         .collect();
 
-    let filter_key = format!("{query}|{fingerprint}");
-    if state.borrow().fingerprint == filter_key {
-        return;
-    }
-    state.borrow_mut().fingerprint = filter_key;
-
-    rebuild_section(
+    sync_section(
         sections.connected_box,
         sections.connected_label,
         &connected,
         "No connected devices",
         &refresh,
+        &mut state.borrow_mut().connected_fp,
     );
-    rebuild_section(
+    sync_section(
         sections.paired_box,
         sections.paired_label,
         &paired,
         "No paired devices",
         &refresh,
+        &mut state.borrow_mut().paired_fp,
     );
-    rebuild_section(
+    sync_section(
         sections.other_box,
         sections.other_label,
         &other,
         "No available devices",
         &refresh,
+        &mut state.borrow_mut().other_fp,
     );
+}
+
+fn sync_section(
+    container: &gtk::Box,
+    label: &gtk::Label,
+    devices: &[BtDevice],
+    empty_text: &str,
+    refresh: &Rc<dyn Fn()>,
+    fingerprint: &mut String,
+) {
+    let fp = section_fingerprint(devices);
+    if *fingerprint == fp {
+        update_section_rows(container, devices);
+        return;
+    }
+
+    // Keep open menus alive; retry structural rebuild on the next poll.
+    if has_open_popover(container) {
+        update_section_rows(container, devices);
+        return;
+    }
+
+    *fingerprint = fp;
+    rebuild_section(container, label, devices, empty_text, refresh);
 }
 
 fn rebuild_section(
@@ -531,6 +591,59 @@ fn rebuild_section(
     }
 }
 
+fn update_section_rows(container: &gtk::Box, devices: &[BtDevice]) {
+    let by_addr: HashMap<&str, &BtDevice> =
+        devices.iter().map(|d| (d.address.as_str(), d)).collect();
+    let mut child = container.first_child();
+    while let Some(widget) = child {
+        child = widget.next_sibling();
+        let Some(row) = widget.downcast_ref::<gtk::Box>() else {
+            continue;
+        };
+        let addr = row.widget_name();
+        let Some(device) = by_addr.get(addr.as_str()) else {
+            continue;
+        };
+        if let Some(name) = find_named_label(row, "name")
+            && name.label() != device.name.as_str()
+        {
+            name.set_label(&device.name);
+        }
+        if let Some(meta) = find_named_label(row, "meta") {
+            let text = device_meta(device);
+            if meta.label() != text.as_str() {
+                meta.set_label(&text);
+            }
+        }
+        if let Some(battery) = device.battery
+            && let Some(bar) = find_named_as::<gtk::ProgressBar>(row, "battery")
+        {
+            apply_battery_bar(&bar, battery);
+        }
+    }
+}
+
+fn find_named_label(parent: &gtk::Box, name: &str) -> Option<gtk::Label> {
+    find_named_as(parent, name)
+}
+
+fn find_named_as<T: IsA<gtk::Widget>>(parent: &gtk::Box, name: &str) -> Option<T> {
+    let mut stack = vec![parent.clone().upcast::<gtk::Widget>()];
+    while let Some(widget) = stack.pop() {
+        if widget.widget_name() == name
+            && let Ok(typed) = widget.clone().downcast::<T>()
+        {
+            return Some(typed);
+        }
+        let mut child = widget.first_child();
+        while let Some(c) = child {
+            child = c.next_sibling();
+            stack.push(c);
+        }
+    }
+    None
+}
+
 fn build_device_row(device: &BtDevice, refresh: Rc<dyn Fn()>) -> gtk::Box {
     let row = gtk::Box::builder()
         .orientation(gtk::Orientation::Horizontal)
@@ -538,6 +651,7 @@ fn build_device_row(device: &BtDevice, refresh: Rc<dyn Fn()>) -> gtk::Box {
         .margin_top(4)
         .margin_bottom(4)
         .build();
+    row.set_widget_name(&device.address);
 
     let icon_name = resolve_device_icon(&device.icon);
     let icon = gtk::Image::from_icon_name(&icon_name);
@@ -556,29 +670,15 @@ fn build_device_row(device: &BtDevice, refresh: Rc<dyn Fn()>) -> gtk::Box {
         .xalign(0.0)
         .ellipsize(pango::EllipsizeMode::End)
         .build();
-
-    let mut meta_parts = vec![device.address.clone()];
-    if device.trusted {
-        meta_parts.push("Trusted".into());
-    }
-    if device.blocked {
-        meta_parts.push("Blocked".into());
-    }
-    if let Some(rssi) = device.rssi {
-        meta_parts.push(format!("RSSI {rssi}"));
-    }
-    if device.connected {
-        meta_parts.push("Connected".into());
-    } else if device.paired {
-        meta_parts.push("Paired".into());
-    }
+    name.set_widget_name("name");
 
     let meta = gtk::Label::builder()
-        .label(meta_parts.join(" · "))
+        .label(device_meta(device))
         .xalign(0.0)
         .ellipsize(pango::EllipsizeMode::End)
         .css_classes(["dim-label", "caption"])
         .build();
+    meta.set_widget_name("meta");
 
     text_col.append(&name);
     text_col.append(&meta);
@@ -586,7 +686,9 @@ fn build_device_row(device: &BtDevice, refresh: Rc<dyn Fn()>) -> gtk::Box {
     row.append(&icon);
     row.append(&text_col);
     if let Some(battery) = device.battery {
-        row.append(&battery_indicator(battery));
+        let bar = battery_indicator(battery);
+        bar.set_widget_name("battery");
+        row.append(&bar);
     }
 
     let primary = primary_action_button(device, refresh.clone());
@@ -607,9 +709,39 @@ fn build_device_row(device: &BtDevice, refresh: Rc<dyn Fn()>) -> gtk::Box {
     row
 }
 
+fn device_meta(device: &BtDevice) -> String {
+    let mut meta_parts = vec![device.address.clone()];
+    if device.trusted {
+        meta_parts.push("Trusted".into());
+    }
+    if device.blocked {
+        meta_parts.push("Blocked".into());
+    }
+    if let Some(rssi) = device.rssi {
+        meta_parts.push(format!("RSSI {rssi}"));
+    }
+    if device.connected {
+        meta_parts.push("Connected".into());
+    } else if device.paired {
+        meta_parts.push("Paired".into());
+    }
+    meta_parts.join(" · ")
+}
+
 fn battery_indicator(percent: u8) -> gtk::Widget {
     ensure_battery_css();
 
+    let bar = gtk::ProgressBar::builder()
+        .show_text(false)
+        .valign(gtk::Align::Center)
+        .css_classes(["bt-battery-bar"])
+        .build();
+    bar.set_size_request(48, 6);
+    apply_battery_bar(&bar, percent);
+    bar.upcast()
+}
+
+fn apply_battery_bar(bar: &gtk::ProgressBar, percent: u8) {
     let percent = percent.min(100);
     let level = if percent <= 15 {
         "critical"
@@ -620,16 +752,12 @@ fn battery_indicator(percent: u8) -> gtk::Widget {
     } else {
         "ok"
     };
-
-    let bar = gtk::ProgressBar::builder()
-        .fraction(f64::from(percent) / 100.0)
-        .show_text(false)
-        .valign(gtk::Align::Center)
-        .tooltip_text(format!("Battery {percent}%"))
-        .css_classes(["bt-battery-bar", level])
-        .build();
-    bar.set_size_request(48, 6);
-    bar.upcast()
+    bar.set_fraction(f64::from(percent) / 100.0);
+    bar.set_tooltip_text(Some(&format!("Battery {percent}%")));
+    for class in ["critical", "low", "medium", "ok"] {
+        bar.remove_css_class(class);
+    }
+    bar.add_css_class(level);
 }
 
 fn ensure_battery_css() {
@@ -1011,12 +1139,12 @@ fn bt(args: &[&str]) -> std::process::Output {
         .unwrap_or_else(|_| Command::new("true").output().expect("true"))
 }
 
-fn devices_fingerprint(devices: &[BtDevice]) -> String {
+fn section_fingerprint(devices: &[BtDevice]) -> String {
     let mut parts: Vec<String> = devices
         .iter()
         .map(|d| {
             format!(
-                "{}|{}|{}|{}|{}|{}|{}|{:?}",
+                "{}|{}|{}|{}|{}|{}|{}|{}",
                 d.address,
                 d.name,
                 d.paired as u8,
@@ -1024,7 +1152,7 @@ fn devices_fingerprint(devices: &[BtDevice]) -> String {
                 d.blocked as u8,
                 d.connected as u8,
                 d.icon,
-                d.battery
+                d.battery.is_some() as u8
             )
         })
         .collect();
