@@ -54,6 +54,11 @@
             };
           };
         }
+        {
+          debug = {
+            disable-cursor-plane = { };
+          };
+        }
       ];
     };
   };
