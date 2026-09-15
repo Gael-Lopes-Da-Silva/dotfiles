@@ -24,6 +24,10 @@
           natural-scroll = { };
         };
 
+        tablet = {
+          map-to-focused-output = { };
+        };
+
         focus-follows-mouse._props = {
           max-scroll-amount = "0%";
         };

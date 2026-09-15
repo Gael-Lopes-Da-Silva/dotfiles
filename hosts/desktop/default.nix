@@ -31,35 +31,36 @@
 
   home-manager.users.gael = {
     wayland.windowManager = {
-      niri.settings._children = [
-        {
-          output = {
-            _args = [ "HDMI-A-2" ];
-            mode = "1920x1080@60";
-            scale = 1.0;
-            position._props = {
-              x = 0;
-              y = 0;
+      niri.settings = {
+        debug = {
+          disable-cursor-plane = { };
+        };
+
+        _children = [
+          {
+            output = {
+              _args = [ "HDMI-A-2" ];
+              mode = "1920x1080@60";
+              scale = 1.0;
+              position._props = {
+                x = 0;
+                y = 0;
+              };
             };
-          };
-        }
-        {
-          output = {
-            _args = [ "HDMI-A-1" ];
-            mode = "1920x1080@100";
-            scale = 1.0;
-            position._props = {
-              x = 0;
-              y = 1080;
+          }
+          {
+            output = {
+              _args = [ "HDMI-A-1" ];
+              mode = "1920x1080@100";
+              scale = 1.0;
+              position._props = {
+                x = 0;
+                y = 1080;
+              };
             };
-          };
-        }
-        {
-          debug = {
-            disable-cursor-plane = { };
-          };
-        }
-      ];
+          }
+        ];
+      };
     };
   };
 }
