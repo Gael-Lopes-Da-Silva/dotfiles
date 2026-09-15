@@ -51,20 +51,13 @@ in
     packet
     papers
     baobab
-    curtail
     cartero
-    netpeek
     decibels
     snapshot
     nautilus
     showtime
-    constrict
-    morphosis
     resources
     impression
-    file-roller
-    audio-sharing
-    field-monitor
 
     gnome-maps
     gnome-boxes
