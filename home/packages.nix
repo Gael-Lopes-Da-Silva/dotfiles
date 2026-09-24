@@ -37,7 +37,6 @@ in
     xwayland-satellite
 
     vial
-    blender
     discord
     filezilla
     cursor-cli

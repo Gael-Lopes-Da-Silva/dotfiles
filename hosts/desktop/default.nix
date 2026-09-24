@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -29,7 +29,23 @@
       RUN+="/bin/sh -c 'echo %k > /sys/bus/usb/drivers/snd-usb-audio/unbind'"
   '';
 
+  nix.settings = {
+    substituters = [
+      "https://cache.nixos-cuda.org"
+    ];
+    trusted-public-keys = [
+      "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
+    ];
+  };
+
   home-manager.users.gael = {
+    home.packages = with pkgs; [
+      (blender.override {
+        config.cudaSupport = true;
+        config.rocmSupport = false;
+      })
+    ];
+
     wayland.windowManager = {
       niri.settings = {
         debug = {

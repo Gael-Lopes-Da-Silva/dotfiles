@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -13,6 +13,13 @@
   };
 
   home-manager.users.gael = {
+    home.packages = with pkgs; [
+      (blender.override {
+        config.cudaSupport = false;
+        config.rocmSupport = false;
+      })
+    ];
+
     wayland.windowManager = {
       niri.settings = {
         _children = [
