@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 {
   imports = [
@@ -38,14 +38,19 @@
     ];
   };
 
-  home-manager.users.gael = {
-    home.packages = with pkgs; [
-      (blender.override {
-        config.cudaSupport = true;
-        config.rocmSupport = false;
-      })
-    ];
+  nixpkgs.config = {
+    cudaSupport = true;
+  };
 
+  environment.systemPackages = with pkgs; [
+    cudaPackages.cudatoolkit
+  ];
+
+  environment.variables = {
+    CPATH = "${lib.getDev pkgs.cudaPackages.cuda_cudart}/include";
+  };
+
+  home-manager.users.gael = {
     wayland.windowManager = {
       niri.settings = {
         debug = {
