@@ -48,7 +48,6 @@
 
       core = {
         compression = 9;
-        editor = "nvim";
         pager = "less";
         whitespace = "-trailing-space";
         preloadindex = true;
