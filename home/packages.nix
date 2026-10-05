@@ -51,6 +51,7 @@ in
     packet
     papers
     baobab
+    bottles
     cartero
     decibels
     snapshot
@@ -60,7 +61,6 @@ in
     impression
 
     gnome-maps
-    gnome-boxes
     gnome-clocks
     gnome-weather
     gnome-decoder
