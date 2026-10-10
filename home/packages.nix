@@ -51,7 +51,6 @@ in
     packet
     papers
     baobab
-    bottles
     cartero
     decibels
     snapshot
@@ -59,7 +58,6 @@ in
     showtime
     resources
     impression
-
     gnome-maps
     gnome-clocks
     gnome-weather
