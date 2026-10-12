@@ -1,6 +1,12 @@
 { pkgs, ... }:
 
 {
+  imports = [
+    ./hardware.nix
+  ];
+
+  networking.hostName = "windows11";
+
   environment.systemPackages = with pkgs; [
     wireguard-tools
   ];
