@@ -18,23 +18,21 @@
     };
   };
 
-  services.displayManager.ly = {
+  services.displayManager.gdm = {
     enable = true;
-
-    settings = {
-      animation = "none";
-      session_log = ".cache/ly/session.log";
-      clock = null;
-      bigclock = true;
-      blank_password = true;
-      blank_box = false;
-      hide_borders = true;
-      hide_key_hints = true;
-      hide_version_string = true;
-      load = true;
-      save = true;
-    };
   };
+
+  services.desktopManager.gnome = {
+    enable = true;
+  };
+
+  services.gnome.core-apps.enable = false;
+  services.gnome.core-developer-tools.enable = false;
+  services.gnome.games.enable = false;
+  environment.gnome.excludePackages = with pkgs; [
+    gnome-tour
+    gnome-user-docs
+  ];
 
   environment = {
     variables = {
@@ -56,16 +54,10 @@
       XDG_CACHE_HOME = "$HOME/.cache";
       XDG_STATE_HOME = "$HOME/.local/state";
 
-      GTK_IM_MODULE = "simple";
-      QT_IM_MODULE = "simple";
-      XMODIFIERS = "@im=simple";
-
       QT_QPA_PLATFORM = "wayland";
       QT_QPA_PLATFORMTHEME = "adwaita";
       QT_STYLE_OVERRIDE = "adwaita-dark";
       QT_QUICK_CONTROLS_STYLE = "adwaita-dark";
-
-      GDK_SCALE = "1";
     };
 
     systemPackages = with pkgs; [
@@ -87,8 +79,6 @@
 
   programs = {
     nix-ld.enable = true;
-    xwayland.enable = true;
-    niri.enable = true;
   };
 
   system.stateVersion = "25.11";

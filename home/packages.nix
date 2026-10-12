@@ -1,28 +1,28 @@
 { pkgs, ... }:
 
-let
-  menu = pkgs.rustPlatform.buildRustPackage {
-    pname = "menu";
-    version = "0.1.0";
-
-    src = ./menu;
-
-    cargoLock.lockFile = ./menu/Cargo.lock;
-
-    nativeBuildInputs = with pkgs; [
-      pkg-config
-      wrapGAppsHook4
-    ];
-
-    buildInputs = with pkgs; [
-      gtk4
-      libadwaita
-    ];
-  };
-in
+# let
+#   menu = pkgs.rustPlatform.buildRustPackage {
+#     pname = "menu";
+#     version = "0.1.0";
+#
+#     src = ./menu;
+#
+#     cargoLock.lockFile = ./menu/Cargo.lock;
+#
+#     nativeBuildInputs = with pkgs; [
+#       pkg-config
+#       wrapGAppsHook4
+#     ];
+#
+#     buildInputs = with pkgs; [
+#       gtk4
+#       libadwaita
+#     ];
+#   };
+# in
 {
   home.packages = [
-    menu
+    # menu
   ]
   ++ (with pkgs; [
     jq
@@ -42,31 +42,31 @@ in
     filezilla
     cursor-cli
 
-    pods
-    lact
-    coulr
-    loupe
-    snoop
-    pinta
-    packet
-    papers
-    baobab
-    cartero
-    decibels
-    snapshot
-    nautilus
-    showtime
-    resources
-    impression
-    gnome-maps
-    gnome-clocks
-    gnome-weather
-    gnome-decoder
-    gnome-console
-    gnome-calendar
-    gnome-calculator
-    gnome-characters
-    gnome-text-editor
-    gnome-sound-recorder
+    # pods
+    # lact
+    # coulr
+    # loupe
+    # snoop
+    # pinta
+    # packet
+    # papers
+    # baobab
+    # cartero
+    # decibels
+    # snapshot
+    # nautilus
+    # showtime
+    # resources
+    # impression
+    # gnome-maps
+    # gnome-clocks
+    # gnome-weather
+    # gnome-decoder
+    # gnome-console
+    # gnome-calendar
+    # gnome-calculator
+    # gnome-characters
+    # gnome-text-editor
+    # gnome-sound-recorder
   ]);
 }

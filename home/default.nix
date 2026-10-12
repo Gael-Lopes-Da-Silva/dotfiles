@@ -18,8 +18,8 @@
   home-manager.users.gael = {
     imports = [
       ./desktop/clipboard.nix
-      ./desktop/mako.nix
-      ./desktop/niri.nix
+      # ./desktop/mako.nix
+      # ./desktop/niri.nix
       ./desktop/theme.nix
 
       ./programs/apps.nix
@@ -29,8 +29,8 @@
 
       ./packages.nix
 
-      ./scripts
-      ./sounds
+      # ./scripts
+      # ./sounds
     ];
 
     home = {

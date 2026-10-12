@@ -16,12 +16,6 @@
       ];
     };
 
-    logind = {
-      settings = {
-        Login.HandlePowerKey = "ignore";
-      };
-    };
-
     openssh = {
       enable = true;
 
