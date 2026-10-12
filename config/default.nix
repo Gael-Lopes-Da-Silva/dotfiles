@@ -223,6 +223,10 @@
     systemPackages = with pkgs; [
       man-pages
       man-pages-posix
+      qadwaitadecorations
+      qadwaitadecorations-qt6
+      qgnomeplatform
+      qgnomeplatform-qt6
     ];
   };
 
@@ -618,14 +622,8 @@
 
       qt = {
         enable = true;
-
-        platformTheme = {
-          name = "adwaita";
-        };
-
-        style = {
-          name = "adwaita-dark";
-        };
+        platformTheme = "gnome";
+        style = "adwaita-dark";
       };
 
       dconf = {
