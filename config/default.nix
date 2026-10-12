@@ -629,8 +629,25 @@
       dconf = {
         enable = true;
         settings = {
-          "org/gnome/desktop/interface".color-scheme = "prefer-dark";
-          "org/gnome/desktop/wm/preferences".button-layout = ":close";
+          "org/gnome/desktop/interface" = {
+            color-scheme = "prefer-dark";
+            enable-hot-corners = false;
+          };
+
+          "org/gnome/desktop/wm/preferences" = {
+            button-layout = ":close";
+            workspace-names = [ "Main" ];
+          };
+
+          "org/gnome/desktop/background" = {
+            picture-uri = "";
+            picture-uri-dark = "";
+            show-desktop-icons = true;
+          };
+
+          "org/gnome/desktop/screensaver" = {
+            picture-uri = "";
+          };
         };
       };
 
@@ -643,7 +660,7 @@
         ];
 
         config = {
-          niri = {
+          common = {
             default = [
               "gnome"
             ];
