@@ -108,20 +108,6 @@
       enable = true;
     };
 
-    displayManager.gdm = {
-      enable = true;
-    };
-
-    desktopManager.gnome = {
-      enable = true;
-    };
-
-    gnome = {
-      core-apps.enable = false;
-      core-developer-tools.enable = false;
-      games.enable = false;
-    };
-
     udev = {
       packages = with pkgs; [
         via
@@ -158,31 +144,6 @@
             "default.clock.quantum" = 2048;
             "default.clock.min-quantum" = 2048;
             "default.clock.max-quantum" = 8192;
-          };
-
-          "91-null-sinks" = {
-            "context.objects" = [
-              {
-                factory = "adapter";
-                args = {
-                  "factory.name" = "support.null-audio-sink";
-                  "node.name" = "SoundboardSink";
-                  "node.description" = "Soundboard Speaker";
-                  "media.class" = "Audio/Sink";
-                  "audio.position" = "FL,FR";
-                };
-              }
-              {
-                factory = "adapter";
-                args = {
-                  "factory.name" = "support.null-audio-sink";
-                  "node.name" = "SoundboardSource";
-                  "node.description" = "Soundboard Mic";
-                  "media.class" = "Audio/Source/Virtual";
-                  "audio.position" = "FL,FR";
-                };
-              }
-            ];
           };
         };
       };
@@ -248,6 +209,10 @@
   };
 
   i18n = {
+    inputMethod = {
+      enable = true;
+      type = "ibus";
+    };
     defaultLocale = "en_US.UTF-8";
     defaultCharset = "UTF-8";
   };
@@ -278,22 +243,22 @@
         ];
 
         packages = with pkgs; [
+          nil
           gtk3
           gtk4
           glib
-          adwaita-qt
-          adwaita-qt6
-          adwaita-icon-theme
+          nixd
           libsecret
           libnotify
+          adwaita-qt
           pulseaudio
+          adwaita-qt6
           wl-clipboard
           xdg-user-dirs
-          xdg-user-dirs-gtk
           bash-completion
+          xdg-user-dirs-gtk
+          adwaita-icon-theme
           bash-language-server
-          nil
-          nixd
 
           vial
           blender
@@ -303,36 +268,46 @@
           obs-studio
           cursor-cli
 
-          # pods
-          # lact
-          # coulr
-          # loupe
-          # snoop
-          # pinta
-          # packet
-          # papers
-          # baobab
-          # cartero
-          # decibels
-          # snapshot
-          # nautilus
-          # showtime
-          # resources
-          # impression
-          # gnome-maps
-          # gnome-clocks
-          # gnome-weather
-          # gnome-decoder
-          # gnome-console
-          # gnome-calendar
-          # gnome-calculator
-          # gnome-characters
-          # gnome-text-editor
-          # gnome-sound-recorder
+          pods
+          lact
+          coulr
+          loupe
+          snoop
+          pinta
+          packet
+          papers
+          baobab
+          sysprof
+          cartero
+          decibels
+          snapshot
+          nautilus
+          showtime
+          resources
+          impression
+          gnome-maps
+          gnome-clocks
+          gnome-weather
+          gnome-decoder
+          gnome-console
+          gnome-calendar
+          gnome-calculator
+          gnome-characters
+          gnome-text-editor
+          gnome-sound-recorder
         ];
       };
 
       services = {
+        gnome = {
+          gnome-keyring.enable = true;
+          gnome-settings-daemon.enable = true;
+        };
+
+        power-profiles-daemon = {
+          enable = true;
+        };
+
         wl-clip-persist = {
           enable = true;
           clipboardType = "regular";
@@ -637,22 +612,9 @@
         settings = {
           "org/gnome/desktop/interface" = {
             color-scheme = "prefer-dark";
-            enable-hot-corners = false;
           };
-
           "org/gnome/desktop/wm/preferences" = {
             button-layout = ":close";
-            workspace-names = [ "Main" ];
-          };
-
-          "org/gnome/desktop/background" = {
-            picture-uri = "";
-            picture-uri-dark = "";
-            show-desktop-icons = true;
-          };
-
-          "org/gnome/desktop/screensaver" = {
-            picture-uri = "";
           };
         };
       };
