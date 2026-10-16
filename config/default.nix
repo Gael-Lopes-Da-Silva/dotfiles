@@ -151,11 +151,6 @@
   };
 
   environment = {
-    gnome.excludePackages = with pkgs; [
-      gnome-tour
-      gnome-user-docs
-    ];
-
     variables = {
       EDITOR = "zeditor";
       VISUAL = "zeditor";
