@@ -709,9 +709,9 @@
             };
           };
 
-          overview = {
-            zoom = 0.45;
-          };
+          # overview = {
+          #   zoom = 0.45;
+          # };
 
           cursor = {
             xcursor-theme = "Bibata-Modern-Classic";
@@ -1090,10 +1090,10 @@
       };
     };
 
-    libvirtd = {
-      enable = true;
-      qemu.swtpm.enable = true;
-    };
+    # libvirtd = {
+    #   enable = true;
+    #   qemu.swtpm.enable = true;
+    # };
 
     spiceUSBRedirection = {
       enable = true;
