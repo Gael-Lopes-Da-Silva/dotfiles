@@ -205,10 +205,6 @@
       VDPAU_DRIVER = "va_gl";
       MOZ_ENABLE_WAYLAND = "1";
 
-      # GTK_IM_MODULE = "simple";
-      # QT_IM_MODULE = "simple";
-      # XMODIFIERS = "@im=simple";
-
       XDG_CONFIG_HOME = "$HOME/.config";
       XDG_DATA_HOME = "$HOME/.local/share";
       XDG_CACHE_HOME = "$HOME/.cache";
@@ -267,9 +263,6 @@
         "audio"
         "video"
         "uinput"
-
-        # "kvm"
-        # "libvirtd"
       ];
     };
   };
@@ -295,13 +288,16 @@
           nil
           nixd
 
+          ags
           gtk3
           gtk4
           glib
+          playerctl
           libsecret
           libnotify
           pulseaudio
           wl-clipboard
+          brightnessctl
 
           adwaita-qt
           adwaita-qt6
@@ -372,11 +368,6 @@
         home-manager.enable = true;
         zoxide.enable = true;
         fzf.enable = true;
-
-        # ags = {
-        #   enable = true;
-        #   configDir = ../shell;
-        # };
 
         bash = {
           enable = true;
@@ -645,8 +636,6 @@
         enable = true;
 
         settings = {
-          # spawn-sh-at-startup = "bash ~/.local/bin/autostart.sh";
-
           prefer-no-csd = { };
           screenshot-path = null;
 
@@ -727,9 +716,9 @@
             };
           };
 
-          # overview = {
-          #   zoom = 0.45;
-          # };
+          overview = {
+            zoom = 0.75;
+          };
 
           cursor = {
             xcursor-theme = "Bibata-Modern-Classic";
@@ -773,37 +762,6 @@
               _props.repeat = false;
               spawn = [ "firefox" ];
             };
-
-            # "Mod+P" = {
-            #   _props.repeat = false;
-            #   spawn-sh = [ "menu --applications" ];
-            # };
-            # "Mod+Q" = {
-            #   _props.repeat = false;
-            #   spawn-sh = [ "menu --power" ];
-            # };
-
-            # "Mod+N" = {
-            #   _props.repeat = false;
-            #   spawn-sh = [ "bash ~/.local/bin/datetime_notify.sh" ];
-            # };
-            # "Mod+B" = {
-            #   _props.repeat = false;
-            #   spawn-sh = [ "bash ~/.local/bin/battery_notify.sh" ];
-            # };
-            # "Mod+W" = {
-            #   _props.repeat = false;
-            #   spawn-sh = [ "bash ~/.local/bin/workspace_notify.sh" ];
-            # };
-
-            # "Mod+Ctrl+C" = {
-            #   _props.repeat = false;
-            #   spawn-sh = [ "bash ~/.local/bin/kill_process.sh" ];
-            # };
-            # "Mod+Ctrl+F" = {
-            #   _props.repeat = false;
-            #   spawn-sh = [ "bash ~/.local/bin/freeze_process.sh" ];
-            # };
 
             "XF86AudioRaiseVolume".spawn-sh = [
               "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0"
@@ -1061,26 +1019,19 @@
         };
       };
 
-      xdg = {
-        autostart.enable = true;
-        menus.enable = true;
-        mime.enable = true;
-        icons.enable = true;
+      xdg.portal = {
+        enable = true;
+        xdgOpenUsePortal = true;
 
-        portal = {
-          enable = true;
-          xdgOpenUsePortal = true;
+        extraPortals = with pkgs; [
+          xdg-desktop-portal-gnome
+        ];
 
-          extraPortals = with pkgs; [
-            xdg-desktop-portal-gnome
-          ];
-
-          config = {
-            common = {
-              default = [
-                "gnome"
-              ];
-            };
+        config = {
+          common = {
+            default = [
+              "gnome"
+            ];
           };
         };
       };
@@ -1114,14 +1065,5 @@
         };
       };
     };
-
-    # libvirtd = {
-    #   enable = true;
-    #   qemu.swtpm.enable = true;
-    # };
-
-    # spiceUSBRedirection = {
-    #   enable = true;
-    # };
   };
 }
