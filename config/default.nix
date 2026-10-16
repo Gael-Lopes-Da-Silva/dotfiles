@@ -35,6 +35,10 @@
   };
 
   boot = {
+    plymouth = {
+      enable = true;
+    };
+
     loader = {
       systemd-boot = {
         enable = true;
@@ -48,13 +52,16 @@
       verbose = false;
     };
 
-    consoleLogLevel = 3;
+    consoleLogLevel = 0;
 
     kernelPackages = pkgs.linuxPackages_latest;
     kernelModules = [ "v4l2loopback" ];
     kernelParams = [
       "quiet"
       "nowatchdog=1"
+      "udev.log_level=3"
+      "rd.udev.log_level=3"
+      "rd.systemd.show_status=auto"
     ];
 
     extraModulePackages = with config.boot.kernelPackages; [
@@ -130,11 +137,12 @@
         session_log = ".cache/ly/session.log";
         clock = null;
         bigclock = true;
-        blank_password = true;
         blank_box = false;
         hide_borders = true;
-        hide_key_hints = true;
-        hide_version_string = true;
+        corner_bottom_left = "";
+        corner_bottom_right = "";
+        corner_top_left = "";
+        corner_top_right = "numlock,capslock";
         load = true;
         save = true;
       };
@@ -244,6 +252,7 @@
       enable = true;
       type = "ibus";
     };
+
     defaultLocale = "en_US.UTF-8";
     defaultCharset = "UTF-8";
   };
@@ -252,14 +261,15 @@
     users.gael = {
       isNormalUser = true;
       extraGroups = [
-        "kvm"
         "disk"
         "input"
         "wheel"
         "audio"
         "video"
         "uinput"
-        "libvirtd"
+
+        # "kvm"
+        # "libvirtd"
       ];
     };
   };
@@ -1095,8 +1105,8 @@
     #   qemu.swtpm.enable = true;
     # };
 
-    spiceUSBRedirection = {
-      enable = true;
-    };
+    # spiceUSBRedirection = {
+    #   enable = true;
+    # };
   };
 }
