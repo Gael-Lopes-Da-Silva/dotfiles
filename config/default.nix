@@ -332,6 +332,7 @@
           baobab
           sysprof
           cartero
+          epiphany
           decibels
           snapshot
           nautilus
@@ -348,6 +349,7 @@
           gnome-characters
           gnome-text-editor
           gnome-sound-recorder
+          gnome-control-center
         ];
       };
 
@@ -370,6 +372,11 @@
         home-manager.enable = true;
         zoxide.enable = true;
         fzf.enable = true;
+
+        # ags = {
+        #   enable = true;
+        #   configDir = ../shell;
+        # };
 
         bash = {
           enable = true;
@@ -669,8 +676,9 @@
           layout = {
             gaps = 10;
             background-color = "#303030";
-            empty-workspace-above-first = { };
             center-focused-column = "never";
+            empty-workspace-above-first = { };
+            always-center-single-column = { };
 
             preset-column-widths._children = [
               { proportion = 0.5; }
@@ -1053,19 +1061,26 @@
         };
       };
 
-      xdg.portal = {
-        enable = true;
-        xdgOpenUsePortal = true;
+      xdg = {
+        autostart.enable = true;
+        menus.enable = true;
+        mime.enable = true;
+        icons.enable = true;
 
-        extraPortals = with pkgs; [
-          xdg-desktop-portal-gnome
-        ];
+        portal = {
+          enable = true;
+          xdgOpenUsePortal = true;
 
-        config = {
-          common = {
-            default = [
-              "gnome"
-            ];
+          extraPortals = with pkgs; [
+            xdg-desktop-portal-gnome
+          ];
+
+          config = {
+            common = {
+              default = [
+                "gnome"
+              ];
+            };
           };
         };
       };
