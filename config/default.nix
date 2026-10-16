@@ -1,5 +1,19 @@
-{ pkgs, config, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 
+let
+  dwm = pkgs.dwm.overrideAttrs {
+    src = lib.cleanSource ../build/dwm;
+  };
+
+  dmenu = pkgs.dmenu.overrideAttrs {
+    src = lib.cleanSource ../build/dmenu;
+  };
+in
 {
   system.stateVersion = "25.11";
 
@@ -108,6 +122,65 @@
       enable = true;
     };
 
+    libinput = {
+      enable = true;
+    };
+
+    power-profiles-daemon = {
+      enable = true;
+    };
+
+    ssh-agent = {
+      enable = true;
+    };
+
+    polkit-gnome = {
+      enable = true;
+    };
+
+    gnome = {
+      gnome-keyring.enable = true;
+      gnome-settings-daemon.enable = true;
+    };
+
+    xserver = {
+      enable = true;
+      excludePackages = with pkgs; [ xterm ];
+
+      xkb = {
+        layout = "us";
+        variant = "intl";
+      };
+
+      displayManager.startx = {
+        enable = true;
+        generateScript = true;
+      };
+
+      windowManager.dwm = {
+        enable = true;
+        package = dwm;
+      };
+    };
+
+    displayManager.ly = {
+      enable = true;
+
+      settings = {
+        animation = "none";
+        session_log = ".cache/ly/session.log";
+        clock = null;
+        bigclock = true;
+        blank_password = true;
+        blank_box = false;
+        hide_borders = true;
+        hide_key_hints = true;
+        hide_version_string = true;
+        load = true;
+        save = true;
+      };
+    };
+
     udev = {
       packages = with pkgs; [
         via
@@ -151,6 +224,11 @@
   };
 
   environment = {
+    pathsToLink = [
+      "/share/applications"
+      "/share/xdg-desktop-portal"
+    ];
+
     variables = {
       EDITOR = "zeditor";
       VISUAL = "zeditor";
@@ -163,14 +241,13 @@
       COLORTERM = "truecolor";
 
       VDPAU_DRIVER = "va_gl";
-      MOZ_ENABLE_WAYLAND = "1";
 
       XDG_CONFIG_HOME = "$HOME/.config";
       XDG_DATA_HOME = "$HOME/.local/share";
       XDG_CACHE_HOME = "$HOME/.cache";
       XDG_STATE_HOME = "$HOME/.local/state";
 
-      QT_QPA_PLATFORM = "wayland";
+      QT_QPA_PLATFORM = "xcb";
       QT_QPA_PLATFORMTHEME = "adwaita";
       QT_STYLE_OVERRIDE = "adwaita-dark";
       QT_QUICK_CONTROLS_STYLE = "adwaita-dark";
@@ -239,21 +316,26 @@
 
         packages = with pkgs; [
           nil
+          nixd
+
           gtk3
           gtk4
           glib
-          nixd
           libsecret
           libnotify
           adwaita-qt
           pulseaudio
           adwaita-qt6
-          wl-clipboard
+          brightnessctl
           xdg-user-dirs
           bash-completion
           xdg-user-dirs-gtk
           adwaita-icon-theme
-          bash-language-server
+
+          maim
+          dmenu
+          xclip
+          xdotool
 
           vial
           blender
@@ -291,22 +373,6 @@
           gnome-text-editor
           gnome-sound-recorder
         ];
-      };
-
-      services = {
-        gnome = {
-          gnome-keyring.enable = true;
-          gnome-settings-daemon.enable = true;
-        };
-
-        power-profiles-daemon = {
-          enable = true;
-        };
-
-        wl-clip-persist = {
-          enable = true;
-          clipboardType = "regular";
-        };
       };
 
       programs = {
