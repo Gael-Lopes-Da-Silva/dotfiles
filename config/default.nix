@@ -130,14 +130,6 @@ in
       enable = true;
     };
 
-    ssh-agent = {
-      enable = true;
-    };
-
-    polkit-gnome = {
-      enable = true;
-    };
-
     gnome = {
       gnome-keyring.enable = true;
       gnome-settings-daemon.enable = true;
@@ -373,6 +365,16 @@ in
           gnome-text-editor
           gnome-sound-recorder
         ];
+      };
+
+      services = {
+        ssh-agent = {
+          enable = true;
+        };
+
+        polkit-gnome = {
+          enable = true;
+        };
       };
 
       programs = {
