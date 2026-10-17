@@ -126,7 +126,6 @@
 
     gnome = {
       gnome-keyring.enable = true;
-      gnome-settings-daemon.enable = true;
     };
 
     displayManager.ly = {
@@ -288,7 +287,6 @@
           nil
           nixd
 
-          ags
           gtk3
           gtk4
           glib
@@ -345,7 +343,6 @@
           gnome-characters
           gnome-text-editor
           gnome-sound-recorder
-          gnome-control-center
         ];
       };
 
