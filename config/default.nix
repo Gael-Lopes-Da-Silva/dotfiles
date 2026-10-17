@@ -124,6 +124,8 @@
       enable = true;
     };
 
+    upower.enable = true;
+
     gnome = {
       gnome-keyring.enable = true;
     };
@@ -765,6 +767,11 @@
             "Mod+BackSpace" = {
               _props.repeat = false;
               spawn = [ "firefox" ];
+            };
+
+            "Mod+P" = {
+              _props.repeat = false;
+              spawn = [ "qs" "-c" "shell" "ipc" "call" "launcher" "toggle" ];
             };
 
             "XF86AudioRaiseVolume".spawn-sh = [
