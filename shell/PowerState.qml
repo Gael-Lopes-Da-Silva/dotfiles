@@ -17,6 +17,56 @@ Singleton {
 	readonly property real level: hasBattery ? battery.percentage : 0
 	readonly property int percent: hasBattery ? Math.round(level * 100) : 0
 
+	property string menuOutput: ""
+	property string menuPage: ""
+
+	readonly property var profiles: {
+		const list = [
+			{ label: "Power saver", profile: PowerProfile.PowerSaver },
+			{ label: "Balanced", profile: PowerProfile.Balanced }
+		]
+		if (PowerProfiles.hasPerformanceProfile)
+			list.push({ label: "Performance", profile: PowerProfile.Performance })
+		return list
+	}
+
+	function toggleMenu(output, page) {
+		if (menuOutput === output && menuPage === page) {
+			closeMenu()
+			return
+		}
+		menuOutput = output
+		menuPage = page
+	}
+
+	function closeMenu() {
+		menuOutput = ""
+		menuPage = ""
+	}
+
+	function lifeText() {
+		if (!hasBattery || plugged)
+			return ""
+		const total = Math.round(battery.timeToEmpty || 0)
+		if (total <= 0)
+			return "Estimating remaining time"
+		if (total < 60)
+			return "Less than a minute remaining"
+		const hours = Math.floor(total / 3600)
+		const minutes = Math.floor((total % 3600) / 60)
+		if (hours > 0)
+			return hours + " h " + minutes + " min remaining"
+		return minutes + " min remaining"
+	}
+
+	function limitText() {
+		if (PowerProfiles.degradationReason === PerformanceDegradationReason.LapDetected)
+			return "Limited while on your lap"
+		if (PowerProfiles.degradationReason === PerformanceDegradationReason.HighTemperature)
+			return "Limited while the laptop is hot"
+		return ""
+	}
+
 	function batteryGlyph() {
 		if (!hasBattery)
 			return ""

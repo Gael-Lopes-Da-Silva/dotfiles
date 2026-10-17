@@ -12,6 +12,16 @@ Item {
 	width: implicitWidth
 	height: implicitHeight
 
+	readonly property real buttonSize: {
+		const side = Math.max(
+			wifiIcon.implicitWidth, wifiIcon.implicitHeight,
+			btIcon.implicitWidth, btIcon.implicitHeight,
+			audioIcon.implicitWidth, audioIcon.implicitHeight,
+			micIcon.implicitWidth, micIcon.implicitHeight
+		)
+		return side + Theme.padding
+	}
+
 	function tone(enabled, quality) {
 		const color = Theme.foreground
 		if (!enabled)
@@ -25,8 +35,8 @@ Item {
 		spacing: Theme.gap
 
 		Item {
-			implicitWidth: wifiIcon.implicitWidth + Theme.padding
-			implicitHeight: wifiIcon.implicitHeight + Theme.padding
+			implicitWidth: root.buttonSize
+			implicitHeight: root.buttonSize
 			width: implicitWidth
 			height: implicitHeight
 
@@ -53,8 +63,8 @@ Item {
 		}
 
 		Item {
-			implicitWidth: btIcon.implicitWidth + Theme.padding
-			implicitHeight: btIcon.implicitHeight + Theme.padding
+			implicitWidth: root.buttonSize
+			implicitHeight: root.buttonSize
 			width: implicitWidth
 			height: implicitHeight
 
@@ -81,8 +91,8 @@ Item {
 		}
 
 		Item {
-			implicitWidth: audioIcon.implicitWidth + Theme.padding
-			implicitHeight: audioIcon.implicitHeight + Theme.padding
+			implicitWidth: root.buttonSize
+			implicitHeight: root.buttonSize
 			width: implicitWidth
 			height: implicitHeight
 
@@ -109,8 +119,8 @@ Item {
 		}
 
 		Item {
-			implicitWidth: micIcon.implicitWidth + Theme.padding
-			implicitHeight: micIcon.implicitHeight + Theme.padding
+			implicitWidth: root.buttonSize
+			implicitHeight: root.buttonSize
 			width: implicitWidth
 			height: implicitHeight
 

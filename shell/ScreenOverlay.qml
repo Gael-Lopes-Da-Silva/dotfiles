@@ -67,6 +67,18 @@ PanelWindow {
 	readonly property string radioPage: RadioState.menuOutput === modelData.name ? RadioState.menuPage : ""
 	property real radioProgress: radioWanted ? 1 : 0
 	property real menuProgress: radioPage !== "" ? 1 : 0
+	readonly property string clockPage: PowerState.menuOutput === modelData.name ? PowerState.menuPage : ""
+	property string clockHold: "time"
+	property real clockMenuProgress: clockPage !== "" ? 1 : 0
+
+	onClockPageChanged: {
+		if (clockPage !== "")
+			clockHold = clockPage
+	}
+	onStatusWantedChanged: {
+		if (!statusWanted && PowerState.menuOutput === modelData.name)
+			PowerState.closeMenu()
+	}
 	property real osdProgress: osdHere ? 1 : 0
 
 	onRadioWantedChanged: {
@@ -124,6 +136,14 @@ PanelWindow {
 	}
 
 	Behavior on menuProgress {
+		NumberAnimation {
+			duration: Theme.motion
+			easing.type: Easing.BezierSpline
+			easing.bezierCurve: Theme.curve
+		}
+	}
+
+	Behavior on clockMenuProgress {
 		NumberAnimation {
 			duration: Theme.motion
 			easing.type: Easing.BezierSpline
@@ -215,8 +235,8 @@ PanelWindow {
 	Item {
 		id: statusClip
 		z: 3
-		width: statusChip.implicitWidth * root.statusProgress
-		height: statusChip.implicitHeight * root.statusProgress
+		width: Math.max(statusChip.implicitWidth, clockMenu.implicitWidth * root.clockMenuProgress) * root.statusProgress
+		height: (statusChip.implicitHeight + clockMenu.implicitHeight * root.clockMenuProgress) * root.statusProgress
 		x: root.width - root.frameThickness - width + root.weld
 		y: root.frameThickness - root.weld
 		clip: true
@@ -226,7 +246,30 @@ PanelWindow {
 			id: statusChip
 			anchors.top: parent.top
 			anchors.right: parent.right
+			activePage: root.clockPage
 			opacity: root.statusProgress > 0.72 ? 1 : 0
+			onTimeClicked: {
+				root.statusWanted = true
+				statusTimer.stop()
+				PowerState.toggleMenu(root.modelData.name, "time")
+			}
+			onBatteryClicked: {
+				root.statusWanted = true
+				statusTimer.stop()
+				PowerState.toggleMenu(root.modelData.name, "battery")
+			}
+
+			Behavior on opacity {
+				NumberAnimation { duration: Theme.fade }
+			}
+		}
+
+		ClockMenu {
+			id: clockMenu
+			anchors.top: statusChip.bottom
+			anchors.right: parent.right
+			page: root.clockPage !== "" ? root.clockPage : root.clockHold
+			opacity: root.clockMenuProgress > 0.45 ? 1 : 0
 
 			Behavior on opacity {
 				NumberAnimation { duration: Theme.fade }
