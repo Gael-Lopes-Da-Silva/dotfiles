@@ -9,6 +9,9 @@ Singleton {
 
 	property bool paused: false
 	property bool replying: false
+	property int localSeq: 0
+	property string lastNotice: ""
+	property real lastNoticeAt: 0
 	readonly property alias entries: model
 	readonly property int count: model.count
 	readonly property int trackedCount: {
@@ -50,6 +53,44 @@ Singleton {
 		Quickshell.execDetached(["xdg-open", value])
 	}
 
+	function copyText(text) {
+		Quickshell.clipboardText = String(text || "")
+	}
+
+	function logCommand() {
+		return "qs log -i " + Quickshell.instanceId
+	}
+
+	function shellNotice(summary, body, failed) {
+		const key = summary + "\n" + body
+		const now = Date.now()
+		if (key === lastNotice && now - lastNoticeAt < 800)
+			return
+		lastNotice = key
+		lastNoticeAt = now
+		const duration = failed ? 8000 : 2500
+		for (let i = 0; i < model.count; i++) {
+			const row = model.get(i)
+			if (row.local === 1 && row.summary === summary) {
+				model.setProperty(i, "body", body)
+				model.setProperty(i, "duration", duration)
+				model.setProperty(i, "remaining", duration)
+				model.setProperty(i, "urgent", failed ? 1 : 0)
+				return
+			}
+		}
+		localSeq -= 1
+		model.append({
+			nid: localSeq,
+			duration: duration,
+			remaining: duration,
+			local: 1,
+			summary: summary,
+			body: body,
+			urgent: failed ? 1 : 0
+		})
+	}
+
 	function track(notification) {
 		if (!notification)
 			return
@@ -65,7 +106,11 @@ Singleton {
 		model.append({
 			nid: notification.id,
 			duration: duration,
-			remaining: duration
+			remaining: duration,
+			local: 0,
+			summary: "",
+			body: "",
+			urgent: 0
 		})
 		notification.closed.connect(() => root.removeId(notification.id))
 	}
@@ -135,5 +180,19 @@ Singleton {
 		repeat: true
 		running: root.count > 0
 		onTriggered: root.tick()
+	}
+
+	Connections {
+		target: Quickshell
+
+		function onReloadCompleted() {
+			Quickshell.inhibitReloadPopup()
+			root.shellNotice("Config reloaded", "Run " + root.logCommand() + " to view the log.", false)
+		}
+
+		function onReloadFailed(errorString) {
+			Quickshell.inhibitReloadPopup()
+			root.shellNotice("Config reload failed", errorString, true)
+		}
 	}
 }

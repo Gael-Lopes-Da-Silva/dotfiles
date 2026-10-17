@@ -34,21 +34,37 @@ Item {
 					required property var nid
 					required property real duration
 					required property real remaining
+					required property var local
+					required property string summary
+					required property string body
+					required property var urgent
+					readonly property bool synthetic: local === 1
 					readonly property var notification: {
 						const _ = NoticeState.trackedCount
+						if (synthetic)
+							return null
 						return NoticeState.lookup(nid)
 					}
-					readonly property bool critical: notification && notification.urgency === NotificationUrgency.Critical
+					readonly property bool critical: synthetic ? urgent === 1 : notification && notification.urgency === NotificationUrgency.Critical
 					readonly property string pictureRaw: notification && notification.image ? String(notification.image) : ""
 					readonly property bool pictureIsIcon: pictureRaw.indexOf("image://icon/") === 0
 					readonly property string pictureSource: pictureRaw !== "" && !pictureIsIcon ? pictureRaw : ""
 					readonly property string appIconSource: {
+						if (synthetic)
+							return ""
 						const fromApp = NoticeState.iconSource(notification ? notification.appIcon : "")
 						if (fromApp)
 							return fromApp
 						return pictureIsIcon ? pictureRaw : ""
 					}
 					readonly property var buttons: {
+						if (synthetic) {
+							const list = []
+							if (critical && body)
+								list.push({ text: "Copy error", copy: body })
+							list.push({ text: "Copy log command", copy: NoticeState.logCommand() })
+							return list
+						}
 						const note = notification
 						if (!note || !note.actions)
 							return []
@@ -61,6 +77,10 @@ Item {
 					}
 
 					function activate() {
+						if (synthetic) {
+							NoticeState.removeId(nid)
+							return
+						}
 						const note = notification
 						if (!note)
 							return
@@ -105,12 +125,20 @@ Item {
 						Row {
 							width: parent.width
 							spacing: 8
-							visible: card.appIconSource !== "" || (card.notification && (card.notification.appName || "") !== "")
+							visible: card.appIconSource !== "" || card.synthetic || (card.notification && (card.notification.appName || "") !== "")
+
+							Text {
+								visible: card.synthetic
+								text: String.fromCodePoint(card.critical ? 0xF0026 : 0xF012C)
+								color: card.critical ? Theme.recording : Theme.foreground
+								font.family: Theme.iconFont
+								font.pixelSize: 18
+							}
 
 							Image {
 								width: 18
 								height: 18
-								visible: status === Image.Ready
+								visible: !card.synthetic && status === Image.Ready
 								source: card.appIconSource
 								sourceSize.width: 36
 								sourceSize.height: 36
@@ -119,8 +147,8 @@ Item {
 							}
 
 							Text {
-								width: Math.max(0, parent.width - (card.appIconSource !== "" ? 26 : 0))
-								text: card.notification ? card.notification.appName : ""
+								width: Math.max(0, parent.width - (card.synthetic || card.appIconSource !== "" ? 26 : 0))
+								text: card.synthetic ? "Quickshell" : (card.notification ? card.notification.appName : "")
 								color: Qt.rgba(Theme.foreground.r, Theme.foreground.g, Theme.foreground.b, 0.55)
 								font.family: Theme.fontFamily
 								font.pixelSize: Theme.fontSize - 2
@@ -146,7 +174,7 @@ Item {
 
 						Text {
 							width: parent.width
-							text: card.notification ? NoticeState.plain(card.notification.summary) : ""
+							text: card.synthetic ? card.summary : (card.notification ? NoticeState.plain(card.notification.summary) : "")
 							color: Theme.foreground
 							font.family: Theme.fontFamily
 							font.pixelSize: Theme.fontSize
@@ -159,15 +187,15 @@ Item {
 							id: body
 							width: parent.width
 							visible: text !== ""
-							text: card.notification ? NoticeState.markup(card.notification.body) : ""
+							text: card.synthetic ? card.body : (card.notification ? NoticeState.markup(card.notification.body) : "")
 							color: Qt.rgba(Theme.foreground.r, Theme.foreground.g, Theme.foreground.b, 0.82)
 							linkColor: "#9ecbff"
-							font.family: Theme.fontFamily
+							font.family: card.synthetic && card.critical ? "monospace" : Theme.fontFamily
 							font.pixelSize: Theme.fontSize
 							wrapMode: Text.WordWrap
-							maximumLineCount: 8
+							maximumLineCount: card.synthetic ? 16 : 8
 							elide: Text.ElideRight
-							textFormat: Text.RichText
+							textFormat: card.synthetic ? Text.PlainText : Text.RichText
 							onLinkActivated: link => NoticeState.openLink(link)
 
 							HoverHandler {
@@ -226,7 +254,13 @@ Item {
 									MouseArea {
 										anchors.fill: parent
 										cursorShape: Qt.PointingHandCursor
-										onClicked: actionButton.modelData.invoke()
+										onClicked: {
+											const action = actionButton.modelData
+											if (action.copy !== undefined)
+												NoticeState.copyText(action.copy)
+											else
+												action.invoke()
+										}
 										onWheel: wheel => wheel.accepted = false
 									}
 								}
