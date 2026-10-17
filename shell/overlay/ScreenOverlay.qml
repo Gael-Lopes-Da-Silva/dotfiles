@@ -18,6 +18,14 @@ PanelWindow {
 	screen: modelData
 	color: "transparent"
 	exclusionMode: ExclusionMode.Ignore
+	visible: !NiriState.hidden
+
+	onVisibleChanged: {
+		if (visible)
+			return
+		statusWanted = false
+		radioWanted = false
+	}
 
 	anchors.left: true
 	anchors.right: true

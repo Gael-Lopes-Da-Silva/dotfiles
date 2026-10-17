@@ -15,6 +15,7 @@ Singleton {
 
 	property bool launcherOpen: false
 	property string launcherOutput: ""
+	property bool hidden: false
 
 	property string osdKind: ""
 	property string osdText: ""
@@ -67,6 +68,8 @@ Singleton {
 	}
 
 	function toggleLauncher() {
+		if (hidden)
+			hidden = false
 		if (launcherOpen) {
 			closeLauncher()
 			return
@@ -74,6 +77,17 @@ Singleton {
 		launcherOutput = focusedOutput
 		launcherOpen = true
 		osdOpen = false
+	}
+
+	function toggleHidden() {
+		hidden = !hidden
+		if (!hidden)
+			return
+		closeLauncher()
+		osdOpen = false
+		NoticeState.replying = false
+		PowerState.closeMenu()
+		RadioState.closeMenu()
 	}
 
 	function closeLauncher() {
@@ -146,6 +160,8 @@ Singleton {
 	}
 
 	function showOsd(kind, text, on) {
+		if (hidden)
+			return
 		osdKind = kind
 		osdText = text || ""
 		osdOn = on !== false

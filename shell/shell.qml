@@ -26,4 +26,11 @@ ShellRoot {
 			NiriState.toggleLauncher()
 		}
 	}
+
+	IpcHandler {
+		target: "interface"
+		function toggle() {
+			NiriState.toggleHidden()
+		}
+	}
 }
