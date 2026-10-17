@@ -26,8 +26,10 @@ Singleton {
 	readonly property int reloadHold: 2500
 	readonly property int reloadFailHold: 8000
 	readonly property int noticeDedupe: 800
+	readonly property int noticeHistory: 40
 	readonly property int noticeMinHeight: 180
 	readonly property real noticeHeightRatio: 0.45
+	readonly property real noticeCenterRatio: 0.36
 	readonly property string shellName: "Quickshell"
 
 	readonly property int launcherLimit: 8

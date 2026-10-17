@@ -26,7 +26,7 @@ Item {
 		Column {
 			id: column
 			width: Theme.notificationWidth
-			spacing: Theme.gap
+			spacing: 0
 
 			Repeater {
 				model: NoticeState.entries
@@ -105,9 +105,12 @@ Item {
 						NoticeState.replying = false
 					}
 
+					readonly property bool shown: !NoticeState.quiet || critical
+
 					width: Theme.notificationWidth
+					clip: true
 					implicitHeight: copy.implicitHeight + Theme.padding * 2
-					height: implicitHeight
+					height: shown ? implicitHeight + Theme.gap : 0
 
 					MouseArea {
 						anchors.fill: parent
@@ -149,7 +152,7 @@ Item {
 							}
 
 							Text {
-								width: Math.max(0, parent.width - (card.synthetic || card.appIconSource !== "" ? 26 : 0))
+								width: Math.max(0, parent.width - (card.synthetic || card.appIconSource !== "" ? Theme.noticeIcon + 8 : 0))
 								text: card.synthetic ? Config.shellName : (card.notification ? card.notification.appName : "")
 								color: Theme.ink(Theme.iconMute)
 								font.family: Theme.fontFamily

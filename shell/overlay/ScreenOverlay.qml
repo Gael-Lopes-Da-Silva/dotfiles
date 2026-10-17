@@ -18,10 +18,10 @@ PanelWindow {
 	screen: modelData
 	color: "transparent"
 	exclusionMode: ExclusionMode.Ignore
-	visible: !NiriState.hidden
+	readonly property bool chrome: !NiriState.hidden
 
-	onVisibleChanged: {
-		if (visible)
+	onChromeChanged: {
+		if (chrome)
 			return
 		statusWanted = false
 		radioWanted = false
@@ -46,7 +46,7 @@ PanelWindow {
 	}
 
 	readonly property bool launcherHere: {
-		if (!NiriState.launcherOpen)
+		if (!chrome || !NiriState.launcherOpen)
 			return false
 		if (NiriState.launcherOutput === "")
 			return focusedHere
@@ -54,7 +54,7 @@ PanelWindow {
 	}
 
 	readonly property bool osdHere: {
-		if (!NiriState.osdOpen || NiriState.launcherOpen)
+		if (!chrome || !NiriState.osdOpen || NiriState.launcherOpen)
 			return false
 		if (NiriState.osdKind === "usb" || NiriState.osdKind === "screen")
 			return true
@@ -66,14 +66,14 @@ PanelWindow {
 		return NiriState.isFullscreen(modelData.name, modelData.width, modelData.height)
 	}
 
-	property real frameThickness: fullscreen ? 0 : Theme.frame
-	property real frameRadius: fullscreen ? 0 : Theme.screenRadius
+	property real frameThickness: chrome && !fullscreen ? Theme.frame : 0
+	property real frameRadius: chrome && !fullscreen ? Theme.screenRadius : 0
 	property bool statusWanted: false
 	property real statusProgress: statusWanted ? 1 : 0
 	readonly property string castMode: NiriState.castMode(modelData.name)
 	property string castHold: "recording"
 	readonly property string castLabel: castMode !== "" ? castMode : castHold
-	property real castProgress: castMode !== "" ? 1 : 0
+	property real castProgress: chrome && castMode !== "" ? 1 : 0
 
 	onCastModeChanged: {
 		if (castMode !== "")
@@ -110,6 +110,7 @@ PanelWindow {
 		const onFrame = frameThickness - weld
 		return Math.max(onFrame, underClock)
 	}
+	readonly property real noticeGap: Theme.padding * (1 - Math.min(1, frameThickness / Math.max(1, Theme.frame)))
 
 	Behavior on frameThickness {
 		NumberAnimation {
@@ -192,6 +193,10 @@ PanelWindow {
 	}
 
 	function syncStatus() {
+		if (!chrome) {
+			statusWanted = false
+			return
+		}
 		if (cornerHover.hovered || chipHover.hovered) {
 			statusTimer.stop()
 			statusWanted = true
@@ -201,6 +206,10 @@ PanelWindow {
 	}
 
 	function syncRadio() {
+		if (!chrome) {
+			radioWanted = false
+			return
+		}
 		if (radioCornerHover.hovered || radioHover.hovered) {
 			radioTimer.stop()
 			radioWanted = true
@@ -239,8 +248,8 @@ PanelWindow {
 		z: 4
 		anchors.top: parent.top
 		anchors.right: parent.right
-		width: Config.hotCorner
-		height: Config.hotCorner
+		width: root.chrome ? Config.hotCorner : 0
+		height: root.chrome ? Config.hotCorner : 0
 
 		HoverHandler {
 			id: cornerHover
@@ -274,6 +283,11 @@ PanelWindow {
 				statusTimer.stop()
 				PowerState.toggleMenu(root.modelData.name, "battery")
 			}
+			onNoticesClicked: {
+				root.statusWanted = true
+				statusTimer.stop()
+				PowerState.toggleMenu(root.modelData.name, "notices")
+			}
 
 			Behavior on opacity {
 				NumberAnimation { duration: Theme.fade }
@@ -284,6 +298,7 @@ PanelWindow {
 			id: clockMenu
 			anchors.top: statusChip.bottom
 			anchors.right: parent.right
+			room: Math.min(root.height * Config.noticeCenterRatio, Math.max(Theme.rowHeight * 4, root.height - (root.frameThickness - root.weld) - statusChip.implicitHeight - Math.max(root.frameThickness, Theme.padding)))
 			page: root.clockPage !== "" ? root.clockPage : root.clockHold
 			opacity: root.clockMenuProgress > Config.menuReveal ? 1 : 0
 
@@ -304,8 +319,8 @@ PanelWindow {
 		visible: root.focusedHere && height > Config.clipMin
 		width: notices.implicitWidth
 		height: root.focusedHere ? notices.implicitHeight : 0
-		x: root.width - root.frameThickness - width + root.weld
-		y: root.noticeTop
+		x: root.width - root.frameThickness - width + root.weld - root.noticeGap
+		y: root.noticeTop + root.noticeGap
 
 		Notifications {
 			id: notices
@@ -394,8 +409,8 @@ PanelWindow {
 		z: 2
 		anchors.left: parent.left
 		anchors.bottom: parent.bottom
-		width: Config.hotCorner
-		height: Config.hotCorner
+		width: root.chrome ? Config.hotCorner : 0
+		height: root.chrome ? Config.hotCorner : 0
 
 		HoverHandler {
 			id: radioCornerHover

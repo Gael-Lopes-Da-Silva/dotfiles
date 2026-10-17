@@ -10,11 +10,14 @@ Singleton {
 
 	property bool paused: false
 	property bool replying: false
+	property bool quiet: false
 	property int localSeq: 0
 	property string lastNotice: ""
 	property real lastNoticeAt: 0
 	readonly property alias entries: model
+	readonly property alias history: historyModel
 	readonly property int count: model.count
+	readonly property int historyCount: historyModel.count
 	readonly property int trackedCount: {
 		const tracked = server.trackedNotifications
 		return tracked && tracked.values ? tracked.values.length : 0
@@ -62,6 +65,32 @@ Singleton {
 		return "qs log -i " + Quickshell.instanceId
 	}
 
+	function trimHistory() {
+		while (historyModel.count > Config.noticeHistory)
+			historyModel.remove(historyModel.count - 1)
+	}
+
+	function remember(entry) {
+		for (let i = 0; i < historyModel.count; i++) {
+			const row = historyModel.get(i)
+			if (row.nid === entry.nid) {
+				historyModel.setProperty(i, "app", entry.app)
+				historyModel.setProperty(i, "summary", entry.summary)
+				historyModel.setProperty(i, "body", entry.body)
+				historyModel.setProperty(i, "icon", entry.icon || "")
+				historyModel.setProperty(i, "urgent", entry.urgent)
+				historyModel.setProperty(i, "at", entry.at)
+				return
+			}
+		}
+		historyModel.insert(0, entry)
+		trimHistory()
+	}
+
+	function clearHistory() {
+		historyModel.clear()
+	}
+
 	function shellNotice(summary, body, failed) {
 		const key = summary + "\n" + body
 		const now = Date.now()
@@ -70,13 +99,24 @@ Singleton {
 		lastNotice = key
 		lastNoticeAt = now
 		const duration = failed ? Config.reloadFailHold : Config.reloadHold
+		const urgent = failed ? 1 : 0
 		for (let i = 0; i < model.count; i++) {
 			const row = model.get(i)
 			if (row.local === 1 && row.summary === summary) {
 				model.setProperty(i, "body", body)
 				model.setProperty(i, "duration", duration)
 				model.setProperty(i, "remaining", duration)
-				model.setProperty(i, "urgent", failed ? 1 : 0)
+				model.setProperty(i, "urgent", urgent)
+				remember({
+					nid: row.nid,
+					app: Config.shellName,
+					summary: summary,
+					body: plain(body),
+					icon: "",
+					at: now,
+					urgent: urgent,
+					local: 1
+				})
 				return
 			}
 		}
@@ -88,7 +128,17 @@ Singleton {
 			local: 1,
 			summary: summary,
 			body: body,
-			urgent: failed ? 1 : 0
+			urgent: urgent
+		})
+		remember({
+			nid: localSeq,
+			app: Config.shellName,
+			summary: summary,
+			body: plain(body),
+			icon: "",
+			at: now,
+			urgent: urgent,
+			local: 1
 		})
 	}
 
@@ -112,6 +162,16 @@ Singleton {
 			summary: "",
 			body: "",
 			urgent: 0
+		})
+		remember({
+			nid: notification.id,
+			app: notification.appName || "",
+			summary: plain(notification.summary || ""),
+			body: notification.body || "",
+			icon: iconSource(notification.appIcon || ""),
+			at: Date.now(),
+			urgent: notification.urgency === NotificationUrgency.Critical ? 1 : 0,
+			local: 0
 		})
 		notification.closed.connect(() => root.removeId(notification.id))
 	}
@@ -139,12 +199,23 @@ Singleton {
 		return String(text || "").replace(/<[^>]+>/g, "")
 	}
 
+	function criticalRow(row) {
+		if (!row)
+			return false
+		if (row.local === 1)
+			return row.urgent === 1
+		const note = lookup(row.nid)
+		return !!(note && note.urgency === NotificationUrgency.Critical)
+	}
+
 	function tick() {
 		if (paused || replying)
 			return
 		for (let i = model.count - 1; i >= 0; i--) {
 			const row = model.get(i)
 			if (!(row.duration > 0))
+				continue
+			if (quiet && !criticalRow(row))
 				continue
 			const next = row.remaining - Config.notificationTick
 			if (next > 0) {
@@ -159,8 +230,22 @@ Singleton {
 		}
 	}
 
+	onQuietChanged: {
+		if (quiet)
+			return
+		for (let i = 0; i < model.count; i++) {
+			const row = model.get(i)
+			if (row.duration > 0)
+				model.setProperty(i, "remaining", row.duration)
+		}
+	}
+
 	ListModel {
 		id: model
+	}
+
+	ListModel {
+		id: historyModel
 	}
 
 	NotificationServer {

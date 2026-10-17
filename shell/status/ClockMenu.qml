@@ -7,10 +7,12 @@ Item {
 	id: root
 
 	property string page: ""
+	property real room: 640
 	readonly property int menuWidth: Theme.clockMenuWidth
+	readonly property int shownWidth: page === "notices" ? Theme.notificationWidth : menuWidth
 	readonly property real cell: Theme.calendarCell
 
-	implicitWidth: menuWidth
+	implicitWidth: shownWidth
 	implicitHeight: column.implicitHeight + Theme.padding
 	width: implicitWidth
 	height: implicitHeight
@@ -54,7 +56,7 @@ Item {
 
 	Column {
 		id: column
-		width: root.menuWidth
+		width: root.shownWidth
 		anchors.horizontalCenter: parent.horizontalCenter
 		anchors.top: parent.top
 		anchors.topMargin: 8
@@ -170,6 +172,12 @@ Item {
 					}
 				}
 			}
+		}
+
+		NoticeCenter {
+			width: parent.width
+			visible: root.page === "notices"
+			maxHeight: Math.max(Theme.rowHeight * 3, root.room - 8 - Theme.padding)
 		}
 
 		Item {

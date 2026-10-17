@@ -8,13 +8,15 @@ Item {
 
 	signal timeClicked()
 	signal batteryClicked()
+	signal noticesClicked()
 
 	property string activePage: ""
 	readonly property real buttonPadX: Theme.chipPadX
 	readonly property real buttonPadY: Theme.chipPadY
 	readonly property real buttonGap: Theme.chipGap
-	readonly property real contentWidth: timeRow.implicitWidth + buttonPadX * 2 + (batteryHit.visible ? buttonGap + batteryRow.implicitWidth + buttonPadX * 2 : 0)
-	readonly property real contentHeight: Math.max(timeRow.implicitHeight, batteryHit.visible ? batteryRow.implicitHeight : 0)
+	readonly property real noticeWidth: Math.max(timeRow.implicitHeight + buttonPadY * 2, noticeRow.implicitWidth + buttonPadX * 2)
+	readonly property real contentWidth: noticeWidth + buttonGap + timeRow.implicitWidth + buttonPadX * 2 + (batteryHit.visible ? buttonGap + batteryRow.implicitWidth + buttonPadX * 2 : 0)
+	readonly property real contentHeight: Math.max(timeRow.implicitHeight, noticeRow.implicitHeight, batteryHit.visible ? batteryRow.implicitHeight : 0)
 
 	implicitWidth: contentWidth + (Theme.padding - buttonPadX) + Theme.padding
 	implicitHeight: contentHeight + Theme.padding * 2
@@ -122,6 +124,47 @@ Item {
 				anchors.fill: parent
 				cursorShape: Qt.PointingHandCursor
 				onClicked: root.batteryClicked()
+			}
+		}
+
+		Item {
+			id: noticeHit
+			implicitWidth: root.noticeWidth
+			implicitHeight: timeRow.implicitHeight + root.buttonPadY * 2
+
+			Rectangle {
+				anchors.fill: parent
+				radius: Theme.buttonRadius
+				color: root.activePage === "notices" ? Theme.ink(Theme.selected) : "transparent"
+			}
+
+			Row {
+				id: noticeRow
+				anchors.centerIn: parent
+				spacing: Theme.gap
+
+				Text {
+					text: String.fromCodePoint(NoticeState.quiet ? 0xF00A0 : 0xF009A)
+					color: Theme.foreground
+					font.family: Theme.iconFont
+					font.pixelSize: Theme.clockSize
+					anchors.verticalCenter: parent.verticalCenter
+				}
+
+				Text {
+					visible: NoticeState.historyCount > 0
+					text: NoticeState.historyCount
+					color: Theme.foreground
+					font.family: Theme.fontFamily
+					font.pixelSize: Theme.clockSize
+					anchors.verticalCenter: parent.verticalCenter
+				}
+			}
+
+			MouseArea {
+				anchors.fill: parent
+				cursorShape: Qt.PointingHandCursor
+				onClicked: root.noticesClicked()
 			}
 		}
 	}
