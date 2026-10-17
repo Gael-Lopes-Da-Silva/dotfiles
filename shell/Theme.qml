@@ -25,6 +25,8 @@ Singleton {
 	readonly property int osdHold: 2000
 	readonly property int hoverDelay: 200
 	readonly property int castSettle: 2000
+	readonly property int notificationHold: 5000
+	readonly property int notificationWidth: 340
 
 	readonly property int fontSize: 14
 	readonly property int clockSize: 22

@@ -70,6 +70,11 @@ PanelWindow {
 	property real launcherFullH: launcherBody.implicitHeight
 
 	readonly property real weld: Math.min(Theme.weld, frameThickness)
+	readonly property real noticeTop: {
+		const belowClock = statusClip.y + statusClip.height + Theme.gap
+		const belowCorner = 16 + Theme.gap
+		return Math.max(belowCorner, belowClock)
+	}
 
 	Behavior on frameThickness {
 		NumberAnimation {
@@ -222,6 +227,21 @@ PanelWindow {
 		HoverHandler {
 			id: chipHover
 			onHoveredChanged: root.syncStatus()
+		}
+	}
+
+	Item {
+		id: noticeClip
+		z: 2
+		visible: root.focusedHere && height > 2
+		width: notices.implicitWidth
+		height: root.focusedHere ? notices.implicitHeight : 0
+		x: root.width - root.frameThickness - width - Theme.gap
+		y: root.noticeTop
+
+		Notifications {
+			id: notices
+			maxHeight: Math.max(180, root.height * 0.45)
 		}
 	}
 
@@ -381,6 +401,9 @@ PanelWindow {
 
 		Region {
 			item: statusClip
+		}
+		Region {
+			item: noticeClip
 		}
 		Region {
 			item: castClip
