@@ -1,4 +1,6 @@
 import QtQuick
+import qs
+import qs.services
 
 Item {
 	id: root
@@ -51,7 +53,7 @@ Item {
 
 	Timer {
 		id: settle
-		interval: Theme.castSettle
+		interval: Config.castSettle
 		onTriggered: {
 			if (!root.hovered)
 				root.shrink = 1

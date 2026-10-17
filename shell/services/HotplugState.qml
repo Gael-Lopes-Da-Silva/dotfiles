@@ -3,6 +3,7 @@ pragma Singleton
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import qs
 
 Singleton {
 	id: root
@@ -12,7 +13,7 @@ Singleton {
 	property var fields: ({})
 
 	function external(name) {
-		return !/^(eDP|LVDS|DSI|Virtual)/.test(String(name || ""))
+		return !new RegExp(Config.internalScreens).test(String(name || ""))
 	}
 
 	function screenLabel(screen) {
@@ -98,7 +99,7 @@ Singleton {
 	}
 
 	Timer {
-		interval: 800
+		interval: Config.screenPrime
 		running: true
 		onTriggered: {
 			root.noteScreens()

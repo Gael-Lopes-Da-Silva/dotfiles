@@ -1,12 +1,13 @@
 import QtQuick
+import qs
 
 Item {
 	id: root
 
 	property real thickness: 0
 	property real radius: 0
-	property real smoothing: 24
-	property color color: "#242424"
+	property real smoothing: Theme.smoothing
+	property color color: Theme.background
 	property vector4d panel0: Qt.vector4d(0, 0, 0, 0)
 	property vector4d panel1: Qt.vector4d(0, 0, 0, 0)
 	property vector4d panel2: Qt.vector4d(0, 0, 0, 0)
@@ -20,7 +21,7 @@ Item {
 	ShaderEffect {
 		anchors.fill: parent
 		blending: true
-		fragmentShader: Qt.resolvedUrl("frame.frag.qsb")
+		fragmentShader: Qt.resolvedUrl("../frame.frag.qsb")
 
 		property real fieldWidth: width
 		property real fieldHeight: height

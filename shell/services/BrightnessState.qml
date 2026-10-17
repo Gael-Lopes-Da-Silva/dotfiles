@@ -3,6 +3,7 @@ pragma Singleton
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import qs
 
 Singleton {
 	id: root
@@ -22,7 +23,7 @@ Singleton {
 			return
 		available = true
 		const next = cur / max
-		const changed = Math.abs(next - level) > 0.002
+		const changed = Math.abs(next - level) > Config.brightnessEpsilon
 		level = next
 		if (!primed) {
 			primed = true
@@ -44,7 +45,7 @@ Singleton {
 	}
 
 	Timer {
-		interval: 250
+		interval: Config.brightnessPoll
 		running: root.watching
 		repeat: true
 		triggeredOnStart: true

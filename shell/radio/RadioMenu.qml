@@ -1,13 +1,15 @@
 import QtQuick
 import Quickshell.Bluetooth
 import Quickshell.Networking
+import qs
+import qs.services
 
 Item {
 	id: root
 
 	readonly property string page: RadioState.menuPage
-	readonly property int menuWidth: 320
-	readonly property int rowHeight: 44
+	readonly property int menuWidth: Theme.radioMenuWidth
+	readonly property int rowHeight: Theme.rowHeight
 
 	implicitWidth: menuWidth
 	implicitHeight: column.implicitHeight + Theme.padding
@@ -23,21 +25,21 @@ Item {
 
 		property bool on: false
 
-		implicitWidth: 38
-		implicitHeight: 22
+		implicitWidth: Theme.toggleWidth
+		implicitHeight: Theme.toggleHeight
 
 		Rectangle {
 			anchors.fill: parent
 			radius: height / 2
-			color: toggle.on ? Theme.foreground : root.ink(0.16)
+			color: toggle.on ? Theme.foreground : root.ink(Theme.track)
 		}
 
 		Rectangle {
-			width: 16
-			height: 16
-			radius: 8
+			width: Theme.toggleKnob
+			height: Theme.toggleKnob
+			radius: Theme.toggleKnob / 2
 			anchors.verticalCenter: parent.verticalCenter
-			x: toggle.on ? parent.width - width - 3 : 3
+			x: toggle.on ? parent.width - width - Theme.toggleInset : Theme.toggleInset
 			color: toggle.on ? Theme.background : Theme.foreground
 		}
 	}
@@ -50,15 +52,15 @@ Item {
 		readonly property real shown: drag.pressed ? slide : value
 		signal moved(real amount)
 
-		implicitHeight: 22
+		implicitHeight: Theme.sliderRow
 
 		Rectangle {
 			anchors.left: parent.left
 			anchors.right: parent.right
 			anchors.verticalCenter: parent.verticalCenter
-			height: 5
-			radius: 2.5
-			color: root.ink(0.16)
+			height: Theme.sliderTrack
+			radius: Theme.sliderTrack / 2
+			color: root.ink(Theme.track)
 
 			Rectangle {
 				width: parent.width * Math.max(0, Math.min(1, bar.shown))
@@ -69,9 +71,9 @@ Item {
 		}
 
 		Rectangle {
-			width: 14
-			height: 14
-			radius: 7
+			width: Theme.sliderThumb
+			height: Theme.sliderThumb
+			radius: Theme.sliderThumb / 2
 			anchors.verticalCenter: parent.verticalCenter
 			x: Math.max(0, Math.min(parent.width - width, parent.width * bar.shown - width / 2))
 			color: Theme.foreground
@@ -102,7 +104,7 @@ Item {
 		anchors.horizontalCenter: parent.horizontalCenter
 		anchors.top: parent.top
 		anchors.topMargin: Theme.padding * 0.5
-		spacing: 4
+		spacing: Theme.menuSpacing
 
 		Item {
 			width: parent.width
@@ -111,21 +113,21 @@ Item {
 
 			Rectangle {
 				anchors.fill: parent
-				anchors.leftMargin: 8
-				anchors.rightMargin: 8
-				radius: 12
-				color: root.ink(0.06)
+				anchors.leftMargin: Theme.inset
+				anchors.rightMargin: Theme.inset
+				radius: Theme.radius
+				color: root.ink(Theme.wash)
 			}
 
 			Text {
 				id: wifiHeadIcon
 				anchors.left: parent.left
-				anchors.leftMargin: 20
+				anchors.leftMargin: Theme.headerInset
 				anchors.verticalCenter: parent.verticalCenter
 				text: RadioState.wifiGlyph()
 				color: Theme.foreground
 				font.family: Theme.iconFont
-				font.pixelSize: Theme.fontSize + 6
+				font.pixelSize: Theme.iconSize
 			}
 
 			Text {
@@ -135,12 +137,12 @@ Item {
 				text: "Wi-Fi"
 				color: Theme.foreground
 				font.family: Theme.fontFamily
-				font.pixelSize: Theme.fontSize + 1
+				font.pixelSize: Theme.headingSize
 			}
 
 			Toggle {
 				anchors.right: parent.right
-				anchors.rightMargin: 18
+				anchors.rightMargin: Theme.edgeInset
 				anchors.verticalCenter: parent.verticalCenter
 				on: Networking.wifiEnabled
 			}
@@ -156,7 +158,7 @@ Item {
 			visible: root.page === "wifi" && RadioState.wifiList.length === 0
 			width: parent.width
 			text: Networking.wifiEnabled ? "No networks" : "Wi-Fi is off"
-			color: root.ink(0.45)
+			color: root.ink(Theme.muted)
 			font.family: Theme.fontFamily
 			font.pixelSize: Theme.fontSize
 			horizontalAlignment: Text.AlignHCenter
@@ -172,39 +174,39 @@ Item {
 				required property var modelData
 				readonly property bool connected: modelData.connected
 
-				width: root.menuWidth - 16
-				x: 8
-				height: 40
-				radius: 10
-				color: connected ? root.ink(0.12) : wifiHover.hovered ? root.ink(0.07) : "transparent"
+				width: root.menuWidth - Theme.inset * 2
+				x: Theme.inset
+				height: Theme.rowInnerHeight
+				radius: Theme.rowRadius
+				color: connected ? root.ink(Theme.selected) : wifiHover.hovered ? root.ink(Theme.hover) : "transparent"
 
 				Rectangle {
 					id: wifiWell
 					anchors.left: parent.left
 					anchors.leftMargin: 6
 					anchors.verticalCenter: parent.verticalCenter
-					width: 28
-					height: 28
-					radius: 8
-					color: root.ink(0.08)
+					width: Theme.well
+					height: Theme.well
+					radius: Theme.buttonRadius
+					color: root.ink(Theme.wellFill)
 
 					Text {
 						anchors.centerIn: parent
 						text: RadioState.strengthGlyph(wifiRow.modelData.signalStrength || 0)
 						color: Theme.foreground
 						font.family: Theme.iconFont
-						font.pixelSize: Theme.fontSize + 2
+						font.pixelSize: Theme.glyphSize
 					}
 				}
 
 				Text {
 					id: lock
 					anchors.left: wifiWell.right
-					anchors.leftMargin: 8
+					anchors.leftMargin: Theme.inset
 					anchors.verticalCenter: parent.verticalCenter
 					visible: RadioState.secured(wifiRow.modelData)
 					text: String.fromCodePoint(0xF033E)
-					color: root.ink(0.55)
+					color: root.ink(Theme.iconMute)
 					font.family: Theme.iconFont
 					font.pixelSize: Theme.fontSize
 				}
@@ -215,16 +217,16 @@ Item {
 					anchors.rightMargin: 12
 					anchors.verticalCenter: parent.verticalCenter
 					text: wifiRow.connected ? "Connected" : Math.round((wifiRow.modelData.signalStrength || 0) * 100) + "%"
-					color: wifiRow.connected ? Theme.foreground : root.ink(0.5)
+					color: wifiRow.connected ? Theme.foreground : root.ink(Theme.quiet)
 					font.family: Theme.fontFamily
-					font.pixelSize: Theme.fontSize - 1
+					font.pixelSize: Theme.smallSize
 				}
 
 				Text {
 					anchors.left: lock.visible ? lock.right : wifiWell.right
-					anchors.leftMargin: 8
+					anchors.leftMargin: Theme.inset
 					anchors.right: status.left
-					anchors.rightMargin: 8
+					anchors.rightMargin: Theme.inset
 					anchors.verticalCenter: parent.verticalCenter
 					text: wifiRow.modelData.name
 					color: Theme.foreground
@@ -250,22 +252,22 @@ Item {
 
 			Rectangle {
 				anchors.fill: parent
-				anchors.leftMargin: 8
-				anchors.rightMargin: 8
+				anchors.leftMargin: Theme.inset
+				anchors.rightMargin: Theme.inset
 				anchors.topMargin: 4
 				anchors.bottomMargin: 4
-				radius: 10
-				color: root.ink(0.08)
+				radius: Theme.rowRadius
+				color: root.ink(Theme.wellFill)
 			}
 
 			Text {
 				anchors.left: parent.left
-				anchors.leftMargin: 20
+				anchors.leftMargin: Theme.headerInset
 				anchors.verticalCenter: parent.verticalCenter
 				text: String.fromCodePoint(0xF033E)
-				color: root.ink(0.55)
+				color: root.ink(Theme.iconMute)
 				font.family: Theme.iconFont
-				font.pixelSize: Theme.fontSize + 2
+				font.pixelSize: Theme.glyphSize
 			}
 
 			TextInput {
@@ -274,7 +276,7 @@ Item {
 				anchors.right: parent.right
 				anchors.verticalCenter: parent.verticalCenter
 				anchors.leftMargin: 46
-				anchors.rightMargin: 18
+				anchors.rightMargin: Theme.edgeInset
 				color: Theme.foreground
 				font.family: Theme.fontFamily
 				font.pixelSize: Theme.fontSize
@@ -304,7 +306,7 @@ Item {
 				anchors.verticalCenter: secret.verticalCenter
 				text: "Password"
 				visible: secret.text.length === 0
-				color: root.ink(0.4)
+				color: root.ink(Theme.dim)
 				font: secret.font
 			}
 		}
@@ -316,21 +318,21 @@ Item {
 
 			Rectangle {
 				anchors.fill: parent
-				anchors.leftMargin: 8
-				anchors.rightMargin: 8
-				radius: 12
-				color: root.ink(0.06)
+				anchors.leftMargin: Theme.inset
+				anchors.rightMargin: Theme.inset
+				radius: Theme.radius
+				color: root.ink(Theme.wash)
 			}
 
 			Text {
 				id: btHeadIcon
 				anchors.left: parent.left
-				anchors.leftMargin: 20
+				anchors.leftMargin: Theme.headerInset
 				anchors.verticalCenter: parent.verticalCenter
 				text: RadioState.btGlyph()
 				color: Theme.foreground
 				font.family: Theme.iconFont
-				font.pixelSize: Theme.fontSize + 6
+				font.pixelSize: Theme.iconSize
 			}
 
 			Text {
@@ -340,12 +342,12 @@ Item {
 				text: "Bluetooth"
 				color: Theme.foreground
 				font.family: Theme.fontFamily
-				font.pixelSize: Theme.fontSize + 1
+				font.pixelSize: Theme.headingSize
 			}
 
 			Toggle {
 				anchors.right: parent.right
-				anchors.rightMargin: 18
+				anchors.rightMargin: Theme.edgeInset
 				anchors.verticalCenter: parent.verticalCenter
 				on: RadioState.bluetooth && RadioState.bluetooth.enabled
 			}
@@ -361,7 +363,7 @@ Item {
 			visible: root.page === "bluetooth" && RadioState.btList.length === 0
 			width: parent.width
 			text: RadioState.bluetooth && RadioState.bluetooth.enabled ? "No devices" : "Bluetooth is off"
-			color: root.ink(0.45)
+			color: root.ink(Theme.muted)
 			font.family: Theme.fontFamily
 			font.pixelSize: Theme.fontSize
 			horizontalAlignment: Text.AlignHCenter
@@ -377,28 +379,28 @@ Item {
 				required property var modelData
 				readonly property bool connected: modelData.connected
 
-				width: root.menuWidth - 16
-				x: 8
-				height: 40
-				radius: 10
-				color: connected ? root.ink(0.12) : btHover.hovered ? root.ink(0.07) : "transparent"
+				width: root.menuWidth - Theme.inset * 2
+				x: Theme.inset
+				height: Theme.rowInnerHeight
+				radius: Theme.rowRadius
+				color: connected ? root.ink(Theme.selected) : btHover.hovered ? root.ink(Theme.hover) : "transparent"
 
 				Rectangle {
 					id: btWell
 					anchors.left: parent.left
 					anchors.leftMargin: 6
 					anchors.verticalCenter: parent.verticalCenter
-					width: 28
-					height: 28
-					radius: 8
-					color: root.ink(0.08)
+					width: Theme.well
+					height: Theme.well
+					radius: Theme.buttonRadius
+					color: root.ink(Theme.wellFill)
 
 					Text {
 						anchors.centerIn: parent
 						text: btRow.connected ? String.fromCodePoint(0xF00B1) : String.fromCodePoint(0xF00AF)
 						color: Theme.foreground
 						font.family: Theme.iconFont
-						font.pixelSize: Theme.fontSize + 2
+						font.pixelSize: Theme.glyphSize
 					}
 				}
 
@@ -416,16 +418,16 @@ Item {
 							return "Paired"
 						return "Pair"
 					}
-					color: btRow.connected ? Theme.foreground : root.ink(0.5)
+					color: btRow.connected ? Theme.foreground : root.ink(Theme.quiet)
 					font.family: Theme.fontFamily
-					font.pixelSize: Theme.fontSize - 1
+					font.pixelSize: Theme.smallSize
 				}
 
 				Text {
 					anchors.left: btWell.right
-					anchors.leftMargin: 8
+					anchors.leftMargin: Theme.inset
 					anchors.right: btStatus.left
-					anchors.rightMargin: 8
+					anchors.rightMargin: Theme.inset
 					anchors.verticalCenter: parent.verticalCenter
 					text: RadioState.deviceLabel(btRow.modelData)
 					color: Theme.foreground
@@ -451,21 +453,21 @@ Item {
 
 			Rectangle {
 				anchors.fill: parent
-				anchors.leftMargin: 8
-				anchors.rightMargin: 8
-				radius: 12
-				color: root.ink(0.06)
+				anchors.leftMargin: Theme.inset
+				anchors.rightMargin: Theme.inset
+				radius: Theme.radius
+				color: root.ink(Theme.wash)
 			}
 
 			Text {
 				id: audioHeadIcon
 				anchors.left: parent.left
-				anchors.leftMargin: 20
+				anchors.leftMargin: Theme.headerInset
 				anchors.verticalCenter: parent.verticalCenter
 				text: AudioState.volumeGlyph(AudioState.sinkLevel, AudioState.sinkMuted)
 				color: Theme.foreground
 				font.family: Theme.iconFont
-				font.pixelSize: Theme.fontSize + 6
+				font.pixelSize: Theme.iconSize
 			}
 
 			Text {
@@ -475,15 +477,15 @@ Item {
 				text: "Audio"
 				color: Theme.foreground
 				font.family: Theme.fontFamily
-				font.pixelSize: Theme.fontSize + 1
+				font.pixelSize: Theme.headingSize
 			}
 
 			Text {
 				anchors.right: parent.right
-				anchors.rightMargin: 20
+				anchors.rightMargin: Theme.headerInset
 				anchors.verticalCenter: parent.verticalCenter
 				text: AudioState.levelText(AudioState.sinkLevel, AudioState.sinkMuted)
-				color: AudioState.sinkMuted ? root.ink(0.5) : Theme.foreground
+				color: AudioState.sinkMuted ? root.ink(Theme.quiet) : Theme.foreground
 				font.family: Theme.fontFamily
 				font.pixelSize: Theme.fontSize
 			}
@@ -498,14 +500,14 @@ Item {
 		Item {
 			visible: root.page === "audio" && AudioState.sink !== null
 			width: parent.width
-			height: 28
+			height: Theme.sliderSlot
 
 			VolumeBar {
 				anchors.left: parent.left
 				anchors.right: parent.right
 				anchors.verticalCenter: parent.verticalCenter
-				anchors.leftMargin: 20
-				anchors.rightMargin: 20
+				anchors.leftMargin: Theme.headerInset
+				anchors.rightMargin: Theme.headerInset
 				value: AudioState.sinkLevel
 				onMoved: amount => AudioState.setVolume(AudioState.sink, amount)
 			}
@@ -515,10 +517,10 @@ Item {
 			visible: root.page === "audio" && AudioState.sinkNodes.length > 0
 			width: parent.width
 			text: "Outputs"
-			color: root.ink(0.4)
+			color: root.ink(Theme.dim)
 			font.family: Theme.fontFamily
-			font.pixelSize: Theme.fontSize - 2
-			leftPadding: 20
+			font.pixelSize: Theme.labelSize
+			leftPadding: Theme.headerInset
 			topPadding: 8
 			bottomPadding: 2
 		}
@@ -527,7 +529,7 @@ Item {
 			visible: root.page === "audio" && AudioState.sinkNodes.length === 0
 			width: parent.width
 			text: "No outputs"
-			color: root.ink(0.45)
+			color: root.ink(Theme.muted)
 			font.family: Theme.fontFamily
 			font.pixelSize: Theme.fontSize
 			horizontalAlignment: Text.AlignHCenter
@@ -543,28 +545,28 @@ Item {
 				required property var modelData
 				readonly property bool active: AudioState.sink && modelData.id === AudioState.sink.id
 
-				width: root.menuWidth - 16
-				x: 8
-				height: 40
-				radius: 10
-				color: active ? root.ink(0.12) : sinkHover.hovered ? root.ink(0.07) : "transparent"
+				width: root.menuWidth - Theme.inset * 2
+				x: Theme.inset
+				height: Theme.rowInnerHeight
+				radius: Theme.rowRadius
+				color: active ? root.ink(Theme.selected) : sinkHover.hovered ? root.ink(Theme.hover) : "transparent"
 
 				Rectangle {
 					id: sinkWell
 					anchors.left: parent.left
 					anchors.leftMargin: 6
 					anchors.verticalCenter: parent.verticalCenter
-					width: 28
-					height: 28
-					radius: 8
-					color: root.ink(0.08)
+					width: Theme.well
+					height: Theme.well
+					radius: Theme.buttonRadius
+					color: root.ink(Theme.wellFill)
 
 					Text {
 						anchors.centerIn: parent
 						text: AudioState.volumeGlyph(sinkRow.modelData.audio ? sinkRow.modelData.audio.volume : 0, sinkRow.modelData.audio ? sinkRow.modelData.audio.muted : false)
 						color: Theme.foreground
 						font.family: Theme.iconFont
-						font.pixelSize: Theme.fontSize + 2
+						font.pixelSize: Theme.glyphSize
 					}
 				}
 
@@ -577,14 +579,14 @@ Item {
 					text: "Active"
 					color: Theme.foreground
 					font.family: Theme.fontFamily
-					font.pixelSize: Theme.fontSize - 1
+					font.pixelSize: Theme.smallSize
 				}
 
 				Text {
 					anchors.left: sinkWell.right
-					anchors.leftMargin: 8
+					anchors.leftMargin: Theme.inset
 					anchors.right: sinkStatus.left
-					anchors.rightMargin: 8
+					anchors.rightMargin: Theme.inset
 					anchors.verticalCenter: parent.verticalCenter
 					text: AudioState.nodeLabel(sinkRow.modelData)
 					color: Theme.foreground
@@ -607,10 +609,10 @@ Item {
 			visible: root.page === "audio"
 			width: parent.width
 			text: "Applications"
-			color: root.ink(0.4)
+			color: root.ink(Theme.dim)
 			font.family: Theme.fontFamily
-			font.pixelSize: Theme.fontSize - 2
-			leftPadding: 20
+			font.pixelSize: Theme.labelSize
+			leftPadding: Theme.headerInset
 			topPadding: 10
 			bottomPadding: 2
 		}
@@ -619,7 +621,7 @@ Item {
 			visible: root.page === "audio" && AudioState.streamNodes.length === 0
 			width: parent.width
 			text: "No app audio"
-			color: root.ink(0.45)
+			color: root.ink(Theme.muted)
 			font.family: Theme.fontFamily
 			font.pixelSize: Theme.fontSize
 			horizontalAlignment: Text.AlignHCenter
@@ -634,7 +636,7 @@ Item {
 				id: streamRow
 				required property var modelData
 				width: root.menuWidth
-				height: 64
+				height: Theme.streamRow
 
 				Rectangle {
 					id: streamWell
@@ -642,36 +644,36 @@ Item {
 					anchors.leftMargin: 14
 					anchors.top: parent.top
 					anchors.topMargin: 6
-					width: 28
-					height: 28
-					radius: 8
-					color: root.ink(0.08)
+					width: Theme.well
+					height: Theme.well
+					radius: Theme.buttonRadius
+					color: root.ink(Theme.wellFill)
 
 					Text {
 						anchors.centerIn: parent
 						text: AudioState.volumeGlyph(streamRow.modelData.audio ? streamRow.modelData.audio.volume : 0, streamRow.modelData.audio ? streamRow.modelData.audio.muted : false)
 						color: Theme.foreground
 						font.family: Theme.iconFont
-						font.pixelSize: Theme.fontSize + 2
+						font.pixelSize: Theme.glyphSize
 					}
 				}
 
 				Text {
 					id: streamMute
 					anchors.right: parent.right
-					anchors.rightMargin: 18
+					anchors.rightMargin: Theme.edgeInset
 					anchors.verticalCenter: streamWell.verticalCenter
 					text: streamRow.modelData.audio && streamRow.modelData.audio.muted ? "Muted" : AudioState.levelText(streamRow.modelData.audio ? streamRow.modelData.audio.volume : 0, false)
-					color: streamRow.modelData.audio && streamRow.modelData.audio.muted ? root.ink(0.5) : Theme.foreground
+					color: streamRow.modelData.audio && streamRow.modelData.audio.muted ? root.ink(Theme.quiet) : Theme.foreground
 					font.family: Theme.fontFamily
-					font.pixelSize: Theme.fontSize - 1
+					font.pixelSize: Theme.smallSize
 				}
 
 				Text {
 					anchors.left: streamWell.right
-					anchors.leftMargin: 8
+					anchors.leftMargin: Theme.inset
 					anchors.right: streamMute.left
-					anchors.rightMargin: 8
+					anchors.rightMargin: Theme.inset
 					anchors.verticalCenter: streamWell.verticalCenter
 					text: AudioState.streamLabel(streamRow.modelData)
 					color: Theme.foreground
@@ -693,8 +695,8 @@ Item {
 					anchors.left: parent.left
 					anchors.right: parent.right
 					anchors.bottom: parent.bottom
-					anchors.leftMargin: 20
-					anchors.rightMargin: 20
+					anchors.leftMargin: Theme.headerInset
+					anchors.rightMargin: Theme.headerInset
 					anchors.bottomMargin: 2
 					value: streamRow.modelData.audio ? streamRow.modelData.audio.volume : 0
 					onMoved: amount => AudioState.setVolume(streamRow.modelData, amount)
@@ -709,21 +711,21 @@ Item {
 
 			Rectangle {
 				anchors.fill: parent
-				anchors.leftMargin: 8
-				anchors.rightMargin: 8
-				radius: 12
-				color: root.ink(0.06)
+				anchors.leftMargin: Theme.inset
+				anchors.rightMargin: Theme.inset
+				radius: Theme.radius
+				color: root.ink(Theme.wash)
 			}
 
 			Text {
 				id: micHeadIcon
 				anchors.left: parent.left
-				anchors.leftMargin: 20
+				anchors.leftMargin: Theme.headerInset
 				anchors.verticalCenter: parent.verticalCenter
 				text: AudioState.micGlyph(AudioState.sourceMuted)
 				color: Theme.foreground
 				font.family: Theme.iconFont
-				font.pixelSize: Theme.fontSize + 6
+				font.pixelSize: Theme.iconSize
 			}
 
 			Text {
@@ -733,15 +735,15 @@ Item {
 				text: "Microphone"
 				color: Theme.foreground
 				font.family: Theme.fontFamily
-				font.pixelSize: Theme.fontSize + 1
+				font.pixelSize: Theme.headingSize
 			}
 
 			Text {
 				anchors.right: parent.right
-				anchors.rightMargin: 20
+				anchors.rightMargin: Theme.headerInset
 				anchors.verticalCenter: parent.verticalCenter
 				text: AudioState.source ? AudioState.levelText(AudioState.sourceLevel, AudioState.sourceMuted) : "None"
-				color: AudioState.sourceMuted ? root.ink(0.5) : Theme.foreground
+				color: AudioState.sourceMuted ? root.ink(Theme.quiet) : Theme.foreground
 				font.family: Theme.fontFamily
 				font.pixelSize: Theme.fontSize
 			}
@@ -756,14 +758,14 @@ Item {
 		Item {
 			visible: root.page === "microphone" && AudioState.source !== null
 			width: parent.width
-			height: 28
+			height: Theme.sliderSlot
 
 			VolumeBar {
 				anchors.left: parent.left
 				anchors.right: parent.right
 				anchors.verticalCenter: parent.verticalCenter
-				anchors.leftMargin: 20
-				anchors.rightMargin: 20
+				anchors.leftMargin: Theme.headerInset
+				anchors.rightMargin: Theme.headerInset
 				value: AudioState.sourceLevel
 				onMoved: amount => AudioState.setVolume(AudioState.source, amount)
 			}
@@ -773,7 +775,7 @@ Item {
 			visible: root.page === "microphone" && AudioState.sourceNodes.length === 0
 			width: parent.width
 			text: "No microphones"
-			color: root.ink(0.45)
+			color: root.ink(Theme.muted)
 			font.family: Theme.fontFamily
 			font.pixelSize: Theme.fontSize
 			horizontalAlignment: Text.AlignHCenter
@@ -789,28 +791,28 @@ Item {
 				required property var modelData
 				readonly property bool active: AudioState.source && modelData.id === AudioState.source.id
 
-				width: root.menuWidth - 16
-				x: 8
-				height: 40
-				radius: 10
-				color: active ? root.ink(0.12) : sourceHover.hovered ? root.ink(0.07) : "transparent"
+				width: root.menuWidth - Theme.inset * 2
+				x: Theme.inset
+				height: Theme.rowInnerHeight
+				radius: Theme.rowRadius
+				color: active ? root.ink(Theme.selected) : sourceHover.hovered ? root.ink(Theme.hover) : "transparent"
 
 				Rectangle {
 					id: sourceWell
 					anchors.left: parent.left
 					anchors.leftMargin: 6
 					anchors.verticalCenter: parent.verticalCenter
-					width: 28
-					height: 28
-					radius: 8
-					color: root.ink(0.08)
+					width: Theme.well
+					height: Theme.well
+					radius: Theme.buttonRadius
+					color: root.ink(Theme.wellFill)
 
 					Text {
 						anchors.centerIn: parent
 						text: AudioState.micGlyph(sourceRow.modelData.audio ? sourceRow.modelData.audio.muted : false)
 						color: Theme.foreground
 						font.family: Theme.iconFont
-						font.pixelSize: Theme.fontSize + 2
+						font.pixelSize: Theme.glyphSize
 					}
 				}
 
@@ -823,14 +825,14 @@ Item {
 					text: "Active"
 					color: Theme.foreground
 					font.family: Theme.fontFamily
-					font.pixelSize: Theme.fontSize - 1
+					font.pixelSize: Theme.smallSize
 				}
 
 				Text {
 					anchors.left: sourceWell.right
-					anchors.leftMargin: 8
+					anchors.leftMargin: Theme.inset
 					anchors.right: sourceStatus.left
-					anchors.rightMargin: 8
+					anchors.rightMargin: Theme.inset
 					anchors.verticalCenter: parent.verticalCenter
 					text: AudioState.nodeLabel(sourceRow.modelData)
 					color: Theme.foreground

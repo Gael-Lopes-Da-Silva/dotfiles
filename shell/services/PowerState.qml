@@ -3,6 +3,7 @@ pragma Singleton
 import QtQuick
 import Quickshell
 import Quickshell.Services.UPower
+import qs
 
 Singleton {
 	id: root
@@ -127,7 +128,7 @@ Singleton {
 
 	Timer {
 		id: arm
-		interval: 400
+		interval: Config.powerPrime
 		onTriggered: {
 			root.pluggedSeen = root.plugged
 			root.primed = true

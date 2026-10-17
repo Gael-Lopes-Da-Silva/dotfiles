@@ -3,6 +3,7 @@ pragma Singleton
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import qs
 
 Singleton {
 	id: root
@@ -31,7 +32,7 @@ Singleton {
 	}
 
 	function isFullscreen(name, screenWidth, screenHeight) {
-		if (screenWidth < 100 || screenHeight < 100)
+		if (screenWidth < Config.fullscreenMin || screenHeight < Config.fullscreenMin)
 			return false
 
 		let active = null
@@ -55,7 +56,7 @@ Singleton {
 			const tile = win.layout && win.layout.tile_size
 			if (!tile)
 				continue
-			if (Math.abs(tile[0] - screenWidth) <= 8 && Math.abs(tile[1] - screenHeight) <= 8)
+			if (Math.abs(tile[0] - screenWidth) <= Config.fullscreenSlack && Math.abs(tile[1] - screenHeight) <= Config.fullscreenSlack)
 				return true
 		}
 		return false
@@ -260,13 +261,13 @@ Singleton {
 
 	Timer {
 		id: retry
-		interval: 1000
+		interval: Config.niriRetry
 		onTriggered: stream.running = true
 	}
 
 	Timer {
 		id: osdTimer
-		interval: Theme.osdHold
+		interval: Config.osdHold
 		onTriggered: root.osdOpen = false
 	}
 }

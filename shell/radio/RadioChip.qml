@@ -1,6 +1,8 @@
 import QtQuick
 import Quickshell.Bluetooth
 import Quickshell.Networking
+import qs
+import qs.services
 
 Item {
 	id: root
@@ -25,8 +27,8 @@ Item {
 	function tone(enabled, quality) {
 		const color = Theme.foreground
 		if (!enabled)
-			return Qt.rgba(color.r, color.g, color.b, 0.4)
-		return Qt.rgba(color.r, color.g, color.b, Math.max(0.55, quality))
+			return Qt.rgba(color.r, color.g, color.b, Theme.dim)
+		return Qt.rgba(color.r, color.g, color.b, Math.max(Theme.signalFloor, quality))
 	}
 
 	Row {
@@ -42,15 +44,15 @@ Item {
 
 			Rectangle {
 				anchors.fill: parent
-				radius: 8
-				color: RadioState.menuPage === "wifi" ? Qt.rgba(1, 1, 1, 0.12) : "transparent"
+				radius: Theme.buttonRadius
+				color: RadioState.menuPage === "wifi" ? Theme.ink(Theme.selected) : "transparent"
 			}
 
 			Text {
 				id: wifiIcon
 				anchors.centerIn: parent
 				text: RadioState.wifiGlyph()
-				color: root.tone(Networking.wifiEnabled, RadioState.activeWifi ? Math.max(0.55, RadioState.wifiSignal) : 0.8)
+				color: root.tone(Networking.wifiEnabled, RadioState.activeWifi ? Math.max(Theme.signalFloor, RadioState.wifiSignal) : Theme.signalIdle)
 				font.family: Theme.iconFont
 				font.pixelSize: Theme.clockSize
 			}
@@ -70,15 +72,15 @@ Item {
 
 			Rectangle {
 				anchors.fill: parent
-				radius: 8
-				color: RadioState.menuPage === "bluetooth" ? Qt.rgba(1, 1, 1, 0.12) : "transparent"
+				radius: Theme.buttonRadius
+				color: RadioState.menuPage === "bluetooth" ? Theme.ink(Theme.selected) : "transparent"
 			}
 
 			Text {
 				id: btIcon
 				anchors.centerIn: parent
 				text: RadioState.btGlyph()
-				color: root.tone(RadioState.bluetooth && RadioState.bluetooth.enabled, RadioState.connectedBt ? RadioState.btQuality : 0.8)
+				color: root.tone(RadioState.bluetooth && RadioState.bluetooth.enabled, RadioState.connectedBt ? RadioState.btQuality : Theme.signalIdle)
 				font.family: Theme.iconFont
 				font.pixelSize: Theme.clockSize
 			}
@@ -98,8 +100,8 @@ Item {
 
 			Rectangle {
 				anchors.fill: parent
-				radius: 8
-				color: RadioState.menuPage === "audio" ? Qt.rgba(1, 1, 1, 0.12) : "transparent"
+				radius: Theme.buttonRadius
+				color: RadioState.menuPage === "audio" ? Theme.ink(Theme.selected) : "transparent"
 			}
 
 			Text {
@@ -126,8 +128,8 @@ Item {
 
 			Rectangle {
 				anchors.fill: parent
-				radius: 8
-				color: RadioState.menuPage === "microphone" ? Qt.rgba(1, 1, 1, 0.12) : "transparent"
+				radius: Theme.buttonRadius
+				color: RadioState.menuPage === "microphone" ? Theme.ink(Theme.selected) : "transparent"
 			}
 
 			Text {

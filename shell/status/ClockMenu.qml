@@ -1,13 +1,14 @@
 import QtQuick
 import Quickshell.Services.UPower
+import qs
+import qs.services
 
 Item {
 	id: root
 
 	property string page: ""
-	readonly property int menuWidth: 292
-	readonly property int rowHeight: 44
-	readonly property real cell: 36
+	readonly property int menuWidth: Theme.clockMenuWidth
+	readonly property real cell: Theme.calendarCell
 
 	implicitWidth: menuWidth
 	implicitHeight: column.implicitHeight + Theme.padding
@@ -17,7 +18,7 @@ Item {
 	property date now: clock.now
 	readonly property int today: now.getDate()
 	readonly property var cells: monthCells(now)
-	readonly property var weekdays: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"]
+	readonly property var weekdays: Config.weekdays
 
 	function monthCells(date) {
 		const year = date.getFullYear()
@@ -44,7 +45,7 @@ Item {
 	}
 
 	Timer {
-		interval: 1000
+		interval: Config.clockTick
 		running: true
 		repeat: true
 		triggeredOnStart: true
@@ -70,30 +71,30 @@ Item {
 				anchors.leftMargin: 18
 				anchors.top: parent.top
 				anchors.topMargin: 4
-				text: Qt.formatDate(root.now, "MMMM")
+				text: Qt.formatDate(root.now, Config.monthFormat)
 				color: Theme.foreground
 				font.family: Theme.fontFamily
-				font.pixelSize: Theme.fontSize + 8
+				font.pixelSize: Theme.monthSize
 			}
 
 			Text {
 				anchors.left: monthTitle.right
 				anchors.leftMargin: 8
 				anchors.baseline: monthTitle.baseline
-				text: Qt.formatDate(root.now, "yyyy")
-				color: root.ink(0.45)
+				text: Qt.formatDate(root.now, Config.yearFormat)
+				color: root.ink(Theme.muted)
 				font.family: Theme.fontFamily
-				font.pixelSize: Theme.fontSize + 2
+				font.pixelSize: Theme.glyphSize
 			}
 
 			Text {
 				anchors.left: parent.left
 				anchors.leftMargin: 18
 				anchors.top: monthTitle.bottom
-				text: Qt.formatDate(root.now, "dddd")
-				color: root.ink(0.55)
+				text: Qt.formatDate(root.now, Config.weekdayFormat)
+				color: root.ink(Theme.iconMute)
 				font.family: Theme.fontFamily
-				font.pixelSize: Theme.fontSize - 1
+				font.pixelSize: Theme.smallSize
 			}
 		}
 
@@ -113,11 +114,11 @@ Item {
 					Text {
 						required property string modelData
 						width: root.cell
-						height: 24
+						height: Theme.weekdayHeight
 						text: modelData
-						color: root.ink(0.4)
+						color: root.ink(Theme.dim)
 						font.family: Theme.fontFamily
-						font.pixelSize: Theme.fontSize - 2
+						font.pixelSize: Theme.labelSize
 						font.letterSpacing: 0.4
 						horizontalAlignment: Text.AlignHCenter
 						verticalAlignment: Text.AlignVCenter
@@ -150,9 +151,9 @@ Item {
 
 						Rectangle {
 							anchors.centerIn: parent
-							width: 30
-							height: 30
-							radius: 15
+							width: Theme.todaySize
+							height: Theme.todaySize
+							radius: Theme.todaySize / 2
 							visible: dayCell.current
 							color: Theme.foreground
 						}
@@ -161,7 +162,7 @@ Item {
 							anchors.centerIn: parent
 							visible: modelData !== 0
 							text: modelData
-							color: dayCell.current ? Theme.background : root.ink(0.82)
+							color: dayCell.current ? Theme.background : root.ink(Theme.body)
 							font.family: Theme.fontFamily
 							font.pixelSize: Theme.fontSize
 							font.bold: dayCell.current
@@ -173,7 +174,7 @@ Item {
 
 		Item {
 			width: parent.width
-			height: 64
+			height: Theme.batteryHeader
 			visible: root.page === "battery"
 
 			Text {
@@ -185,7 +186,7 @@ Item {
 				text: "Battery"
 				color: Theme.foreground
 				font.family: Theme.fontFamily
-				font.pixelSize: Theme.fontSize + 4
+				font.pixelSize: Theme.titleSize
 			}
 
 			Text {
@@ -195,7 +196,7 @@ Item {
 				text: PowerState.percent + "%"
 				color: Theme.foreground
 				font.family: Theme.fontFamily
-				font.pixelSize: Theme.fontSize + 4
+				font.pixelSize: Theme.titleSize
 			}
 
 			Rectangle {
@@ -205,15 +206,15 @@ Item {
 				anchors.rightMargin: 18
 				anchors.bottom: parent.bottom
 				anchors.bottomMargin: 10
-				height: 6
-				radius: 3
-				color: root.ink(0.16)
+				height: Theme.batteryBar
+				radius: Theme.batteryBar / 2
+				color: root.ink(Theme.track)
 
 				Rectangle {
 					width: parent.width * Math.max(0, Math.min(1, PowerState.level))
 					height: parent.height
 					radius: parent.radius
-					color: PowerState.percent <= 15 && !PowerState.plugged ? Theme.recording : Theme.foreground
+					color: PowerState.percent <= Config.lowBattery && !PowerState.plugged ? Theme.recording : Theme.foreground
 				}
 			}
 		}
@@ -227,8 +228,8 @@ Item {
 				anchors.fill: parent
 				anchors.leftMargin: 8
 				anchors.rightMargin: 8
-				radius: 10
-				color: root.ink(0.06)
+				radius: Theme.rowRadius
+				color: root.ink(Theme.wash)
 			}
 
 			Text {
@@ -254,11 +255,11 @@ Item {
 				required property var modelData
 				readonly property bool active: PowerProfiles.profile === modelData.profile
 
-				width: root.menuWidth - 16
-				x: 8
-				height: 40
-				radius: 10
-				color: active ? root.ink(0.14) : profileHover.hovered ? root.ink(0.07) : "transparent"
+				width: root.menuWidth - Theme.inset * 2
+				x: Theme.inset
+				height: Theme.rowInnerHeight
+				radius: Theme.rowRadius
+				color: active ? root.ink(0.14) : profileHover.hovered ? root.ink(Theme.hover) : "transparent"
 
 				Text {
 					anchors.left: parent.left
@@ -278,7 +279,7 @@ Item {
 					text: "Active"
 					color: Theme.foreground
 					font.family: Theme.fontFamily
-					font.pixelSize: Theme.fontSize - 1
+					font.pixelSize: Theme.smallSize
 				}
 
 				HoverHandler {
@@ -297,9 +298,9 @@ Item {
 			visible: root.page === "battery" && PowerState.limitText() !== ""
 			width: parent.width
 			text: PowerState.limitText()
-			color: root.ink(0.5)
+			color: root.ink(Theme.quiet)
 			font.family: Theme.fontFamily
-			font.pixelSize: Theme.fontSize - 1
+			font.pixelSize: Theme.smallSize
 			wrapMode: Text.WordWrap
 			leftPadding: 18
 			rightPadding: 18

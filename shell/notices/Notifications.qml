@@ -1,5 +1,7 @@
 import QtQuick
 import Quickshell.Services.Notifications
+import qs
+import qs.services
 
 Item {
 	id: root
@@ -132,26 +134,26 @@ Item {
 								text: String.fromCodePoint(card.critical ? 0xF0026 : 0xF012C)
 								color: card.critical ? Theme.recording : Theme.foreground
 								font.family: Theme.iconFont
-								font.pixelSize: 18
+								font.pixelSize: Theme.noticeIcon
 							}
 
 							Image {
-								width: 18
-								height: 18
+								width: Theme.noticeIcon
+								height: Theme.noticeIcon
 								visible: !card.synthetic && status === Image.Ready
 								source: card.appIconSource
-								sourceSize.width: 36
-								sourceSize.height: 36
+								sourceSize.width: Theme.noticeIcon * 2
+								sourceSize.height: Theme.noticeIcon * 2
 								fillMode: Image.PreserveAspectFit
 								asynchronous: true
 							}
 
 							Text {
 								width: Math.max(0, parent.width - (card.synthetic || card.appIconSource !== "" ? 26 : 0))
-								text: card.synthetic ? "Quickshell" : (card.notification ? card.notification.appName : "")
-								color: Qt.rgba(Theme.foreground.r, Theme.foreground.g, Theme.foreground.b, 0.55)
+								text: card.synthetic ? Config.shellName : (card.notification ? card.notification.appName : "")
+								color: Theme.ink(Theme.iconMute)
 								font.family: Theme.fontFamily
-								font.pixelSize: Theme.fontSize - 2
+								font.pixelSize: Theme.labelSize
 								elide: Text.ElideRight
 							}
 						}
@@ -164,11 +166,11 @@ Item {
 							fillMode: Image.PreserveAspectFit
 							asynchronous: true
 							sourceSize.width: Theme.notificationWidth
-							sourceSize.height: 360
+							sourceSize.height: Theme.noticeImageSource
 							height: {
 								if (!visible || implicitWidth < 1)
 									return 0
-								return Math.min(160, implicitHeight * width / implicitWidth)
+								return Math.min(Theme.noticeImageHeight, implicitHeight * width / implicitWidth)
 							}
 						}
 
@@ -179,7 +181,7 @@ Item {
 							font.family: Theme.fontFamily
 							font.pixelSize: Theme.fontSize
 							wrapMode: Text.WordWrap
-							maximumLineCount: 2
+							maximumLineCount: Theme.noticeSummaryLines
 							elide: Text.ElideRight
 						}
 
@@ -188,12 +190,12 @@ Item {
 							width: parent.width
 							visible: text !== ""
 							text: card.synthetic ? card.body : (card.notification ? NoticeState.markup(card.notification.body) : "")
-							color: Qt.rgba(Theme.foreground.r, Theme.foreground.g, Theme.foreground.b, 0.82)
-							linkColor: "#9ecbff"
-							font.family: card.synthetic && card.critical ? "monospace" : Theme.fontFamily
+							color: Theme.ink(Theme.body)
+							linkColor: Theme.link
+							font.family: card.synthetic && card.critical ? Theme.monoFamily : Theme.fontFamily
 							font.pixelSize: Theme.fontSize
 							wrapMode: Text.WordWrap
-							maximumLineCount: card.synthetic ? 16 : 8
+							maximumLineCount: card.synthetic ? Theme.noticeErrorLines : Theme.noticeBodyLines
 							elide: Text.ElideRight
 							textFormat: card.synthetic ? Text.PlainText : Text.RichText
 							onLinkActivated: link => NoticeState.openLink(link)
@@ -217,11 +219,11 @@ Item {
 									readonly property string icon: card.notification && card.notification.hasActionIcons ? NoticeState.iconSource(modelData.identifier) : ""
 
 									implicitWidth: Math.min(copy.width, actionRow.implicitWidth + 16)
-									implicitHeight: 28
+									implicitHeight: Theme.noticeActionHeight
 									width: implicitWidth
 									height: implicitHeight
-									radius: 8
-									color: Qt.rgba(Theme.foreground.r, Theme.foreground.g, Theme.foreground.b, actionHover.hovered ? 0.18 : 0.1)
+									radius: Theme.buttonRadius
+									color: Theme.ink(actionHover.hovered ? Theme.buttonHover : Theme.field)
 
 									Row {
 										id: actionRow
@@ -243,7 +245,7 @@ Item {
 											text: actionButton.modelData.text || ""
 											color: Theme.foreground
 											font.family: Theme.fontFamily
-											font.pixelSize: Theme.fontSize - 1
+											font.pixelSize: Theme.smallSize
 										}
 									}
 
@@ -275,9 +277,9 @@ Item {
 
 							Rectangle {
 								width: parent.width - replySend.width - replyRow.spacing
-								height: 32
-								radius: 8
-								color: Qt.rgba(Theme.foreground.r, Theme.foreground.g, Theme.foreground.b, 0.1)
+								height: Theme.noticeReply
+								radius: Theme.buttonRadius
+								color: Theme.ink(Theme.field)
 
 								TextInput {
 									id: replyInput
@@ -298,7 +300,7 @@ Item {
 										verticalAlignment: Text.AlignVCenter
 										visible: !replyInput.text && !replyInput.activeFocus
 										text: card.notification ? (card.notification.inlineReplyPlaceholder || "") : ""
-										color: Qt.rgba(Theme.foreground.r, Theme.foreground.g, Theme.foreground.b, 0.4)
+										color: Theme.ink(Theme.dim)
 										font.family: Theme.fontFamily
 										font.pixelSize: Theme.fontSize
 										elide: Text.ElideRight
@@ -308,17 +310,17 @@ Item {
 
 							Rectangle {
 								id: replySend
-								width: 32
-								height: 32
-								radius: 8
-								color: Qt.rgba(Theme.foreground.r, Theme.foreground.g, Theme.foreground.b, replySendHover.hovered ? 0.18 : 0.1)
+								width: Theme.noticeReply
+								height: Theme.noticeReply
+								radius: Theme.buttonRadius
+								color: Theme.ink(replySendHover.hovered ? Theme.buttonHover : Theme.field)
 
 								Text {
 									anchors.centerIn: parent
 									text: String.fromCodePoint(0xF048A)
 									color: Theme.foreground
 									font.family: Theme.iconFont
-									font.pixelSize: 16
+									font.pixelSize: Theme.replyIcon
 								}
 
 								HoverHandler {
@@ -336,10 +338,10 @@ Item {
 
 						Rectangle {
 							width: parent.width
-							height: 3
-							radius: 1.5
+							height: Theme.noticeProgress
+							radius: Theme.noticeProgress / 2
 							visible: card.duration > 0 || card.critical
-							color: Qt.rgba(Theme.foreground.r, Theme.foreground.g, Theme.foreground.b, 0.16)
+							color: Theme.ink(Theme.track)
 
 							Rectangle {
 								width: parent.width * (card.duration > 0 ? card.remaining / card.duration : 1)
@@ -356,9 +358,9 @@ Item {
 
 	Rectangle {
 		visible: flick.contentHeight > flick.height + 1
-		width: 3
-		radius: 1.5
-		color: Qt.rgba(Theme.foreground.r, Theme.foreground.g, Theme.foreground.b, 0.35)
+		width: Theme.noticeProgress
+		radius: Theme.noticeProgress / 2
+		color: Theme.ink(Theme.scroll)
 		height: Math.max(24, flick.height * flick.height / Math.max(flick.contentHeight, 1))
 		x: parent.width - width
 		y: flick.visibleArea.yPosition * (flick.height - height)

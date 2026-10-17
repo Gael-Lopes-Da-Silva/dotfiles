@@ -2,6 +2,8 @@ import Quickshell
 import Quickshell.Bluetooth
 import Quickshell.Io
 import Quickshell.Networking
+import qs.overlay
+import qs.services
 
 ShellRoot {
 	// Singletons are created on first use. Keep the watchers alive from startup

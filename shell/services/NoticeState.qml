@@ -3,6 +3,7 @@ pragma Singleton
 import QtQuick
 import Quickshell
 import Quickshell.Services.Notifications
+import qs
 
 Singleton {
 	id: root
@@ -25,7 +26,7 @@ Singleton {
 			return timeout
 		if (timeout === 0)
 			return 0
-		return Theme.notificationHold
+		return Config.notificationHold
 	}
 
 	function iconSource(name) {
@@ -64,11 +65,11 @@ Singleton {
 	function shellNotice(summary, body, failed) {
 		const key = summary + "\n" + body
 		const now = Date.now()
-		if (key === lastNotice && now - lastNoticeAt < 800)
+		if (key === lastNotice && now - lastNoticeAt < Config.noticeDedupe)
 			return
 		lastNotice = key
 		lastNoticeAt = now
-		const duration = failed ? 8000 : 2500
+		const duration = failed ? Config.reloadFailHold : Config.reloadHold
 		for (let i = 0; i < model.count; i++) {
 			const row = model.get(i)
 			if (row.local === 1 && row.summary === summary) {
@@ -145,7 +146,7 @@ Singleton {
 			const row = model.get(i)
 			if (!(row.duration > 0))
 				continue
-			const next = row.remaining - 50
+			const next = row.remaining - Config.notificationTick
 			if (next > 0) {
 				model.setProperty(i, "remaining", next)
 				continue
@@ -176,7 +177,7 @@ Singleton {
 	}
 
 	Timer {
-		interval: 50
+		interval: Config.notificationTick
 		repeat: true
 		running: root.count > 0
 		onTriggered: root.tick()

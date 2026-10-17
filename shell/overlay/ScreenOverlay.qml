@@ -1,6 +1,14 @@
 import QtQuick
 import Quickshell
 import Quickshell.Wayland
+import qs
+import qs.cast
+import qs.launcher
+import qs.notices
+import qs.osd
+import qs.radio
+import qs.services
+import qs.status
 
 PanelWindow {
 	id: root
@@ -223,8 +231,8 @@ PanelWindow {
 		z: 4
 		anchors.top: parent.top
 		anchors.right: parent.right
-		width: 16
-		height: 16
+		width: Config.hotCorner
+		height: Config.hotCorner
 
 		HoverHandler {
 			id: cornerHover
@@ -240,14 +248,14 @@ PanelWindow {
 		x: root.width - root.frameThickness - width + root.weld
 		y: root.frameThickness - root.weld
 		clip: true
-		visible: width > 2 && height > 2
+		visible: width > Config.clipMin && height > Config.clipMin
 
 		StatusChip {
 			id: statusChip
 			anchors.top: parent.top
 			anchors.right: parent.right
 			activePage: root.clockPage
-			opacity: root.statusProgress > 0.72 ? 1 : 0
+			opacity: root.statusProgress > Config.reveal ? 1 : 0
 			onTimeClicked: {
 				root.statusWanted = true
 				statusTimer.stop()
@@ -269,7 +277,7 @@ PanelWindow {
 			anchors.top: statusChip.bottom
 			anchors.right: parent.right
 			page: root.clockPage !== "" ? root.clockPage : root.clockHold
-			opacity: root.clockMenuProgress > 0.45 ? 1 : 0
+			opacity: root.clockMenuProgress > Config.menuReveal ? 1 : 0
 
 			Behavior on opacity {
 				NumberAnimation { duration: Theme.fade }
@@ -285,7 +293,7 @@ PanelWindow {
 	Item {
 		id: noticeClip
 		z: 2
-		visible: root.focusedHere && height > 2
+		visible: root.focusedHere && height > Config.clipMin
 		width: notices.implicitWidth
 		height: root.focusedHere ? notices.implicitHeight : 0
 		x: root.width - root.frameThickness - width + root.weld
@@ -293,7 +301,7 @@ PanelWindow {
 
 		Notifications {
 			id: notices
-			maxHeight: Math.max(180, root.height * 0.45)
+			maxHeight: Math.max(Config.noticeMinHeight, root.height * Config.noticeHeightRatio)
 		}
 	}
 
@@ -305,7 +313,7 @@ PanelWindow {
 		x: root.frameThickness - root.weld
 		y: root.frameThickness - root.weld
 		clip: true
-		visible: width > 2 && height > 2
+		visible: width > Config.clipMin && height > Config.clipMin
 
 		CastIndicator {
 			id: castBody
@@ -314,7 +322,7 @@ PanelWindow {
 			shown: root.castMode !== ""
 			anchors.top: parent.top
 			anchors.left: parent.left
-			opacity: root.castProgress > 0.72 ? 1 : 0
+			opacity: root.castProgress > Config.reveal ? 1 : 0
 
 			Behavior on opacity {
 				NumberAnimation { duration: Theme.fade }
@@ -330,13 +338,13 @@ PanelWindow {
 		x: (root.width - width) / 2
 		y: root.height - root.frameThickness - height + root.weld
 		clip: true
-		visible: height > 2
+		visible: height > Config.clipMin
 
 		Osd {
 			id: osdBody
 			anchors.bottom: parent.bottom
 			anchors.horizontalCenter: parent.horizontalCenter
-			opacity: root.osdProgress > 0.72 ? 1 : 0
+			opacity: root.osdProgress > Config.reveal ? 1 : 0
 
 			Behavior on opacity {
 				NumberAnimation { duration: Theme.fade }
@@ -352,7 +360,7 @@ PanelWindow {
 		x: (root.width - width) / 2
 		y: root.height - root.frameThickness - height + root.weld
 		clip: true
-		visible: height > 2
+		visible: height > Config.clipMin
 
 		MouseArea {
 			anchors.fill: parent
@@ -365,7 +373,7 @@ PanelWindow {
 			anchors.bottom: parent.bottom
 			anchors.horizontalCenter: parent.horizontalCenter
 			open: root.launcherHere
-			opacity: root.launcherProgress > 0.72 ? 1 : 0
+			opacity: root.launcherProgress > Config.reveal ? 1 : 0
 
 			Behavior on opacity {
 				NumberAnimation { duration: Theme.fade }
@@ -378,8 +386,8 @@ PanelWindow {
 		z: 2
 		anchors.left: parent.left
 		anchors.bottom: parent.bottom
-		width: 16
-		height: 16
+		width: Config.hotCorner
+		height: Config.hotCorner
 
 		HoverHandler {
 			id: radioCornerHover
@@ -395,13 +403,13 @@ PanelWindow {
 		x: root.frameThickness - root.weld
 		y: root.height - root.frameThickness - height + root.weld
 		clip: true
-		visible: width > 2 && height > 2
+		visible: width > Config.clipMin && height > Config.clipMin
 
 		RadioMenu {
 			id: radioMenu
 			anchors.left: parent.left
 			anchors.bottom: radioChip.top
-			opacity: root.menuProgress > 0.45 ? 1 : 0
+			opacity: root.menuProgress > Config.menuReveal ? 1 : 0
 
 			Behavior on opacity {
 				NumberAnimation { duration: Theme.fade }
@@ -412,7 +420,7 @@ PanelWindow {
 			id: radioChip
 			anchors.left: parent.left
 			anchors.bottom: parent.bottom
-			opacity: root.radioProgress > 0.72 ? 1 : 0
+			opacity: root.radioProgress > Config.reveal ? 1 : 0
 			onPicked: page => {
 				root.radioWanted = true
 				radioTimer.stop()
@@ -432,7 +440,7 @@ PanelWindow {
 
 	Timer {
 		id: statusTimer
-		interval: Theme.hoverDelay
+		interval: Config.hoverDelay
 		onTriggered: {
 			if (!cornerHover.hovered && !chipHover.hovered)
 				root.statusWanted = false
@@ -441,7 +449,7 @@ PanelWindow {
 
 	Timer {
 		id: radioTimer
-		interval: Theme.hoverDelay
+		interval: Config.hoverDelay
 		onTriggered: {
 			if (!radioCornerHover.hovered && !radioHover.hovered)
 				root.radioWanted = false

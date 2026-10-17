@@ -3,6 +3,7 @@ pragma Singleton
 import QtQuick
 import Quickshell
 import Quickshell.Services.Pipewire
+import qs
 
 Singleton {
 	id: root
@@ -54,7 +55,7 @@ Singleton {
 	}
 
 	Timer {
-		interval: 500
+		interval: Config.audioPoll
 		running: true
 		onTriggered: {
 			if (root.liveVolume >= 0) {
@@ -75,7 +76,7 @@ Singleton {
 	function note() {
 		if (!primed || liveVolume < 0)
 			return
-		const changed = Math.abs(liveVolume - volume) > 0.005 || liveMuted !== muted
+		const changed = Math.abs(liveVolume - volume) > Config.volumeEpsilon || liveMuted !== muted
 		volume = liveVolume
 		muted = liveMuted
 		if (changed && !adjusting)
@@ -86,7 +87,7 @@ Singleton {
 	function noteMic() {
 		if (!primed || !source)
 			return
-		const changed = Math.abs(sourceLevel - micVolume) > 0.005 || sourceMuted !== micMuted
+		const changed = Math.abs(sourceLevel - micVolume) > Config.volumeEpsilon || sourceMuted !== micMuted
 		micVolume = sourceLevel
 		micMuted = sourceMuted
 		if (changed && !micAdjusting)
@@ -95,7 +96,7 @@ Singleton {
 	}
 
 	Timer {
-		interval: RadioState.menuPage === "audio" || RadioState.menuPage === "microphone" ? 1000 : 3000
+		interval: RadioState.menuPage === "audio" || RadioState.menuPage === "microphone" ? Config.audioListOpen : Config.audioListIdle
 		repeat: true
 		running: true
 		triggeredOnStart: true
@@ -142,9 +143,9 @@ Singleton {
 			return nodeLabel(a).localeCompare(nodeLabel(b))
 		})
 		streams.sort((a, b) => streamLabel(a).localeCompare(streamLabel(b)))
-		const nextSinks = sinks.slice(0, 6)
-		const nextSources = sources.slice(0, 6)
-		const nextStreams = streams.slice(0, 6)
+		const nextSinks = sinks.slice(0, Config.audioLimit)
+		const nextSources = sources.slice(0, Config.audioLimit)
+		const nextStreams = streams.slice(0, Config.audioLimit)
 		if (!sameNodes(sinkNodes, nextSinks))
 			sinkNodes = nextSinks
 		if (!sameNodes(sourceNodes, nextSources))
@@ -186,11 +187,11 @@ Singleton {
 	}
 
 	function volumeGlyph(level, muted) {
-		if (muted || level <= 0.001)
+		if (muted || level <= Config.muteFloor)
 			return String.fromCodePoint(0xF075F)
-		if (level < 0.33)
+		if (level < Config.volumeLow)
 			return String.fromCodePoint(0xF057F)
-		if (level < 0.66)
+		if (level < Config.volumeMid)
 			return String.fromCodePoint(0xF0580)
 		return String.fromCodePoint(0xF057E)
 	}

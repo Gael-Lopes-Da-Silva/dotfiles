@@ -1,6 +1,8 @@
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import qs
+import qs.services
 
 Item {
 	id: root
@@ -9,15 +11,12 @@ Item {
 	property string query: ""
 	property int selected: 0
 
-	readonly property int rowHeight: 48
-	readonly property int iconSize: 26
-	readonly property int textSize: Theme.fontSize + 4
-	readonly property int fieldWidth: 440
+	readonly property int rowHeight: Theme.launcherRow
+	readonly property int iconSize: Theme.launcherIcon
+	readonly property int textSize: Theme.launcherText
+	readonly property int fieldWidth: Theme.launcherWidth
 	property var iconFiles: ({})
-	readonly property var iconSizes: [
-		"512x512", "512x512@2", "256x256", "256x256@2",
-		"128x128", "128x128@2", "64x64", "48x48", "32x32"
-	]
+	readonly property var iconSizes: Config.iconSizes
 	readonly property var results: {
 		const model = DesktopEntries.applications
 		const apps = model && model.values ? model.values : []
@@ -31,7 +30,7 @@ Item {
 				matched.push(app)
 		}
 		matched.sort((a, b) => String(a.name).localeCompare(String(b.name)))
-		return matched.slice(0, 8)
+		return matched.slice(0, Config.launcherLimit)
 	}
 
 	implicitWidth: column.implicitWidth + Theme.padding * 2
@@ -201,8 +200,8 @@ Item {
 
 				width: root.fieldWidth
 				height: detail === "" ? root.rowHeight : root.rowHeight + 8
-				radius: 12
-				color: chosen ? Theme.ink(0.12) : "transparent"
+				radius: Theme.radius
+				color: chosen ? Theme.ink(Theme.selected) : "transparent"
 
 				Image {
 					id: appIcon
@@ -240,7 +239,7 @@ Item {
 						width: parent.width
 						visible: appRow.detail !== ""
 						text: appRow.detail
-						color: Theme.ink(0.5)
+						color: Theme.ink(Theme.quiet)
 						font.family: Theme.fontFamily
 						font.pixelSize: Theme.fontSize
 						elide: Text.ElideRight
@@ -260,7 +259,7 @@ Item {
 		Text {
 			visible: root.results.length === 0 && root.query.trim() !== ""
 			text: "No matches"
-			color: Theme.ink(0.45)
+			color: Theme.ink(Theme.muted)
 			font.family: Theme.fontFamily
 			font.pixelSize: root.textSize
 			width: root.fieldWidth
@@ -276,18 +275,18 @@ Item {
 
 		Rectangle {
 			width: root.fieldWidth
-			height: 48
-			radius: 14
-			color: Theme.ink(0.08)
+			height: Theme.launcherRow
+			radius: Theme.searchRadius
+			color: Theme.ink(Theme.wellFill)
 
 			Text {
 				anchors.left: parent.left
 				anchors.leftMargin: 16
 				anchors.verticalCenter: parent.verticalCenter
 				text: String.fromCodePoint(0xF0349)
-				color: Theme.ink(0.55)
+				color: Theme.ink(Theme.iconMute)
 				font.family: Theme.iconFont
-				font.pixelSize: 18
+				font.pixelSize: Theme.searchIconSize
 			}
 
 			TextInput {
@@ -332,7 +331,7 @@ Item {
 				anchors.verticalCenter: search.verticalCenter
 				text: "Search"
 				visible: search.text.length === 0
-				color: Theme.ink(0.4)
+				color: Theme.ink(Theme.dim)
 				font: search.font
 			}
 		}

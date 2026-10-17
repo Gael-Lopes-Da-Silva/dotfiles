@@ -1,5 +1,7 @@
 import QtQuick
 import Quickshell
+import qs
+import qs.services
 
 Item {
 	id: root
@@ -8,16 +10,16 @@ Item {
 	signal batteryClicked()
 
 	property string activePage: ""
-	readonly property real buttonPadX: 8
-	readonly property real buttonPadY: 2
-	readonly property real buttonGap: 8
+	readonly property real buttonPadX: Theme.chipPadX
+	readonly property real buttonPadY: Theme.chipPadY
+	readonly property real buttonGap: Theme.chipGap
 	readonly property real contentWidth: timeRow.implicitWidth + buttonPadX * 2 + (batteryHit.visible ? buttonGap + batteryRow.implicitWidth + buttonPadX * 2 : 0)
 	readonly property real contentHeight: Math.max(timeRow.implicitHeight, batteryHit.visible ? batteryRow.implicitHeight : 0)
 
 	implicitWidth: contentWidth + (Theme.padding - buttonPadX) + Theme.padding
 	implicitHeight: contentHeight + Theme.padding * 2
 
-	property string timeText: Qt.formatTime(clock.now, "HH:mm")
+	property string timeText: Qt.formatTime(clock.now, Config.timeFormat)
 
 	function clockGlyph() {
 		return String.fromCodePoint(0xF0150)
@@ -29,7 +31,7 @@ Item {
 	}
 
 	Timer {
-		interval: 1000
+		interval: Config.clockTick
 		running: true
 		repeat: true
 		triggeredOnStart: true
@@ -49,8 +51,8 @@ Item {
 
 			Rectangle {
 				anchors.fill: parent
-				radius: 8
-				color: root.activePage === "time" ? Qt.rgba(1, 1, 1, 0.12) : "transparent"
+				radius: Theme.buttonRadius
+				color: root.activePage === "time" ? Theme.ink(Theme.selected) : "transparent"
 			}
 
 			Row {
@@ -90,8 +92,8 @@ Item {
 
 			Rectangle {
 				anchors.fill: parent
-				radius: 8
-				color: root.activePage === "battery" ? Qt.rgba(1, 1, 1, 0.12) : "transparent"
+				radius: Theme.buttonRadius
+				color: root.activePage === "battery" ? Theme.ink(Theme.selected) : "transparent"
 			}
 
 			Row {

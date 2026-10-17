@@ -1,4 +1,6 @@
 import QtQuick
+import qs
+import qs.services
 
 Item {
 	id: root
@@ -42,12 +44,12 @@ Item {
 		if (kind === "brightness")
 			return String.fromCodePoint(0xF00DF)
 		if (kind === "microphone")
-			return AudioState.micGlyph(AudioState.micMuted || amount <= 0.001)
-		if (AudioState.muted || amount <= 0.001)
+			return AudioState.micGlyph(AudioState.micMuted || amount <= Config.muteFloor)
+		if (AudioState.muted || amount <= Config.muteFloor)
 			return String.fromCodePoint(0xF075F)
-		if (amount < 0.33)
+		if (amount < Config.volumeLow)
 			return String.fromCodePoint(0xF057F)
-		if (amount < 0.66)
+		if (amount < Config.volumeMid)
 			return String.fromCodePoint(0xF0580)
 		return String.fromCodePoint(0xF057E)
 	}
@@ -64,16 +66,16 @@ Item {
 			text: root.glyph
 			color: Theme.foreground
 			font.family: Theme.iconFont
-			font.pixelSize: Theme.fontSize + 6
+			font.pixelSize: Theme.iconSize
 			anchors.verticalCenter: parent.verticalCenter
 		}
 
 		Rectangle {
 			visible: !root.discrete
-			implicitWidth: 148
-			implicitHeight: 4
-			radius: 2
-			color: Qt.rgba(Theme.foreground.r, Theme.foreground.g, Theme.foreground.b, 0.18)
+			implicitWidth: Theme.osdBarWidth
+			implicitHeight: Theme.osdBarHeight
+			radius: Theme.osdBarHeight / 2
+			color: Theme.ink(Theme.buttonHover)
 			anchors.verticalCenter: parent.verticalCenter
 
 			Rectangle {
@@ -89,7 +91,7 @@ Item {
 			color: Theme.foreground
 			font.family: Theme.fontFamily
 			font.pixelSize: Theme.fontSize
-			width: root.discrete ? Math.min(contentWidth, 240) : contentWidth
+			width: root.discrete ? Math.min(contentWidth, Theme.osdLabelWidth) : contentWidth
 			elide: Text.ElideRight
 			anchors.verticalCenter: parent.verticalCenter
 		}

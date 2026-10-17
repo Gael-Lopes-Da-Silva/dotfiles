@@ -5,6 +5,7 @@ import Quickshell
 import Quickshell.Bluetooth
 import Quickshell.Io
 import Quickshell.Networking
+import qs
 
 Singleton {
 	id: root
@@ -14,7 +15,7 @@ Singleton {
 	property string menuPage: ""
 	property var pending: null
 	property string password: ""
-	property real btRssi: -999
+	property real btRssi: Config.rssiUnknown
 
 	readonly property var wifi: {
 		const _ = revision
@@ -54,7 +55,7 @@ Singleton {
 			return (b.signalStrength || 0) - (a.signalStrength || 0)
 		})
 		const out = []
-		for (let i = 0; i < list.length && out.length < 8; i++) {
+		for (let i = 0; i < list.length && out.length < Config.networkLimit; i++) {
 			if (list[i].name)
 				out.push(list[i])
 		}
@@ -73,13 +74,13 @@ Singleton {
 		return null
 	}
 
-	readonly property bool btRssiKnown: btRssi > -200 && btRssi < 20
+	readonly property bool btRssiKnown: btRssi > Config.rssiMin && btRssi < Config.rssiMax
 	readonly property real btQuality: {
 		if (!connectedBt)
 			return 0
 		if (!btRssiKnown)
 			return 1
-		return Math.max(0, Math.min(1, (btRssi + 100) / 55))
+		return Math.max(0, Math.min(1, (btRssi - Config.rssiFloor) / Config.rssiSpan))
 	}
 
 	readonly property var btList: {
@@ -92,7 +93,7 @@ Singleton {
 				return a.paired ? -1 : 1
 			return deviceLabel(a).localeCompare(deviceLabel(b))
 		})
-		return list.slice(0, 8)
+		return list.slice(0, Config.deviceLimit)
 	}
 
 	function btDevices() {
@@ -236,7 +237,7 @@ Singleton {
 	onMenuPageChanged: applyScan()
 
 	Timer {
-		interval: root.menuPage !== "" ? 1500 : 4000
+		interval: root.menuPage !== "" ? Config.radioRefreshOpen : Config.radioRefreshIdle
 		repeat: true
 		running: true
 		triggeredOnStart: true
@@ -244,7 +245,7 @@ Singleton {
 	}
 
 	Timer {
-		interval: 2000
+		interval: Config.rssiPoll
 		repeat: true
 		running: root.connectedBt !== null
 		triggeredOnStart: true
@@ -261,10 +262,10 @@ Singleton {
 		stdout: StdioCollector {
 			onStreamFinished: {
 				const match = String(this.text).match(/-?\d+/)
-				root.btRssi = match ? parseInt(match[0], 10) : -999
+				root.btRssi = match ? parseInt(match[0], 10) : Config.rssiUnknown
 			}
 		}
 	}
 
-	onConnectedBtChanged: btRssi = -999
+	onConnectedBtChanged: btRssi = Config.rssiUnknown
 }
