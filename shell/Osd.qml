@@ -4,6 +4,7 @@ Item {
 	id: root
 
 	readonly property string kind: NiriState.osdKind
+	readonly property bool discrete: kind === "usb" || kind === "screen"
 	readonly property real amount: {
 		if (kind === "brightness")
 			return BrightnessState.level
@@ -17,6 +18,10 @@ Item {
 	}
 	readonly property real bar: Math.max(0, Math.min(1, amount))
 	readonly property string label: {
+		if (kind === "usb" || kind === "screen") {
+			const name = NiriState.osdText || (kind === "usb" ? "USB" : "Screen")
+			return name + (NiriState.osdOn ? " plugged in" : " unplugged")
+		}
 		if (kind === "power")
 			return PowerState.plugged ? "Plugged in" : "Unplugged"
 		if (kind === "brightness")
@@ -28,6 +33,10 @@ Item {
 		return Math.round(amount * 100) + "%"
 	}
 	readonly property string glyph: {
+		if (kind === "usb")
+			return String.fromCodePoint(0xF0A72)
+		if (kind === "screen")
+			return String.fromCodePoint(NiriState.osdOn ? 0xF0379 : 0xF0D57)
 		if (kind === "power")
 			return String.fromCodePoint(PowerState.plugged ? 0xF06A5 : 0xF06A6)
 		if (kind === "brightness")
@@ -60,6 +69,7 @@ Item {
 		}
 
 		Rectangle {
+			visible: !root.discrete
 			implicitWidth: 148
 			implicitHeight: 4
 			radius: 2
@@ -79,6 +89,8 @@ Item {
 			color: Theme.foreground
 			font.family: Theme.fontFamily
 			font.pixelSize: Theme.fontSize
+			width: root.discrete ? Math.min(contentWidth, 240) : contentWidth
+			elide: Text.ElideRight
 			anchors.verticalCenter: parent.verticalCenter
 		}
 	}

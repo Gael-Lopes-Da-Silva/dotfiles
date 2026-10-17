@@ -11,6 +11,7 @@ ShellRoot {
 	readonly property bool wifiEnabled: Networking.wifiEnabled
 	readonly property bool bluetoothOn: Bluetooth.defaultAdapter ? Bluetooth.defaultAdapter.enabled : false
 	readonly property int noticeCount: NoticeState.count
+	readonly property bool devicesReady: HotplugState.primed
 
 	Variants {
 		model: Quickshell.screens

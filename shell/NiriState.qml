@@ -16,6 +16,8 @@ Singleton {
 	property string launcherOutput: ""
 
 	property string osdKind: ""
+	property string osdText: ""
+	property bool osdOn: true
 	property bool osdOpen: false
 
 	readonly property string focusedOutput: {
@@ -142,8 +144,10 @@ Singleton {
 		}
 	}
 
-	function showOsd(kind) {
+	function showOsd(kind, text, on) {
 		osdKind = kind
+		osdText = text || ""
+		osdOn = on !== false
 		if (!launcherOpen)
 			osdOpen = true
 		osdTimer.restart()

@@ -37,7 +37,13 @@ PanelWindow {
 		return modelData.name === NiriState.launcherOutput
 	}
 
-	readonly property bool osdHere: NiriState.osdOpen && !NiriState.launcherOpen && focusedHere
+	readonly property bool osdHere: {
+		if (!NiriState.osdOpen || NiriState.launcherOpen)
+			return false
+		if (NiriState.osdKind === "usb" || NiriState.osdKind === "screen")
+			return true
+		return focusedHere
+	}
 
 	readonly property bool fullscreen: {
 		const _ = NiriState.revision
