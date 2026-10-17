@@ -14,9 +14,9 @@ Singleton {
 	readonly property int travel: 8
 
 	// Niri struts use `frame`. Window geometry radius uses `innerRadius`.
-	readonly property int frame: 12
-	readonly property int screenRadius: 28
-	readonly property int innerRadius: screenRadius - frame
+	readonly property int frame: 4
+	readonly property int screenRadius: 12
+	readonly property int innerRadius: screenRadius
 	readonly property int motion: 450
 	readonly property var curve: [0.38, 1.21, 0.22, 1, 1, 1]
 	readonly property int smoothing: 24
@@ -25,6 +25,7 @@ Singleton {
 	readonly property int hoverDelay: 200
 
 	readonly property int fontSize: 14
+	readonly property int clockSize: 22
 	readonly property string fontFamily: "Noto Sans"
 	readonly property string iconFont: "Symbols Nerd Font"
 }

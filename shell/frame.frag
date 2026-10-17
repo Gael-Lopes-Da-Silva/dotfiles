@@ -29,10 +29,11 @@ float sdFrame(vec2 p) {
 	if (thickness < 0.5)
 		return 1e4;
 	vec2 halfSize = vec2(fieldWidth, fieldHeight) * 0.5;
-	float innerRadius = max(radius - thickness, 0.0);
 	vec2 innerHalf = max(halfSize - vec2(thickness), vec2(0.0));
-	float outer = sdRoundBox(p - halfSize, halfSize, radius);
-	float inner = sdRoundBox(p - halfSize, innerHalf, innerRadius);
+	// The outer edge is the screen rectangle, extended past the pixels so the
+	// antialiased fringe falls off-screen and the corners stay filled.
+	float outer = sdRoundBox(p - halfSize, halfSize + vec2(1.0), 0.0);
+	float inner = sdRoundBox(p - halfSize, innerHalf, radius);
 	return max(outer, -inner);
 }
 

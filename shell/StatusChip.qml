@@ -70,7 +70,7 @@ Item {
 			text: root.timeText
 			color: Theme.foreground
 			font.family: Theme.fontFamily
-			font.pixelSize: Theme.fontSize
+			font.pixelSize: Theme.clockSize
 			anchors.verticalCenter: parent.verticalCenter
 		}
 
