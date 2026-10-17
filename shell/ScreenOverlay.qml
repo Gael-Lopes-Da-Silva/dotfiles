@@ -18,7 +18,8 @@ PanelWindow {
 
 	WlrLayershell.layer: WlrLayer.Overlay
 	WlrLayershell.namespace: "shell"
-	WlrLayershell.keyboardFocus: launcherHere ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
+	readonly property bool radioKeys: RadioState.menuPage === "wifi" && RadioState.pending !== null
+	WlrLayershell.keyboardFocus: launcherHere || radioKeys ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
 
 	readonly property bool focusedHere: {
 		const _ = NiriState.revision
@@ -55,7 +56,16 @@ PanelWindow {
 		if (castMode !== "")
 			castHold = castMode
 	}
+	property bool radioWanted: false
+	readonly property string radioPage: RadioState.menuOutput === modelData.name ? RadioState.menuPage : ""
+	property real radioProgress: radioWanted ? 1 : 0
+	property real menuProgress: radioPage !== "" ? 1 : 0
 	property real osdProgress: osdHere ? 1 : 0
+
+	onRadioWantedChanged: {
+		if (!radioWanted && RadioState.menuOutput === modelData.name)
+			RadioState.closeMenu()
+	}
 	property real launcherProgress: launcherHere ? 1 : 0
 	property real launcherFullH: launcherBody.implicitHeight
 
@@ -86,6 +96,22 @@ PanelWindow {
 	}
 
 	Behavior on castProgress {
+		NumberAnimation {
+			duration: Theme.motion
+			easing.type: Easing.BezierSpline
+			easing.bezierCurve: Theme.curve
+		}
+	}
+
+	Behavior on radioProgress {
+		NumberAnimation {
+			duration: Theme.motion
+			easing.type: Easing.BezierSpline
+			easing.bezierCurve: Theme.curve
+		}
+	}
+
+	Behavior on menuProgress {
 		NumberAnimation {
 			duration: Theme.motion
 			easing.type: Easing.BezierSpline
@@ -126,6 +152,15 @@ PanelWindow {
 		}
 	}
 
+	function syncRadio() {
+		if (radioCornerHover.hovered || radioHover.hovered) {
+			radioTimer.stop()
+			radioWanted = true
+		} else {
+			radioTimer.restart()
+		}
+	}
+
 	BlobField {
 		anchors.fill: parent
 		thickness: root.frameThickness
@@ -136,7 +171,9 @@ PanelWindow {
 		panel1: Qt.vector4d(osdClip.x, osdClip.y, osdClip.width, osdClip.height)
 		panel2: Qt.vector4d(launcherClip.x, launcherClip.y, launcherClip.width, launcherClip.height)
 		panel3: Qt.vector4d(castClip.x, castClip.y, castClip.width, castClip.height)
+		panel4: Qt.vector4d(radioClip.x, radioClip.y, radioClip.width, radioClip.height)
 		panelRadius: Qt.vector4d(Theme.screenRadius, Theme.screenRadius, Theme.screenRadius, Theme.screenRadius)
+		panel4Radius: Theme.screenRadius
 	}
 
 	MouseArea {
@@ -264,12 +301,78 @@ PanelWindow {
 		}
 	}
 
+	Item {
+		id: radioCorner
+		z: 2
+		anchors.left: parent.left
+		anchors.bottom: parent.bottom
+		width: 16
+		height: 16
+
+		HoverHandler {
+			id: radioCornerHover
+			onHoveredChanged: root.syncRadio()
+		}
+	}
+
+	Item {
+		id: radioClip
+		z: 3
+		width: Math.max(radioChip.implicitWidth, radioMenu.implicitWidth * root.menuProgress) * root.radioProgress
+		height: (radioChip.implicitHeight + radioMenu.implicitHeight * root.menuProgress) * root.radioProgress
+		x: root.frameThickness - root.weld
+		y: root.height - root.frameThickness - height + root.weld
+		clip: true
+		visible: width > 2 && height > 2
+
+		RadioMenu {
+			id: radioMenu
+			anchors.left: parent.left
+			anchors.bottom: radioChip.top
+			opacity: root.menuProgress > 0.45 ? 1 : 0
+
+			Behavior on opacity {
+				NumberAnimation { duration: Theme.fade }
+			}
+		}
+
+		RadioChip {
+			id: radioChip
+			anchors.left: parent.left
+			anchors.bottom: parent.bottom
+			opacity: root.radioProgress > 0.72 ? 1 : 0
+			onPicked: page => {
+				root.radioWanted = true
+				radioTimer.stop()
+				RadioState.toggleMenu(root.modelData.name, page)
+			}
+
+			Behavior on opacity {
+				NumberAnimation { duration: Theme.fade }
+			}
+		}
+
+		HoverHandler {
+			id: radioHover
+			onHoveredChanged: root.syncRadio()
+		}
+	}
+
 	Timer {
 		id: statusTimer
 		interval: Theme.hoverDelay
 		onTriggered: {
 			if (!cornerHover.hovered && !chipHover.hovered)
 				root.statusWanted = false
+		}
+	}
+
+	Timer {
+		id: radioTimer
+		interval: Theme.hoverDelay
+		onTriggered: {
+			if (!radioCornerHover.hovered && !radioHover.hovered)
+				root.radioWanted = false
 		}
 	}
 
@@ -281,6 +384,12 @@ PanelWindow {
 		}
 		Region {
 			item: castClip
+		}
+		Region {
+			item: radioCorner
+		}
+		Region {
+			item: radioClip
 		}
 	}
 }

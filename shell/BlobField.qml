@@ -11,7 +11,9 @@ Item {
 	property vector4d panel1: Qt.vector4d(0, 0, 0, 0)
 	property vector4d panel2: Qt.vector4d(0, 0, 0, 0)
 	property vector4d panel3: Qt.vector4d(0, 0, 0, 0)
+	property vector4d panel4: Qt.vector4d(0, 0, 0, 0)
 	property vector4d panelRadius: Qt.vector4d(0, 0, 0, 0)
+	property real panel4Radius: 0
 
 	ShaderEffect {
 		anchors.fill: parent
@@ -29,6 +31,8 @@ Item {
 		property vector4d panel3: root.panel3
 		property vector4d panelRadius: root.panelRadius
 		property color surface: root.color
+		property vector4d panel4: root.panel4
+		property real panel4Radius: root.panel4Radius
 	}
 }
 
