@@ -79,5 +79,61 @@ Item {
 				onClicked: root.picked("bluetooth")
 			}
 		}
+
+		Item {
+			implicitWidth: audioIcon.implicitWidth + Theme.padding
+			implicitHeight: audioIcon.implicitHeight + Theme.padding
+			width: implicitWidth
+			height: implicitHeight
+
+			Rectangle {
+				anchors.fill: parent
+				radius: 8
+				color: RadioState.menuPage === "audio" ? Qt.rgba(1, 1, 1, 0.12) : "transparent"
+			}
+
+			Text {
+				id: audioIcon
+				anchors.centerIn: parent
+				text: AudioState.volumeGlyph(AudioState.sinkLevel, AudioState.sinkMuted)
+				color: root.tone(!AudioState.sinkMuted, 1)
+				font.family: Theme.iconFont
+				font.pixelSize: Theme.clockSize
+			}
+
+			MouseArea {
+				anchors.fill: parent
+				cursorShape: Qt.PointingHandCursor
+				onClicked: root.picked("audio")
+			}
+		}
+
+		Item {
+			implicitWidth: micIcon.implicitWidth + Theme.padding
+			implicitHeight: micIcon.implicitHeight + Theme.padding
+			width: implicitWidth
+			height: implicitHeight
+
+			Rectangle {
+				anchors.fill: parent
+				radius: 8
+				color: RadioState.menuPage === "microphone" ? Qt.rgba(1, 1, 1, 0.12) : "transparent"
+			}
+
+			Text {
+				id: micIcon
+				anchors.centerIn: parent
+				text: AudioState.micGlyph(AudioState.sourceMuted)
+				color: root.tone(!AudioState.sourceMuted && AudioState.source !== null, 1)
+				font.family: Theme.iconFont
+				font.pixelSize: Theme.clockSize
+			}
+
+			MouseArea {
+				anchors.fill: parent
+				cursorShape: Qt.PointingHandCursor
+				onClicked: root.picked("microphone")
+			}
+		}
 	}
 }

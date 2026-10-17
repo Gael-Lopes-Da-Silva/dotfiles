@@ -9,6 +9,8 @@ Item {
 			return BrightnessState.level
 		if (kind === "power")
 			return PowerState.level
+		if (kind === "microphone")
+			return AudioState.micMuted ? 0 : AudioState.micVolume
 		if (AudioState.muted)
 			return 0
 		return AudioState.volume
@@ -19,6 +21,8 @@ Item {
 			return PowerState.plugged ? "Plugged in" : "Unplugged"
 		if (kind === "brightness")
 			return Math.round(amount * 100) + "%"
+		if (kind === "microphone")
+			return AudioState.levelText(AudioState.micVolume, AudioState.micMuted)
 		if (AudioState.muted)
 			return "Muted"
 		return Math.round(amount * 100) + "%"
@@ -28,6 +32,8 @@ Item {
 			return String.fromCodePoint(PowerState.plugged ? 0xF06A5 : 0xF06A6)
 		if (kind === "brightness")
 			return String.fromCodePoint(0xF00DF)
+		if (kind === "microphone")
+			return AudioState.micGlyph(AudioState.micMuted || amount <= 0.001)
 		if (AudioState.muted || amount <= 0.001)
 			return String.fromCodePoint(0xF075F)
 		if (amount < 0.33)
