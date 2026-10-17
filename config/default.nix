@@ -767,35 +767,22 @@
               spawn = [ "firefox" ];
             };
 
-            "XF86AudioRaiseVolume".spawn = [ "qs" "-c" "shell" "ipc" "call" "osd" "raiseVolume" ];
-            "XF86AudioLowerVolume".spawn = [ "qs" "-c" "shell" "ipc" "call" "osd" "lowerVolume" ];
-            "XF86AudioMute".spawn = [ "qs" "-c" "shell" "ipc" "call" "osd" "mute" ];
-            "XF86AudioMicMute".spawn = [ "qs" "-c" "shell" "ipc" "call" "osd" "muteSource" ];
+            "XF86AudioRaiseVolume".spawn-sh = [
+              "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0"
+            ];
+            "XF86AudioLowerVolume".spawn-sh = [
+              "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"
+            ];
+            "XF86AudioMute".spawn-sh = [ "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle" ];
+            "XF86AudioMicMute".spawn-sh = [ "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle" ];
 
-            "XF86AudioPlay".spawn = [ "qs" "-c" "shell" "ipc" "call" "osd" "playPause" ];
-            "XF86AudioStop".spawn = [ "qs" "-c" "shell" "ipc" "call" "osd" "stop" ];
-            "XF86AudioPrev".spawn = [ "qs" "-c" "shell" "ipc" "call" "osd" "previous" ];
-            "XF86AudioNext".spawn = [ "qs" "-c" "shell" "ipc" "call" "osd" "next" ];
+            "XF86AudioPlay".spawn-sh = [ "playerctl play-pause" ];
+            "XF86AudioStop".spawn-sh = [ "playerctl stop" ];
+            "XF86AudioPrev".spawn-sh = [ "playerctl previous" ];
+            "XF86AudioNext".spawn-sh = [ "playerctl next" ];
 
-            "XF86MonBrightnessUp".spawn = [ "qs" "-c" "shell" "ipc" "call" "osd" "brightnessUp" ];
-            "XF86MonBrightnessDown".spawn = [ "qs" "-c" "shell" "ipc" "call" "osd" "brightnessDown" ];
-
-            "Mod+T" = {
-              _props.repeat = false;
-              spawn = [ "qs" "-c" "shell" "ipc" "call" "glance" "open" ];
-            };
-            "Mod+A" = {
-              _props.repeat = false;
-              spawn = [ "qs" "-c" "shell" "ipc" "call" "launcher" "toggle" ];
-            };
-            "Mod+N" = {
-              _props.repeat = false;
-              spawn = [ "qs" "-c" "shell" "ipc" "call" "controls" "toggle" ];
-            };
-            "Mod+V" = {
-              _props.repeat = false;
-              spawn = [ "qs" "-c" "shell" "ipc" "call" "notifications" "toggle" ];
-            };
+            "XF86MonBrightnessUp".spawn-sh = [ "brightnessctl --class=backlight set +10%" ];
+            "XF86MonBrightnessDown".spawn-sh = [ "brightnessctl --class=backlight set 10%-" ];
 
             "Mod+Left".focus-column-left = { };
             "Mod+Down".focus-window-down = { };
