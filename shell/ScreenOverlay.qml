@@ -19,7 +19,8 @@ PanelWindow {
 	WlrLayershell.layer: WlrLayer.Overlay
 	WlrLayershell.namespace: "shell"
 	readonly property bool radioKeys: RadioState.menuPage === "wifi" && RadioState.pending !== null
-	WlrLayershell.keyboardFocus: launcherHere || radioKeys ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
+	readonly property bool noticeKeys: NoticeState.replying && focusedHere
+	WlrLayershell.keyboardFocus: launcherHere || radioKeys || noticeKeys ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
 
 	readonly property bool focusedHere: {
 		const _ = NiriState.revision
@@ -71,9 +72,9 @@ PanelWindow {
 
 	readonly property real weld: Math.min(Theme.weld, frameThickness)
 	readonly property real noticeTop: {
-		const belowClock = statusClip.y + statusClip.height + Theme.gap
-		const belowCorner = 16 + Theme.gap
-		return Math.max(belowCorner, belowClock)
+		const underClock = statusClip.y + statusClip.height - weld
+		const onFrame = frameThickness - weld
+		return Math.max(onFrame, underClock)
 	}
 
 	Behavior on frameThickness {
@@ -177,8 +178,10 @@ PanelWindow {
 		panel2: Qt.vector4d(launcherClip.x, launcherClip.y, launcherClip.width, launcherClip.height)
 		panel3: Qt.vector4d(castClip.x, castClip.y, castClip.width, castClip.height)
 		panel4: Qt.vector4d(radioClip.x, radioClip.y, radioClip.width, radioClip.height)
+		panel5: Qt.vector4d(noticeClip.x, noticeClip.y, noticeClip.width, noticeClip.height)
 		panelRadius: Qt.vector4d(Theme.screenRadius, Theme.screenRadius, Theme.screenRadius, Theme.screenRadius)
 		panel4Radius: Theme.screenRadius
+		panel5Radius: Theme.screenRadius
 	}
 
 	MouseArea {
@@ -191,7 +194,7 @@ PanelWindow {
 
 	Item {
 		id: hotCorner
-		z: 2
+		z: 4
 		anchors.top: parent.top
 		anchors.right: parent.right
 		width: 16
@@ -236,7 +239,7 @@ PanelWindow {
 		visible: root.focusedHere && height > 2
 		width: notices.implicitWidth
 		height: root.focusedHere ? notices.implicitHeight : 0
-		x: root.width - root.frameThickness - width - Theme.gap
+		x: root.width - root.frameThickness - width + root.weld
 		y: root.noticeTop
 
 		Notifications {
