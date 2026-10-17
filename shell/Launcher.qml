@@ -1,6 +1,6 @@
 import QtQuick
 import Quickshell
-import Quickshell.Widgets
+import Quickshell.Io
 
 Item {
 	id: root
@@ -9,8 +9,12 @@ Item {
 	property string query: ""
 	property int selected: 0
 
-	readonly property int rowHeight: 42
+	readonly property int rowHeight: 48
+	readonly property int iconSize: 26
+	readonly property int textSize: Theme.fontSize + 4
 	readonly property int fieldWidth: 440
+	property int iconToken: 0
+	property var iconFiles: ({})
 	readonly property var results: {
 		const model = DesktopEntries.applications
 		const apps = model && model.values ? model.values : []
@@ -33,7 +37,44 @@ Item {
 	onResultsChanged: {
 		if (selected >= results.length)
 			selected = 0
+		resolveIcons()
 	}
+
+	function resolveIcons() {
+		iconToken++
+		const names = []
+		for (let i = 0; i < results.length; i++)
+			names.push(results[i].icon || "application-x-executable")
+		iconResolver.exec([
+			"sh",
+			Qt.resolvedUrl("resolve-icons.sh").toString().replace(/^file:\/\//, ""),
+			String(iconToken),
+			names.join("\n")
+		])
+	}
+
+	function iconSource(name) {
+		const path = iconFiles[name || ""] || ""
+		if (path)
+			return "file://" + path
+		return Quickshell.iconPath(name || "", "application-x-executable")
+	}
+
+	Process {
+		id: iconResolver
+		stdout: SplitParser {
+			onRead: line => {
+				const parts = String(line).split("\t")
+				if (parts.length < 3 || Number(parts[0]) !== root.iconToken)
+					return
+				const next = Object.assign({}, root.iconFiles)
+				next[parts[1]] = parts[2]
+				root.iconFiles = next
+			}
+		}
+	}
+
+	Component.onCompleted: resolveIcons()
 
 	onOpenChanged: {
 		if (open)
@@ -85,9 +126,15 @@ Item {
 					anchors.rightMargin: 10
 					spacing: Theme.gap
 
-					IconImage {
-						source: Quickshell.iconPath(modelData.icon || "", "application-x-executable")
-						implicitSize: 22
+					Image {
+						source: root.iconSource(modelData.icon || "application-x-executable")
+						width: root.iconSize
+						height: root.iconSize
+						sourceSize.width: root.iconSize * 2
+						sourceSize.height: root.iconSize * 2
+						fillMode: Image.PreserveAspectFit
+						smooth: true
+						mipmap: true
 						anchors.verticalCenter: parent.verticalCenter
 					}
 
@@ -95,9 +142,9 @@ Item {
 						text: modelData.name
 						color: Theme.foreground
 						font.family: Theme.fontFamily
-						font.pixelSize: Theme.fontSize
+						font.pixelSize: root.textSize
 						elide: Text.ElideRight
-						width: parent.width - 22 - Theme.gap
+						width: parent.width - root.iconSize - Theme.gap
 						anchors.verticalCenter: parent.verticalCenter
 					}
 				}
@@ -117,7 +164,7 @@ Item {
 			text: "No matches"
 			color: Qt.rgba(Theme.foreground.r, Theme.foreground.g, Theme.foreground.b, 0.55)
 			font.family: Theme.fontFamily
-			font.pixelSize: Theme.fontSize
+			font.pixelSize: root.textSize
 			width: root.fieldWidth
 			leftPadding: 10
 			topPadding: 8
@@ -137,7 +184,7 @@ Item {
 				anchors.rightMargin: 10
 				color: Theme.foreground
 				font.family: Theme.fontFamily
-				font.pixelSize: Theme.fontSize
+				font.pixelSize: root.textSize
 				clip: true
 				selectByMouse: true
 				text: root.query
