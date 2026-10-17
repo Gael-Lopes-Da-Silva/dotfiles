@@ -14,6 +14,7 @@ layout(std140, binding = 0) uniform buf {
 	vec4 panel0;
 	vec4 panel1;
 	vec4 panel2;
+	vec4 panel3;
 	vec4 panelRadius;
 	vec4 surface;
 };
@@ -71,6 +72,7 @@ float shapeDistance(vec2 p) {
 	d = smin(d, sdPanel(p, panel0, panelRadius.x), smoothing);
 	d = smin(d, sdPanel(p, panel1, panelRadius.y), smoothing);
 	d = smin(d, sdPanel(p, panel2, panelRadius.z), smoothing);
+	d = smin(d, sdPanel(p, panel3, panelRadius.w), smoothing);
 	return d;
 }
 

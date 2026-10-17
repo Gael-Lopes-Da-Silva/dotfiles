@@ -46,6 +46,15 @@ PanelWindow {
 	property real frameRadius: fullscreen ? 0 : Theme.screenRadius
 	property bool statusWanted: false
 	property real statusProgress: statusWanted ? 1 : 0
+	readonly property string castMode: NiriState.castMode(modelData.name)
+	property string castHold: "recording"
+	readonly property string castLabel: castMode !== "" ? castMode : castHold
+	property real castProgress: castMode !== "" ? 1 : 0
+
+	onCastModeChanged: {
+		if (castMode !== "")
+			castHold = castMode
+	}
 	property real osdProgress: osdHere ? 1 : 0
 	property real launcherProgress: launcherHere ? 1 : 0
 	property real launcherFullH: launcherBody.implicitHeight
@@ -69,6 +78,14 @@ PanelWindow {
 	}
 
 	Behavior on statusProgress {
+		NumberAnimation {
+			duration: Theme.motion
+			easing.type: Easing.BezierSpline
+			easing.bezierCurve: Theme.curve
+		}
+	}
+
+	Behavior on castProgress {
 		NumberAnimation {
 			duration: Theme.motion
 			easing.type: Easing.BezierSpline
@@ -118,7 +135,8 @@ PanelWindow {
 		panel0: Qt.vector4d(statusClip.x, statusClip.y, statusClip.width, statusClip.height)
 		panel1: Qt.vector4d(osdClip.x, osdClip.y, osdClip.width, osdClip.height)
 		panel2: Qt.vector4d(launcherClip.x, launcherClip.y, launcherClip.width, launcherClip.height)
-		panelRadius: Qt.vector4d(Theme.screenRadius, Theme.screenRadius, Theme.screenRadius, 0)
+		panel3: Qt.vector4d(castClip.x, castClip.y, castClip.width, castClip.height)
+		panelRadius: Qt.vector4d(Theme.screenRadius, Theme.screenRadius, Theme.screenRadius, Theme.screenRadius)
 	}
 
 	MouseArea {
@@ -167,6 +185,29 @@ PanelWindow {
 		HoverHandler {
 			id: chipHover
 			onHoveredChanged: root.syncStatus()
+		}
+	}
+
+	Item {
+		id: castClip
+		z: 3
+		width: castBody.implicitWidth * root.castProgress
+		height: castBody.implicitHeight * root.castProgress
+		x: root.frameThickness - root.weld
+		y: root.frameThickness - root.weld
+		clip: true
+		visible: width > 2 && height > 2
+
+		CastIndicator {
+			id: castBody
+			mode: root.castLabel
+			anchors.top: parent.top
+			anchors.left: parent.left
+			opacity: root.castProgress > 0.72 ? 1 : 0
+
+			Behavior on opacity {
+				NumberAnimation { duration: Theme.fade }
+			}
 		}
 	}
 

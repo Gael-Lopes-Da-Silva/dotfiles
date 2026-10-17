@@ -9,6 +9,7 @@ Singleton {
 
 	property var workspaces: []
 	property var windows: ({})
+	property var casts: ({})
 	property int revision: 0
 
 	property bool launcherOpen: false
@@ -76,6 +77,52 @@ Singleton {
 		launcherOpen = false
 		if (osdTimer.running)
 			osdOpen = true
+	}
+
+	function castIsLive(cast) {
+		if (!cast)
+			return false
+		const target = cast.target || {}
+		return cast.is_active === true || !!target.Output || !!target.Window
+	}
+
+	function castMode(outputName) {
+		const _ = revision
+		let recording = false
+		let casting = false
+		const values = Object.values(casts)
+		for (let i = 0; i < values.length; i++) {
+			const cast = values[i]
+			if (!castIsLive(cast))
+				continue
+			const target = cast.target || {}
+			if (target.Output) {
+				if (target.Output.name === outputName)
+					recording = true
+				continue
+			}
+			if (target.Window) {
+				const win = windows[target.Window.id]
+				if (!win) {
+					casting = true
+					continue
+				}
+				let output = ""
+				for (let w = 0; w < workspaces.length; w++) {
+					if (workspaces[w].id === win.workspace_id)
+						output = workspaces[w].output
+				}
+				if (output === "" || output === outputName)
+					casting = true
+				continue
+			}
+			recording = true
+		}
+		if (recording)
+			return "recording"
+		if (casting)
+			return "casting"
+		return ""
 	}
 
 	function showOsd(kind) {
@@ -148,6 +195,21 @@ Singleton {
 				})
 			}
 			windows = next
+		} else if (event.CastsChanged) {
+			const next = {}
+			const list = event.CastsChanged.casts || []
+			for (let i = 0; i < list.length; i++)
+				next[list[i].stream_id] = list[i]
+			casts = next
+		} else if (event.CastStartedOrChanged) {
+			const cast = event.CastStartedOrChanged.cast
+			const next = Object.assign({}, casts)
+			next[cast.stream_id] = cast
+			casts = next
+		} else if (event.CastStopped) {
+			const next = Object.assign({}, casts)
+			delete next[event.CastStopped.stream_id]
+			casts = next
 		} else if (event.WindowLayoutsChanged) {
 			const next = Object.assign({}, windows)
 			const changes = event.WindowLayoutsChanged.changes

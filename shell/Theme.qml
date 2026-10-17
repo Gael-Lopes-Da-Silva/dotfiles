@@ -6,6 +6,7 @@ import Quickshell
 Singleton {
 	readonly property color background: "#242424"
 	readonly property color foreground: "#eeeeee"
+	readonly property color recording: "#ff5c5c"
 
 	readonly property int radius: 12
 	readonly property int padding: 14
