@@ -4,7 +4,9 @@ Item {
 	id: root
 
 	property string mode: "recording"
+	property string output: ""
 	property bool shown: false
+	property bool hovered: pointer.containsMouse
 	property real iconSize: Theme.clockSize
 	property real shrink: 0
 	property bool animateSize: true
@@ -12,6 +14,8 @@ Item {
 	readonly property real fullWidth: fullIcon.implicitWidth + Theme.padding * 1.5
 	readonly property real fullHeight: fullIcon.implicitHeight + Theme.padding * 1.5
 
+	width: implicitWidth
+	height: implicitHeight
 	implicitWidth: fullWidth / (1 + 1 * shrink)
 	implicitHeight: fullHeight / (1 + 1 * shrink)
 
@@ -48,13 +52,32 @@ Item {
 	Timer {
 		id: settle
 		interval: Theme.castSettle
-		onTriggered: root.shrink = 1
+		onTriggered: {
+			if (!root.hovered)
+				root.shrink = 1
+		}
+	}
+
+	MouseArea {
+		id: pointer
+		anchors.fill: parent
+		hoverEnabled: true
+		cursorShape: Qt.PointingHandCursor
+		onContainsMouseChanged: {
+			if (containsMouse) {
+				settle.stop()
+				root.shrink = 0
+			} else if (root.shown) {
+				settle.restart()
+			}
+		}
+		onClicked: NiriState.stopCasts(root.output)
 	}
 
 	Text {
 		id: fullIcon
 		visible: false
-		text: icon.text
+		text: String.fromCodePoint(root.mode === "casting" ? 0xF0118 : 0xF0EC2)
 		font.family: Theme.iconFont
 		font.pixelSize: root.iconSize
 	}
@@ -62,7 +85,7 @@ Item {
 	Text {
 		id: icon
 		anchors.centerIn: parent
-		text: String.fromCodePoint(root.mode === "casting" ? 0xF0118 : 0xF0EC2)
+		text: String.fromCodePoint(root.hovered ? 0xF0666 : (root.mode === "casting" ? 0xF0118 : 0xF0EC2))
 		color: Theme.recording
 		font.family: Theme.iconFont
 		font.pixelSize: root.iconSize / (1 + root.shrink)

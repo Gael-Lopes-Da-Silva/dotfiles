@@ -201,6 +201,7 @@ PanelWindow {
 		CastIndicator {
 			id: castBody
 			mode: root.castLabel
+			output: root.modelData.name
 			shown: root.castMode !== ""
 			anchors.top: parent.top
 			anchors.left: parent.left
@@ -277,6 +278,9 @@ PanelWindow {
 
 		Region {
 			item: statusClip
+		}
+		Region {
+			item: castClip
 		}
 	}
 }

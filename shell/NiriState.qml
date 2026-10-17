@@ -86,6 +86,25 @@ Singleton {
 		return cast.is_active === true || !!target.Output || !!target.Window
 	}
 
+	function castAffects(cast, outputName) {
+		if (!castIsLive(cast))
+			return false
+		const target = cast.target || {}
+		if (target.Output)
+			return target.Output.name === outputName
+		if (target.Window) {
+			const win = windows[target.Window.id]
+			if (!win)
+				return true
+			for (let w = 0; w < workspaces.length; w++) {
+				if (workspaces[w].id === win.workspace_id)
+					return workspaces[w].output === "" || workspaces[w].output === outputName
+			}
+			return true
+		}
+		return true
+	}
+
 	function castMode(outputName) {
 		const _ = revision
 		let recording = false
@@ -93,36 +112,34 @@ Singleton {
 		const values = Object.values(casts)
 		for (let i = 0; i < values.length; i++) {
 			const cast = values[i]
-			if (!castIsLive(cast))
+			if (!castAffects(cast, outputName))
 				continue
 			const target = cast.target || {}
-			if (target.Output) {
-				if (target.Output.name === outputName)
-					recording = true
-				continue
-			}
-			if (target.Window) {
-				const win = windows[target.Window.id]
-				if (!win) {
-					casting = true
-					continue
-				}
-				let output = ""
-				for (let w = 0; w < workspaces.length; w++) {
-					if (workspaces[w].id === win.workspace_id)
-						output = workspaces[w].output
-				}
-				if (output === "" || output === outputName)
-					casting = true
-				continue
-			}
-			recording = true
+			if (target.Window && !target.Output)
+				casting = true
+			else
+				recording = true
 		}
 		if (recording)
 			return "recording"
 		if (casting)
 			return "casting"
 		return ""
+	}
+
+	function stopCasts(outputName) {
+		const seen = {}
+		const values = Object.values(casts)
+		for (let i = 0; i < values.length; i++) {
+			const cast = values[i]
+			if (!castAffects(cast, outputName) || cast.kind !== "PipeWire")
+				continue
+			const id = cast.session_id
+			if (id === undefined || id === null || seen[id])
+				continue
+			seen[id] = true
+			Quickshell.execDetached(["niri", "msg", "action", "stop-cast", "--session-id", String(id)])
+		}
 	}
 
 	function showOsd(kind) {
