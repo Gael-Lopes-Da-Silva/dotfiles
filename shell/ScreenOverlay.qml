@@ -201,6 +201,7 @@ PanelWindow {
 		CastIndicator {
 			id: castBody
 			mode: root.castLabel
+			shown: root.castMode !== ""
 			anchors.top: parent.top
 			anchors.left: parent.left
 			opacity: root.castProgress > 0.72 ? 1 : 0
