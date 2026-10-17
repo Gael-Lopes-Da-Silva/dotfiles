@@ -13,8 +13,11 @@ Item {
 	readonly property int iconSize: 26
 	readonly property int textSize: Theme.fontSize + 4
 	readonly property int fieldWidth: 440
-	property int iconToken: 0
 	property var iconFiles: ({})
+	readonly property var iconSizes: [
+		"512x512", "512x512@2", "256x256", "256x256@2",
+		"128x128", "128x128@2", "64x64", "48x48", "32x32"
+	]
 	readonly property var results: {
 		const model = DesktopEntries.applications
 		const apps = model && model.values ? model.values : []
@@ -41,37 +44,110 @@ Item {
 	}
 
 	function resolveIcons() {
-		iconToken++
-		const names = []
-		for (let i = 0; i < results.length; i++)
-			names.push(results[i].icon || "application-x-executable")
-		iconResolver.exec([
-			"sh",
-			Qt.resolvedUrl("resolve-icons.sh").toString().replace(/^file:\/\//, ""),
-			String(iconToken),
-			names.join("\n")
-		])
+		if (!files)
+			return
+		const next = Object.assign({}, iconFiles)
+		let changed = false
+		for (let i = 0; i < results.length; i++) {
+			const name = results[i].icon || "application-x-executable"
+			if (next[name])
+				continue
+			next[name] = locateIcon(name)
+			changed = true
+		}
+		if (changed)
+			iconFiles = next
 	}
 
 	function iconSource(name) {
-		const path = iconFiles[name || ""] || ""
-		if (path)
-			return "file://" + path
+		const url = iconFiles[name || ""] || ""
+		if (url)
+			return url
 		return Quickshell.iconPath(name || "", "application-x-executable")
 	}
 
-	Process {
-		id: iconResolver
-		stdout: SplitParser {
-			onRead: line => {
-				const parts = String(line).split("\t")
-				if (parts.length < 3 || Number(parts[0]) !== root.iconToken)
-					return
-				const next = Object.assign({}, root.iconFiles)
-				next[parts[1]] = parts[2]
-				root.iconFiles = next
-			}
+	function locateIcon(name) {
+		if (name.charAt(0) === "/" || name.indexOf("file://") === 0) {
+			const path = name.replace(/^file:\/\//, "")
+			const direct = iconUrl(path)
+			if (direct)
+				return direct
 		}
+
+		const raw = Quickshell.env("XDG_DATA_DIRS")
+		const dirs = raw ? String(raw).split(":") : []
+		for (let d = 0; d < dirs.length; d++) {
+			const dir = dirs[d]
+			if (!dir)
+				continue
+			for (let s = 0; s < iconSizes.length; s++) {
+				const png = dir + "/icons/hicolor/" + iconSizes[s] + "/apps/" + name + ".png"
+				if (fileExists(png))
+					return "file://" + png
+			}
+			const svg = iconUrl(dir + "/icons/hicolor/scalable/apps/" + name + ".svg")
+			if (svg)
+				return svg
+			const pix = dir + "/pixmaps/" + name + ".png"
+			if (fileExists(pix))
+				return "file://" + pix
+		}
+		return Quickshell.iconPath(name, "application-x-executable")
+	}
+
+	// Qt paints <clipPath> geometry and enable-background as an opaque black square.
+	function iconUrl(path) {
+		if (path.slice(-4) !== ".svg" && path.slice(-5) !== ".svgz")
+			return fileExists(path) ? "file://" + path : ""
+		if (path.slice(-5) === ".svgz")
+			return fileExists(path) ? "file://" + path : ""
+		const text = readText(path)
+		if (!text)
+			return ""
+		if (text.indexOf("clipPath") === -1 && text.indexOf("enable-background") === -1)
+			return "file://" + path
+		const cleaned = text
+			.replace(/enable-background\s*=\s*"[^"]*"/gi, "")
+			.replace(/enable-background\s*:\s*[^;"]*/gi, "")
+			.replace(/<clipPath\b[^>]*>[\s\S]*?<\/clipPath>/gi, "")
+		return "data:image/svg+xml;base64," + base64(cleaned)
+	}
+
+	function fileExists(path) {
+		files.path = path
+		const data = files.data()
+		const size = data ? (data.byteLength || data.length || 0) : 0
+		return files.loaded && size > 0
+	}
+
+	function readText(path) {
+		files.path = path
+		const text = files.text()
+		return files.loaded ? text : ""
+	}
+
+	function base64(text) {
+		const bytes = []
+		for (let i = 0; i < text.length; i++) {
+			let c = text.charCodeAt(i)
+			if (c < 0x80)
+				bytes.push(c)
+			else if (c < 0x800)
+				bytes.push(0xc0 | (c >> 6), 0x80 | (c & 63))
+			else if (c >= 0xd800 && c <= 0xdbff && i + 1 < text.length) {
+				const u = 0x10000 + ((c & 0x3ff) << 10) + (text.charCodeAt(++i) & 0x3ff)
+				bytes.push(0xf0 | (u >> 18), 0x80 | ((u >> 12) & 63), 0x80 | ((u >> 6) & 63), 0x80 | (u & 63))
+			} else
+				bytes.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63))
+		}
+		return Qt.btoa(bytes)
+	}
+
+	FileView {
+		id: files
+		preload: false
+		blockAllReads: true
+		printErrors: false
 	}
 
 	Component.onCompleted: resolveIcons()
