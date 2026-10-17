@@ -18,6 +18,7 @@ Singleton {
 	property var sinkNodes: []
 	property var sourceNodes: []
 	property var streamNodes: []
+	property var captureNodes: []
 
 	readonly property var sink: Pipewire.defaultAudioSink
 	readonly property var source: Pipewire.defaultAudioSource
@@ -47,6 +48,8 @@ Singleton {
 			add(sourceNodes[i])
 		for (let i = 0; i < streamNodes.length; i++)
 			add(streamNodes[i])
+		for (let i = 0; i < captureNodes.length; i++)
+			add(captureNodes[i])
 		return list
 	}
 
@@ -109,6 +112,7 @@ Singleton {
 		const sinks = []
 		const sources = []
 		const streams = []
+		const captures = []
 		for (let i = 0; i < list.length; i++) {
 			const node = list[i]
 			if (!node || !node.audio)
@@ -123,7 +127,9 @@ Singleton {
 				streams.push(node)
 			else if (!stream && sinkBit)
 				sinks.push(node)
-			if (!stream && sourceBit && !isMonitor(node))
+			if (stream && sourceBit && !isMonitor(node))
+				captures.push(node)
+			else if (!stream && sourceBit && !isMonitor(node))
 				sources.push(node)
 		}
 		const sinkId = sink ? sink.id : -1
@@ -143,15 +149,19 @@ Singleton {
 			return nodeLabel(a).localeCompare(nodeLabel(b))
 		})
 		streams.sort((a, b) => streamLabel(a).localeCompare(streamLabel(b)))
+		captures.sort((a, b) => streamLabel(a).localeCompare(streamLabel(b)))
 		const nextSinks = sinks.slice(0, Config.audioLimit)
 		const nextSources = sources.slice(0, Config.audioLimit)
 		const nextStreams = streams.slice(0, Config.audioLimit)
+		const nextCaptures = captures.slice(0, Config.audioLimit)
 		if (!sameNodes(sinkNodes, nextSinks))
 			sinkNodes = nextSinks
 		if (!sameNodes(sourceNodes, nextSources))
 			sourceNodes = nextSources
 		if (!sameNodes(streamNodes, nextStreams))
 			streamNodes = nextStreams
+		if (!sameNodes(captureNodes, nextCaptures))
+			captureNodes = nextCaptures
 	}
 
 	function sameNodes(current, next) {

@@ -158,7 +158,7 @@ Column {
 			Column {
 				id: list
 				width: flick.width
-				spacing: 0
+				spacing: Theme.menuSpacing
 
 				Repeater {
 					model: NoticeState.history
@@ -178,16 +178,30 @@ Column {
 						readonly property bool marked: shell || icon !== ""
 
 						width: list.width
-						implicitHeight: copy.implicitHeight + Theme.padding * 2 + Theme.gap
+						implicitHeight: copy.implicitHeight + Theme.inset * 2
 						height: implicitHeight
+
+						Rectangle {
+							anchors.fill: parent
+							anchors.leftMargin: Theme.inset
+							anchors.rightMargin: Theme.inset
+							radius: Theme.rowRadius
+							color: rowHover.hovered ? Theme.ink(Theme.hover) : "transparent"
+						}
+
+						HoverHandler {
+							id: rowHover
+						}
 
 						Column {
 							id: copy
 							anchors.left: parent.left
 							anchors.right: parent.right
 							anchors.top: parent.top
-							anchors.margins: Theme.padding
-							spacing: 8
+							anchors.leftMargin: Theme.inset + 6
+							anchors.rightMargin: Theme.inset + 6
+							anchors.topMargin: Theme.inset
+							spacing: Theme.menuSpacing
 
 							Item {
 								width: parent.width

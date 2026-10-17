@@ -620,7 +620,7 @@ Item {
 		Text {
 			visible: root.page === "audio" && AudioState.streamNodes.length === 0
 			width: parent.width
-			text: "No app audio"
+			text: "No applications"
 			color: root.ink(Theme.muted)
 			font.family: Theme.fontFamily
 			font.pixelSize: Theme.fontSize
@@ -847,6 +847,105 @@ Item {
 					hoverEnabled: true
 					cursorShape: Qt.PointingHandCursor
 					onClicked: AudioState.selectSource(sourceRow.modelData)
+				}
+			}
+		}
+
+		Text {
+			visible: root.page === "microphone"
+			width: parent.width
+			text: "Applications"
+			color: root.ink(Theme.dim)
+			font.family: Theme.fontFamily
+			font.pixelSize: Theme.labelSize
+			leftPadding: Theme.headerInset
+			topPadding: 10
+			bottomPadding: 2
+		}
+
+		Text {
+			visible: root.page === "microphone" && AudioState.captureNodes.length === 0
+			width: parent.width
+			text: "No applications"
+			color: root.ink(Theme.muted)
+			font.family: Theme.fontFamily
+			font.pixelSize: Theme.fontSize
+			horizontalAlignment: Text.AlignHCenter
+			topPadding: 6
+			bottomPadding: 6
+		}
+
+		Repeater {
+			model: root.page === "microphone" ? AudioState.captureNodes : []
+
+			Item {
+				id: captureRow
+				required property var modelData
+				width: root.menuWidth
+				height: Theme.streamRow
+
+				Rectangle {
+					id: captureWell
+					anchors.left: parent.left
+					anchors.leftMargin: 14
+					anchors.top: parent.top
+					anchors.topMargin: 6
+					width: Theme.well
+					height: Theme.well
+					radius: Theme.buttonRadius
+					color: root.ink(Theme.wellFill)
+
+					Text {
+						anchors.centerIn: parent
+						text: AudioState.micGlyph(captureRow.modelData.audio ? captureRow.modelData.audio.muted : false)
+						color: Theme.foreground
+						font.family: Theme.iconFont
+						font.pixelSize: Theme.glyphSize
+					}
+				}
+
+				Text {
+					id: captureMute
+					anchors.right: parent.right
+					anchors.rightMargin: Theme.edgeInset
+					anchors.verticalCenter: captureWell.verticalCenter
+					text: captureRow.modelData.audio && captureRow.modelData.audio.muted ? "Muted" : AudioState.levelText(captureRow.modelData.audio ? captureRow.modelData.audio.volume : 0, false)
+					color: captureRow.modelData.audio && captureRow.modelData.audio.muted ? root.ink(Theme.quiet) : Theme.foreground
+					font.family: Theme.fontFamily
+					font.pixelSize: Theme.smallSize
+				}
+
+				Text {
+					anchors.left: captureWell.right
+					anchors.leftMargin: Theme.inset
+					anchors.right: captureMute.left
+					anchors.rightMargin: Theme.inset
+					anchors.verticalCenter: captureWell.verticalCenter
+					text: AudioState.streamLabel(captureRow.modelData)
+					color: Theme.foreground
+					font.family: Theme.fontFamily
+					font.pixelSize: Theme.fontSize
+					elide: Text.ElideRight
+				}
+
+				MouseArea {
+					anchors.right: parent.right
+					anchors.top: parent.top
+					width: captureMute.implicitWidth + 36
+					height: 36
+					cursorShape: Qt.PointingHandCursor
+					onClicked: AudioState.toggleMute(captureRow.modelData)
+				}
+
+				VolumeBar {
+					anchors.left: parent.left
+					anchors.right: parent.right
+					anchors.bottom: parent.bottom
+					anchors.leftMargin: Theme.headerInset
+					anchors.rightMargin: Theme.headerInset
+					anchors.bottomMargin: 2
+					value: captureRow.modelData.audio ? captureRow.modelData.audio.volume : 0
+					onMoved: amount => AudioState.setVolume(captureRow.modelData, amount)
 				}
 			}
 		}
