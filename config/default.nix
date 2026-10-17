@@ -366,6 +366,13 @@
         zoxide.enable = true;
         fzf.enable = true;
 
+        quickshell = {
+          enable = true;
+          activeConfig = "shell";
+          configs.shell = ../shell;
+          systemd.enable = true;
+        };
+
         bash = {
           enable = true;
 
