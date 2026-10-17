@@ -134,8 +134,8 @@ PanelWindow {
 		z: 2
 		anchors.top: parent.top
 		anchors.right: parent.right
-		width: 36
-		height: 36
+		width: 16
+		height: 16
 
 		HoverHandler {
 			id: cornerHover

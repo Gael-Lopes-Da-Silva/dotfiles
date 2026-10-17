@@ -7,12 +7,16 @@ Item {
 	readonly property real amount: {
 		if (kind === "brightness")
 			return BrightnessState.level
+		if (kind === "power")
+			return PowerState.level
 		if (AudioState.muted)
 			return 0
 		return AudioState.volume
 	}
 	readonly property real bar: Math.max(0, Math.min(1, amount))
 	readonly property string label: {
+		if (kind === "power")
+			return PowerState.plugged ? "Plugged in" : "Unplugged"
 		if (kind === "brightness")
 			return Math.round(amount * 100) + "%"
 		if (AudioState.muted)
@@ -20,6 +24,8 @@ Item {
 		return Math.round(amount * 100) + "%"
 	}
 	readonly property string glyph: {
+		if (kind === "power")
+			return String.fromCodePoint(PowerState.plugged ? 0xF06A5 : 0xF06A6)
 		if (kind === "brightness")
 			return String.fromCodePoint(0xF00DF)
 		if (AudioState.muted || amount <= 0.001)

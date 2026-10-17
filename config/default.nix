@@ -669,7 +669,7 @@
           };
 
           layout = {
-            gaps = 10;
+            gaps = 15;
             background-color = "#303030";
             center-focused-column = "never";
             empty-workspace-above-first = { };
@@ -712,13 +712,6 @@
                 x = 0;
                 y = 2;
               };
-            };
-
-            struts = {
-              left = 5;
-              right = 5;
-              top = 5;
-              bottom = 5;
             };
           };
 
