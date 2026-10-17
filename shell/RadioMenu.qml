@@ -6,17 +6,40 @@ Item {
 	id: root
 
 	readonly property string page: RadioState.menuPage
-	readonly property int menuWidth: 300
-	readonly property int rowHeight: 36
+	readonly property int menuWidth: 320
+	readonly property int rowHeight: 44
 
 	implicitWidth: menuWidth
 	implicitHeight: column.implicitHeight + Theme.padding
 	width: implicitWidth
 	height: implicitHeight
 
-	function dim() {
-		const color = Theme.foreground
-		return Qt.rgba(color.r, color.g, color.b, 0.55)
+	function ink(alpha) {
+		return Theme.ink(alpha)
+	}
+
+	component Toggle: Item {
+		id: toggle
+
+		property bool on: false
+
+		implicitWidth: 38
+		implicitHeight: 22
+
+		Rectangle {
+			anchors.fill: parent
+			radius: height / 2
+			color: toggle.on ? Theme.foreground : root.ink(0.16)
+		}
+
+		Rectangle {
+			width: 16
+			height: 16
+			radius: 8
+			anchors.verticalCenter: parent.verticalCenter
+			x: toggle.on ? parent.width - width - 3 : 3
+			color: toggle.on ? Theme.background : Theme.foreground
+		}
 	}
 
 	component VolumeBar: Item {
@@ -27,15 +50,15 @@ Item {
 		readonly property real shown: drag.pressed ? slide : value
 		signal moved(real amount)
 
-		implicitHeight: 18
+		implicitHeight: 22
 
 		Rectangle {
 			anchors.left: parent.left
 			anchors.right: parent.right
 			anchors.verticalCenter: parent.verticalCenter
-			height: 4
-			radius: 2
-			color: Qt.rgba(Theme.foreground.r, Theme.foreground.g, Theme.foreground.b, 0.18)
+			height: 5
+			radius: 2.5
+			color: root.ink(0.16)
 
 			Rectangle {
 				width: parent.width * Math.max(0, Math.min(1, bar.shown))
@@ -43,6 +66,15 @@ Item {
 				radius: parent.radius
 				color: Theme.foreground
 			}
+		}
+
+		Rectangle {
+			width: 14
+			height: 14
+			radius: 7
+			anchors.verticalCenter: parent.verticalCenter
+			x: Math.max(0, Math.min(parent.width - width, parent.width * bar.shown - width / 2))
+			color: Theme.foreground
 		}
 
 		MouseArea {
@@ -70,22 +102,30 @@ Item {
 		anchors.horizontalCenter: parent.horizontalCenter
 		anchors.top: parent.top
 		anchors.topMargin: Theme.padding * 0.5
-		spacing: 2
+		spacing: 4
 
 		Item {
 			width: parent.width
 			height: root.rowHeight
 			visible: root.page === "wifi"
 
+			Rectangle {
+				anchors.fill: parent
+				anchors.leftMargin: 8
+				anchors.rightMargin: 8
+				radius: 12
+				color: root.ink(0.06)
+			}
+
 			Text {
 				id: wifiHeadIcon
 				anchors.left: parent.left
-				anchors.leftMargin: Theme.padding
+				anchors.leftMargin: 20
 				anchors.verticalCenter: parent.verticalCenter
 				text: RadioState.wifiGlyph()
 				color: Theme.foreground
 				font.family: Theme.iconFont
-				font.pixelSize: Theme.fontSize + 4
+				font.pixelSize: Theme.fontSize + 6
 			}
 
 			Text {
@@ -95,17 +135,14 @@ Item {
 				text: "Wi-Fi"
 				color: Theme.foreground
 				font.family: Theme.fontFamily
-				font.pixelSize: Theme.fontSize
+				font.pixelSize: Theme.fontSize + 1
 			}
 
-			Text {
+			Toggle {
 				anchors.right: parent.right
-				anchors.rightMargin: Theme.padding
+				anchors.rightMargin: 18
 				anchors.verticalCenter: parent.verticalCenter
-				text: Networking.wifiEnabled ? "On" : "Off"
-				color: Theme.foreground
-				font.family: Theme.fontFamily
-				font.pixelSize: Theme.fontSize
+				on: Networking.wifiEnabled
 			}
 
 			MouseArea {
@@ -119,44 +156,55 @@ Item {
 			visible: root.page === "wifi" && RadioState.wifiList.length === 0
 			width: parent.width
 			text: Networking.wifiEnabled ? "No networks" : "Wi-Fi is off"
-			color: root.dim()
+			color: root.ink(0.45)
 			font.family: Theme.fontFamily
 			font.pixelSize: Theme.fontSize
-			leftPadding: Theme.padding
-			rightPadding: Theme.padding
-			topPadding: 6
-			bottomPadding: 6
+			horizontalAlignment: Text.AlignHCenter
+			topPadding: 10
+			bottomPadding: 8
 		}
 
 		Repeater {
 			model: root.page === "wifi" ? RadioState.wifiList : []
 
 			Rectangle {
+				id: wifiRow
 				required property var modelData
-				width: root.menuWidth
-				height: root.rowHeight
-				radius: 8
-				color: hover.hovered ? Qt.rgba(1, 1, 1, 0.08) : "transparent"
+				readonly property bool connected: modelData.connected
 
-				Text {
-					id: bars
+				width: root.menuWidth - 16
+				x: 8
+				height: 40
+				radius: 10
+				color: connected ? root.ink(0.12) : wifiHover.hovered ? root.ink(0.07) : "transparent"
+
+				Rectangle {
+					id: wifiWell
 					anchors.left: parent.left
-					anchors.leftMargin: Theme.padding
+					anchors.leftMargin: 6
 					anchors.verticalCenter: parent.verticalCenter
-					text: RadioState.strengthGlyph(modelData.signalStrength || 0)
-					color: Theme.foreground
-					font.family: Theme.iconFont
-					font.pixelSize: Theme.fontSize + 2
+					width: 28
+					height: 28
+					radius: 8
+					color: root.ink(0.08)
+
+					Text {
+						anchors.centerIn: parent
+						text: RadioState.strengthGlyph(wifiRow.modelData.signalStrength || 0)
+						color: Theme.foreground
+						font.family: Theme.iconFont
+						font.pixelSize: Theme.fontSize + 2
+					}
 				}
 
 				Text {
 					id: lock
-					anchors.left: bars.right
-					anchors.leftMargin: Theme.gap
+					anchors.left: wifiWell.right
+					anchors.leftMargin: 8
 					anchors.verticalCenter: parent.verticalCenter
-					visible: RadioState.secured(modelData)
+					visible: RadioState.secured(wifiRow.modelData)
 					text: String.fromCodePoint(0xF033E)
-					color: root.dim()
+					color: root.ink(0.55)
 					font.family: Theme.iconFont
 					font.pixelSize: Theme.fontSize
 				}
@@ -164,21 +212,21 @@ Item {
 				Text {
 					id: status
 					anchors.right: parent.right
-					anchors.rightMargin: Theme.padding
+					anchors.rightMargin: 12
 					anchors.verticalCenter: parent.verticalCenter
-					text: modelData.connected ? "Connected" : Math.round((modelData.signalStrength || 0) * 100) + "%"
-					color: root.dim()
+					text: wifiRow.connected ? "Connected" : Math.round((wifiRow.modelData.signalStrength || 0) * 100) + "%"
+					color: wifiRow.connected ? Theme.foreground : root.ink(0.5)
 					font.family: Theme.fontFamily
-					font.pixelSize: Theme.fontSize
+					font.pixelSize: Theme.fontSize - 1
 				}
 
 				Text {
-					anchors.left: lock.visible ? lock.right : bars.right
-					anchors.leftMargin: Theme.gap
+					anchors.left: lock.visible ? lock.right : wifiWell.right
+					anchors.leftMargin: 8
 					anchors.right: status.left
-					anchors.rightMargin: Theme.gap
+					anchors.rightMargin: 8
 					anchors.verticalCenter: parent.verticalCenter
-					text: modelData.name
+					text: wifiRow.modelData.name
 					color: Theme.foreground
 					font.family: Theme.fontFamily
 					font.pixelSize: Theme.fontSize
@@ -186,11 +234,11 @@ Item {
 				}
 
 				MouseArea {
-					id: hover
+					id: wifiHover
 					anchors.fill: parent
 					hoverEnabled: true
 					cursorShape: Qt.PointingHandCursor
-					onClicked: RadioState.activateWifi(modelData)
+					onClicked: RadioState.activateWifi(wifiRow.modelData)
 				}
 			}
 		}
@@ -198,15 +246,35 @@ Item {
 		Item {
 			visible: root.page === "wifi" && RadioState.pending !== null
 			width: parent.width
-			height: secret.implicitHeight + 16
+			height: 48
+
+			Rectangle {
+				anchors.fill: parent
+				anchors.leftMargin: 8
+				anchors.rightMargin: 8
+				anchors.topMargin: 4
+				anchors.bottomMargin: 4
+				radius: 10
+				color: root.ink(0.08)
+			}
+
+			Text {
+				anchors.left: parent.left
+				anchors.leftMargin: 20
+				anchors.verticalCenter: parent.verticalCenter
+				text: String.fromCodePoint(0xF033E)
+				color: root.ink(0.55)
+				font.family: Theme.iconFont
+				font.pixelSize: Theme.fontSize + 2
+			}
 
 			TextInput {
 				id: secret
 				anchors.left: parent.left
 				anchors.right: parent.right
 				anchors.verticalCenter: parent.verticalCenter
-				anchors.leftMargin: Theme.padding
-				anchors.rightMargin: Theme.padding
+				anchors.leftMargin: 46
+				anchors.rightMargin: 18
 				color: Theme.foreground
 				font.family: Theme.fontFamily
 				font.pixelSize: Theme.fontSize
@@ -236,7 +304,7 @@ Item {
 				anchors.verticalCenter: secret.verticalCenter
 				text: "Password"
 				visible: secret.text.length === 0
-				color: root.dim()
+				color: root.ink(0.4)
 				font: secret.font
 			}
 		}
@@ -246,15 +314,23 @@ Item {
 			height: root.rowHeight
 			visible: root.page === "bluetooth"
 
+			Rectangle {
+				anchors.fill: parent
+				anchors.leftMargin: 8
+				anchors.rightMargin: 8
+				radius: 12
+				color: root.ink(0.06)
+			}
+
 			Text {
 				id: btHeadIcon
 				anchors.left: parent.left
-				anchors.leftMargin: Theme.padding
+				anchors.leftMargin: 20
 				anchors.verticalCenter: parent.verticalCenter
 				text: RadioState.btGlyph()
 				color: Theme.foreground
 				font.family: Theme.iconFont
-				font.pixelSize: Theme.fontSize + 4
+				font.pixelSize: Theme.fontSize + 6
 			}
 
 			Text {
@@ -264,17 +340,14 @@ Item {
 				text: "Bluetooth"
 				color: Theme.foreground
 				font.family: Theme.fontFamily
-				font.pixelSize: Theme.fontSize
+				font.pixelSize: Theme.fontSize + 1
 			}
 
-			Text {
+			Toggle {
 				anchors.right: parent.right
-				anchors.rightMargin: Theme.padding
+				anchors.rightMargin: 18
 				anchors.verticalCenter: parent.verticalCenter
-				text: RadioState.bluetooth && RadioState.bluetooth.enabled ? "On" : "Off"
-				color: Theme.foreground
-				font.family: Theme.fontFamily
-				font.pixelSize: Theme.fontSize
+				on: RadioState.bluetooth && RadioState.bluetooth.enabled
 			}
 
 			MouseArea {
@@ -288,62 +361,73 @@ Item {
 			visible: root.page === "bluetooth" && RadioState.btList.length === 0
 			width: parent.width
 			text: RadioState.bluetooth && RadioState.bluetooth.enabled ? "No devices" : "Bluetooth is off"
-			color: root.dim()
+			color: root.ink(0.45)
 			font.family: Theme.fontFamily
 			font.pixelSize: Theme.fontSize
-			leftPadding: Theme.padding
-			rightPadding: Theme.padding
-			topPadding: 6
-			bottomPadding: 6
+			horizontalAlignment: Text.AlignHCenter
+			topPadding: 10
+			bottomPadding: 8
 		}
 
 		Repeater {
 			model: root.page === "bluetooth" ? RadioState.btList : []
 
 			Rectangle {
+				id: btRow
 				required property var modelData
-				width: root.menuWidth
-				height: root.rowHeight
-				radius: 8
-				color: btHover.hovered ? Qt.rgba(1, 1, 1, 0.08) : "transparent"
+				readonly property bool connected: modelData.connected
 
-				Text {
-					id: btMark
+				width: root.menuWidth - 16
+				x: 8
+				height: 40
+				radius: 10
+				color: connected ? root.ink(0.12) : btHover.hovered ? root.ink(0.07) : "transparent"
+
+				Rectangle {
+					id: btWell
 					anchors.left: parent.left
-					anchors.leftMargin: Theme.padding
+					anchors.leftMargin: 6
 					anchors.verticalCenter: parent.verticalCenter
-					text: modelData.connected ? String.fromCodePoint(0xF00B1) : String.fromCodePoint(0xF00AF)
-					color: Theme.foreground
-					font.family: Theme.iconFont
-					font.pixelSize: Theme.fontSize + 2
+					width: 28
+					height: 28
+					radius: 8
+					color: root.ink(0.08)
+
+					Text {
+						anchors.centerIn: parent
+						text: btRow.connected ? String.fromCodePoint(0xF00B1) : String.fromCodePoint(0xF00AF)
+						color: Theme.foreground
+						font.family: Theme.iconFont
+						font.pixelSize: Theme.fontSize + 2
+					}
 				}
 
 				Text {
 					id: btStatus
 					anchors.right: parent.right
-					anchors.rightMargin: Theme.padding
+					anchors.rightMargin: 12
 					anchors.verticalCenter: parent.verticalCenter
 					text: {
-						if (modelData.connected && RadioState.btRssiKnown)
+						if (btRow.modelData.connected && RadioState.btRssiKnown)
 							return Math.round(RadioState.btQuality * 100) + "%"
-						if (modelData.connected)
+						if (btRow.modelData.connected)
 							return "Connected"
-						if (modelData.paired)
+						if (btRow.modelData.paired)
 							return "Paired"
 						return "Pair"
 					}
-					color: root.dim()
+					color: btRow.connected ? Theme.foreground : root.ink(0.5)
 					font.family: Theme.fontFamily
-					font.pixelSize: Theme.fontSize
+					font.pixelSize: Theme.fontSize - 1
 				}
 
 				Text {
-					anchors.left: btMark.right
-					anchors.leftMargin: Theme.gap
+					anchors.left: btWell.right
+					anchors.leftMargin: 8
 					anchors.right: btStatus.left
-					anchors.rightMargin: Theme.gap
+					anchors.rightMargin: 8
 					anchors.verticalCenter: parent.verticalCenter
-					text: RadioState.deviceLabel(modelData)
+					text: RadioState.deviceLabel(btRow.modelData)
 					color: Theme.foreground
 					font.family: Theme.fontFamily
 					font.pixelSize: Theme.fontSize
@@ -355,7 +439,7 @@ Item {
 					anchors.fill: parent
 					hoverEnabled: true
 					cursorShape: Qt.PointingHandCursor
-					onClicked: RadioState.activateBt(modelData)
+					onClicked: RadioState.activateBt(btRow.modelData)
 				}
 			}
 		}
@@ -365,15 +449,23 @@ Item {
 			height: root.rowHeight
 			visible: root.page === "audio"
 
+			Rectangle {
+				anchors.fill: parent
+				anchors.leftMargin: 8
+				anchors.rightMargin: 8
+				radius: 12
+				color: root.ink(0.06)
+			}
+
 			Text {
 				id: audioHeadIcon
 				anchors.left: parent.left
-				anchors.leftMargin: Theme.padding
+				anchors.leftMargin: 20
 				anchors.verticalCenter: parent.verticalCenter
 				text: AudioState.volumeGlyph(AudioState.sinkLevel, AudioState.sinkMuted)
 				color: Theme.foreground
 				font.family: Theme.iconFont
-				font.pixelSize: Theme.fontSize + 4
+				font.pixelSize: Theme.fontSize + 6
 			}
 
 			Text {
@@ -383,15 +475,15 @@ Item {
 				text: "Audio"
 				color: Theme.foreground
 				font.family: Theme.fontFamily
-				font.pixelSize: Theme.fontSize
+				font.pixelSize: Theme.fontSize + 1
 			}
 
 			Text {
 				anchors.right: parent.right
-				anchors.rightMargin: Theme.padding
+				anchors.rightMargin: 20
 				anchors.verticalCenter: parent.verticalCenter
 				text: AudioState.levelText(AudioState.sinkLevel, AudioState.sinkMuted)
-				color: Theme.foreground
+				color: AudioState.sinkMuted ? root.ink(0.5) : Theme.foreground
 				font.family: Theme.fontFamily
 				font.pixelSize: Theme.fontSize
 			}
@@ -406,29 +498,40 @@ Item {
 		Item {
 			visible: root.page === "audio" && AudioState.sink !== null
 			width: parent.width
-			height: 18
+			height: 28
 
 			VolumeBar {
 				anchors.left: parent.left
 				anchors.right: parent.right
 				anchors.verticalCenter: parent.verticalCenter
-				anchors.leftMargin: Theme.padding
-				anchors.rightMargin: Theme.padding
+				anchors.leftMargin: 20
+				anchors.rightMargin: 20
 				value: AudioState.sinkLevel
 				onMoved: amount => AudioState.setVolume(AudioState.sink, amount)
 			}
 		}
 
 		Text {
+			visible: root.page === "audio" && AudioState.sinkNodes.length > 0
+			width: parent.width
+			text: "Outputs"
+			color: root.ink(0.4)
+			font.family: Theme.fontFamily
+			font.pixelSize: Theme.fontSize - 2
+			leftPadding: 20
+			topPadding: 8
+			bottomPadding: 2
+		}
+
+		Text {
 			visible: root.page === "audio" && AudioState.sinkNodes.length === 0
 			width: parent.width
 			text: "No outputs"
-			color: root.dim()
+			color: root.ink(0.45)
 			font.family: Theme.fontFamily
 			font.pixelSize: Theme.fontSize
-			leftPadding: Theme.padding
-			rightPadding: Theme.padding
-			topPadding: 6
+			horizontalAlignment: Text.AlignHCenter
+			topPadding: 8
 			bottomPadding: 6
 		}
 
@@ -436,41 +539,54 @@ Item {
 			model: root.page === "audio" ? AudioState.sinkNodes : []
 
 			Rectangle {
+				id: sinkRow
 				required property var modelData
-				width: root.menuWidth
-				height: root.rowHeight
-				radius: 8
-				color: sinkHover.hovered ? Qt.rgba(1, 1, 1, 0.08) : "transparent"
+				readonly property bool active: AudioState.sink && modelData.id === AudioState.sink.id
 
-				Text {
-					id: sinkMark
+				width: root.menuWidth - 16
+				x: 8
+				height: 40
+				radius: 10
+				color: active ? root.ink(0.12) : sinkHover.hovered ? root.ink(0.07) : "transparent"
+
+				Rectangle {
+					id: sinkWell
 					anchors.left: parent.left
-					anchors.leftMargin: Theme.padding
+					anchors.leftMargin: 6
 					anchors.verticalCenter: parent.verticalCenter
-					text: AudioState.volumeGlyph(modelData.audio ? modelData.audio.volume : 0, modelData.audio ? modelData.audio.muted : false)
-					color: Theme.foreground
-					font.family: Theme.iconFont
-					font.pixelSize: Theme.fontSize + 2
+					width: 28
+					height: 28
+					radius: 8
+					color: root.ink(0.08)
+
+					Text {
+						anchors.centerIn: parent
+						text: AudioState.volumeGlyph(sinkRow.modelData.audio ? sinkRow.modelData.audio.volume : 0, sinkRow.modelData.audio ? sinkRow.modelData.audio.muted : false)
+						color: Theme.foreground
+						font.family: Theme.iconFont
+						font.pixelSize: Theme.fontSize + 2
+					}
 				}
 
 				Text {
 					id: sinkStatus
 					anchors.right: parent.right
-					anchors.rightMargin: Theme.padding
+					anchors.rightMargin: 12
 					anchors.verticalCenter: parent.verticalCenter
-					text: AudioState.sink && modelData.id === AudioState.sink.id ? "Active" : ""
-					color: root.dim()
+					visible: sinkRow.active
+					text: "Active"
+					color: Theme.foreground
 					font.family: Theme.fontFamily
-					font.pixelSize: Theme.fontSize
+					font.pixelSize: Theme.fontSize - 1
 				}
 
 				Text {
-					anchors.left: sinkMark.right
-					anchors.leftMargin: Theme.gap
+					anchors.left: sinkWell.right
+					anchors.leftMargin: 8
 					anchors.right: sinkStatus.left
-					anchors.rightMargin: Theme.gap
+					anchors.rightMargin: 8
 					anchors.verticalCenter: parent.verticalCenter
-					text: AudioState.nodeLabel(modelData)
+					text: AudioState.nodeLabel(sinkRow.modelData)
 					color: Theme.foreground
 					font.family: Theme.fontFamily
 					font.pixelSize: Theme.fontSize
@@ -482,7 +598,7 @@ Item {
 					anchors.fill: parent
 					hoverEnabled: true
 					cursorShape: Qt.PointingHandCursor
-					onClicked: AudioState.selectSink(modelData)
+					onClicked: AudioState.selectSink(sinkRow.modelData)
 				}
 			}
 		}
@@ -491,25 +607,23 @@ Item {
 			visible: root.page === "audio"
 			width: parent.width
 			text: "Applications"
-			color: root.dim()
+			color: root.ink(0.4)
 			font.family: Theme.fontFamily
-			font.pixelSize: Theme.fontSize
-			leftPadding: Theme.padding
-			rightPadding: Theme.padding
+			font.pixelSize: Theme.fontSize - 2
+			leftPadding: 20
 			topPadding: 10
-			bottomPadding: 4
+			bottomPadding: 2
 		}
 
 		Text {
 			visible: root.page === "audio" && AudioState.streamNodes.length === 0
 			width: parent.width
 			text: "No app audio"
-			color: root.dim()
+			color: root.ink(0.45)
 			font.family: Theme.fontFamily
 			font.pixelSize: Theme.fontSize
-			leftPadding: Theme.padding
-			rightPadding: Theme.padding
-			topPadding: 4
+			horizontalAlignment: Text.AlignHCenter
+			topPadding: 6
 			bottomPadding: 6
 		}
 
@@ -517,40 +631,49 @@ Item {
 			model: root.page === "audio" ? AudioState.streamNodes : []
 
 			Item {
+				id: streamRow
 				required property var modelData
 				width: root.menuWidth
-				height: 52
+				height: 64
 
-				Text {
-					id: streamIcon
+				Rectangle {
+					id: streamWell
 					anchors.left: parent.left
-					anchors.leftMargin: Theme.padding
+					anchors.leftMargin: 14
 					anchors.top: parent.top
-					anchors.topMargin: 4
-					text: AudioState.volumeGlyph(modelData.audio ? modelData.audio.volume : 0, modelData.audio ? modelData.audio.muted : false)
-					color: Theme.foreground
-					font.family: Theme.iconFont
-					font.pixelSize: Theme.fontSize + 2
+					anchors.topMargin: 6
+					width: 28
+					height: 28
+					radius: 8
+					color: root.ink(0.08)
+
+					Text {
+						anchors.centerIn: parent
+						text: AudioState.volumeGlyph(streamRow.modelData.audio ? streamRow.modelData.audio.volume : 0, streamRow.modelData.audio ? streamRow.modelData.audio.muted : false)
+						color: Theme.foreground
+						font.family: Theme.iconFont
+						font.pixelSize: Theme.fontSize + 2
+					}
 				}
 
 				Text {
 					id: streamMute
 					anchors.right: parent.right
-					anchors.rightMargin: Theme.padding
-					anchors.verticalCenter: streamIcon.verticalCenter
-					text: modelData.audio && modelData.audio.muted ? "Muted" : AudioState.levelText(modelData.audio ? modelData.audio.volume : 0, false)
-					color: root.dim()
+					anchors.rightMargin: 18
+					anchors.verticalCenter: streamWell.verticalCenter
+					text: streamRow.modelData.audio && streamRow.modelData.audio.muted ? "Muted" : AudioState.levelText(streamRow.modelData.audio ? streamRow.modelData.audio.volume : 0, false)
+					color: streamRow.modelData.audio && streamRow.modelData.audio.muted ? root.ink(0.5) : Theme.foreground
 					font.family: Theme.fontFamily
-					font.pixelSize: Theme.fontSize
+					font.pixelSize: Theme.fontSize - 1
 				}
 
 				Text {
-					anchors.left: streamIcon.right
-					anchors.leftMargin: Theme.gap
+					anchors.left: streamWell.right
+					anchors.leftMargin: 8
 					anchors.right: streamMute.left
-					anchors.rightMargin: Theme.gap
-					anchors.verticalCenter: streamIcon.verticalCenter
-					text: AudioState.streamLabel(modelData)
+					anchors.rightMargin: 8
+					anchors.verticalCenter: streamWell.verticalCenter
+					text: AudioState.streamLabel(streamRow.modelData)
 					color: Theme.foreground
 					font.family: Theme.fontFamily
 					font.pixelSize: Theme.fontSize
@@ -560,21 +683,21 @@ Item {
 				MouseArea {
 					anchors.right: parent.right
 					anchors.top: parent.top
-					width: streamMute.implicitWidth + Theme.padding * 2
-					height: 28
+					width: streamMute.implicitWidth + 36
+					height: 36
 					cursorShape: Qt.PointingHandCursor
-					onClicked: AudioState.toggleMute(modelData)
+					onClicked: AudioState.toggleMute(streamRow.modelData)
 				}
 
 				VolumeBar {
 					anchors.left: parent.left
 					anchors.right: parent.right
 					anchors.bottom: parent.bottom
-					anchors.leftMargin: Theme.padding
-					anchors.rightMargin: Theme.padding
+					anchors.leftMargin: 20
+					anchors.rightMargin: 20
 					anchors.bottomMargin: 2
-					value: modelData.audio ? modelData.audio.volume : 0
-					onMoved: amount => AudioState.setVolume(modelData, amount)
+					value: streamRow.modelData.audio ? streamRow.modelData.audio.volume : 0
+					onMoved: amount => AudioState.setVolume(streamRow.modelData, amount)
 				}
 			}
 		}
@@ -584,15 +707,23 @@ Item {
 			height: root.rowHeight
 			visible: root.page === "microphone"
 
+			Rectangle {
+				anchors.fill: parent
+				anchors.leftMargin: 8
+				anchors.rightMargin: 8
+				radius: 12
+				color: root.ink(0.06)
+			}
+
 			Text {
 				id: micHeadIcon
 				anchors.left: parent.left
-				anchors.leftMargin: Theme.padding
+				anchors.leftMargin: 20
 				anchors.verticalCenter: parent.verticalCenter
 				text: AudioState.micGlyph(AudioState.sourceMuted)
 				color: Theme.foreground
 				font.family: Theme.iconFont
-				font.pixelSize: Theme.fontSize + 4
+				font.pixelSize: Theme.fontSize + 6
 			}
 
 			Text {
@@ -602,15 +733,15 @@ Item {
 				text: "Microphone"
 				color: Theme.foreground
 				font.family: Theme.fontFamily
-				font.pixelSize: Theme.fontSize
+				font.pixelSize: Theme.fontSize + 1
 			}
 
 			Text {
 				anchors.right: parent.right
-				anchors.rightMargin: Theme.padding
+				anchors.rightMargin: 20
 				anchors.verticalCenter: parent.verticalCenter
 				text: AudioState.source ? AudioState.levelText(AudioState.sourceLevel, AudioState.sourceMuted) : "None"
-				color: Theme.foreground
+				color: AudioState.sourceMuted ? root.ink(0.5) : Theme.foreground
 				font.family: Theme.fontFamily
 				font.pixelSize: Theme.fontSize
 			}
@@ -625,14 +756,14 @@ Item {
 		Item {
 			visible: root.page === "microphone" && AudioState.source !== null
 			width: parent.width
-			height: 18
+			height: 28
 
 			VolumeBar {
 				anchors.left: parent.left
 				anchors.right: parent.right
 				anchors.verticalCenter: parent.verticalCenter
-				anchors.leftMargin: Theme.padding
-				anchors.rightMargin: Theme.padding
+				anchors.leftMargin: 20
+				anchors.rightMargin: 20
 				value: AudioState.sourceLevel
 				onMoved: amount => AudioState.setVolume(AudioState.source, amount)
 			}
@@ -642,12 +773,11 @@ Item {
 			visible: root.page === "microphone" && AudioState.sourceNodes.length === 0
 			width: parent.width
 			text: "No microphones"
-			color: root.dim()
+			color: root.ink(0.45)
 			font.family: Theme.fontFamily
 			font.pixelSize: Theme.fontSize
-			leftPadding: Theme.padding
-			rightPadding: Theme.padding
-			topPadding: 6
+			horizontalAlignment: Text.AlignHCenter
+			topPadding: 8
 			bottomPadding: 6
 		}
 
@@ -655,41 +785,54 @@ Item {
 			model: root.page === "microphone" ? AudioState.sourceNodes : []
 
 			Rectangle {
+				id: sourceRow
 				required property var modelData
-				width: root.menuWidth
-				height: root.rowHeight
-				radius: 8
-				color: sourceHover.hovered ? Qt.rgba(1, 1, 1, 0.08) : "transparent"
+				readonly property bool active: AudioState.source && modelData.id === AudioState.source.id
 
-				Text {
-					id: sourceMark
+				width: root.menuWidth - 16
+				x: 8
+				height: 40
+				radius: 10
+				color: active ? root.ink(0.12) : sourceHover.hovered ? root.ink(0.07) : "transparent"
+
+				Rectangle {
+					id: sourceWell
 					anchors.left: parent.left
-					anchors.leftMargin: Theme.padding
+					anchors.leftMargin: 6
 					anchors.verticalCenter: parent.verticalCenter
-					text: AudioState.micGlyph(modelData.audio ? modelData.audio.muted : false)
-					color: Theme.foreground
-					font.family: Theme.iconFont
-					font.pixelSize: Theme.fontSize + 2
+					width: 28
+					height: 28
+					radius: 8
+					color: root.ink(0.08)
+
+					Text {
+						anchors.centerIn: parent
+						text: AudioState.micGlyph(sourceRow.modelData.audio ? sourceRow.modelData.audio.muted : false)
+						color: Theme.foreground
+						font.family: Theme.iconFont
+						font.pixelSize: Theme.fontSize + 2
+					}
 				}
 
 				Text {
 					id: sourceStatus
 					anchors.right: parent.right
-					anchors.rightMargin: Theme.padding
+					anchors.rightMargin: 12
 					anchors.verticalCenter: parent.verticalCenter
-					text: AudioState.source && modelData.id === AudioState.source.id ? "Active" : ""
-					color: root.dim()
+					visible: sourceRow.active
+					text: "Active"
+					color: Theme.foreground
 					font.family: Theme.fontFamily
-					font.pixelSize: Theme.fontSize
+					font.pixelSize: Theme.fontSize - 1
 				}
 
 				Text {
-					anchors.left: sourceMark.right
-					anchors.leftMargin: Theme.gap
+					anchors.left: sourceWell.right
+					anchors.leftMargin: 8
 					anchors.right: sourceStatus.left
-					anchors.rightMargin: Theme.gap
+					anchors.rightMargin: 8
 					anchors.verticalCenter: parent.verticalCenter
-					text: AudioState.nodeLabel(modelData)
+					text: AudioState.nodeLabel(sourceRow.modelData)
 					color: Theme.foreground
 					font.family: Theme.fontFamily
 					font.pixelSize: Theme.fontSize
@@ -701,7 +844,7 @@ Item {
 					anchors.fill: parent
 					hoverEnabled: true
 					cursorShape: Qt.PointingHandCursor
-					onClicked: AudioState.selectSource(modelData)
+					onClicked: AudioState.selectSource(sourceRow.modelData)
 				}
 			}
 		}

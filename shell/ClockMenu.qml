@@ -5,9 +5,9 @@ Item {
 	id: root
 
 	property string page: ""
-	readonly property int menuWidth: 280
-	readonly property int rowHeight: 36
-	readonly property real cell: 32
+	readonly property int menuWidth: 292
+	readonly property int rowHeight: 44
+	readonly property real cell: 36
 
 	implicitWidth: menuWidth
 	implicitHeight: column.implicitHeight + Theme.padding
@@ -34,9 +34,8 @@ Item {
 		return cells
 	}
 
-	function dim() {
-		const color = Theme.foreground
-		return Qt.rgba(color.r, color.g, color.b, 0.55)
+	function ink(alpha) {
+		return Theme.ink(alpha)
 	}
 
 	QtObject {
@@ -57,22 +56,44 @@ Item {
 		width: root.menuWidth
 		anchors.horizontalCenter: parent.horizontalCenter
 		anchors.top: parent.top
-		anchors.topMargin: Theme.padding * 0.5
-		spacing: 4
+		anchors.topMargin: 8
+		spacing: 2
 
 		Item {
 			width: parent.width
-			height: root.rowHeight
+			height: 52
 			visible: root.page === "time"
 
 			Text {
+				id: monthTitle
 				anchors.left: parent.left
-				anchors.leftMargin: Theme.padding
-				anchors.verticalCenter: parent.verticalCenter
-				text: Qt.formatDate(root.now, "MMMM yyyy")
+				anchors.leftMargin: 18
+				anchors.top: parent.top
+				anchors.topMargin: 4
+				text: Qt.formatDate(root.now, "MMMM")
 				color: Theme.foreground
 				font.family: Theme.fontFamily
-				font.pixelSize: Theme.fontSize
+				font.pixelSize: Theme.fontSize + 8
+			}
+
+			Text {
+				anchors.left: monthTitle.right
+				anchors.leftMargin: 8
+				anchors.baseline: monthTitle.baseline
+				text: Qt.formatDate(root.now, "yyyy")
+				color: root.ink(0.45)
+				font.family: Theme.fontFamily
+				font.pixelSize: Theme.fontSize + 2
+			}
+
+			Text {
+				anchors.left: parent.left
+				anchors.leftMargin: 18
+				anchors.top: monthTitle.bottom
+				text: Qt.formatDate(root.now, "dddd")
+				color: root.ink(0.55)
+				font.family: Theme.fontFamily
+				font.pixelSize: Theme.fontSize - 1
 			}
 		}
 
@@ -92,11 +113,12 @@ Item {
 					Text {
 						required property string modelData
 						width: root.cell
-						height: 22
+						height: 24
 						text: modelData
-						color: root.dim()
+						color: root.ink(0.4)
 						font.family: Theme.fontFamily
 						font.pixelSize: Theme.fontSize - 2
+						font.letterSpacing: 0.4
 						horizontalAlignment: Text.AlignHCenter
 						verticalAlignment: Text.AlignVCenter
 					}
@@ -106,39 +128,43 @@ Item {
 
 		Item {
 			width: parent.width
-			height: dayGrid.implicitHeight
+			height: dayGrid.implicitHeight + 8
 			visible: root.page === "time"
 
 			Grid {
 				id: dayGrid
 				anchors.horizontalCenter: parent.horizontalCenter
+				anchors.top: parent.top
 				columns: 7
 
 				Repeater {
 					model: root.cells
 
 					Item {
+						id: dayCell
 						required property var modelData
+						readonly property bool current: modelData !== 0 && modelData === root.today
+
 						width: root.cell
 						height: root.cell
 
 						Rectangle {
 							anchors.centerIn: parent
-							width: 26
-							height: 26
-							radius: 13
-							visible: modelData !== 0 && modelData === root.today
-							color: Qt.rgba(Theme.foreground.r, Theme.foreground.g, Theme.foreground.b, 0.16)
+							width: 30
+							height: 30
+							radius: 15
+							visible: dayCell.current
+							color: Theme.foreground
 						}
 
 						Text {
 							anchors.centerIn: parent
 							visible: modelData !== 0
 							text: modelData
-							color: modelData === root.today ? Theme.foreground : root.dim()
+							color: dayCell.current ? Theme.background : root.ink(0.82)
 							font.family: Theme.fontFamily
 							font.pixelSize: Theme.fontSize
-							font.bold: modelData === root.today
+							font.bold: dayCell.current
 						}
 					}
 				}
@@ -147,27 +173,76 @@ Item {
 
 		Item {
 			width: parent.width
-			height: root.rowHeight
+			height: 64
 			visible: root.page === "battery"
 
 			Text {
+				id: batteryTitle
 				anchors.left: parent.left
-				anchors.leftMargin: Theme.padding
-				anchors.verticalCenter: parent.verticalCenter
+				anchors.leftMargin: 18
+				anchors.top: parent.top
+				anchors.topMargin: 6
 				text: "Battery"
 				color: Theme.foreground
 				font.family: Theme.fontFamily
-				font.pixelSize: Theme.fontSize
+				font.pixelSize: Theme.fontSize + 4
 			}
 
 			Text {
 				anchors.right: parent.right
-				anchors.rightMargin: Theme.padding
-				anchors.verticalCenter: parent.verticalCenter
+				anchors.rightMargin: 18
+				anchors.baseline: batteryTitle.baseline
 				text: PowerState.percent + "%"
 				color: Theme.foreground
 				font.family: Theme.fontFamily
+				font.pixelSize: Theme.fontSize + 4
+			}
+
+			Rectangle {
+				anchors.left: parent.left
+				anchors.right: parent.right
+				anchors.leftMargin: 18
+				anchors.rightMargin: 18
+				anchors.bottom: parent.bottom
+				anchors.bottomMargin: 10
+				height: 6
+				radius: 3
+				color: root.ink(0.16)
+
+				Rectangle {
+					width: parent.width * Math.max(0, Math.min(1, PowerState.level))
+					height: parent.height
+					radius: parent.radius
+					color: PowerState.percent <= 15 && !PowerState.plugged ? Theme.recording : Theme.foreground
+				}
+			}
+		}
+
+		Item {
+			visible: root.page === "battery" && !PowerState.plugged
+			width: parent.width
+			height: life.implicitHeight + 16
+
+			Rectangle {
+				anchors.fill: parent
+				anchors.leftMargin: 8
+				anchors.rightMargin: 8
+				radius: 10
+				color: root.ink(0.06)
+			}
+
+			Text {
+				id: life
+				anchors.left: parent.left
+				anchors.right: parent.right
+				anchors.verticalCenter: parent.verticalCenter
+				anchors.leftMargin: 18
+				anchors.rightMargin: 18
+				text: PowerState.lifeText()
+				color: Theme.foreground
+				font.family: Theme.fontFamily
 				font.pixelSize: Theme.fontSize
+				wrapMode: Text.WordWrap
 			}
 		}
 
@@ -179,14 +254,15 @@ Item {
 				required property var modelData
 				readonly property bool active: PowerProfiles.profile === modelData.profile
 
-				width: root.menuWidth
-				height: root.rowHeight
-				radius: 8
-				color: profileHover.hovered ? Qt.rgba(1, 1, 1, 0.08) : "transparent"
+				width: root.menuWidth - 16
+				x: 8
+				height: 40
+				radius: 10
+				color: active ? root.ink(0.14) : profileHover.hovered ? root.ink(0.07) : "transparent"
 
 				Text {
 					anchors.left: parent.left
-					anchors.leftMargin: Theme.padding
+					anchors.leftMargin: 14
 					anchors.verticalCenter: parent.verticalCenter
 					text: profileRow.modelData.label
 					color: Theme.foreground
@@ -196,13 +272,13 @@ Item {
 
 				Text {
 					anchors.right: parent.right
-					anchors.rightMargin: Theme.padding
+					anchors.rightMargin: 14
 					anchors.verticalCenter: parent.verticalCenter
 					visible: profileRow.active
 					text: "Active"
 					color: Theme.foreground
 					font.family: Theme.fontFamily
-					font.pixelSize: Theme.fontSize
+					font.pixelSize: Theme.fontSize - 1
 				}
 
 				HoverHandler {
@@ -221,28 +297,14 @@ Item {
 			visible: root.page === "battery" && PowerState.limitText() !== ""
 			width: parent.width
 			text: PowerState.limitText()
-			color: root.dim()
+			color: root.ink(0.5)
 			font.family: Theme.fontFamily
 			font.pixelSize: Theme.fontSize - 1
 			wrapMode: Text.WordWrap
-			leftPadding: Theme.padding
-			rightPadding: Theme.padding
-			topPadding: 4
-			bottomPadding: 2
-		}
-
-		Text {
-			visible: root.page === "battery" && !PowerState.plugged
-			width: parent.width
-			text: PowerState.lifeText()
-			color: Theme.foreground
-			font.family: Theme.fontFamily
-			font.pixelSize: Theme.fontSize
-			wrapMode: Text.WordWrap
-			leftPadding: Theme.padding
-			rightPadding: Theme.padding
+			leftPadding: 18
+			rightPadding: 18
 			topPadding: 6
-			bottomPadding: 6
+			bottomPadding: 2
 		}
 	}
 }

@@ -182,46 +182,68 @@ Item {
 		anchors.bottom: parent.bottom
 		anchors.horizontalCenter: parent.horizontalCenter
 		anchors.bottomMargin: Theme.padding
-		spacing: 4
+		spacing: 2
 
 		Repeater {
 			model: root.results
 
 			Rectangle {
+				id: appRow
 				required property var modelData
 				required property int index
+				readonly property bool chosen: index === root.selected
+				readonly property string detail: {
+					const generic = modelData.genericName || ""
+					if (!generic || generic === modelData.name)
+						return ""
+					return generic
+				}
 
 				width: root.fieldWidth
-				height: root.rowHeight
-				radius: Theme.radius
-				color: index === root.selected ? Qt.rgba(1, 1, 1, 0.12) : "transparent"
+				height: detail === "" ? root.rowHeight : root.rowHeight + 8
+				radius: 12
+				color: chosen ? Theme.ink(0.12) : "transparent"
 
-				Row {
-					anchors.fill: parent
-					anchors.leftMargin: 10
-					anchors.rightMargin: 10
-					spacing: Theme.gap
+				Image {
+					id: appIcon
+					anchors.left: parent.left
+					anchors.leftMargin: 12
+					anchors.verticalCenter: parent.verticalCenter
+					source: root.iconSource(appRow.modelData.icon || "application-x-executable")
+					width: root.iconSize
+					height: root.iconSize
+					sourceSize.width: root.iconSize * 2
+					sourceSize.height: root.iconSize * 2
+					fillMode: Image.PreserveAspectFit
+					smooth: true
+					mipmap: true
+				}
 
-					Image {
-						source: root.iconSource(modelData.icon || "application-x-executable")
-						width: root.iconSize
-						height: root.iconSize
-						sourceSize.width: root.iconSize * 2
-						sourceSize.height: root.iconSize * 2
-						fillMode: Image.PreserveAspectFit
-						smooth: true
-						mipmap: true
-						anchors.verticalCenter: parent.verticalCenter
-					}
+				Column {
+					anchors.left: appIcon.right
+					anchors.leftMargin: 12
+					anchors.right: parent.right
+					anchors.rightMargin: 14
+					anchors.verticalCenter: parent.verticalCenter
+					spacing: 1
 
 					Text {
-						text: modelData.name
+						width: parent.width
+						text: appRow.modelData.name
 						color: Theme.foreground
 						font.family: Theme.fontFamily
 						font.pixelSize: root.textSize
 						elide: Text.ElideRight
-						width: parent.width - root.iconSize - Theme.gap
-						anchors.verticalCenter: parent.verticalCenter
+					}
+
+					Text {
+						width: parent.width
+						visible: appRow.detail !== ""
+						text: appRow.detail
+						color: Theme.ink(0.5)
+						font.family: Theme.fontFamily
+						font.pixelSize: Theme.fontSize
+						elide: Text.ElideRight
 					}
 				}
 
@@ -238,26 +260,43 @@ Item {
 		Text {
 			visible: root.results.length === 0 && root.query.trim() !== ""
 			text: "No matches"
-			color: Qt.rgba(Theme.foreground.r, Theme.foreground.g, Theme.foreground.b, 0.55)
+			color: Theme.ink(0.45)
 			font.family: Theme.fontFamily
 			font.pixelSize: root.textSize
 			width: root.fieldWidth
-			leftPadding: 10
-			topPadding: 8
-			bottomPadding: 8
+			horizontalAlignment: Text.AlignHCenter
+			topPadding: 12
+			bottomPadding: 12
 		}
 
 		Item {
 			width: root.fieldWidth
-			height: search.implicitHeight + 16
+			height: 12
+		}
+
+		Rectangle {
+			width: root.fieldWidth
+			height: 48
+			radius: 14
+			color: Theme.ink(0.08)
+
+			Text {
+				anchors.left: parent.left
+				anchors.leftMargin: 16
+				anchors.verticalCenter: parent.verticalCenter
+				text: String.fromCodePoint(0xF0349)
+				color: Theme.ink(0.55)
+				font.family: Theme.iconFont
+				font.pixelSize: 18
+			}
 
 			TextInput {
 				id: search
 				anchors.left: parent.left
 				anchors.right: parent.right
 				anchors.verticalCenter: parent.verticalCenter
-				anchors.leftMargin: 10
-				anchors.rightMargin: 10
+				anchors.leftMargin: 44
+				anchors.rightMargin: 16
 				color: Theme.foreground
 				font.family: Theme.fontFamily
 				font.pixelSize: root.textSize
@@ -293,7 +332,7 @@ Item {
 				anchors.verticalCenter: search.verticalCenter
 				text: "Search"
 				visible: search.text.length === 0
-				color: Qt.rgba(Theme.foreground.r, Theme.foreground.g, Theme.foreground.b, 0.45)
+				color: Theme.ink(0.4)
 				font: search.font
 			}
 		}

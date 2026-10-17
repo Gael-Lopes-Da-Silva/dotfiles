@@ -32,4 +32,9 @@ Singleton {
 	readonly property int clockSize: 22
 	readonly property string fontFamily: "Noto Sans"
 	readonly property string iconFont: "Symbols Nerd Font"
+
+	function ink(alpha) {
+		const color = foreground
+		return Qt.rgba(color.r, color.g, color.b, alpha)
+	}
 }
