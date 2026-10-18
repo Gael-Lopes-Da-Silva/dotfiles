@@ -40,6 +40,7 @@ Item {
 					required property string summary
 					required property string body
 					required property var urgent
+					required property var closing
 					readonly property bool synthetic: local === 1
 					readonly property var notification: {
 						const _ = NoticeState.trackedCount
@@ -106,11 +107,69 @@ Item {
 					}
 
 					readonly property bool shown: !NoticeState.quiet || critical
+					readonly property bool leaving: closing === 1
+					property bool arrived: false
+					property bool faceReady: false
+					property string faceSummary: ""
+					property string faceBody: ""
+					property string faceApp: ""
+					readonly property real fullHeight: copy.implicitHeight + Theme.padding * 2 + Theme.gap
+
+					function captureFace() {
+						if (faceReady)
+							return
+						if (synthetic) {
+							faceSummary = summary
+							faceBody = body
+							faceApp = Config.shellName
+						} else if (notification) {
+							faceSummary = NoticeState.plain(notification.summary)
+							faceBody = NoticeState.markup(notification.body)
+							faceApp = notification.appName || ""
+						} else {
+							for (let i = 0; i < NoticeState.history.count; i++) {
+								const row = NoticeState.history.get(i)
+								if (row.nid !== nid)
+									continue
+								faceSummary = row.summary || ""
+								faceBody = NoticeState.markup(row.body || "")
+								faceApp = row.app || ""
+								break
+							}
+						}
+						faceReady = true
+					}
 
 					width: Theme.notificationWidth
 					clip: true
-					implicitHeight: copy.implicitHeight + Theme.padding * 2
-					height: shown ? implicitHeight + Theme.gap : 0
+					height: arrived && shown && !leaving ? fullHeight : 0
+					opacity: arrived && shown && !leaving ? 1 : 0
+
+					Behavior on height {
+						NumberAnimation {
+							duration: Theme.motion
+							easing.type: Easing.BezierSpline
+							easing.bezierCurve: Theme.curve
+						}
+					}
+
+					Behavior on opacity {
+						NumberAnimation { duration: Theme.motion }
+					}
+
+					Timer {
+						id: leaveTimer
+						interval: Theme.motion
+						onTriggered: NoticeState.finishRemove(card.nid)
+					}
+
+					Component.onCompleted: Qt.callLater(() => { arrived = true })
+					onLeavingChanged: {
+						if (!leaving)
+							return
+						captureFace()
+						leaveTimer.start()
+					}
 
 					MouseArea {
 						anchors.fill: parent
@@ -153,7 +212,7 @@ Item {
 
 							Text {
 								width: Math.max(0, parent.width - (card.synthetic || card.appIconSource !== "" ? Theme.noticeIcon + 8 : 0))
-								text: card.synthetic ? Config.shellName : (card.notification ? card.notification.appName : "")
+								text: card.faceReady ? card.faceApp : (card.synthetic ? Config.shellName : (card.notification ? card.notification.appName : ""))
 								color: Theme.ink(Theme.iconMute)
 								font.family: Theme.fontFamily
 								font.pixelSize: Theme.labelSize
@@ -179,7 +238,7 @@ Item {
 
 						Text {
 							width: parent.width
-							text: card.synthetic ? card.summary : (card.notification ? NoticeState.plain(card.notification.summary) : "")
+							text: card.faceReady ? card.faceSummary : (card.synthetic ? card.summary : (card.notification ? NoticeState.plain(card.notification.summary) : ""))
 							color: Theme.foreground
 							font.family: Theme.fontFamily
 							font.pixelSize: Theme.fontSize
@@ -189,10 +248,10 @@ Item {
 						}
 
 						Text {
-							id: body
+							id: bodyText
 							width: parent.width
 							visible: text !== ""
-							text: card.synthetic ? card.body : (card.notification ? NoticeState.markup(card.notification.body) : "")
+							text: card.faceReady ? card.faceBody : (card.synthetic ? card.body : (card.notification ? NoticeState.markup(card.notification.body) : ""))
 							color: Theme.ink(Theme.body)
 							linkColor: Theme.link
 							font.family: card.synthetic && card.critical ? Theme.monoFamily : Theme.fontFamily
@@ -204,7 +263,7 @@ Item {
 							onLinkActivated: link => NoticeState.openLink(link)
 
 							HoverHandler {
-								cursorShape: body.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
+								cursorShape: bodyText.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
 							}
 						}
 
@@ -366,7 +425,7 @@ Item {
 		color: Theme.ink(Theme.scroll)
 		height: Math.max(24, flick.height * flick.height / Math.max(flick.contentHeight, 1))
 		x: parent.width - width
-		y: flick.visibleArea.yPosition * (flick.height - height)
+		y: flick.contentY / Math.max(1, flick.contentHeight - flick.height) * Math.max(0, flick.height - height)
 	}
 
 	HoverHandler {

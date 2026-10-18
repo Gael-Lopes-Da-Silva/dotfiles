@@ -313,7 +313,7 @@ Column {
 			color: Theme.ink(Theme.scroll)
 			height: Math.max(24, flick.height * flick.height / Math.max(flick.contentHeight, 1))
 			x: parent.width - width - Theme.inset
-			y: flick.visibleArea.yPosition * (flick.height - height)
+			y: flick.contentY / Math.max(1, flick.contentHeight - flick.height) * Math.max(0, flick.height - height)
 		}
 	}
 }

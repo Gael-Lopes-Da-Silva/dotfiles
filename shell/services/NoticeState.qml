@@ -128,7 +128,8 @@ Singleton {
 			local: 1,
 			summary: summary,
 			body: body,
-			urgent: urgent
+			urgent: urgent,
+			closing: 0
 		})
 		remember({
 			nid: localSeq,
@@ -161,7 +162,8 @@ Singleton {
 			local: 0,
 			summary: "",
 			body: "",
-			urgent: 0
+			urgent: 0,
+			closing: 0
 		})
 		remember({
 			nid: notification.id,
@@ -177,6 +179,17 @@ Singleton {
 	}
 
 	function removeId(id) {
+		for (let i = 0; i < model.count; i++) {
+			if (model.get(i).nid === id) {
+				if (model.get(i).closing === 1)
+					return
+				model.setProperty(i, "closing", 1)
+				return
+			}
+		}
+	}
+
+	function finishRemove(id) {
 		for (let i = 0; i < model.count; i++) {
 			if (model.get(i).nid === id) {
 				model.remove(i)
@@ -213,6 +226,8 @@ Singleton {
 			return
 		for (let i = model.count - 1; i >= 0; i--) {
 			const row = model.get(i)
+			if (row.closing === 1)
+				continue
 			if (!(row.duration > 0))
 				continue
 			if (quiet && !criticalRow(row))
@@ -226,7 +241,7 @@ Singleton {
 			if (notification)
 				notification.expire()
 			else
-				model.remove(i)
+				root.removeId(row.nid)
 		}
 	}
 
