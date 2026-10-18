@@ -19,7 +19,7 @@ Singleton {
 			id: adapter
 
 			property JsonObject theme: JsonObject {
-				property string background: "#242424"
+				property string background: "#121212"
 				property string foreground: "#eeeeee"
 				property string recording: "#ff5c5c"
 				property string link: "#9ecbff"
