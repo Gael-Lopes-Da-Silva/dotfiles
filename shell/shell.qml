@@ -17,7 +17,19 @@ ShellRoot {
 
 	Variants {
 		model: Quickshell.screens
-		ScreenOverlay {}
+
+		Scope {
+			id: screenScope
+			required property var modelData
+
+			Wallpaper {
+				screen: screenScope.modelData
+			}
+
+			ScreenOverlay {
+				modelData: screenScope.modelData
+			}
+		}
 	}
 
 	IpcHandler {

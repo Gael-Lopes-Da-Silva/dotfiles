@@ -45,7 +45,7 @@ Singleton {
 	readonly property int well: 28
 	readonly property int menuSpacing: 4
 
-	readonly property int frame: 6
+	readonly property int frame: 2
 	readonly property int screenRadius: 20
 	readonly property int innerRadius: screenRadius
 	readonly property int weld: 12
