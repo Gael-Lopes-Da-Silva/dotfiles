@@ -668,7 +668,7 @@ Item {
 						anchors.leftMargin: Theme.inset
 						anchors.rightMargin: Theme.inset
 						radius: Theme.radius
-						color: streamMuteHit.containsMouse ? root.ink(Theme.buttonHover) : root.ink(Theme.wash)
+						color: streamMuteHit.containsMouse ? root.ink(Theme.hover) : "transparent"
 					}
 
 					Text {
@@ -935,7 +935,7 @@ Item {
 						anchors.leftMargin: Theme.inset
 						anchors.rightMargin: Theme.inset
 						radius: Theme.radius
-						color: captureMuteHit.containsMouse ? root.ink(Theme.buttonHover) : root.ink(Theme.wash)
+						color: captureMuteHit.containsMouse ? root.ink(Theme.hover) : "transparent"
 					}
 
 					Text {

@@ -13,13 +13,16 @@ Item {
 	property real shrink: 0
 	property bool animateSize: true
 
-	readonly property real fullWidth: fullIcon.implicitWidth + Theme.padding * 1.5
-	readonly property real fullHeight: fullIcon.implicitHeight + Theme.padding * 1.5
+	readonly property real open: Math.max(0, 1 - shrink)
+	readonly property real margin: Theme.padding * open
+	readonly property real edge: Math.max(1, margin)
+	readonly property real buttonWidth: fullIcon.implicitWidth / (1 + 1 * shrink) + Theme.padding * 1.5 * open
+	readonly property real buttonHeight: fullIcon.implicitHeight / (1 + 1 * shrink) + Theme.padding * 1.5 * open
 
 	width: implicitWidth
 	height: implicitHeight
-	implicitWidth: fullWidth / (1 + 1 * shrink)
-	implicitHeight: fullHeight / (1 + 1 * shrink)
+	implicitWidth: buttonWidth + edge + margin
+	implicitHeight: buttonHeight + edge + margin
 
 	function present() {
 		settle.stop()
@@ -27,6 +30,7 @@ Item {
 		iconSize = Theme.clockSize
 		shrink = 0
 		animateSize = true
+		settle.interval = Config.castSettle
 		settle.restart()
 	}
 
@@ -70,6 +74,7 @@ Item {
 				settle.stop()
 				root.shrink = 0
 			} else if (root.shown) {
+				settle.interval = Config.castHoverSettle
 				settle.restart()
 			}
 		}
@@ -84,10 +89,20 @@ Item {
 		font.pixelSize: root.iconSize
 	}
 
+	Rectangle {
+		id: buttonFace
+		x: root.edge
+		y: root.edge
+		width: root.buttonWidth
+		height: root.buttonHeight
+		radius: Theme.buttonRadius
+		color: root.hovered ? Theme.ink(Theme.hover) : "transparent"
+	}
+
 	Text {
 		id: icon
-		anchors.centerIn: parent
-		text: String.fromCodePoint(root.hovered ? 0xF0666 : (root.mode === "casting" ? 0xF0118 : 0xF0EC2))
+		anchors.centerIn: buttonFace
+		text: String.fromCodePoint(root.hovered ? 0xF10D3 : (root.mode === "casting" ? 0xF0118 : 0xF0EC2))
 		color: Theme.recording
 		font.family: Theme.iconFont
 		font.pixelSize: root.iconSize / (1 + root.shrink)
