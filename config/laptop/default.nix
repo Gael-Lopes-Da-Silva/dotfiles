@@ -1,0 +1,52 @@
+{ pkgs, ... }:
+
+{
+  imports = [
+    ./hardware.nix
+  ];
+
+  networking.hostName = "windows11";
+
+  environment.systemPackages = with pkgs; [
+    wireguard-tools
+  ];
+
+  networking = {
+    wg-quick.interfaces.wg0 = {
+      address = [ "10.8.0.3/32" ];
+      mtu = 1420;
+
+      privateKeyFile = "/home/gael/.config/wireguard/gael.key";
+
+      peers = [
+        {
+          publicKey = "Bqt6sSxpSYf7lpon+ufSsgxxeVRykffmgnbrSBOnzT8=";
+          endpoint = "46.105.79.118:51820";
+          allowedIPs = [
+            "10.0.0.0/16"
+            "10.8.0.0/24"
+          ];
+          persistentKeepalive = 25;
+        }
+      ];
+    };
+  };
+
+  home-manager.users.gael = {
+    wayland.windowManager.niri.settings = {
+      _children = [
+        {
+          output = {
+            _args = [ "eDP-1" ];
+            mode = "1920x1080@60";
+            scale = 1.0;
+            position._props = {
+              x = 0;
+              y = 0;
+            };
+          };
+        }
+      ];
+    };
+  };
+}
