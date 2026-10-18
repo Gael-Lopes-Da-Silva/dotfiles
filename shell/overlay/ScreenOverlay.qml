@@ -8,6 +8,7 @@ import qs.notices
 import qs.osd
 import qs.radio
 import qs.services
+import qs.session
 import qs.status
 
 PanelWindow {
@@ -25,6 +26,7 @@ PanelWindow {
 			return
 		statusWanted = false
 		radioWanted = false
+		sessionWanted = false
 	}
 
 	anchors.left: true
@@ -85,6 +87,15 @@ PanelWindow {
 	readonly property string radioPage: RadioState.menuOutput === modelData.name ? RadioState.menuPage : ""
 	property real radioProgress: radioWanted ? 1 : 0
 	property real menuProgress: radioPage !== "" ? 1 : 0
+	property bool sessionWanted: false
+	property bool sessionMenu: false
+	property real sessionProgress: sessionWanted ? 1 : 0
+	property real sessionMenuProgress: sessionMenu ? 1 : 0
+
+	onSessionWantedChanged: {
+		if (!sessionWanted)
+			sessionMenu = false
+	}
 	readonly property string clockPage: PowerState.menuOutput === modelData.name ? PowerState.menuPage : ""
 	property string clockHold: "time"
 	property real clockMenuProgress: clockPage !== "" ? 1 : 0
@@ -162,6 +173,22 @@ PanelWindow {
 		}
 	}
 
+	Behavior on sessionProgress {
+		NumberAnimation {
+			duration: Theme.motion
+			easing.type: Easing.BezierSpline
+			easing.bezierCurve: Theme.curve
+		}
+	}
+
+	Behavior on sessionMenuProgress {
+		NumberAnimation {
+			duration: Theme.motion
+			easing.type: Easing.BezierSpline
+			easing.bezierCurve: Theme.curve
+		}
+	}
+
 	Behavior on clockMenuProgress {
 		NumberAnimation {
 			duration: Theme.motion
@@ -220,6 +247,19 @@ PanelWindow {
 		}
 	}
 
+	function syncSession() {
+		if (!chrome) {
+			sessionWanted = false
+			return
+		}
+		if (sessionCornerHover.hovered || sessionHover.hovered) {
+			sessionTimer.stop()
+			sessionWanted = true
+		} else {
+			sessionTimer.restart()
+		}
+	}
+
 	BlobField {
 		anchors.fill: parent
 		thickness: root.frameThickness
@@ -232,9 +272,11 @@ PanelWindow {
 		panel3: Qt.vector4d(castClip.x, castClip.y, castClip.width, castClip.height)
 		panel4: Qt.vector4d(radioClip.x, radioClip.y, radioClip.width, radioClip.height)
 		panel5: Qt.vector4d(noticeClip.x, noticeClip.y, noticeClip.width, noticeClip.height)
+		panel6: Qt.vector4d(sessionClip.x, sessionClip.y, sessionClip.width, sessionClip.height)
 		panelRadius: Qt.vector4d(Theme.screenRadius, Theme.screenRadius, Theme.screenRadius, Theme.screenRadius)
 		panel4Radius: Theme.screenRadius
 		panel5Radius: Theme.screenRadius
+		panel6Radius: Theme.screenRadius
 	}
 
 	MouseArea {
@@ -463,6 +505,73 @@ PanelWindow {
 		}
 	}
 
+	Item {
+		id: sessionCorner
+		z: 2
+		anchors.right: parent.right
+		anchors.bottom: parent.bottom
+		width: root.chrome ? Config.hotCorner : 0
+		height: root.chrome ? Config.hotCorner : 0
+
+		HoverHandler {
+			id: sessionCornerHover
+			onHoveredChanged: root.syncSession()
+		}
+	}
+
+	Item {
+		id: sessionClip
+		z: 3
+		width: Math.max(sessionChip.implicitWidth, sessionMenuBody.implicitWidth * root.sessionMenuProgress) * root.sessionProgress
+		height: (sessionChip.implicitHeight + sessionMenuBody.implicitHeight * root.sessionMenuProgress) * root.sessionProgress
+		x: root.width - root.frameThickness - width + root.weld
+		y: root.height - root.frameThickness - height + root.weld
+		clip: true
+		visible: width > Config.clipMin && height > Config.clipMin
+
+		SessionMenu {
+			id: sessionMenuBody
+			anchors.right: parent.right
+			anchors.bottom: sessionChip.top
+			opacity: root.sessionMenuProgress > Config.menuReveal ? 1 : 0
+			onChosen: {
+				root.sessionMenu = false
+				root.sessionWanted = false
+			}
+
+			Behavior on opacity {
+				NumberAnimation { duration: Theme.fade }
+			}
+		}
+
+		SessionChip {
+			id: sessionChip
+			anchors.right: parent.right
+			anchors.bottom: parent.bottom
+			powerOpen: root.sessionMenu
+			opacity: root.sessionProgress > Config.reveal ? 1 : 0
+			onPowerClicked: {
+				root.sessionWanted = true
+				sessionTimer.stop()
+				root.sessionMenu = !root.sessionMenu
+			}
+			onShotClicked: {
+				Quickshell.execDetached(["niri", "msg", "action", "screenshot", "--show-pointer", "false"])
+				root.sessionMenu = false
+				root.sessionWanted = false
+			}
+
+			Behavior on opacity {
+				NumberAnimation { duration: Theme.fade }
+			}
+		}
+
+		HoverHandler {
+			id: sessionHover
+			onHoveredChanged: root.syncSession()
+		}
+	}
+
 	Timer {
 		id: statusTimer
 		interval: Config.hoverDelay
@@ -478,6 +587,15 @@ PanelWindow {
 		onTriggered: {
 			if (!radioCornerHover.hovered && !radioHover.hovered)
 				root.radioWanted = false
+		}
+	}
+
+	Timer {
+		id: sessionTimer
+		interval: Config.hoverDelay
+		onTriggered: {
+			if (!sessionCornerHover.hovered && !sessionHover.hovered)
+				root.sessionWanted = false
 		}
 	}
 
@@ -498,6 +616,12 @@ PanelWindow {
 		}
 		Region {
 			item: radioClip
+		}
+		Region {
+			item: sessionCorner
+		}
+		Region {
+			item: sessionClip
 		}
 	}
 }

@@ -14,9 +14,11 @@ Item {
 	property vector4d panel3: Qt.vector4d(0, 0, 0, 0)
 	property vector4d panel4: Qt.vector4d(0, 0, 0, 0)
 	property vector4d panel5: Qt.vector4d(0, 0, 0, 0)
+	property vector4d panel6: Qt.vector4d(0, 0, 0, 0)
 	property vector4d panelRadius: Qt.vector4d(0, 0, 0, 0)
 	property real panel4Radius: 0
 	property real panel5Radius: 0
+	property real panel6Radius: 0
 
 	ShaderEffect {
 		anchors.fill: parent
@@ -38,6 +40,8 @@ Item {
 		property real panel4Radius: root.panel4Radius
 		property vector4d panel5: root.panel5
 		property real panel5Radius: root.panel5Radius
+		property vector4d panel6: root.panel6
+		property real panel6Radius: root.panel6Radius
 	}
 }
 

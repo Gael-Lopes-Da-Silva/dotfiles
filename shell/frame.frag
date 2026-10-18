@@ -21,6 +21,8 @@ layout(std140, binding = 0) uniform buf {
 	float panel4Radius;
 	vec4 panel5;
 	float panel5Radius;
+	vec4 panel6;
+	float panel6Radius;
 };
 
 float sdRoundBox(vec2 p, vec2 halfSize, float r) {
@@ -79,6 +81,7 @@ float shapeDistance(vec2 p) {
 	d = smin(d, sdPanel(p, panel3, panelRadius.w), smoothing);
 	d = smin(d, sdPanel(p, panel4, panel4Radius), smoothing);
 	d = smin(d, sdPanel(p, panel5, panel5Radius), smoothing);
+	d = smin(d, sdPanel(p, panel6, panel6Radius), smoothing);
 	return d;
 }
 

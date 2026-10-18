@@ -18,7 +18,7 @@ Item {
 	readonly property real contentWidth: noticeWidth + buttonGap + timeRow.implicitWidth + buttonPadX * 2 + (batteryHit.visible ? buttonGap + batteryRow.implicitWidth + buttonPadX * 2 : 0)
 	readonly property real contentHeight: Math.max(timeRow.implicitHeight, noticeRow.implicitHeight, batteryHit.visible ? batteryRow.implicitHeight : 0)
 
-	implicitWidth: contentWidth + (Theme.padding - buttonPadX) + Theme.padding
+	implicitWidth: contentWidth + Theme.padding * 2
 	implicitHeight: contentHeight + Theme.padding * 2
 
 	property string timeText: Qt.formatTime(clock.now, Config.timeFormat)

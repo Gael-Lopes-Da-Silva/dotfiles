@@ -74,6 +74,7 @@ Singleton {
 
 	readonly property int clockMenuWidth: 292
 	readonly property int radioMenuWidth: 320
+	readonly property int sessionMenuWidth: 240
 	readonly property int launcherWidth: 440
 	readonly property int launcherRow: 48
 	readonly property int launcherIcon: 26
