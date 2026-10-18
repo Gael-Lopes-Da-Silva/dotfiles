@@ -328,7 +328,6 @@
           baobab
           sysprof
           cartero
-          epiphany
           decibels
           snapshot
           nautilus
