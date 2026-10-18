@@ -653,88 +653,81 @@ Item {
 		Repeater {
 			model: root.page === "audio" ? AudioState.streamNodes : []
 
-			Item {
+			Column {
 				id: streamRow
 				required property var modelData
 				width: root.menuWidth
-				height: Theme.streamRow
+				spacing: Theme.menuSpacing
 
-				Rectangle {
-					id: streamWell
-					anchors.left: parent.left
-					anchors.leftMargin: 14
-					anchors.top: parent.top
-					anchors.topMargin: 6
-					width: Theme.well
-					height: Theme.well
-					radius: Theme.buttonRadius
-					color: root.ink(Theme.wellFill)
+				Item {
+					width: parent.width
+					height: root.rowHeight
+
+					Rectangle {
+						anchors.fill: parent
+						anchors.leftMargin: Theme.inset
+						anchors.rightMargin: Theme.inset
+						radius: Theme.radius
+						color: streamMuteHit.containsMouse ? root.ink(Theme.buttonHover) : root.ink(Theme.wash)
+					}
 
 					Text {
-						anchors.centerIn: parent
+						id: streamIcon
+						anchors.left: parent.left
+						anchors.leftMargin: Theme.headerInset
+						anchors.verticalCenter: parent.verticalCenter
 						text: AudioState.volumeGlyph(streamRow.modelData.audio ? streamRow.modelData.audio.volume : 0, streamRow.modelData.audio ? streamRow.modelData.audio.muted : false)
 						color: Theme.foreground
 						font.family: Theme.iconFont
-						font.pixelSize: Theme.glyphSize
+						font.pixelSize: Theme.iconSize
+					}
+
+					Text {
+						anchors.left: streamIcon.right
+						anchors.leftMargin: Theme.gap
+						anchors.right: streamLevel.left
+						anchors.rightMargin: Theme.gap
+						anchors.verticalCenter: parent.verticalCenter
+						text: AudioState.streamLabel(streamRow.modelData)
+						color: Theme.foreground
+						font.family: Theme.fontFamily
+						font.pixelSize: Theme.headingSize
+						elide: Text.ElideRight
+					}
+
+					Text {
+						id: streamLevel
+						anchors.right: parent.right
+						anchors.rightMargin: Theme.headerInset
+						anchors.verticalCenter: parent.verticalCenter
+						text: AudioState.levelText(streamRow.modelData.audio ? streamRow.modelData.audio.volume : 0, streamRow.modelData.audio ? streamRow.modelData.audio.muted : false)
+						color: streamRow.modelData.audio && streamRow.modelData.audio.muted ? root.ink(Theme.quiet) : Theme.foreground
+						font.family: Theme.fontFamily
+						font.pixelSize: Theme.fontSize
+					}
+
+					MouseArea {
+						id: streamMuteHit
+						anchors.fill: parent
+						hoverEnabled: true
+						cursorShape: Qt.PointingHandCursor
+						onClicked: AudioState.toggleMute(streamRow.modelData)
 					}
 				}
 
-				Text {
-					id: streamMute
-					anchors.right: parent.right
-					anchors.rightMargin: Theme.edgeInset
-					anchors.verticalCenter: streamWell.verticalCenter
-					text: streamRow.modelData.audio && streamRow.modelData.audio.muted ? "Muted" : AudioState.levelText(streamRow.modelData.audio ? streamRow.modelData.audio.volume : 0, false)
-					color: streamRow.modelData.audio && streamRow.modelData.audio.muted ? root.ink(Theme.quiet) : Theme.foreground
-					font.family: Theme.fontFamily
-					font.pixelSize: Theme.smallSize
-				}
+				Item {
+					width: parent.width
+					height: Theme.sliderSlot
 
-				Text {
-					anchors.left: streamWell.right
-					anchors.leftMargin: Theme.inset
-					anchors.right: streamMute.left
-					anchors.rightMargin: Theme.inset
-					anchors.verticalCenter: streamWell.verticalCenter
-					text: AudioState.streamLabel(streamRow.modelData)
-					color: Theme.foreground
-					font.family: Theme.fontFamily
-					font.pixelSize: Theme.fontSize
-					elide: Text.ElideRight
-				}
-
-				Rectangle {
-					z: -1
-					anchors.fill: streamMuteHit
-					anchors.leftMargin: Theme.inset
-					anchors.rightMargin: Theme.inset
-					anchors.topMargin: 2
-					anchors.bottomMargin: 2
-					radius: Theme.rowRadius
-					color: streamMuteHit.containsMouse ? root.ink(Theme.hover) : "transparent"
-				}
-
-				MouseArea {
-					id: streamMuteHit
-					anchors.left: parent.left
-					anchors.right: parent.right
-					anchors.top: parent.top
-					anchors.bottom: streamVolume.top
-					hoverEnabled: true
-					cursorShape: Qt.PointingHandCursor
-					onClicked: AudioState.toggleMute(streamRow.modelData)
-				}
-
-				VolumeBar {
-					id: streamVolume
-					anchors.left: parent.left
-					anchors.right: parent.right
-					anchors.bottom: parent.bottom
-					anchors.leftMargin: Theme.headerInset
-					anchors.rightMargin: Theme.headerInset
-					anchors.bottomMargin: 2
-					value: streamRow.modelData.audio ? streamRow.modelData.audio.volume : 0
-					onMoved: amount => AudioState.setVolume(streamRow.modelData, amount)
+					VolumeBar {
+						anchors.left: parent.left
+						anchors.right: parent.right
+						anchors.verticalCenter: parent.verticalCenter
+						anchors.leftMargin: Theme.headerInset
+						anchors.rightMargin: Theme.headerInset
+						value: streamRow.modelData.audio ? streamRow.modelData.audio.volume : 0
+						onMoved: amount => AudioState.setVolume(streamRow.modelData, amount)
+					}
 				}
 			}
 		}
@@ -927,88 +920,81 @@ Item {
 		Repeater {
 			model: root.page === "microphone" ? AudioState.captureNodes : []
 
-			Item {
+			Column {
 				id: captureRow
 				required property var modelData
 				width: root.menuWidth
-				height: Theme.streamRow
+				spacing: Theme.menuSpacing
 
-				Rectangle {
-					id: captureWell
-					anchors.left: parent.left
-					anchors.leftMargin: 14
-					anchors.top: parent.top
-					anchors.topMargin: 6
-					width: Theme.well
-					height: Theme.well
-					radius: Theme.buttonRadius
-					color: root.ink(Theme.wellFill)
+				Item {
+					width: parent.width
+					height: root.rowHeight
+
+					Rectangle {
+						anchors.fill: parent
+						anchors.leftMargin: Theme.inset
+						anchors.rightMargin: Theme.inset
+						radius: Theme.radius
+						color: captureMuteHit.containsMouse ? root.ink(Theme.buttonHover) : root.ink(Theme.wash)
+					}
 
 					Text {
-						anchors.centerIn: parent
+						id: captureIcon
+						anchors.left: parent.left
+						anchors.leftMargin: Theme.headerInset
+						anchors.verticalCenter: parent.verticalCenter
 						text: AudioState.micGlyph(captureRow.modelData.audio ? captureRow.modelData.audio.volume : 0, captureRow.modelData.audio ? captureRow.modelData.audio.muted : false)
 						color: Theme.foreground
 						font.family: Theme.iconFont
-						font.pixelSize: Theme.glyphSize
+						font.pixelSize: Theme.iconSize
+					}
+
+					Text {
+						anchors.left: captureIcon.right
+						anchors.leftMargin: Theme.gap
+						anchors.right: captureLevel.left
+						anchors.rightMargin: Theme.gap
+						anchors.verticalCenter: parent.verticalCenter
+						text: AudioState.streamLabel(captureRow.modelData)
+						color: Theme.foreground
+						font.family: Theme.fontFamily
+						font.pixelSize: Theme.headingSize
+						elide: Text.ElideRight
+					}
+
+					Text {
+						id: captureLevel
+						anchors.right: parent.right
+						anchors.rightMargin: Theme.headerInset
+						anchors.verticalCenter: parent.verticalCenter
+						text: AudioState.levelText(captureRow.modelData.audio ? captureRow.modelData.audio.volume : 0, captureRow.modelData.audio ? captureRow.modelData.audio.muted : false)
+						color: captureRow.modelData.audio && captureRow.modelData.audio.muted ? root.ink(Theme.quiet) : Theme.foreground
+						font.family: Theme.fontFamily
+						font.pixelSize: Theme.fontSize
+					}
+
+					MouseArea {
+						id: captureMuteHit
+						anchors.fill: parent
+						hoverEnabled: true
+						cursorShape: Qt.PointingHandCursor
+						onClicked: AudioState.toggleMute(captureRow.modelData)
 					}
 				}
 
-				Text {
-					id: captureMute
-					anchors.right: parent.right
-					anchors.rightMargin: Theme.edgeInset
-					anchors.verticalCenter: captureWell.verticalCenter
-					text: captureRow.modelData.audio && captureRow.modelData.audio.muted ? "Muted" : AudioState.levelText(captureRow.modelData.audio ? captureRow.modelData.audio.volume : 0, false)
-					color: captureRow.modelData.audio && captureRow.modelData.audio.muted ? root.ink(Theme.quiet) : Theme.foreground
-					font.family: Theme.fontFamily
-					font.pixelSize: Theme.smallSize
-				}
+				Item {
+					width: parent.width
+					height: Theme.sliderSlot
 
-				Text {
-					anchors.left: captureWell.right
-					anchors.leftMargin: Theme.inset
-					anchors.right: captureMute.left
-					anchors.rightMargin: Theme.inset
-					anchors.verticalCenter: captureWell.verticalCenter
-					text: AudioState.streamLabel(captureRow.modelData)
-					color: Theme.foreground
-					font.family: Theme.fontFamily
-					font.pixelSize: Theme.fontSize
-					elide: Text.ElideRight
-				}
-
-				Rectangle {
-					z: -1
-					anchors.fill: captureMuteHit
-					anchors.leftMargin: Theme.inset
-					anchors.rightMargin: Theme.inset
-					anchors.topMargin: 2
-					anchors.bottomMargin: 2
-					radius: Theme.rowRadius
-					color: captureMuteHit.containsMouse ? root.ink(Theme.hover) : "transparent"
-				}
-
-				MouseArea {
-					id: captureMuteHit
-					anchors.left: parent.left
-					anchors.right: parent.right
-					anchors.top: parent.top
-					anchors.bottom: captureVolume.top
-					hoverEnabled: true
-					cursorShape: Qt.PointingHandCursor
-					onClicked: AudioState.toggleMute(captureRow.modelData)
-				}
-
-				VolumeBar {
-					id: captureVolume
-					anchors.left: parent.left
-					anchors.right: parent.right
-					anchors.bottom: parent.bottom
-					anchors.leftMargin: Theme.headerInset
-					anchors.rightMargin: Theme.headerInset
-					anchors.bottomMargin: 2
-					value: captureRow.modelData.audio ? captureRow.modelData.audio.volume : 0
-					onMoved: amount => AudioState.setVolume(captureRow.modelData, amount)
+					VolumeBar {
+						anchors.left: parent.left
+						anchors.right: parent.right
+						anchors.verticalCenter: parent.verticalCenter
+						anchors.leftMargin: Theme.headerInset
+						anchors.rightMargin: Theme.headerInset
+						value: captureRow.modelData.audio ? captureRow.modelData.audio.volume : 0
+						onMoved: amount => AudioState.setVolume(captureRow.modelData, amount)
+					}
 				}
 			}
 		}
