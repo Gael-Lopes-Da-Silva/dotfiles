@@ -706,22 +706,27 @@ Item {
 				Rectangle {
 					z: -1
 					anchors.fill: streamMuteHit
-					radius: Theme.buttonRadius
+					anchors.leftMargin: Theme.inset
+					anchors.rightMargin: Theme.inset
+					anchors.topMargin: 2
+					anchors.bottomMargin: 2
+					radius: Theme.rowRadius
 					color: streamMuteHit.containsMouse ? root.ink(Theme.hover) : "transparent"
 				}
 
 				MouseArea {
 					id: streamMuteHit
+					anchors.left: parent.left
 					anchors.right: parent.right
 					anchors.top: parent.top
+					anchors.bottom: streamVolume.top
 					hoverEnabled: true
-					width: streamMute.implicitWidth + 36
-					height: 36
 					cursorShape: Qt.PointingHandCursor
 					onClicked: AudioState.toggleMute(streamRow.modelData)
 				}
 
 				VolumeBar {
+					id: streamVolume
 					anchors.left: parent.left
 					anchors.right: parent.right
 					anchors.bottom: parent.bottom
@@ -975,22 +980,27 @@ Item {
 				Rectangle {
 					z: -1
 					anchors.fill: captureMuteHit
-					radius: Theme.buttonRadius
+					anchors.leftMargin: Theme.inset
+					anchors.rightMargin: Theme.inset
+					anchors.topMargin: 2
+					anchors.bottomMargin: 2
+					radius: Theme.rowRadius
 					color: captureMuteHit.containsMouse ? root.ink(Theme.hover) : "transparent"
 				}
 
 				MouseArea {
 					id: captureMuteHit
+					anchors.left: parent.left
 					anchors.right: parent.right
 					anchors.top: parent.top
+					anchors.bottom: captureVolume.top
 					hoverEnabled: true
-					width: captureMute.implicitWidth + 36
-					height: 36
 					cursorShape: Qt.PointingHandCursor
 					onClicked: AudioState.toggleMute(captureRow.modelData)
 				}
 
 				VolumeBar {
+					id: captureVolume
 					anchors.left: parent.left
 					anchors.right: parent.right
 					anchors.bottom: parent.bottom
