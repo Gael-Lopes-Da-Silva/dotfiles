@@ -670,7 +670,7 @@
 
           layout = {
             gaps = 15;
-            background-color = "#303030";
+            background-color = "#1C1C1C";
             center-focused-column = "never";
             empty-workspace-above-first = { };
             always-center-single-column = { };
@@ -717,6 +717,7 @@
 
           overview = {
             zoom = 0.75;
+            backdrop-color = "#0F0F0F";
           };
 
           cursor = {
