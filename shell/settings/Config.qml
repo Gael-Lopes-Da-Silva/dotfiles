@@ -81,6 +81,9 @@ Singleton {
 	readonly property string osdScreenName: Settings.settings.osdScreenName
 	readonly property string powerLap: Settings.settings.powerLap
 	readonly property string powerHot: Settings.settings.powerHot
+	readonly property string batteryLow: Settings.settings.batteryLow
+	readonly property string batteryRemaining: Settings.settings.batteryRemaining
+	readonly property string batteryFull: Settings.settings.batteryFull
 	readonly property var niriEvent: Settings.settings.niriEvent
 	readonly property var screenshotCommand: Settings.settings.screenshotCommand
 	readonly property var pickColorCommand: Settings.settings.pickColorCommand

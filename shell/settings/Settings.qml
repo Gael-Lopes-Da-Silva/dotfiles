@@ -181,6 +181,9 @@ Singleton {
 				property string osdScreenName: "Screen"
 				property string powerLap: "Limited while on your lap"
 				property string powerHot: "Limited while the laptop is hot"
+				property string batteryLow: "Battery low"
+				property string batteryRemaining: "% remaining"
+				property string batteryFull: "Fully charged"
 				property var niriEvent: ["niri", "msg", "--json", "event-stream"]
 				property var screenshotCommand: ["niri", "msg", "action", "screenshot", "--show-pointer", "false"]
 				property var pickColorCommand: ["niri", "msg", "--json", "pick-color"]

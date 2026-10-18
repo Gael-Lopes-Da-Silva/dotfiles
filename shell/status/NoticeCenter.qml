@@ -188,6 +188,7 @@ Column {
 						required property real at
 						required property var urgent
 						required property var local
+						required property string kind
 						readonly property bool shell: Number(local) === 1
 						readonly property bool alarm: Number(urgent) === 1
 						readonly property bool marked: shell || icon !== ""
@@ -288,10 +289,10 @@ Column {
 								text: row.shell ? row.body : NoticeState.markup(row.body)
 								color: Theme.ink(Theme.body)
 								linkColor: Theme.link
-								font.family: row.shell && row.alarm ? Theme.monoFamily : Theme.fontFamily
+								font.family: row.kind === "reload" && row.alarm ? Theme.monoFamily : Theme.fontFamily
 								font.pixelSize: Theme.fontSize
 								wrapMode: Text.WordWrap
-								maximumLineCount: row.shell ? Theme.noticeErrorLines : Theme.noticeBodyLines
+								maximumLineCount: row.kind === "reload" ? Theme.noticeErrorLines : Theme.noticeBodyLines
 								elide: Text.ElideRight
 								textFormat: row.shell ? Text.PlainText : Text.RichText
 								onLinkActivated: link => NoticeState.openLink(link)

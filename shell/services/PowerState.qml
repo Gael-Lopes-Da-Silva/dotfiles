@@ -10,6 +10,9 @@ Singleton {
 
 	property bool primed: false
 	property bool pluggedSeen: false
+	property int percentSeen: 0
+	property bool lowSeen: false
+	property bool fullSeen: false
 
 	readonly property var battery: UPower.displayDevice
 	readonly property bool hasBattery: battery.ready && battery.isLaptopBattery && battery.isPresent
@@ -80,27 +83,64 @@ Singleton {
 		return Config.icon(icons[icons.length - 1])
 	}
 
-	function note() {
-		if (!primed || !hasBattery || plugged === pluggedSeen)
-			return
+	function capture() {
 		pluggedSeen = plugged
-		NiriState.showOsd("power")
+		percentSeen = percent
+		lowSeen = hasBattery && !plugged && percent <= Config.lowBattery
+		fullSeen = hasBattery && plugged && percent >= 100
+	}
+
+	function reportLow() {
+		NoticeState.powerNotice(Config.batteryLow, percent + Config.batteryRemaining, true)
+	}
+
+	// One notice each time charge falls to the low mark, and one when a charge reaches full.
+	function note() {
+		if (!primed || !hasBattery)
+			return
+		const wasPlugged = pluggedSeen
+		if (plugged !== pluggedSeen) {
+			pluggedSeen = plugged
+			NiriState.showOsd("power")
+		}
+		const low = !plugged && percent <= Config.lowBattery
+		const wasLow = lowSeen
+		lowSeen = low
+		if (low && !wasLow)
+			reportLow()
+		const reachedFull = plugged && percent >= 100 && !fullSeen && wasPlugged && percentSeen < 100
+		if (plugged && percent >= 100)
+			fullSeen = true
+		else if (!plugged)
+			fullSeen = false
+		percentSeen = percent
+		if (reachedFull)
+			NoticeState.powerNotice(Config.batteryFull, "", false)
 	}
 
 	onPluggedChanged: note()
+	onPercentChanged: note()
 
 	Timer {
 		id: arm
 		interval: Config.powerPrime
 		onTriggered: {
-			root.pluggedSeen = root.plugged
+			root.capture()
 			root.primed = true
+			if (root.lowSeen)
+				root.reportLow()
 		}
 	}
 
 	Component.onCompleted: arm.restart()
 	onHasBatteryChanged: {
-		if (!primed)
+		if (!primed) {
 			arm.restart()
+			return
+		}
+		const wasLow = lowSeen
+		capture()
+		if (lowSeen && !wasLow)
+			reportLow()
 	}
 }

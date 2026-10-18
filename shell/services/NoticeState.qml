@@ -80,6 +80,7 @@ Singleton {
 				historyModel.setProperty(i, "icon", entry.icon || "")
 				historyModel.setProperty(i, "urgent", entry.urgent)
 				historyModel.setProperty(i, "at", entry.at)
+				historyModel.setProperty(i, "kind", entry.kind || "")
 				return
 			}
 		}
@@ -91,22 +92,23 @@ Singleton {
 		historyModel.clear()
 	}
 
-	function shellNotice(summary, body, failed) {
+	function publish(summary, body, duration, urgent, kind) {
 		const key = summary + "\n" + body
 		const now = Date.now()
 		if (key === lastNotice && now - lastNoticeAt < Config.noticeDedupe)
 			return
 		lastNotice = key
 		lastNoticeAt = now
-		const duration = failed ? Config.reloadFailHold : Config.reloadHold
-		const urgent = failed ? 1 : 0
+		const alarm = urgent ? 1 : 0
+		const tone = kind || ""
 		for (let i = 0; i < model.count; i++) {
 			const row = model.get(i)
 			if (row.local === 1 && row.summary === summary) {
 				model.setProperty(i, "body", body)
 				model.setProperty(i, "duration", duration)
 				model.setProperty(i, "remaining", duration)
-				model.setProperty(i, "urgent", urgent)
+				model.setProperty(i, "urgent", alarm)
+				model.setProperty(i, "kind", tone)
 				remember({
 					nid: row.nid,
 					app: Config.shellName,
@@ -114,8 +116,9 @@ Singleton {
 					body: plain(body),
 					icon: "",
 					at: now,
-					urgent: urgent,
-					local: 1
+					urgent: alarm,
+					local: 1,
+					kind: tone
 				})
 				return
 			}
@@ -128,8 +131,9 @@ Singleton {
 			local: 1,
 			summary: summary,
 			body: body,
-			urgent: urgent,
-			closing: 0
+			urgent: alarm,
+			closing: 0,
+			kind: tone
 		})
 		remember({
 			nid: localSeq,
@@ -138,9 +142,18 @@ Singleton {
 			body: plain(body),
 			icon: "",
 			at: now,
-			urgent: urgent,
-			local: 1
+			urgent: alarm,
+			local: 1,
+			kind: tone
 		})
+	}
+
+	function shellNotice(summary, body, failed) {
+		publish(summary, body, failed ? Config.reloadFailHold : Config.reloadHold, failed, "reload")
+	}
+
+	function powerNotice(summary, body, urgent) {
+		publish(summary, body, Config.notificationHold, urgent, "power")
 	}
 
 	function track(notification) {
@@ -163,7 +176,8 @@ Singleton {
 			summary: "",
 			body: "",
 			urgent: 0,
-			closing: 0
+			closing: 0,
+			kind: ""
 		})
 		remember({
 			nid: notification.id,
@@ -173,7 +187,8 @@ Singleton {
 			icon: iconSource(notification.appIcon || ""),
 			at: Date.now(),
 			urgent: notification.urgency === NotificationUrgency.Critical ? 1 : 0,
-			local: 0
+			local: 0,
+			kind: ""
 		})
 		notification.closed.connect(() => root.removeId(notification.id))
 	}

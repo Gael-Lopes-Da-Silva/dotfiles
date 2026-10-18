@@ -41,6 +41,7 @@ Item {
 					required property string body
 					required property var urgent
 					required property var closing
+					required property string kind
 					readonly property bool synthetic: local === 1
 					readonly property var notification: {
 						const _ = NoticeState.trackedCount
@@ -62,6 +63,8 @@ Item {
 					}
 					readonly property var buttons: {
 						if (synthetic) {
+							if (kind !== "reload")
+								return []
 							const list = []
 							if (critical && body)
 								list.push({ text: "Copy error", copy: body })
@@ -193,7 +196,7 @@ Item {
 
 							Text {
 								visible: card.synthetic
-								text: Config.icon(card.critical ? Config.alert : Config.check)
+								text: card.kind === "power" ? PowerState.batteryGlyph() : Config.icon(card.critical ? Config.alert : Config.check)
 								color: card.critical ? Theme.recording : Theme.foreground
 								font.family: Theme.iconFont
 								font.pixelSize: Theme.noticeIcon
@@ -254,10 +257,10 @@ Item {
 							text: card.faceReady ? card.faceBody : (card.synthetic ? card.body : (card.notification ? NoticeState.markup(card.notification.body) : ""))
 							color: Theme.ink(Theme.body)
 							linkColor: Theme.link
-							font.family: card.synthetic && card.critical ? Theme.monoFamily : Theme.fontFamily
+							font.family: card.kind === "reload" && card.critical ? Theme.monoFamily : Theme.fontFamily
 							font.pixelSize: Theme.fontSize
 							wrapMode: Text.WordWrap
-							maximumLineCount: card.synthetic ? Theme.noticeErrorLines : Theme.noticeBodyLines
+							maximumLineCount: card.kind === "reload" ? Theme.noticeErrorLines : Theme.noticeBodyLines
 							elide: Text.ElideRight
 							textFormat: card.synthetic ? Text.PlainText : Text.RichText
 							onLinkActivated: link => NoticeState.openLink(link)
