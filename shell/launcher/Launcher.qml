@@ -1,7 +1,7 @@
 import QtQuick
 import Quickshell
 import Quickshell.Io
-import qs
+import qs.settings
 import qs.services
 
 Item {
@@ -283,7 +283,7 @@ Item {
 				anchors.left: parent.left
 				anchors.leftMargin: 16
 				anchors.verticalCenter: parent.verticalCenter
-				text: String.fromCodePoint(0xF0349)
+				text: Config.icon(Config.search)
 				color: Theme.ink(Theme.iconMute)
 				font.family: Theme.iconFont
 				font.pixelSize: Theme.searchIconSize

@@ -1,6 +1,6 @@
 import QtQuick
 import Quickshell.Services.UPower
-import qs
+import qs.settings
 import qs.services
 
 Item {

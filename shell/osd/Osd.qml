@@ -1,5 +1,5 @@
 import QtQuick
-import qs
+import qs.settings
 import qs.services
 
 Item {
@@ -21,37 +21,31 @@ Item {
 	readonly property real bar: Math.max(0, Math.min(1, amount))
 	readonly property string label: {
 		if (kind === "usb" || kind === "screen") {
-			const name = NiriState.osdText || (kind === "usb" ? "USB" : "Screen")
-			return name + (NiriState.osdOn ? " plugged in" : " unplugged")
+			const name = NiriState.osdText || (kind === "usb" ? Config.osdUsbName : Config.osdScreenName)
+			return name + (NiriState.osdOn ? Config.osdPlugged : Config.osdUnplugged)
 		}
 		if (kind === "power")
-			return PowerState.plugged ? "Charger plugged in" : "Charger unplugged"
+			return PowerState.plugged ? Config.osdChargerOn : Config.osdChargerOff
 		if (kind === "brightness")
 			return Math.round(amount * 100) + "%"
 		if (kind === "microphone")
-			return AudioState.micMuted ? "Microphone muted" : AudioState.levelText(AudioState.micVolume, false)
+			return AudioState.micMuted ? Config.osdMicMuted : AudioState.levelText(AudioState.micVolume, false)
 		if (AudioState.muted)
-			return "Audio muted"
+			return Config.osdAudioMuted
 		return Math.round(amount * 100) + "%"
 	}
 	readonly property string glyph: {
 		if (kind === "usb")
-			return String.fromCodePoint(0xF129E)
+			return Config.icon(Config.usb)
 		if (kind === "screen")
-			return String.fromCodePoint(NiriState.osdOn ? 0xF0379 : 0xF0D57)
+			return Config.icon(NiriState.osdOn ? Config.screenOn : Config.screenOff)
 		if (kind === "power")
-			return String.fromCodePoint(PowerState.plugged ? 0xF06A5 : 0xF06A6)
+			return Config.icon(PowerState.plugged ? Config.chargerOn : Config.chargerOff)
 		if (kind === "brightness")
-			return String.fromCodePoint(0xF00DF)
+			return Config.icon(Config.brightness)
 		if (kind === "microphone")
 			return AudioState.micGlyph(AudioState.micVolume, AudioState.micMuted)
-		if (AudioState.muted || amount <= Config.muteFloor)
-			return String.fromCodePoint(0xF075F)
-		if (amount < Config.volumeLow)
-			return String.fromCodePoint(0xF057F)
-		if (amount < Config.volumeMid)
-			return String.fromCodePoint(0xF0580)
-		return String.fromCodePoint(0xF057E)
+		return AudioState.volumeGlyph(amount, AudioState.muted || amount <= Config.muteFloor)
 	}
 
 	implicitWidth: row.implicitWidth + Theme.padding * 2

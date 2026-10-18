@@ -1,7 +1,7 @@
 import QtQuick
 import Quickshell
 import Quickshell.Wayland
-import qs
+import qs.settings
 import qs.cast
 import qs.launcher
 import qs.notices
@@ -555,7 +555,7 @@ PanelWindow {
 				root.sessionMenu = !root.sessionMenu
 			}
 			onShotClicked: {
-				Quickshell.execDetached(["niri", "msg", "action", "screenshot", "--show-pointer", "false"])
+				Quickshell.execDetached(Config.screenshotCommand)
 				root.sessionMenu = false
 				root.sessionWanted = false
 			}

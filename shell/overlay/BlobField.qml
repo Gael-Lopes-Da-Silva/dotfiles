@@ -1,5 +1,5 @@
 import QtQuick
-import qs
+import qs.settings
 
 Item {
 	id: root
@@ -23,7 +23,7 @@ Item {
 	ShaderEffect {
 		anchors.fill: parent
 		blending: true
-		fragmentShader: Qt.resolvedUrl("../frame.frag.qsb")
+		fragmentShader: Qt.resolvedUrl("../shader/frame.frag.qsb")
 
 		property real fieldWidth: width
 		property real fieldHeight: height

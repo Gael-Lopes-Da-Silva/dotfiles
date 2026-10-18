@@ -1,6 +1,6 @@
 import QtQuick
 import Quickshell
-import qs
+import qs.settings
 import qs.services
 
 Item {
@@ -24,7 +24,7 @@ Item {
 	property string timeText: Qt.formatTime(clock.now, Config.timeFormat)
 
 	function clockGlyph() {
-		return String.fromCodePoint(0xF0150)
+		return Config.icon(Config.clock)
 	}
 
 	QtObject {
@@ -160,7 +160,7 @@ Item {
 				spacing: Theme.gap
 
 				Text {
-					text: String.fromCodePoint(NoticeState.quiet ? 0xF00A0 : 0xF009A)
+					text: Config.icon(NoticeState.quiet ? Config.bellOff : Config.bell)
 					color: Theme.foreground
 					font.family: Theme.iconFont
 					font.pixelSize: Theme.clockSize

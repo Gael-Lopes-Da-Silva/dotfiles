@@ -1,5 +1,5 @@
 import QtQuick
-import qs
+import qs.settings
 
 Item {
 	id: root
@@ -39,7 +39,7 @@ Item {
 			Text {
 				id: shotIcon
 				anchors.centerIn: parent
-				text: String.fromCodePoint(0xF0E51)
+				text: Config.icon(Config.screenshot)
 				color: Theme.foreground
 				font.family: Theme.iconFont
 				font.pixelSize: Theme.clockSize
@@ -73,7 +73,7 @@ Item {
 			Text {
 				id: powerIcon
 				anchors.centerIn: parent
-				text: String.fromCodePoint(0xF0425)
+				text: Config.icon(Config.power)
 				color: Theme.foreground
 				font.family: Theme.iconFont
 				font.pixelSize: Theme.clockSize

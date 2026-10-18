@@ -1,6 +1,6 @@
 import QtQuick
 import Quickshell
-import qs
+import qs.settings
 
 Item {
 	id: root
@@ -26,12 +26,7 @@ Item {
 		spacing: Theme.menuSpacing
 
 		Repeater {
-			model: [
-				{ icon: 0xF0904, label: "Suspend", command: ["systemctl", "suspend"] },
-				{ icon: 0xF0709, label: "Restart", command: ["systemctl", "reboot"] },
-				{ icon: 0xF0425, label: "Shut down", command: ["systemctl", "poweroff"] },
-				{ icon: 0xF0343, label: "Log out", command: ["niri", "msg", "action", "quit", "--skip-confirmation"] }
-			]
+			model: Config.sessionActions
 
 			Rectangle {
 				id: actionRow
@@ -55,7 +50,7 @@ Item {
 
 					Text {
 						anchors.centerIn: parent
-						text: String.fromCodePoint(actionRow.modelData.icon)
+						text: Config.icon(actionRow.modelData.icon)
 						color: Theme.foreground
 						font.family: Theme.iconFont
 						font.pixelSize: Theme.glyphSize

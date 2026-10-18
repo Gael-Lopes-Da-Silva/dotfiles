@@ -1,7 +1,7 @@
 import QtQuick
 import Quickshell.Bluetooth
 import Quickshell.Networking
-import qs
+import qs.settings
 import qs.services
 
 Item {

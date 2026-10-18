@@ -3,7 +3,7 @@ pragma Singleton
 import QtQuick
 import Quickshell
 import Quickshell.Services.UPower
-import qs
+import qs.settings
 
 Singleton {
 	id: root
@@ -62,59 +62,22 @@ Singleton {
 
 	function limitText() {
 		if (PowerProfiles.degradationReason === PerformanceDegradationReason.LapDetected)
-			return "Limited while on your lap"
+			return Config.powerLap
 		if (PowerProfiles.degradationReason === PerformanceDegradationReason.HighTemperature)
-			return "Limited while the laptop is hot"
+			return Config.powerHot
 		return ""
 	}
 
 	function batteryGlyph() {
 		if (!hasBattery)
 			return ""
-		if (plugged) {
-			if (percent >= 95)
-				return String.fromCodePoint(0xF0085)
-			if (percent >= 85)
-				return String.fromCodePoint(0xF008B)
-			if (percent >= 75)
-				return String.fromCodePoint(0xF008A)
-			if (percent >= 65)
-				return String.fromCodePoint(0xF089E)
-			if (percent >= 55)
-				return String.fromCodePoint(0xF0089)
-			if (percent >= 45)
-				return String.fromCodePoint(0xF089D)
-			if (percent >= 35)
-				return String.fromCodePoint(0xF0088)
-			if (percent >= 25)
-				return String.fromCodePoint(0xF0087)
-			if (percent >= 15)
-				return String.fromCodePoint(0xF0086)
-			if (percent >= 5)
-				return String.fromCodePoint(0xF089C)
-			return String.fromCodePoint(0xF0084)
+		const icons = plugged ? Config.batteryCharging : Config.batteryDischarging
+		const steps = Config.batterySteps
+		for (let i = 0; i < steps.length && i < icons.length; i++) {
+			if (percent >= steps[i])
+				return Config.icon(icons[i])
 		}
-		if (percent >= 95)
-			return String.fromCodePoint(0xF0079)
-		if (percent >= 85)
-			return String.fromCodePoint(0xF0082)
-		if (percent >= 75)
-			return String.fromCodePoint(0xF0081)
-		if (percent >= 65)
-			return String.fromCodePoint(0xF0080)
-		if (percent >= 55)
-			return String.fromCodePoint(0xF007F)
-		if (percent >= 45)
-			return String.fromCodePoint(0xF007E)
-		if (percent >= 35)
-			return String.fromCodePoint(0xF007D)
-		if (percent >= 25)
-			return String.fromCodePoint(0xF007C)
-		if (percent >= 15)
-			return String.fromCodePoint(0xF007B)
-		if (percent >= 5)
-			return String.fromCodePoint(0xF007A)
-		return String.fromCodePoint(0xF008E)
+		return Config.icon(icons[icons.length - 1])
 	}
 
 	function note() {

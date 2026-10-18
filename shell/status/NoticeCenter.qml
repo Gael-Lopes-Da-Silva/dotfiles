@@ -1,5 +1,5 @@
 import QtQuick
-import qs
+import qs.settings
 import qs.services
 
 Column {
@@ -23,10 +23,10 @@ Column {
 
 	function glyph(local, urgent) {
 		if (Number(urgent) === 1)
-			return String.fromCodePoint(0xF0026)
+			return Config.icon(Config.alert)
 		if (Number(local) === 1)
-			return String.fromCodePoint(0xF012C)
-		return String.fromCodePoint(0xF009A)
+			return Config.icon(Config.check)
+		return Config.icon(Config.bell)
 	}
 
 	Item {
@@ -47,7 +47,7 @@ Column {
 			anchors.left: parent.left
 			anchors.leftMargin: Theme.headerInset
 			anchors.verticalCenter: parent.verticalCenter
-			text: String.fromCodePoint(NoticeState.quiet ? 0xF00A0 : 0xF009A)
+			text: Config.icon(NoticeState.quiet ? Config.bellOff : Config.bell)
 			color: Theme.foreground
 			font.family: Theme.iconFont
 			font.pixelSize: Theme.iconSize

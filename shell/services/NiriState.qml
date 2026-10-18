@@ -3,7 +3,7 @@ pragma Singleton
 import QtQuick
 import Quickshell
 import Quickshell.Io
-import qs
+import qs.settings
 
 Singleton {
 	id: root
@@ -252,7 +252,7 @@ Singleton {
 
 	Process {
 		id: stream
-		command: ["niri", "msg", "--json", "event-stream"]
+		command: Config.niriEvent
 		running: true
 		stdout: SplitParser {
 			onRead: line => root.ingest(String(line))

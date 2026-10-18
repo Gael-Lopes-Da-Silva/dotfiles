@@ -1,7 +1,7 @@
 import QtQuick
 import Quickshell.Bluetooth
 import Quickshell.Networking
-import qs
+import qs.settings
 import qs.services
 
 Item {
@@ -218,7 +218,7 @@ Item {
 					anchors.leftMargin: Theme.inset
 					anchors.verticalCenter: parent.verticalCenter
 					visible: RadioState.secured(wifiRow.modelData)
-					text: String.fromCodePoint(0xF033E)
+					text: Config.icon(Config.lock)
 					color: root.ink(Theme.iconMute)
 					font.family: Theme.iconFont
 					font.pixelSize: Theme.fontSize
@@ -281,7 +281,7 @@ Item {
 				anchors.left: parent.left
 				anchors.leftMargin: Theme.headerInset
 				anchors.verticalCenter: parent.verticalCenter
-				text: String.fromCodePoint(0xF033E)
+				text: Config.icon(Config.lock)
 				color: root.ink(Theme.iconMute)
 				font.family: Theme.iconFont
 				font.pixelSize: Theme.glyphSize
@@ -416,7 +416,7 @@ Item {
 
 					Text {
 						anchors.centerIn: parent
-						text: btRow.connected ? String.fromCodePoint(0xF00B1) : String.fromCodePoint(0xF00AF)
+						text: Config.icon(btRow.connected ? Config.btOn : Config.btIdle)
 						color: Theme.foreground
 						font.family: Theme.iconFont
 						font.pixelSize: Theme.glyphSize

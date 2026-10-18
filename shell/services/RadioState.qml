@@ -5,7 +5,7 @@ import Quickshell
 import Quickshell.Bluetooth
 import Quickshell.Io
 import Quickshell.Networking
-import qs
+import qs.settings
 
 Singleton {
 	id: root
@@ -116,26 +116,26 @@ Singleton {
 	}
 
 	function strengthGlyph(strength) {
-		const bars = [0xF091F, 0xF0922, 0xF0925, 0xF0928]
+		const bars = Config.wifiBars
 		const idx = strength >= 0.75 ? 3 : strength >= 0.5 ? 2 : strength >= 0.25 ? 1 : 0
-		return String.fromCodePoint(bars[idx])
+		return Config.icon(bars[idx])
 	}
 
 	function wifiGlyph() {
 		if (!Networking.wifiEnabled)
-			return String.fromCodePoint(0xF05AA)
+			return Config.icon(Config.wifiOff)
 		if (!activeWifi)
-			return String.fromCodePoint(0xF092A)
+			return Config.icon(Config.wifiIdle)
 		return strengthGlyph(wifiSignal)
 	}
 
 	function btGlyph() {
 		const adapter = bluetooth
 		if (!adapter || !adapter.enabled)
-			return String.fromCodePoint(0xF00B2)
+			return Config.icon(Config.btOff)
 		if (!connectedBt)
-			return String.fromCodePoint(0xF00AF)
-		return String.fromCodePoint(0xF00B1)
+			return Config.icon(Config.btIdle)
+		return Config.icon(Config.btOn)
 	}
 
 	function needsPsk(network) {

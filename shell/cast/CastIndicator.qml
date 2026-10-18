@@ -1,5 +1,5 @@
 import QtQuick
-import qs
+import qs.settings
 
 Item {
 	id: root
@@ -8,9 +8,9 @@ Item {
 	property string output: ""
 	property real iconSize: Theme.clockSize
 
-	readonly property int glyphSize: Math.round(iconSize * 0.68)
-	readonly property int edge: 1
-	readonly property int iconNudge: 4
+	readonly property int glyphSize: Math.round(iconSize * Config.castGlyphScale)
+	readonly property int edge: Config.castEdge
+	readonly property int iconNudge: Config.castNudge
 	readonly property real buttonSide: castMetrics.advanceWidth
 
 	width: implicitWidth
@@ -22,7 +22,7 @@ Item {
 		id: castMetrics
 		font.family: Theme.iconFont
 		font.pixelSize: root.glyphSize
-		text: String.fromCodePoint(0xF044A)
+		text: Config.icon(Config.record)
 	}
 
 	Item {
@@ -37,7 +37,7 @@ Item {
 		anchors.centerIn: glyphBox
 		anchors.horizontalCenterOffset: root.iconNudge
 		anchors.verticalCenterOffset: root.iconNudge
-		text: String.fromCodePoint(0xF044A)
+		text: Config.icon(Config.record)
 		color: Theme.recording
 		font.family: Theme.iconFont
 		font.pixelSize: root.glyphSize

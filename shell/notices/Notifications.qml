@@ -1,6 +1,6 @@
 import QtQuick
 import Quickshell.Services.Notifications
-import qs
+import qs.settings
 import qs.services
 
 Item {
@@ -193,7 +193,7 @@ Item {
 
 							Text {
 								visible: card.synthetic
-								text: String.fromCodePoint(card.critical ? 0xF0026 : 0xF012C)
+								text: Config.icon(card.critical ? Config.alert : Config.check)
 								color: card.critical ? Theme.recording : Theme.foreground
 								font.family: Theme.iconFont
 								font.pixelSize: Theme.noticeIcon
@@ -379,7 +379,7 @@ Item {
 
 								Text {
 									anchors.centerIn: parent
-									text: String.fromCodePoint(0xF048A)
+									text: Config.icon(Config.reply)
 									color: Theme.foreground
 									font.family: Theme.iconFont
 									font.pixelSize: Theme.replyIcon

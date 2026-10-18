@@ -3,7 +3,7 @@ pragma Singleton
 import QtQuick
 import Quickshell
 import Quickshell.Services.Pipewire
-import qs
+import qs.settings
 
 Singleton {
 	id: root
@@ -197,24 +197,26 @@ Singleton {
 	}
 
 	function volumeGlyph(level, muted) {
+		const icons = Config.volumeIcons
 		if (muted || level <= Config.muteFloor)
-			return String.fromCodePoint(0xF075F)
+			return Config.icon(icons[0])
 		if (level < Config.volumeLow)
-			return String.fromCodePoint(0xF057F)
+			return Config.icon(icons[1])
 		if (level < Config.volumeMid)
-			return String.fromCodePoint(0xF0580)
-		return String.fromCodePoint(0xF057E)
+			return Config.icon(icons[2])
+		return Config.icon(icons[3])
 	}
 
 	function micGlyph(level, muted) {
+		const icons = Config.micIcons
 		if (muted || level <= Config.muteFloor)
-			return String.fromCodePoint(0xF036D)
-		return String.fromCodePoint(0xF036C)
+			return Config.icon(icons[0])
+		return Config.icon(icons[1])
 	}
 
 	function levelText(level, muted) {
 		if (muted)
-			return "Muted"
+			return Config.mutedLabel
 		return Math.round(Math.max(0, level) * 100) + "%"
 	}
 
