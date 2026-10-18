@@ -48,51 +48,6 @@ Item {
 		spacing: root.buttonGap
 
 		Item {
-			implicitWidth: timeRow.implicitWidth + root.buttonPadX * 2
-			implicitHeight: timeRow.implicitHeight + root.buttonPadY * 2
-
-			Rectangle {
-				anchors.fill: parent
-				radius: Theme.buttonRadius
-				color: {
-					if (timeHover.containsMouse)
-						return Theme.ink(root.activePage === "time" ? Theme.buttonHover : Theme.hover)
-					return root.activePage === "time" ? Theme.ink(Theme.selected) : "transparent"
-				}
-			}
-
-			Row {
-				id: timeRow
-				anchors.centerIn: parent
-				spacing: Theme.gap
-
-				Text {
-					text: root.clockGlyph()
-					color: Theme.foreground
-					font.family: Theme.iconFont
-					font.pixelSize: Theme.clockSize
-					anchors.verticalCenter: parent.verticalCenter
-				}
-
-				Text {
-					text: root.timeText
-					color: Theme.foreground
-					font.family: Theme.fontFamily
-					font.pixelSize: Theme.clockSize
-					anchors.verticalCenter: parent.verticalCenter
-				}
-			}
-
-			MouseArea {
-				id: timeHover
-				anchors.fill: parent
-				hoverEnabled: true
-				cursorShape: Qt.PointingHandCursor
-				onClicked: root.timeClicked()
-			}
-		}
-
-		Item {
 			id: batteryHit
 			visible: PowerState.hasBattery
 			implicitWidth: batteryRow.implicitWidth + root.buttonPadX * 2
@@ -136,6 +91,51 @@ Item {
 				hoverEnabled: true
 				cursorShape: Qt.PointingHandCursor
 				onClicked: root.batteryClicked()
+			}
+		}
+
+		Item {
+			implicitWidth: timeRow.implicitWidth + root.buttonPadX * 2
+			implicitHeight: timeRow.implicitHeight + root.buttonPadY * 2
+
+			Rectangle {
+				anchors.fill: parent
+				radius: Theme.buttonRadius
+				color: {
+					if (timeHover.containsMouse)
+						return Theme.ink(root.activePage === "time" ? Theme.buttonHover : Theme.hover)
+					return root.activePage === "time" ? Theme.ink(Theme.selected) : "transparent"
+				}
+			}
+
+			Row {
+				id: timeRow
+				anchors.centerIn: parent
+				spacing: Theme.gap
+
+				Text {
+					text: root.clockGlyph()
+					color: Theme.foreground
+					font.family: Theme.iconFont
+					font.pixelSize: Theme.clockSize
+					anchors.verticalCenter: parent.verticalCenter
+				}
+
+				Text {
+					text: root.timeText
+					color: Theme.foreground
+					font.family: Theme.fontFamily
+					font.pixelSize: Theme.clockSize
+					anchors.verticalCenter: parent.verticalCenter
+				}
+			}
+
+			MouseArea {
+				id: timeHover
+				anchors.fill: parent
+				hoverEnabled: true
+				cursorShape: Qt.PointingHandCursor
+				onClicked: root.timeClicked()
 			}
 		}
 
