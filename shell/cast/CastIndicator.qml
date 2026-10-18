@@ -16,13 +16,14 @@ Item {
 	readonly property real open: Math.max(0, 1 - shrink)
 	readonly property real margin: Theme.padding * open
 	readonly property real edge: Math.max(1, margin)
+	readonly property real iconNudge: 2 * shrink
 	readonly property real buttonWidth: fullIcon.implicitWidth / (1 + 1 * shrink) + Theme.padding * 1.5 * open
 	readonly property real buttonHeight: fullIcon.implicitHeight / (1 + 1 * shrink) + Theme.padding * 1.5 * open
 
 	width: implicitWidth
 	height: implicitHeight
-	implicitWidth: buttonWidth + edge + margin
-	implicitHeight: buttonHeight + edge + margin
+	implicitWidth: buttonWidth + edge + margin + iconNudge
+	implicitHeight: buttonHeight + edge + margin + iconNudge
 
 	function present() {
 		settle.stop()
@@ -102,6 +103,8 @@ Item {
 	Text {
 		id: icon
 		anchors.centerIn: buttonFace
+		anchors.horizontalCenterOffset: root.iconNudge
+		anchors.verticalCenterOffset: root.iconNudge
 		text: String.fromCodePoint(root.hovered ? 0xF10D3 : (root.mode === "casting" ? 0xF0118 : 0xF0EC2))
 		color: Theme.recording
 		font.family: Theme.iconFont
