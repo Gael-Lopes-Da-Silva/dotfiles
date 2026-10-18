@@ -386,7 +386,6 @@ PanelWindow {
 			id: castBody
 			mode: root.castLabel
 			output: root.modelData.name
-			shown: root.castMode !== ""
 			anchors.top: parent.top
 			anchors.left: parent.left
 			opacity: root.castProgress > Config.reveal ? 1 : 0
@@ -607,9 +606,6 @@ PanelWindow {
 		}
 		Region {
 			item: noticeClip
-		}
-		Region {
-			item: castClip
 		}
 		Region {
 			item: radioCorner

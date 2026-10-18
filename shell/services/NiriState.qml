@@ -144,21 +144,6 @@ Singleton {
 		return ""
 	}
 
-	function stopCasts(outputName) {
-		const seen = {}
-		const values = Object.values(casts)
-		for (let i = 0; i < values.length; i++) {
-			const cast = values[i]
-			if (!castAffects(cast, outputName) || cast.kind !== "PipeWire")
-				continue
-			const id = cast.session_id
-			if (id === undefined || id === null || seen[id])
-				continue
-			seen[id] = true
-			Quickshell.execDetached(["niri", "msg", "action", "stop-cast", "--session-id", String(id)])
-		}
-	}
-
 	function showOsd(kind, text, on) {
 		if (hidden && kind !== "usb")
 			return
