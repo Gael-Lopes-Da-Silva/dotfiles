@@ -4,8 +4,9 @@ import qs.settings
 Item {
 	id: root
 
-	signal powerClicked()
+	signal colorClicked()
 	signal shotClicked()
+	signal powerClicked()
 
 	property bool powerOpen: false
 
@@ -15,7 +16,7 @@ Item {
 	height: implicitHeight
 
 	readonly property real buttonSize: {
-		const side = Math.max(powerIcon.implicitWidth, powerIcon.implicitHeight, shotIcon.implicitWidth, shotIcon.implicitHeight)
+		const side = Math.max(powerIcon.implicitWidth, powerIcon.implicitHeight, shotIcon.implicitWidth, shotIcon.implicitHeight, colorIcon.implicitWidth, colorIcon.implicitHeight)
 		return side + Theme.padding
 	}
 
@@ -23,6 +24,36 @@ Item {
 		id: row
 		anchors.centerIn: parent
 		spacing: Theme.gap
+
+		Item {
+			implicitWidth: root.buttonSize
+			implicitHeight: root.buttonSize
+			width: implicitWidth
+			height: implicitHeight
+
+			Rectangle {
+				anchors.fill: parent
+				radius: Theme.buttonRadius
+				color: colorHover.containsMouse ? Theme.ink(Theme.hover) : "transparent"
+			}
+
+			Text {
+				id: colorIcon
+				anchors.centerIn: parent
+				text: Config.icon(Config.eyedropper)
+				color: Theme.foreground
+				font.family: Theme.iconFont
+				font.pixelSize: Theme.clockSize
+			}
+
+			MouseArea {
+				id: colorHover
+				anchors.fill: parent
+				hoverEnabled: true
+				cursorShape: Qt.PointingHandCursor
+				onClicked: root.colorClicked()
+			}
+		}
 
 		Item {
 			implicitWidth: root.buttonSize

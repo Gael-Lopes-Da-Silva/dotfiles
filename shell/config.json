@@ -163,6 +163,7 @@
     "powerHot": "Limited while the laptop is hot",
     "niriEvent": ["niri", "msg", "--json", "event-stream"],
     "screenshotCommand": ["niri", "msg", "action", "screenshot", "--show-pointer", "false"],
+    "pickColorCommand": ["niri", "msg", "--json", "pick-color"],
     "sessionActions": [
       { "icon": "F0904", "label": "Suspend", "command": ["systemctl", "suspend"] },
       { "icon": "F0709", "label": "Restart", "command": ["systemctl", "reboot"] },
@@ -175,6 +176,7 @@
     "record": "F044A",
     "power": "F0425",
     "screenshot": "F0E51",
+    "eyedropper": "F020A",
     "clock": "F0150",
     "bell": "F009A",
     "bellOff": "F00A0",

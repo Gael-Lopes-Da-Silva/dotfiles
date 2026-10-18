@@ -1,5 +1,6 @@
 import QtQuick
 import Quickshell
+import Quickshell.Io
 import Quickshell.Wayland
 import qs.settings
 import qs.cast
@@ -258,6 +259,28 @@ PanelWindow {
 		} else {
 			sessionTimer.restart()
 		}
+	}
+
+	function copyPickedColor(text) {
+		let data
+		try {
+			data = JSON.parse(String(text || "").trim())
+		} catch (e) {
+			return
+		}
+		const rgb = data && data.rgb
+		if (!rgb || rgb.length < 3)
+			return
+		let hex = "#"
+		for (let i = 0; i < 3; i++) {
+			const channel = Number(rgb[i])
+			if (!Number.isFinite(channel))
+				return
+			const byte = Math.round(Math.min(1, Math.max(0, channel)) * 255)
+			const pair = byte.toString(16)
+			hex += pair.length < 2 ? "0" + pair : pair
+		}
+		Quickshell.execDetached(["wl-copy", "--type", "text/plain", hex])
 	}
 
 	BlobField {
@@ -554,6 +577,11 @@ PanelWindow {
 				sessionTimer.stop()
 				root.sessionMenu = !root.sessionMenu
 			}
+			onColorClicked: {
+				colorPick.exec(Config.pickColorCommand)
+				root.sessionMenu = false
+				root.sessionWanted = false
+			}
 			onShotClicked: {
 				Quickshell.execDetached(Config.screenshotCommand)
 				root.sessionMenu = false
@@ -586,6 +614,13 @@ PanelWindow {
 		onTriggered: {
 			if (!radioCornerHover.hovered && !radioHover.hovered)
 				root.radioWanted = false
+		}
+	}
+
+	Process {
+		id: colorPick
+		stdout: StdioCollector {
+			onStreamFinished: root.copyPickedColor(this.text)
 		}
 	}
 

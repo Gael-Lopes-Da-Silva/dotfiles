@@ -183,6 +183,7 @@ Singleton {
 				property string powerHot: "Limited while the laptop is hot"
 				property var niriEvent: ["niri", "msg", "--json", "event-stream"]
 				property var screenshotCommand: ["niri", "msg", "action", "screenshot", "--show-pointer", "false"]
+				property var pickColorCommand: ["niri", "msg", "--json", "pick-color"]
 				property var sessionActions: [
 					{ icon: "F0904", label: "Suspend", command: ["systemctl", "suspend"] },
 					{ icon: "F0709", label: "Restart", command: ["systemctl", "reboot"] },
@@ -196,6 +197,7 @@ Singleton {
 				property string record: "F044A"
 				property string power: "F0425"
 				property string screenshot: "F0E51"
+				property string eyedropper: "F020A"
 				property string clock: "F0150"
 				property string bell: "F009A"
 				property string bellOff: "F00A0"

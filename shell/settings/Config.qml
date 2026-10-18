@@ -83,12 +83,14 @@ Singleton {
 	readonly property string powerHot: Settings.settings.powerHot
 	readonly property var niriEvent: Settings.settings.niriEvent
 	readonly property var screenshotCommand: Settings.settings.screenshotCommand
+	readonly property var pickColorCommand: Settings.settings.pickColorCommand
 	readonly property var sessionActions: Settings.settings.sessionActions
 	readonly property var batterySteps: Settings.settings.batterySteps
 
 	readonly property string record: Settings.icons.record
 	readonly property string power: Settings.icons.power
 	readonly property string screenshot: Settings.icons.screenshot
+	readonly property string eyedropper: Settings.icons.eyedropper
 	readonly property string clock: Settings.icons.clock
 	readonly property string bell: Settings.icons.bell
 	readonly property string bellOff: Settings.icons.bellOff
