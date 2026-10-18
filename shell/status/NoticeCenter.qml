@@ -39,7 +39,7 @@ Column {
 			anchors.leftMargin: Theme.inset
 			anchors.rightMargin: Theme.inset
 			radius: Theme.radius
-			color: Theme.ink(Theme.wash)
+			color: quietHover.containsMouse ? Theme.ink(Theme.buttonHover) : Theme.ink(Theme.wash)
 		}
 
 		Text {
@@ -93,7 +93,9 @@ Column {
 		}
 
 		MouseArea {
+			id: quietHover
 			anchors.fill: parent
+			hoverEnabled: true
 			cursorShape: Qt.PointingHandCursor
 			onClicked: NoticeState.quiet = !NoticeState.quiet
 		}
@@ -105,24 +107,37 @@ Column {
 		height: 28
 		visible: NoticeState.historyCount > 0
 
-		Text {
+		Item {
 			anchors.right: parent.right
-			anchors.rightMargin: 18
+			anchors.rightMargin: Theme.inset
 			anchors.verticalCenter: parent.verticalCenter
-			text: "Clear"
-			color: clearHover.hovered ? Theme.foreground : Theme.ink(Theme.muted)
-			font.family: Theme.fontFamily
-			font.pixelSize: Theme.smallSize
-		}
+			implicitWidth: clearLabel.implicitWidth + 16
+			implicitHeight: clearLabel.implicitHeight + 8
+			width: implicitWidth
+			height: implicitHeight
 
-		HoverHandler {
-			id: clearHover
-		}
+			Rectangle {
+				anchors.fill: parent
+				radius: Theme.buttonRadius
+				color: clearHover.containsMouse ? Theme.ink(Theme.hover) : "transparent"
+			}
 
-		MouseArea {
-			anchors.fill: parent
-			cursorShape: Qt.PointingHandCursor
-			onClicked: NoticeState.clearHistory()
+			Text {
+				id: clearLabel
+				anchors.centerIn: parent
+				text: "Clear"
+				color: clearHover.containsMouse ? Theme.foreground : Theme.ink(Theme.muted)
+				font.family: Theme.fontFamily
+				font.pixelSize: Theme.smallSize
+			}
+
+			MouseArea {
+				id: clearHover
+				anchors.fill: parent
+				hoverEnabled: true
+				cursorShape: Qt.PointingHandCursor
+				onClicked: NoticeState.clearHistory()
+			}
 		}
 	}
 

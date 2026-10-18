@@ -206,8 +206,10 @@ Singleton {
 		return String.fromCodePoint(0xF057E)
 	}
 
-	function micGlyph(muted) {
-		return String.fromCodePoint(muted ? 0xF036D : 0xF036C)
+	function micGlyph(level, muted) {
+		if (muted || level <= Config.muteFloor)
+			return String.fromCodePoint(0xF036D)
+		return String.fromCodePoint(0xF036C)
 	}
 
 	function levelText(level, muted) {

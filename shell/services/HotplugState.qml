@@ -10,7 +10,9 @@ Singleton {
 
 	property bool primed: false
 	property var seen: ({})
-	property var fields: ({})
+	property string diskBatch: ""
+	property string diskState: ""
+	property bool disksPrimed: false
 
 	function external(name) {
 		return !new RegExp(Config.internalScreens).test(String(name || ""))
@@ -58,37 +60,59 @@ Singleton {
 		return String(value || "").replace(/_/g, " ").trim()
 	}
 
-	function commitUsb() {
-		const action = fields.ACTION || ""
-		if (fields.DEVTYPE !== "usb_device")
-			return
-		if (action !== "add" && action !== "remove")
-			return
-		const model = pretty(fields.ID_MODEL_FROM_DATABASE || fields.ID_MODEL)
-		const vendor = pretty(fields.ID_VENDOR_FROM_DATABASE || fields.ID_VENDOR)
-		if (/root hub|host controller|\bhub\b/i.test(model) || /root hub|host controller|\bhub\b/i.test(vendor))
-			return
-		let name = vendor
-		if (model && vendor && model.toLowerCase().indexOf(vendor.toLowerCase()) === -1)
-			name = vendor + " " + model
-		else
-			name = model || vendor
-		NiriState.showOsd("usb", name || "USB", action === "add")
+	function diskLabel(name) {
+		let text = String(name || "").replace(/^usb-/, "")
+		text = text.replace(/-[0-9]+:[0-9]+$/, "")
+		const parts = text.split("_")
+		if (parts.length > 2 && /^[A-Z0-9]{8,}$/.test(parts[parts.length - 1]))
+			parts.pop()
+		return pretty(parts.join(" ")) || "USB"
 	}
 
-	function ingestUsb(line) {
-		const text = String(line)
-		if (text.indexOf("UDEV") === 0 || text.trim() === "") {
-			commitUsb()
-			fields = {}
+	function diskMap(state) {
+		const map = {}
+		const lines = String(state || "").split("\n")
+		for (let i = 0; i < lines.length; i++) {
+			const line = lines[i]
+			if (!line)
+				continue
+			const tab = line.indexOf("\t")
+			if (tab < 0)
+				continue
+			map[line.slice(0, tab)] = line.slice(tab + 1)
+		}
+		return map
+	}
+
+	function takeDisk(line) {
+		const name = String(line).trim()
+		if (name.indexOf("usb-") !== 0 || /-part\d+$/.test(name))
+			return
+		const key = name.replace(/-[0-9]+:[0-9]+$/, "")
+		if (diskBatch.indexOf(key + "\t") !== -1)
+			return
+		diskBatch = diskBatch + key + "\t" + diskLabel(key) + "\n"
+	}
+
+	function finishDisks() {
+		const next = diskMap(diskBatch)
+		if (!disksPrimed) {
+			diskState = diskBatch
+			disksPrimed = true
 			return
 		}
-		const eq = text.indexOf("=")
-		if (eq <= 0)
-			return
-		const next = Object.assign({}, fields)
-		next[text.slice(0, eq)] = text.slice(eq + 1)
-		fields = next
+		const prev = diskMap(diskState)
+		const arrived = Object.keys(next)
+		for (let i = 0; i < arrived.length; i++) {
+			if (!prev[arrived[i]])
+				NiriState.showOsd("usb", next[arrived[i]] || "USB", true)
+		}
+		const gone = Object.keys(prev)
+		for (let i = 0; i < gone.length; i++) {
+			if (!next[gone[i]])
+				NiriState.showOsd("usb", prev[gone[i]] || "USB", false)
+		}
+		diskState = diskBatch
 	}
 
 	Connections {
@@ -108,10 +132,27 @@ Singleton {
 	}
 
 	Process {
-		command: ["stdbuf", "-oL", "udevadm", "monitor", "--udev", "--subsystem-match=usb", "--property"]
-		running: true
+		id: disks
+		command: ["ls", "-1", "/dev/disk/by-id"]
 		stdout: SplitParser {
-			onRead: line => root.ingestUsb(line)
+			onRead: line => root.takeDisk(line)
+		}
+		onExited: code => {
+			if (code === 0)
+				root.finishDisks()
+		}
+	}
+
+	Timer {
+		interval: Config.usbPoll
+		running: true
+		repeat: true
+		triggeredOnStart: true
+		onTriggered: {
+			if (disks.running)
+				return
+			root.diskBatch = ""
+			disks.running = true
 		}
 	}
 }

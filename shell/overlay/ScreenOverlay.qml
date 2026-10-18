@@ -54,7 +54,9 @@ PanelWindow {
 	}
 
 	readonly property bool osdHere: {
-		if (!chrome || !NiriState.osdOpen || NiriState.launcherOpen)
+		if (!NiriState.osdOpen || NiriState.launcherOpen)
+			return false
+		if (!chrome && NiriState.osdKind !== "usb")
 			return false
 		if (NiriState.osdKind === "usb" || NiriState.osdKind === "screen")
 			return true

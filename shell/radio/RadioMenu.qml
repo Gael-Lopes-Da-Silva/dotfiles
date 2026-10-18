@@ -57,6 +57,17 @@ Item {
 		Rectangle {
 			anchors.left: parent.left
 			anchors.right: parent.right
+			anchors.leftMargin: Theme.inset - Theme.headerInset
+			anchors.rightMargin: Theme.inset - Theme.headerInset
+			anchors.verticalCenter: parent.verticalCenter
+			height: Theme.sliderSlot
+			radius: Theme.rowRadius
+			color: drag.containsMouse || drag.pressed ? root.ink(Theme.hover) : "transparent"
+		}
+
+		Rectangle {
+			anchors.left: parent.left
+			anchors.right: parent.right
 			anchors.verticalCenter: parent.verticalCenter
 			height: Theme.sliderTrack
 			radius: Theme.sliderTrack / 2
@@ -116,7 +127,7 @@ Item {
 				anchors.leftMargin: Theme.inset
 				anchors.rightMargin: Theme.inset
 				radius: Theme.radius
-				color: root.ink(Theme.wash)
+				color: wifiHeadHover.containsMouse ? root.ink(Theme.buttonHover) : root.ink(Theme.wash)
 			}
 
 			Text {
@@ -148,7 +159,9 @@ Item {
 			}
 
 			MouseArea {
+				id: wifiHeadHover
 				anchors.fill: parent
+				hoverEnabled: true
 				cursorShape: Qt.PointingHandCursor
 				onClicked: RadioState.toggleWifi()
 			}
@@ -178,7 +191,7 @@ Item {
 				x: Theme.inset
 				height: Theme.rowInnerHeight
 				radius: Theme.rowRadius
-				color: connected ? root.ink(Theme.selected) : wifiHover.hovered ? root.ink(Theme.hover) : "transparent"
+				color: wifiHover.containsMouse ? root.ink(connected ? Theme.buttonHover : Theme.hover) : (connected ? root.ink(Theme.selected) : "transparent")
 
 				Rectangle {
 					id: wifiWell
@@ -257,7 +270,11 @@ Item {
 				anchors.topMargin: 4
 				anchors.bottomMargin: 4
 				radius: Theme.rowRadius
-				color: root.ink(Theme.wellFill)
+				color: secretHover.hovered ? root.ink(Theme.buttonHover) : root.ink(Theme.wellFill)
+			}
+
+			HoverHandler {
+				id: secretHover
 			}
 
 			Text {
@@ -321,7 +338,7 @@ Item {
 				anchors.leftMargin: Theme.inset
 				anchors.rightMargin: Theme.inset
 				radius: Theme.radius
-				color: root.ink(Theme.wash)
+				color: btHeadHover.containsMouse ? root.ink(Theme.buttonHover) : root.ink(Theme.wash)
 			}
 
 			Text {
@@ -353,7 +370,9 @@ Item {
 			}
 
 			MouseArea {
+				id: btHeadHover
 				anchors.fill: parent
+				hoverEnabled: true
 				cursorShape: Qt.PointingHandCursor
 				onClicked: RadioState.toggleBluetooth()
 			}
@@ -383,7 +402,7 @@ Item {
 				x: Theme.inset
 				height: Theme.rowInnerHeight
 				radius: Theme.rowRadius
-				color: connected ? root.ink(Theme.selected) : btHover.hovered ? root.ink(Theme.hover) : "transparent"
+				color: btHover.containsMouse ? root.ink(connected ? Theme.buttonHover : Theme.hover) : (connected ? root.ink(Theme.selected) : "transparent")
 
 				Rectangle {
 					id: btWell
@@ -456,7 +475,7 @@ Item {
 				anchors.leftMargin: Theme.inset
 				anchors.rightMargin: Theme.inset
 				radius: Theme.radius
-				color: root.ink(Theme.wash)
+				color: audioHeadHover.containsMouse ? root.ink(Theme.buttonHover) : root.ink(Theme.wash)
 			}
 
 			Text {
@@ -491,7 +510,9 @@ Item {
 			}
 
 			MouseArea {
+				id: audioHeadHover
 				anchors.fill: parent
+				hoverEnabled: true
 				cursorShape: Qt.PointingHandCursor
 				onClicked: AudioState.toggleMute(AudioState.sink)
 			}
@@ -549,7 +570,7 @@ Item {
 				x: Theme.inset
 				height: Theme.rowInnerHeight
 				radius: Theme.rowRadius
-				color: active ? root.ink(Theme.selected) : sinkHover.hovered ? root.ink(Theme.hover) : "transparent"
+				color: sinkHover.containsMouse ? root.ink(active ? Theme.buttonHover : Theme.hover) : (active ? root.ink(Theme.selected) : "transparent")
 
 				Rectangle {
 					id: sinkWell
@@ -682,9 +703,18 @@ Item {
 					elide: Text.ElideRight
 				}
 
+				Rectangle {
+					z: -1
+					anchors.fill: streamMuteHit
+					radius: Theme.buttonRadius
+					color: streamMuteHit.containsMouse ? root.ink(Theme.hover) : "transparent"
+				}
+
 				MouseArea {
+					id: streamMuteHit
 					anchors.right: parent.right
 					anchors.top: parent.top
+					hoverEnabled: true
 					width: streamMute.implicitWidth + 36
 					height: 36
 					cursorShape: Qt.PointingHandCursor
@@ -714,7 +744,7 @@ Item {
 				anchors.leftMargin: Theme.inset
 				anchors.rightMargin: Theme.inset
 				radius: Theme.radius
-				color: root.ink(Theme.wash)
+				color: micHeadHover.containsMouse ? root.ink(Theme.buttonHover) : root.ink(Theme.wash)
 			}
 
 			Text {
@@ -722,7 +752,7 @@ Item {
 				anchors.left: parent.left
 				anchors.leftMargin: Theme.headerInset
 				anchors.verticalCenter: parent.verticalCenter
-				text: AudioState.micGlyph(AudioState.sourceMuted)
+				text: AudioState.micGlyph(AudioState.sourceLevel, AudioState.sourceMuted)
 				color: Theme.foreground
 				font.family: Theme.iconFont
 				font.pixelSize: Theme.iconSize
@@ -749,7 +779,9 @@ Item {
 			}
 
 			MouseArea {
+				id: micHeadHover
 				anchors.fill: parent
+				hoverEnabled: true
 				cursorShape: Qt.PointingHandCursor
 				onClicked: AudioState.toggleMute(AudioState.source)
 			}
@@ -769,6 +801,18 @@ Item {
 				value: AudioState.sourceLevel
 				onMoved: amount => AudioState.setVolume(AudioState.source, amount)
 			}
+		}
+
+		Text {
+			visible: root.page === "microphone" && AudioState.sourceNodes.length > 0
+			width: parent.width
+			text: "Inputs"
+			color: root.ink(Theme.dim)
+			font.family: Theme.fontFamily
+			font.pixelSize: Theme.labelSize
+			leftPadding: Theme.headerInset
+			topPadding: 8
+			bottomPadding: 2
 		}
 
 		Text {
@@ -795,7 +839,7 @@ Item {
 				x: Theme.inset
 				height: Theme.rowInnerHeight
 				radius: Theme.rowRadius
-				color: active ? root.ink(Theme.selected) : sourceHover.hovered ? root.ink(Theme.hover) : "transparent"
+				color: sourceHover.containsMouse ? root.ink(active ? Theme.buttonHover : Theme.hover) : (active ? root.ink(Theme.selected) : "transparent")
 
 				Rectangle {
 					id: sourceWell
@@ -809,7 +853,7 @@ Item {
 
 					Text {
 						anchors.centerIn: parent
-						text: AudioState.micGlyph(sourceRow.modelData.audio ? sourceRow.modelData.audio.muted : false)
+						text: AudioState.micGlyph(sourceRow.modelData.audio ? sourceRow.modelData.audio.volume : 0, sourceRow.modelData.audio ? sourceRow.modelData.audio.muted : false)
 						color: Theme.foreground
 						font.family: Theme.iconFont
 						font.pixelSize: Theme.glyphSize
@@ -897,7 +941,7 @@ Item {
 
 					Text {
 						anchors.centerIn: parent
-						text: AudioState.micGlyph(captureRow.modelData.audio ? captureRow.modelData.audio.muted : false)
+						text: AudioState.micGlyph(captureRow.modelData.audio ? captureRow.modelData.audio.volume : 0, captureRow.modelData.audio ? captureRow.modelData.audio.muted : false)
 						color: Theme.foreground
 						font.family: Theme.iconFont
 						font.pixelSize: Theme.glyphSize
@@ -928,9 +972,18 @@ Item {
 					elide: Text.ElideRight
 				}
 
+				Rectangle {
+					z: -1
+					anchors.fill: captureMuteHit
+					radius: Theme.buttonRadius
+					color: captureMuteHit.containsMouse ? root.ink(Theme.hover) : "transparent"
+				}
+
 				MouseArea {
+					id: captureMuteHit
 					anchors.right: parent.right
 					anchors.top: parent.top
+					hoverEnabled: true
 					width: captureMute.implicitWidth + 36
 					height: 36
 					cursorShape: Qt.PointingHandCursor

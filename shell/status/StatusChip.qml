@@ -54,7 +54,11 @@ Item {
 			Rectangle {
 				anchors.fill: parent
 				radius: Theme.buttonRadius
-				color: root.activePage === "time" ? Theme.ink(Theme.selected) : "transparent"
+				color: {
+					if (timeHover.containsMouse)
+						return Theme.ink(root.activePage === "time" ? Theme.buttonHover : Theme.hover)
+					return root.activePage === "time" ? Theme.ink(Theme.selected) : "transparent"
+				}
 			}
 
 			Row {
@@ -80,7 +84,9 @@ Item {
 			}
 
 			MouseArea {
+				id: timeHover
 				anchors.fill: parent
+				hoverEnabled: true
 				cursorShape: Qt.PointingHandCursor
 				onClicked: root.timeClicked()
 			}
@@ -95,7 +101,11 @@ Item {
 			Rectangle {
 				anchors.fill: parent
 				radius: Theme.buttonRadius
-				color: root.activePage === "battery" ? Theme.ink(Theme.selected) : "transparent"
+				color: {
+					if (batteryHover.containsMouse)
+						return Theme.ink(root.activePage === "battery" ? Theme.buttonHover : Theme.hover)
+					return root.activePage === "battery" ? Theme.ink(Theme.selected) : "transparent"
+				}
 			}
 
 			Row {
@@ -121,7 +131,9 @@ Item {
 			}
 
 			MouseArea {
+				id: batteryHover
 				anchors.fill: parent
+				hoverEnabled: true
 				cursorShape: Qt.PointingHandCursor
 				onClicked: root.batteryClicked()
 			}
@@ -135,7 +147,11 @@ Item {
 			Rectangle {
 				anchors.fill: parent
 				radius: Theme.buttonRadius
-				color: root.activePage === "notices" ? Theme.ink(Theme.selected) : "transparent"
+				color: {
+					if (noticeHover.containsMouse)
+						return Theme.ink(root.activePage === "notices" ? Theme.buttonHover : Theme.hover)
+					return root.activePage === "notices" ? Theme.ink(Theme.selected) : "transparent"
+				}
 			}
 
 			Row {
@@ -162,7 +178,9 @@ Item {
 			}
 
 			MouseArea {
+				id: noticeHover
 				anchors.fill: parent
+				hoverEnabled: true
 				cursorShape: Qt.PointingHandCursor
 				onClicked: root.noticesClicked()
 			}

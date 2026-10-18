@@ -160,7 +160,7 @@ Singleton {
 	}
 
 	function showOsd(kind, text, on) {
-		if (hidden)
+		if (hidden && kind !== "usb")
 			return
 		osdKind = kind
 		osdText = text || ""

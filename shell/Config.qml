@@ -19,6 +19,7 @@ Singleton {
 	readonly property int clipMin: 2
 
 	readonly property int osdHold: 2000
+	readonly property int usbPoll: 500
 	readonly property int castSettle: 2000
 
 	readonly property int notificationHold: 5000

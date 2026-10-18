@@ -45,7 +45,11 @@ Item {
 			Rectangle {
 				anchors.fill: parent
 				radius: Theme.buttonRadius
-				color: RadioState.menuPage === "wifi" ? Theme.ink(Theme.selected) : "transparent"
+				color: {
+					if (wifiHover.containsMouse)
+						return Theme.ink(RadioState.menuPage === "wifi" ? Theme.buttonHover : Theme.hover)
+					return RadioState.menuPage === "wifi" ? Theme.ink(Theme.selected) : "transparent"
+				}
 			}
 
 			Text {
@@ -58,7 +62,9 @@ Item {
 			}
 
 			MouseArea {
+				id: wifiHover
 				anchors.fill: parent
+				hoverEnabled: true
 				cursorShape: Qt.PointingHandCursor
 				onClicked: root.picked("wifi")
 			}
@@ -73,7 +79,11 @@ Item {
 			Rectangle {
 				anchors.fill: parent
 				radius: Theme.buttonRadius
-				color: RadioState.menuPage === "bluetooth" ? Theme.ink(Theme.selected) : "transparent"
+				color: {
+					if (btHover.containsMouse)
+						return Theme.ink(RadioState.menuPage === "bluetooth" ? Theme.buttonHover : Theme.hover)
+					return RadioState.menuPage === "bluetooth" ? Theme.ink(Theme.selected) : "transparent"
+				}
 			}
 
 			Text {
@@ -86,7 +96,9 @@ Item {
 			}
 
 			MouseArea {
+				id: btHover
 				anchors.fill: parent
+				hoverEnabled: true
 				cursorShape: Qt.PointingHandCursor
 				onClicked: root.picked("bluetooth")
 			}
@@ -101,7 +113,11 @@ Item {
 			Rectangle {
 				anchors.fill: parent
 				radius: Theme.buttonRadius
-				color: RadioState.menuPage === "audio" ? Theme.ink(Theme.selected) : "transparent"
+				color: {
+					if (audioHover.containsMouse)
+						return Theme.ink(RadioState.menuPage === "audio" ? Theme.buttonHover : Theme.hover)
+					return RadioState.menuPage === "audio" ? Theme.ink(Theme.selected) : "transparent"
+				}
 			}
 
 			Text {
@@ -114,7 +130,9 @@ Item {
 			}
 
 			MouseArea {
+				id: audioHover
 				anchors.fill: parent
+				hoverEnabled: true
 				cursorShape: Qt.PointingHandCursor
 				onClicked: root.picked("audio")
 			}
@@ -129,20 +147,26 @@ Item {
 			Rectangle {
 				anchors.fill: parent
 				radius: Theme.buttonRadius
-				color: RadioState.menuPage === "microphone" ? Theme.ink(Theme.selected) : "transparent"
+				color: {
+					if (micHover.containsMouse)
+						return Theme.ink(RadioState.menuPage === "microphone" ? Theme.buttonHover : Theme.hover)
+					return RadioState.menuPage === "microphone" ? Theme.ink(Theme.selected) : "transparent"
+				}
 			}
 
 			Text {
 				id: micIcon
 				anchors.centerIn: parent
-				text: AudioState.micGlyph(AudioState.sourceMuted)
+				text: AudioState.micGlyph(AudioState.sourceLevel, AudioState.sourceMuted)
 				color: root.tone(!AudioState.sourceMuted && AudioState.source !== null, 1)
 				font.family: Theme.iconFont
 				font.pixelSize: Theme.clockSize
 			}
 
 			MouseArea {
+				id: micHover
 				anchors.fill: parent
+				hoverEnabled: true
 				cursorShape: Qt.PointingHandCursor
 				onClicked: root.picked("microphone")
 			}

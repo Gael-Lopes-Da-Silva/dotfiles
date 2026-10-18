@@ -6,7 +6,7 @@ Item {
 	id: root
 
 	readonly property string kind: NiriState.osdKind
-	readonly property bool discrete: kind === "usb" || kind === "screen"
+	readonly property bool discrete: kind === "usb" || kind === "screen" || kind === "power" || (kind === "microphone" && AudioState.micMuted) || (kind === "volume" && AudioState.muted)
 	readonly property real amount: {
 		if (kind === "brightness")
 			return BrightnessState.level
@@ -25,18 +25,18 @@ Item {
 			return name + (NiriState.osdOn ? " plugged in" : " unplugged")
 		}
 		if (kind === "power")
-			return PowerState.plugged ? "Plugged in" : "Unplugged"
+			return PowerState.plugged ? "Charger plugged in" : "Charger unplugged"
 		if (kind === "brightness")
 			return Math.round(amount * 100) + "%"
 		if (kind === "microphone")
-			return AudioState.levelText(AudioState.micVolume, AudioState.micMuted)
+			return AudioState.micMuted ? "Microphone muted" : AudioState.levelText(AudioState.micVolume, false)
 		if (AudioState.muted)
-			return "Muted"
+			return "Audio muted"
 		return Math.round(amount * 100) + "%"
 	}
 	readonly property string glyph: {
 		if (kind === "usb")
-			return String.fromCodePoint(0xF0A72)
+			return String.fromCodePoint(0xF129E)
 		if (kind === "screen")
 			return String.fromCodePoint(NiriState.osdOn ? 0xF0379 : 0xF0D57)
 		if (kind === "power")
@@ -44,7 +44,7 @@ Item {
 		if (kind === "brightness")
 			return String.fromCodePoint(0xF00DF)
 		if (kind === "microphone")
-			return AudioState.micGlyph(AudioState.micMuted || amount <= Config.muteFloor)
+			return AudioState.micGlyph(AudioState.micVolume, AudioState.micMuted)
 		if (AudioState.muted || amount <= Config.muteFloor)
 			return String.fromCodePoint(0xF075F)
 		if (amount < Config.volumeLow)
@@ -91,9 +91,16 @@ Item {
 			color: Theme.foreground
 			font.family: Theme.fontFamily
 			font.pixelSize: Theme.fontSize
-			width: root.discrete ? Math.min(contentWidth, Theme.osdLabelWidth) : contentWidth
 			elide: Text.ElideRight
+			width: Math.min(caption.advanceWidth, Theme.osdLabelWidth)
 			anchors.verticalCenter: parent.verticalCenter
 		}
+	}
+
+	TextMetrics {
+		id: caption
+		font.family: Theme.fontFamily
+		font.pixelSize: Theme.fontSize
+		text: root.label
 	}
 }

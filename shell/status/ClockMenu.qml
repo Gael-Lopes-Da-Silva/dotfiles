@@ -267,7 +267,7 @@ Item {
 				x: Theme.inset
 				height: Theme.rowInnerHeight
 				radius: Theme.rowRadius
-				color: active ? root.ink(0.14) : profileHover.hovered ? root.ink(Theme.hover) : "transparent"
+				color: profileHover.hovered ? root.ink(active ? Theme.buttonHover : Theme.hover) : (active ? root.ink(Theme.selected) : "transparent")
 
 				Text {
 					anchors.left: parent.left
