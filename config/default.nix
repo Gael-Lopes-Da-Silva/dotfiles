@@ -35,10 +35,6 @@
   };
 
   boot = {
-    plymouth = {
-      enable = true;
-    };
-
     loader = {
       systemd-boot = {
         enable = true;
@@ -48,21 +44,10 @@
       efi.canTouchEfiVariables = true;
     };
 
-    initrd = {
-      verbose = false;
-    };
-
-    consoleLogLevel = 0;
+    consoleLogLevel = 3;
 
     kernelPackages = pkgs.linuxPackages_latest;
     kernelModules = [ "v4l2loopback" ];
-    kernelParams = [
-      "quiet"
-      "nowatchdog=1"
-      "udev.log_level=3"
-      "rd.udev.log_level=3"
-      "rd.systemd.show_status=auto"
-    ];
 
     extraModulePackages = with config.boot.kernelPackages; [
       v4l2loopback
@@ -764,11 +749,27 @@
 
             "Mod+P" = {
               _props.repeat = false;
-              spawn = [ "qs" "-c" "shell" "ipc" "call" "launcher" "toggle" ];
+              spawn = [
+                "qs"
+                "-c"
+                "shell"
+                "ipc"
+                "call"
+                "launcher"
+                "toggle"
+              ];
             };
             "Mod+B" = {
               _props.repeat = false;
-              spawn = [ "qs" "-c" "shell" "ipc" "call" "interface" "toggle" ];
+              spawn = [
+                "qs"
+                "-c"
+                "shell"
+                "ipc"
+                "call"
+                "interface"
+                "toggle"
+              ];
             };
 
             "XF86AudioRaiseVolume".spawn-sh = [
