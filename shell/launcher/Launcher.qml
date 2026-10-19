@@ -152,12 +152,12 @@ Item {
 	Component.onCompleted: resolveIcons()
 
 	onOpenChanged: {
-		if (open)
-			Qt.callLater(() => search.forceActiveFocus())
-		else {
-			query = ""
-			selected = 0
-		}
+		if (!open)
+			return
+		// The close animation is still showing this list, so reset on the next open.
+		query = ""
+		selected = 0
+		Qt.callLater(() => search.forceActiveFocus())
 	}
 
 	function activate(index) {
