@@ -190,6 +190,7 @@
     "reply": "F048A",
     "wifiOff": "F05AA",
     "wifiIdle": "F092A",
+    "ethernet": "F0200",
     "btOff": "F00B2",
     "btIdle": "F00AF",
     "btOn": "F00B1",

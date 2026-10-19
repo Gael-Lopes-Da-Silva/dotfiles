@@ -55,8 +55,8 @@ Item {
 			Text {
 				id: wifiIcon
 				anchors.centerIn: parent
-				text: RadioState.wifiGlyph()
-				color: root.tone(Networking.wifiEnabled, RadioState.activeWifi ? Math.max(Theme.signalFloor, RadioState.wifiSignal) : Theme.signalIdle)
+				text: RadioState.linkGlyph()
+				color: root.tone(RadioState.wired !== null || Networking.wifiEnabled, RadioState.wired !== null ? 1 : (RadioState.activeWifi ? Math.max(Theme.signalFloor, RadioState.wifiSignal) : Theme.signalIdle))
 				font.family: Theme.iconFont
 				font.pixelSize: Theme.clockSize
 			}

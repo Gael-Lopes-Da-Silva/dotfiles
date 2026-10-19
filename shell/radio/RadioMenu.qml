@@ -175,6 +175,71 @@ Item {
 				}
 			}
 
+			Item {
+				visible: root.page === "wifi" && RadioState.wired !== null
+				width: parent.width
+				implicitHeight: ethernetBox.implicitHeight
+				height: implicitHeight
+
+				Rectangle {
+					id: ethernetBox
+					width: root.menuWidth - Theme.inset * 2
+					x: Theme.inset
+					implicitHeight: Math.max(Theme.rowInnerHeight, ethernetCopy.implicitHeight + 12)
+					height: implicitHeight
+					radius: Theme.rowRadius
+					color: root.ink(Theme.selected)
+
+					Rectangle {
+						id: ethernetWell
+						anchors.left: parent.left
+						anchors.leftMargin: 6
+						anchors.verticalCenter: parent.verticalCenter
+						width: Theme.well
+						height: Theme.well
+						radius: Theme.buttonRadius
+						color: root.ink(Theme.wellFill)
+
+						Text {
+							anchors.centerIn: parent
+							text: Config.icon(Config.ethernet)
+							color: Theme.foreground
+							font.family: Theme.iconFont
+							font.pixelSize: Theme.glyphSize
+						}
+					}
+
+					Column {
+						id: ethernetCopy
+						anchors.left: ethernetWell.right
+						anchors.leftMargin: Theme.inset
+						anchors.right: parent.right
+						anchors.rightMargin: 12
+						anchors.verticalCenter: parent.verticalCenter
+						spacing: 1
+
+						Text {
+							width: parent.width
+							text: RadioState.ethernetName()
+							color: Theme.foreground
+							font.family: Theme.fontFamily
+							font.pixelSize: Theme.fontSize
+							elide: Text.ElideRight
+						}
+
+						Text {
+							width: parent.width
+							visible: text !== ""
+							text: RadioState.ethernetFacts()
+							color: root.ink(Theme.quiet)
+							font.family: Theme.fontFamily
+							font.pixelSize: Theme.smallSize
+							elide: Text.ElideRight
+						}
+					}
+				}
+			}
+
 			Text {
 				visible: root.page === "wifi" && RadioState.wifiList.length === 0
 				width: parent.width

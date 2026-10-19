@@ -104,6 +104,7 @@ Singleton {
 	readonly property string reply: Settings.icons.reply
 	readonly property string wifiOff: Settings.icons.wifiOff
 	readonly property string wifiIdle: Settings.icons.wifiIdle
+	readonly property string ethernet: Settings.icons.ethernet
 	readonly property string btOff: Settings.icons.btOff
 	readonly property string btIdle: Settings.icons.btIdle
 	readonly property string btOn: Settings.icons.btOn

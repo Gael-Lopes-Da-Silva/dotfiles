@@ -211,6 +211,7 @@ Singleton {
 				property string reply: "F048A"
 				property string wifiOff: "F05AA"
 				property string wifiIdle: "F092A"
+				property string ethernet: "F0200"
 				property string btOff: "F00B2"
 				property string btIdle: "F00AF"
 				property string btOn: "F00B1"

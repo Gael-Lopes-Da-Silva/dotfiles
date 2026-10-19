@@ -43,6 +43,18 @@ Singleton {
 
 	readonly property real wifiSignal: activeWifi ? activeWifi.signalStrength : 0
 
+	readonly property var wired: {
+		const _ = revision
+		const model = Networking.devices
+		const list = model && model.values ? model.values : []
+		for (let i = 0; i < list.length; i++) {
+			const dev = list[i]
+			if (dev.type === DeviceType.Wired && dev.connected)
+				return dev
+		}
+		return null
+	}
+
 	readonly property var wifiList: {
 		const _ = revision
 		const dev = wifi
@@ -127,6 +139,47 @@ Singleton {
 		if (!activeWifi)
 			return Config.icon(Config.wifiIdle)
 		return strengthGlyph(wifiSignal)
+	}
+
+	function linkGlyph() {
+		if (wired)
+			return Config.icon(Config.ethernet)
+		return wifiGlyph()
+	}
+
+	function ethernetName() {
+		const dev = wired
+		if (!dev)
+			return ""
+		const net = dev.network
+		const profile = net && net.name
+		if (profile && profile !== dev.name)
+			return profile
+		return "Ethernet"
+	}
+
+	function linkRate(speed) {
+		if (speed >= 1000) {
+			const gigs = speed / 1000
+			const text = Number.isInteger(gigs) ? String(gigs) : gigs.toFixed(1)
+			return text + " Gb/s"
+		}
+		return speed + " Mb/s"
+	}
+
+	function ethernetFacts() {
+		const dev = wired
+		if (!dev)
+			return ""
+		const parts = []
+		if (dev.name)
+			parts.push(dev.name)
+		const speed = Number(dev.linkSpeed) || 0
+		if (speed > 0)
+			parts.push(linkRate(speed))
+		if (dev.address)
+			parts.push(dev.address)
+		return parts.join("  ·  ")
 	}
 
 	function btGlyph() {
