@@ -11,11 +11,16 @@ Singleton {
 	id: root
 
 	property int revision: 0
+	property bool wifiWarm: false
+	property bool btWarm: false
 	property string menuOutput: ""
 	property string menuPage: ""
 	property var pending: null
 	property string password: ""
 	property real btRssi: Config.rssiUnknown
+
+	readonly property bool wifiReady: !Networking.wifiEnabled || wifiWarm
+	readonly property bool btReady: !(bluetooth && bluetooth.enabled) || btWarm
 
 	readonly property var wifi: {
 		const _ = revision
@@ -280,21 +285,182 @@ Singleton {
 	function applyScan() {
 		const dev = wifi
 		if (dev)
-			dev.scannerEnabled = menuPage === "wifi" && Networking.wifiEnabled
+			dev.scannerEnabled = Networking.wifiEnabled && (menuPage === "wifi" || !wifiWarm)
 		const adapter = bluetooth
 		if (!adapter)
 			return
-		adapter.discovering = menuPage === "bluetooth" && adapter.enabled
+		adapter.discovering = adapter.enabled && (menuPage === "bluetooth" || !btWarm)
+	}
+
+	function touch() {
+		touchTimer.restart()
 	}
 
 	onMenuPageChanged: applyScan()
+	onWifiChanged: applyScan()
+	onBluetoothChanged: {
+		applyScan()
+		touch()
+	}
 
 	Timer {
-		interval: root.menuPage !== "" ? Config.radioRefreshOpen : Config.radioRefreshIdle
+		id: touchTimer
+		interval: 32
+		onTriggered: root.revision++
+	}
+
+	Timer {
+		interval: Config.audioPoll
 		repeat: true
-		running: true
+		running: !root.wifiWarm || !root.btWarm
 		triggeredOnStart: true
 		onTriggered: root.revision++
+	}
+
+	Timer {
+		interval: Config.radioWarmup
+		running: !root.wifiWarm || !root.btWarm
+		onTriggered: {
+			root.wifiWarm = true
+			root.btWarm = true
+			root.applyScan()
+			root.revision++
+		}
+	}
+
+	Timer {
+		interval: Config.radioRefreshIdle
+		repeat: true
+		running: root.wifiWarm && root.btWarm && root.menuPage === ""
+		onTriggered: root.revision++
+	}
+
+	Timer {
+		interval: Config.radioRefreshOpen
+		repeat: true
+		running: root.menuPage !== ""
+		triggeredOnStart: true
+		onTriggered: root.revision++
+	}
+
+	Connections {
+		target: Networking
+		function onWifiEnabledChanged() {
+			root.touch()
+			root.applyScan()
+		}
+	}
+
+	property var deviceWires: ({})
+	property var btWires: ({})
+
+	function remember(pool, object, wire) {
+		if (!object || !wire)
+			return
+		pool[String(object)] = wire
+	}
+
+	function forget(pool, object) {
+		if (!object)
+			return
+		const id = String(object)
+		const wires = pool[id]
+		if (!wires)
+			return
+		for (let i = 0; i < wires.length; i++) {
+			if (wires[i])
+				wires[i].destroy()
+		}
+		delete pool[id]
+	}
+
+	function bindDevice(dev) {
+		if (!dev || !deviceWatch || root.deviceWires[String(dev)])
+			return
+		const wires = []
+		wires.push(deviceWatch.createObject(root, { target: dev }))
+		if (dev.networks)
+			wires.push(networkWatch.createObject(root, { target: dev.networks }))
+		root.remember(root.deviceWires, dev, wires)
+	}
+
+	function bindBt(dev) {
+		if (!dev || !btWatch || root.btWires[String(dev)])
+			return
+		root.remember(root.btWires, dev, [btWatch.createObject(root, { target: dev })])
+	}
+
+	Component {
+		id: deviceWatch
+		Connections {
+			function onConnectedChanged() { root.touch() }
+			function onNameChanged() { root.touch() }
+			function onAddressChanged() { root.touch() }
+		}
+	}
+
+	Component {
+		id: networkWatch
+		Connections {
+			function onObjectInsertedPost(object, index) { root.touch() }
+			function onObjectRemovedPost(object, index) { root.touch() }
+		}
+	}
+
+	Component {
+		id: btWatch
+		Connections {
+			function onConnectedChanged() { root.touch() }
+			function onPairedChanged() { root.touch() }
+			function onNameChanged() { root.touch() }
+			function onDeviceNameChanged() { root.touch() }
+		}
+	}
+
+	Connections {
+		target: Networking.devices
+		function onObjectInsertedPost(object, index) {
+			root.bindDevice(object)
+			root.touch()
+		}
+		function onObjectRemovedPre(object, index) { root.forget(root.deviceWires, object) }
+		function onObjectRemovedPost(object, index) { root.touch() }
+	}
+
+	Connections {
+		target: Bluetooth
+		function onDefaultAdapterChanged() {
+			root.touch()
+			root.applyScan()
+		}
+	}
+
+	Connections {
+		target: Bluetooth.devices
+		function onObjectInsertedPost(object, index) {
+			root.bindBt(object)
+			root.touch()
+		}
+		function onObjectRemovedPre(object, index) { root.forget(root.btWires, object) }
+		function onObjectRemovedPost(object, index) { root.touch() }
+	}
+
+	Connections {
+		target: root.bluetooth
+		function onEnabledChanged() {
+			root.touch()
+			root.applyScan()
+		}
+	}
+
+	Component.onCompleted: {
+		const devices = Networking.devices.values
+		for (let i = 0; i < devices.length; i++)
+			bindDevice(devices[i])
+		const found = Bluetooth.devices.values
+		for (let i = 0; i < found.length; i++)
+			bindBt(found[i])
+		applyScan()
 	}
 
 	Timer {

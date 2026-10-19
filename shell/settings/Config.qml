@@ -59,6 +59,7 @@ Singleton {
 
 	readonly property int radioRefreshOpen: Settings.settings.radioRefreshOpen
 	readonly property int radioRefreshIdle: Settings.settings.radioRefreshIdle
+	readonly property int radioWarmup: Settings.settings.radioWarmup
 	readonly property int rssiPoll: Settings.settings.rssiPoll
 	readonly property int rssiUnknown: Settings.settings.rssiUnknown
 	readonly property int rssiMin: Settings.settings.rssiMin

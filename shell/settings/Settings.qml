@@ -161,6 +161,7 @@ Singleton {
 				property real volumeMid: 0.66
 				property int radioRefreshOpen: 1500
 				property int radioRefreshIdle: 4000
+				property int radioWarmup: 8000
 				property int rssiPoll: 2000
 				property int rssiUnknown: -999
 				property int rssiMin: -200

@@ -243,7 +243,7 @@ Item {
 			Text {
 				visible: root.page === "wifi" && RadioState.wifiList.length === 0
 				width: parent.width
-				text: Networking.wifiEnabled ? "No networks" : "Wi-Fi is off"
+				text: !Networking.wifiEnabled ? "Wi-Fi is off" : RadioState.wifiReady ? "No networks" : "Scanning"
 				color: root.ink(Theme.muted)
 				font.family: Theme.fontFamily
 				font.pixelSize: Theme.fontSize
@@ -305,7 +305,14 @@ Item {
 			Text {
 				visible: root.page === "bluetooth" && RadioState.btList.length === 0
 				width: parent.width
-				text: RadioState.bluetooth && RadioState.bluetooth.enabled ? "No devices" : "Bluetooth is off"
+				text: {
+					const adapter = RadioState.bluetooth
+					if (adapter && !adapter.enabled)
+						return "Bluetooth is off"
+					if (!adapter)
+						return RadioState.btWarm ? "Bluetooth is off" : "Scanning"
+					return RadioState.btReady ? "No devices" : "Scanning"
+				}
 				color: root.ink(Theme.muted)
 				font.family: Theme.fontFamily
 				font.pixelSize: Theme.fontSize
@@ -398,7 +405,7 @@ Item {
 			Text {
 				visible: root.page === "audio" && AudioState.sinkNodes.length === 0
 				width: parent.width
-				text: "No outputs"
+				text: AudioState.settled ? "No outputs" : "Loading"
 				color: root.ink(Theme.muted)
 				font.family: Theme.fontFamily
 				font.pixelSize: Theme.fontSize
@@ -491,7 +498,7 @@ Item {
 			Text {
 				visible: root.page === "microphone" && AudioState.sourceNodes.length === 0
 				width: parent.width
-				text: "No microphones"
+				text: AudioState.settled ? "No microphones" : "Loading"
 				color: root.ink(Theme.muted)
 				font.family: Theme.fontFamily
 				font.pixelSize: Theme.fontSize
@@ -703,7 +710,7 @@ Item {
 			Text {
 				visible: root.page === "audio" && AudioState.streamNodes.length === 0
 				width: parent.width
-				text: "No applications"
+				text: AudioState.settled ? "No applications" : "Loading"
 				color: root.ink(Theme.muted)
 				font.family: Theme.fontFamily
 				font.pixelSize: Theme.fontSize
@@ -727,7 +734,7 @@ Item {
 			Text {
 				visible: root.page === "microphone" && AudioState.captureNodes.length === 0
 				width: parent.width
-				text: "No applications"
+				text: AudioState.settled ? "No applications" : "Loading"
 				color: root.ink(Theme.muted)
 				font.family: Theme.fontFamily
 				font.pixelSize: Theme.fontSize

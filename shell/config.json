@@ -141,6 +141,7 @@
     "volumeMid": 0.66,
     "radioRefreshOpen": 1500,
     "radioRefreshIdle": 4000,
+    "radioWarmup": 8000,
     "rssiPoll": 2000,
     "rssiUnknown": -999,
     "rssiMin": -200,

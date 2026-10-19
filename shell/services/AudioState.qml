@@ -15,6 +15,7 @@ Singleton {
 	property bool muted: false
 	property real micVolume: 0
 	property bool micMuted: false
+	property bool settled: false
 	property var sinkNodes: []
 	property var sourceNodes: []
 	property var streamNodes: []
@@ -31,30 +32,81 @@ Singleton {
 	readonly property real sourceLevel: sourceAudio ? sourceAudio.volume : 0
 	readonly property bool sourceMuted: sourceAudio ? sourceAudio.muted : false
 
-	readonly property var tracked: {
-		const list = []
-		const seen = {}
-		function add(node) {
-			if (!node || seen[node.id])
-				return
-			seen[node.id] = true
-			list.push(node)
-		}
-		add(sink)
-		add(source)
-		for (let i = 0; i < sinkNodes.length; i++)
-			add(sinkNodes[i])
-		for (let i = 0; i < sourceNodes.length; i++)
-			add(sourceNodes[i])
-		for (let i = 0; i < streamNodes.length; i++)
-			add(streamNodes[i])
-		for (let i = 0; i < captureNodes.length; i++)
-			add(captureNodes[i])
-		return list
+	PwObjectTracker {
+		objects: Pipewire.nodes.values
 	}
 
-	PwObjectTracker {
-		objects: root.tracked
+	Timer {
+		id: collectSoon
+		interval: 32
+		onTriggered: root.collect()
+	}
+
+	function schedule() {
+		collectSoon.restart()
+	}
+
+	Connections {
+		target: Pipewire
+		function onReadyChanged() { root.schedule() }
+		function onDefaultAudioSinkChanged() { root.schedule() }
+		function onDefaultAudioSourceChanged() { root.schedule() }
+	}
+
+	property var nodeWires: ({})
+
+	function bindNode(node) {
+		if (!node || !nodeWatch)
+			return
+		const id = String(node.id)
+		if (root.nodeWires[id])
+			return
+		root.nodeWires[id] = nodeWatch.createObject(root, { target: node })
+	}
+
+	function unbindNode(node) {
+		if (!node)
+			return
+		const id = String(node.id)
+		const wire = root.nodeWires[id]
+		if (!wire)
+			return
+		wire.destroy()
+		delete root.nodeWires[id]
+	}
+
+	Component {
+		id: nodeWatch
+		Connections {
+			function onReadyChanged() { root.schedule() }
+			function onPropertiesChanged() { root.schedule() }
+		}
+	}
+
+	Connections {
+		target: Pipewire.nodes
+		function onObjectInsertedPost(object, index) {
+			root.bindNode(object)
+			root.schedule()
+		}
+		function onObjectRemovedPre(object, index) { root.unbindNode(object) }
+		function onObjectRemovedPost(object, index) { root.schedule() }
+	}
+
+	Connections {
+		target: RadioState
+		function onMenuPageChanged() {
+			const page = RadioState.menuPage
+			if (page === "audio" || page === "microphone")
+				root.schedule()
+		}
+	}
+
+	Component.onCompleted: {
+		const list = Pipewire.nodes.values
+		for (let i = 0; i < list.length; i++)
+			bindNode(list[i])
+		schedule()
 	}
 
 	Timer {
@@ -99,9 +151,33 @@ Singleton {
 	}
 
 	Timer {
-		interval: RadioState.menuPage === "audio" || RadioState.menuPage === "microphone" ? Config.audioListOpen : Config.audioListIdle
+		interval: Config.audioPoll
 		repeat: true
-		running: true
+		running: !root.settled
+		triggeredOnStart: true
+		onTriggered: root.collect()
+	}
+
+	Timer {
+		interval: Config.audioListIdle
+		running: !root.settled
+		onTriggered: {
+			root.collect()
+			root.settled = true
+		}
+	}
+
+	Timer {
+		interval: Config.audioListIdle
+		repeat: true
+		running: root.settled && RadioState.menuPage !== "audio" && RadioState.menuPage !== "microphone"
+		onTriggered: root.collect()
+	}
+
+	Timer {
+		interval: Config.audioListOpen
+		repeat: true
+		running: root.settled && (RadioState.menuPage === "audio" || RadioState.menuPage === "microphone")
 		triggeredOnStart: true
 		onTriggered: root.collect()
 	}
@@ -113,9 +189,14 @@ Singleton {
 		const sources = []
 		const streams = []
 		const captures = []
+		let pending = !Pipewire.ready
 		for (let i = 0; i < list.length; i++) {
 			const node = list[i]
-			if (!node || !node.audio)
+			if (!node)
+				continue
+			if (node.audio && !node.ready)
+				pending = true
+			if (!node.audio)
 				continue
 			const type = node.type
 			const stream = (type & PwNodeType.Stream) === PwNodeType.Stream
@@ -162,6 +243,8 @@ Singleton {
 			streamNodes = nextStreams
 		if (!sameNodes(captureNodes, nextCaptures))
 			captureNodes = nextCaptures
+		if (!pending)
+			settled = true
 	}
 
 	function sameNodes(current, next) {
