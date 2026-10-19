@@ -13,9 +13,10 @@ Item {
 	property real room: 4096
 
 	implicitWidth: menuWidth
-	implicitHeight: column.implicitHeight + Theme.padding
+	implicitHeight: Math.min(room, column.implicitHeight + Theme.padding)
 	width: implicitWidth
 	height: implicitHeight
+	clip: true
 
 	function ink(alpha) {
 		return Theme.ink(alpha)
@@ -186,155 +187,6 @@ Item {
 				bottomPadding: 8
 			}
 
-			Repeater {
-				model: root.page === "wifi" ? RadioState.wifiList : []
-
-				Rectangle {
-					id: wifiRow
-					required property var modelData
-					readonly property bool connected: modelData.connected
-
-					width: root.menuWidth - Theme.inset * 2
-					x: Theme.inset
-					height: Theme.rowInnerHeight
-					radius: Theme.rowRadius
-					color: wifiHover.containsMouse ? root.ink(connected ? Theme.buttonHover : Theme.hover) : (connected ? root.ink(Theme.selected) : "transparent")
-
-					Rectangle {
-						id: wifiWell
-						anchors.left: parent.left
-						anchors.leftMargin: 6
-						anchors.verticalCenter: parent.verticalCenter
-						width: Theme.well
-						height: Theme.well
-						radius: Theme.buttonRadius
-						color: root.ink(Theme.wellFill)
-
-						Text {
-							anchors.centerIn: parent
-							text: RadioState.strengthGlyph(wifiRow.modelData.signalStrength || 0)
-							color: Theme.foreground
-							font.family: Theme.iconFont
-							font.pixelSize: Theme.glyphSize
-						}
-					}
-
-					Text {
-						id: lock
-						anchors.left: wifiWell.right
-						anchors.leftMargin: Theme.inset
-						anchors.verticalCenter: parent.verticalCenter
-						visible: RadioState.secured(wifiRow.modelData)
-						text: Config.icon(Config.lock)
-						color: root.ink(Theme.iconMute)
-						font.family: Theme.iconFont
-						font.pixelSize: Theme.fontSize
-					}
-
-					Text {
-						id: status
-						anchors.right: parent.right
-						anchors.rightMargin: 12
-						anchors.verticalCenter: parent.verticalCenter
-						text: wifiRow.connected ? "Connected" : Math.round((wifiRow.modelData.signalStrength || 0) * 100) + "%"
-						color: wifiRow.connected ? Theme.foreground : root.ink(Theme.quiet)
-						font.family: Theme.fontFamily
-						font.pixelSize: Theme.smallSize
-					}
-
-					Text {
-						anchors.left: lock.visible ? lock.right : wifiWell.right
-						anchors.leftMargin: Theme.inset
-						anchors.right: status.left
-						anchors.rightMargin: Theme.inset
-						anchors.verticalCenter: parent.verticalCenter
-						text: wifiRow.modelData.name
-						color: Theme.foreground
-						font.family: Theme.fontFamily
-						font.pixelSize: Theme.fontSize
-						elide: Text.ElideRight
-					}
-
-					MouseArea {
-						id: wifiHover
-						anchors.fill: parent
-						hoverEnabled: true
-						cursorShape: Qt.PointingHandCursor
-						onClicked: RadioState.activateWifi(wifiRow.modelData)
-					}
-				}
-			}
-
-			Item {
-				visible: root.page === "wifi" && RadioState.pending !== null
-				width: parent.width
-				height: 48
-
-				Rectangle {
-					anchors.fill: parent
-					anchors.leftMargin: Theme.inset
-					anchors.rightMargin: Theme.inset
-					anchors.topMargin: 4
-					anchors.bottomMargin: 4
-					radius: Theme.rowRadius
-					color: secretHover.hovered ? root.ink(Theme.buttonHover) : root.ink(Theme.wellFill)
-				}
-
-				HoverHandler {
-					id: secretHover
-				}
-
-				Text {
-					anchors.left: parent.left
-					anchors.leftMargin: Theme.headerInset
-					anchors.verticalCenter: parent.verticalCenter
-					text: Config.icon(Config.lock)
-					color: root.ink(Theme.iconMute)
-					font.family: Theme.iconFont
-					font.pixelSize: Theme.glyphSize
-				}
-
-				TextInput {
-					id: secret
-					anchors.left: parent.left
-					anchors.right: parent.right
-					anchors.verticalCenter: parent.verticalCenter
-					anchors.leftMargin: 46
-					anchors.rightMargin: Theme.edgeInset
-					color: Theme.foreground
-					font.family: Theme.fontFamily
-					font.pixelSize: Theme.fontSize
-					echoMode: TextInput.Password
-					selectByMouse: true
-					clip: true
-					text: RadioState.password
-					onTextChanged: RadioState.password = text
-					onVisibleChanged: if (visible) forceActiveFocus()
-
-					Keys.onReturnPressed: event => {
-						RadioState.submitPassword()
-						event.accepted = true
-					}
-					Keys.onEnterPressed: event => {
-						RadioState.submitPassword()
-						event.accepted = true
-					}
-					Keys.onEscapePressed: event => {
-						RadioState.pending = null
-						event.accepted = true
-					}
-				}
-
-				Text {
-					anchors.left: secret.left
-					anchors.verticalCenter: secret.verticalCenter
-					text: "Password"
-					visible: secret.text.length === 0
-					color: root.ink(Theme.dim)
-					font: secret.font
-				}
-			}
-
 			Item {
 				width: parent.width
 				height: root.rowHeight
@@ -395,81 +247,6 @@ Item {
 				horizontalAlignment: Text.AlignHCenter
 				topPadding: 10
 				bottomPadding: 8
-			}
-
-			Repeater {
-				model: root.page === "bluetooth" ? RadioState.btList : []
-
-				Rectangle {
-					id: btRow
-					required property var modelData
-					readonly property bool connected: modelData.connected
-
-					width: root.menuWidth - Theme.inset * 2
-					x: Theme.inset
-					height: Theme.rowInnerHeight
-					radius: Theme.rowRadius
-					color: btHover.containsMouse ? root.ink(connected ? Theme.buttonHover : Theme.hover) : (connected ? root.ink(Theme.selected) : "transparent")
-
-					Rectangle {
-						id: btWell
-						anchors.left: parent.left
-						anchors.leftMargin: 6
-						anchors.verticalCenter: parent.verticalCenter
-						width: Theme.well
-						height: Theme.well
-						radius: Theme.buttonRadius
-						color: root.ink(Theme.wellFill)
-
-						Text {
-							anchors.centerIn: parent
-							text: Config.icon(btRow.connected ? Config.btOn : Config.btIdle)
-							color: Theme.foreground
-							font.family: Theme.iconFont
-							font.pixelSize: Theme.glyphSize
-						}
-					}
-
-					Text {
-						id: btStatus
-						anchors.right: parent.right
-						anchors.rightMargin: 12
-						anchors.verticalCenter: parent.verticalCenter
-						text: {
-							if (btRow.modelData.connected && RadioState.btRssiKnown)
-								return Math.round(RadioState.btQuality * 100) + "%"
-							if (btRow.modelData.connected)
-								return "Connected"
-							if (btRow.modelData.paired)
-								return "Paired"
-							return "Pair"
-						}
-						color: btRow.connected ? Theme.foreground : root.ink(Theme.quiet)
-						font.family: Theme.fontFamily
-						font.pixelSize: Theme.smallSize
-					}
-
-					Text {
-						anchors.left: btWell.right
-						anchors.leftMargin: Theme.inset
-						anchors.right: btStatus.left
-						anchors.rightMargin: Theme.inset
-						anchors.verticalCenter: parent.verticalCenter
-						text: RadioState.deviceLabel(btRow.modelData)
-						color: Theme.foreground
-						font.family: Theme.fontFamily
-						font.pixelSize: Theme.fontSize
-						elide: Text.ElideRight
-					}
-
-					MouseArea {
-						id: btHover
-						anchors.fill: parent
-						hoverEnabled: true
-						cursorShape: Qt.PointingHandCursor
-						onClicked: RadioState.activateBt(btRow.modelData)
-					}
-				}
 			}
 
 			Item {
@@ -842,6 +619,323 @@ Item {
 				bottomPadding: 6
 			}
 
+		}
+
+		Item {
+			id: radioPane
+			readonly property var radioModel: {
+				if (root.page === "wifi")
+					return RadioState.wifiList
+				if (root.page === "bluetooth")
+					return RadioState.btList
+				return []
+			}
+			readonly property real rowBlock: Theme.rowInnerHeight
+			readonly property real full: radioColumn.implicitHeight
+			readonly property real tail: secretRow.visible ? secretRow.height + column.spacing : 0
+			readonly property real budget: Math.max(0, root.room - Theme.padding - body.implicitHeight - column.spacing - tail)
+			visible: radioModel.length > 0
+			width: parent.width
+			implicitHeight: Math.min(full, Math.max(budget, Math.min(full, rowBlock)))
+			height: implicitHeight
+
+			property string scrollPage: root.page
+			onScrollPageChanged: radioFlick.contentY = 0
+
+			Flickable {
+				id: radioFlick
+				anchors.fill: parent
+				contentWidth: width
+				contentHeight: radioColumn.implicitHeight
+				clip: true
+				boundsBehavior: Flickable.StopAtBounds
+				flickableDirection: Flickable.VerticalFlick
+				interactive: contentHeight > height + 1
+
+				Column {
+					id: radioColumn
+					width: radioFlick.width
+					spacing: Theme.menuSpacing
+
+					Repeater {
+						model: root.page === "wifi" ? radioPane.radioModel : []
+
+						Rectangle {
+							id: wifiRow
+							required property var modelData
+							readonly property bool connected: modelData.connected
+
+							width: root.menuWidth - Theme.inset * 2
+							x: Theme.inset
+							height: Theme.rowInnerHeight
+							radius: Theme.rowRadius
+							color: wifiHover.containsMouse ? root.ink(connected ? Theme.buttonHover : Theme.hover) : (connected ? root.ink(Theme.selected) : "transparent")
+
+							Rectangle {
+								id: wifiWell
+								anchors.left: parent.left
+								anchors.leftMargin: 6
+								anchors.verticalCenter: parent.verticalCenter
+								width: Theme.well
+								height: Theme.well
+								radius: Theme.buttonRadius
+								color: root.ink(Theme.wellFill)
+
+								Text {
+									anchors.centerIn: parent
+									text: RadioState.strengthGlyph(wifiRow.modelData.signalStrength || 0)
+									color: Theme.foreground
+									font.family: Theme.iconFont
+									font.pixelSize: Theme.glyphSize
+								}
+							}
+
+							Text {
+								id: lock
+								anchors.left: wifiWell.right
+								anchors.leftMargin: Theme.inset
+								anchors.verticalCenter: parent.verticalCenter
+								visible: RadioState.secured(wifiRow.modelData)
+								text: Config.icon(Config.lock)
+								color: root.ink(Theme.iconMute)
+								font.family: Theme.iconFont
+								font.pixelSize: Theme.fontSize
+							}
+
+							Text {
+								id: status
+								anchors.right: parent.right
+								anchors.rightMargin: 12
+								anchors.verticalCenter: parent.verticalCenter
+								text: wifiRow.connected ? "Connected" : Math.round((wifiRow.modelData.signalStrength || 0) * 100) + "%"
+								color: wifiRow.connected ? Theme.foreground : root.ink(Theme.quiet)
+								font.family: Theme.fontFamily
+								font.pixelSize: Theme.smallSize
+							}
+
+							Text {
+								anchors.left: lock.visible ? lock.right : wifiWell.right
+								anchors.leftMargin: Theme.inset
+								anchors.right: status.left
+								anchors.rightMargin: Theme.inset
+								anchors.verticalCenter: parent.verticalCenter
+								text: wifiRow.modelData.name
+								color: Theme.foreground
+								font.family: Theme.fontFamily
+								font.pixelSize: Theme.fontSize
+								elide: Text.ElideRight
+							}
+
+							MouseArea {
+								id: wifiHover
+								anchors.fill: parent
+								hoverEnabled: true
+								cursorShape: Qt.PointingHandCursor
+								onClicked: RadioState.activateWifi(wifiRow.modelData)
+							}
+						}
+					}
+
+					Repeater {
+						model: root.page === "bluetooth" ? radioPane.radioModel : []
+
+						Rectangle {
+							id: btRow
+							required property var modelData
+							readonly property bool connected: modelData.connected
+
+							width: root.menuWidth - Theme.inset * 2
+							x: Theme.inset
+							height: Theme.rowInnerHeight
+							radius: Theme.rowRadius
+							color: btHover.containsMouse ? root.ink(connected ? Theme.buttonHover : Theme.hover) : (connected ? root.ink(Theme.selected) : "transparent")
+
+							Rectangle {
+								id: btWell
+								anchors.left: parent.left
+								anchors.leftMargin: 6
+								anchors.verticalCenter: parent.verticalCenter
+								width: Theme.well
+								height: Theme.well
+								radius: Theme.buttonRadius
+								color: root.ink(Theme.wellFill)
+
+								Text {
+									anchors.centerIn: parent
+									text: Config.icon(btRow.connected ? Config.btOn : Config.btIdle)
+									color: Theme.foreground
+									font.family: Theme.iconFont
+									font.pixelSize: Theme.glyphSize
+								}
+							}
+
+							Text {
+								id: btStatus
+								anchors.right: parent.right
+								anchors.rightMargin: 12
+								anchors.verticalCenter: parent.verticalCenter
+								text: {
+									if (btRow.modelData.connected && RadioState.btRssiKnown)
+										return Math.round(RadioState.btQuality * 100) + "%"
+									if (btRow.modelData.connected)
+										return "Connected"
+									if (btRow.modelData.paired)
+										return "Paired"
+									return "Pair"
+								}
+								color: btRow.connected ? Theme.foreground : root.ink(Theme.quiet)
+								font.family: Theme.fontFamily
+								font.pixelSize: Theme.smallSize
+							}
+
+							Text {
+								anchors.left: btWell.right
+								anchors.leftMargin: Theme.inset
+								anchors.right: btStatus.left
+								anchors.rightMargin: Theme.inset
+								anchors.verticalCenter: parent.verticalCenter
+								text: RadioState.deviceLabel(btRow.modelData)
+								color: Theme.foreground
+								font.family: Theme.fontFamily
+								font.pixelSize: Theme.fontSize
+								elide: Text.ElideRight
+							}
+
+							MouseArea {
+								id: btHover
+								anchors.fill: parent
+								hoverEnabled: true
+								cursorShape: Qt.PointingHandCursor
+								onClicked: RadioState.activateBt(btRow.modelData)
+							}
+						}
+					}
+				}
+			}
+
+			Item {
+				id: radioScroll
+				visible: radioFlick.contentHeight > radioFlick.height + 1
+				anchors.top: parent.top
+				anchors.bottom: parent.bottom
+				anchors.right: parent.right
+				width: Theme.inset + Theme.noticeProgress
+
+				Rectangle {
+					id: radioThumb
+					width: Theme.noticeProgress
+					radius: width / 2
+					anchors.horizontalCenter: parent.horizontalCenter
+					color: radioScrollDrag.containsMouse || radioScrollDrag.pressed ? Theme.foreground : root.ink(Theme.scroll)
+					height: Math.max(24, radioFlick.height * radioFlick.height / Math.max(radioFlick.contentHeight, 1))
+					y: radioFlick.contentY / Math.max(1, radioFlick.contentHeight - radioFlick.height) * Math.max(0, radioFlick.height - height)
+				}
+
+				MouseArea {
+					id: radioScrollDrag
+					anchors.fill: parent
+					hoverEnabled: true
+					preventStealing: true
+					cursorShape: Qt.PointingHandCursor
+					property real origin: 0
+					property real originY: 0
+
+					function scrollTo(local) {
+						const track = Math.max(1, radioFlick.height - radioThumb.height)
+						const span = Math.max(0, radioFlick.contentHeight - radioFlick.height)
+						const barY = Math.max(0, Math.min(track, local - radioThumb.height / 2))
+						radioFlick.contentY = barY / track * span
+					}
+
+					onPressed: mouse => {
+						const local = mapToItem(radioPane, mouse.x, mouse.y).y
+						const onThumb = local >= radioThumb.y && local <= radioThumb.y + radioThumb.height
+						if (!onThumb)
+							scrollTo(local)
+						origin = local
+						originY = radioFlick.contentY
+					}
+					onPositionChanged: mouse => {
+						if (!pressed)
+							return
+						const local = mapToItem(radioPane, mouse.x, mouse.y).y
+						const track = Math.max(1, radioFlick.height - radioThumb.height)
+						const span = Math.max(0, radioFlick.contentHeight - radioFlick.height)
+						radioFlick.contentY = Math.max(0, Math.min(span, originY + (local - origin) * span / track))
+					}
+				}
+			}
+		}
+
+		Item {
+			id: secretRow
+			visible: root.page === "wifi" && RadioState.pending !== null
+			width: parent.width
+			height: 48
+
+			Rectangle {
+				anchors.fill: parent
+				anchors.leftMargin: Theme.inset
+				anchors.rightMargin: Theme.inset
+				anchors.topMargin: 4
+				anchors.bottomMargin: 4
+				radius: Theme.rowRadius
+				color: secretHover.hovered ? root.ink(Theme.buttonHover) : root.ink(Theme.wellFill)
+			}
+
+			HoverHandler {
+				id: secretHover
+			}
+
+			Text {
+				anchors.left: parent.left
+				anchors.leftMargin: Theme.headerInset
+				anchors.verticalCenter: parent.verticalCenter
+				text: Config.icon(Config.lock)
+				color: root.ink(Theme.iconMute)
+				font.family: Theme.iconFont
+				font.pixelSize: Theme.glyphSize
+			}
+
+			TextInput {
+				id: secret
+				anchors.left: parent.left
+				anchors.right: parent.right
+				anchors.verticalCenter: parent.verticalCenter
+				anchors.leftMargin: 46
+				anchors.rightMargin: Theme.edgeInset
+				color: Theme.foreground
+				font.family: Theme.fontFamily
+				font.pixelSize: Theme.fontSize
+				echoMode: TextInput.Password
+				selectByMouse: true
+				clip: true
+				text: RadioState.password
+				onTextChanged: RadioState.password = text
+				onVisibleChanged: if (visible) forceActiveFocus()
+
+				Keys.onReturnPressed: event => {
+					RadioState.submitPassword()
+					event.accepted = true
+				}
+				Keys.onEnterPressed: event => {
+					RadioState.submitPassword()
+					event.accepted = true
+				}
+				Keys.onEscapePressed: event => {
+					RadioState.pending = null
+					event.accepted = true
+				}
+			}
+
+			Text {
+				anchors.left: secret.left
+				anchors.verticalCenter: secret.verticalCenter
+				text: "Password"
+				visible: secret.text.length === 0
+				color: root.ink(Theme.dim)
+				font: secret.font
+			}
 		}
 
 		Item {
