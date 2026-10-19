@@ -7,7 +7,7 @@ import qs.services
 Item {
 	id: root
 
-	readonly property string page: RadioState.menuPage
+	property string page: ""
 	readonly property int menuWidth: Theme.radioMenuWidth
 	readonly property int rowHeight: Theme.rowHeight
 	property real room: 4096

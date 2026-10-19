@@ -86,8 +86,15 @@ PanelWindow {
 	}
 	property bool radioWanted: false
 	readonly property string radioPage: RadioState.menuOutput === modelData.name ? RadioState.menuPage : ""
+	property string radioHold: "wifi"
+	readonly property string radioShown: radioPage !== "" ? radioPage : radioHold
 	property real radioProgress: radioWanted ? 1 : 0
 	property real menuProgress: radioPage !== "" ? 1 : 0
+
+	onRadioPageChanged: {
+		if (radioPage !== "")
+			radioHold = radioPage
+	}
 	property bool sessionWanted: false
 	property bool sessionMenu: false
 	property real sessionProgress: sessionWanted ? 1 : 0
@@ -498,8 +505,9 @@ PanelWindow {
 			id: radioMenu
 			anchors.left: parent.left
 			anchors.bottom: radioChip.top
+			page: root.radioShown
 			room: {
-				const audio = RadioState.menuPage === "audio" || RadioState.menuPage === "microphone"
+				const audio = root.radioShown === "audio" || root.radioShown === "microphone"
 				const ratio = audio ? Config.audioMenuRatio : Config.noticeCenterRatio
 				const chrome = root.height - (root.frameThickness - root.weld) - radioChip.implicitHeight - Math.max(root.frameThickness, Theme.padding)
 				return Math.min(root.height * ratio, Math.max(Theme.rowHeight * 4, chrome))
