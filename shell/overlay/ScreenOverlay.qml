@@ -498,6 +498,7 @@ PanelWindow {
 			id: radioMenu
 			anchors.left: parent.left
 			anchors.bottom: radioChip.top
+			room: Math.min(root.height * Config.noticeCenterRatio, Math.max(Theme.rowHeight * 4, root.height - (root.frameThickness - root.weld) - radioChip.implicitHeight - Math.max(root.frameThickness, Theme.padding)))
 			opacity: root.menuProgress > Config.menuReveal ? 1 : 0
 
 			Behavior on opacity {

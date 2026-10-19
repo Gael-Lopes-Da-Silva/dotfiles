@@ -152,8 +152,8 @@ Singleton {
 		captures.sort((a, b) => streamLabel(a).localeCompare(streamLabel(b)))
 		const nextSinks = sinks.slice(0, Config.audioLimit)
 		const nextSources = sources.slice(0, Config.audioLimit)
-		const nextStreams = streams.slice(0, Config.audioLimit)
-		const nextCaptures = captures.slice(0, Config.audioLimit)
+		const nextStreams = streams
+		const nextCaptures = captures
 		if (!sameNodes(sinkNodes, nextSinks))
 			sinkNodes = nextSinks
 		if (!sameNodes(sourceNodes, nextSources))
