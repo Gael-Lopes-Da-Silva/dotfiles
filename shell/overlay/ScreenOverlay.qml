@@ -506,6 +506,7 @@ PanelWindow {
 			anchors.left: parent.left
 			anchors.bottom: radioChip.top
 			page: root.radioShown
+			live: root.radioPage !== ""
 			room: {
 				const audio = root.radioShown === "audio" || root.radioShown === "microphone"
 				const ratio = audio ? Config.audioMenuRatio : Config.noticeCenterRatio
@@ -523,6 +524,7 @@ PanelWindow {
 			id: radioChip
 			anchors.left: parent.left
 			anchors.bottom: parent.bottom
+			openPage: root.menuProgress > 0 ? root.radioShown : RadioState.menuPage
 			opacity: root.radioProgress > Config.reveal ? 1 : 0
 			onPicked: page => {
 				root.radioWanted = true

@@ -8,6 +8,7 @@ Item {
 	id: root
 
 	property string page: ""
+	property bool live: true
 	readonly property int menuWidth: Theme.radioMenuWidth
 	readonly property int rowHeight: Theme.rowHeight
 	property real room: 4096
@@ -241,7 +242,7 @@ Item {
 			}
 
 			Text {
-				visible: root.page === "wifi" && RadioState.wifiList.length === 0
+				visible: root.page === "wifi" && radioPane.radioModel.length === 0
 				width: parent.width
 				text: !Networking.wifiEnabled ? "Wi-Fi is off" : RadioState.wifiReady ? "No networks" : "Scanning"
 				color: root.ink(Theme.muted)
@@ -303,7 +304,7 @@ Item {
 			}
 
 			Text {
-				visible: root.page === "bluetooth" && RadioState.btList.length === 0
+				visible: root.page === "bluetooth" && radioPane.radioModel.length === 0
 				width: parent.width
 				text: {
 					const adapter = RadioState.bluetooth
@@ -746,12 +747,24 @@ Item {
 
 		Item {
 			id: radioPane
-			readonly property var radioModel: {
+			// The close animation is still showing this list, so keep the last one until it is gone.
+			property bool live: root.live
+			property var radioModel: []
+			readonly property var radioSource: {
 				if (root.page === "wifi")
 					return RadioState.wifiList
 				if (root.page === "bluetooth")
 					return RadioState.btList
 				return []
+			}
+
+			onLiveChanged: {
+				if (live)
+					radioModel = radioSource
+			}
+			onRadioSourceChanged: {
+				if (live)
+					radioModel = radioSource
 			}
 			readonly property real rowBlock: Theme.rowInnerHeight
 			readonly property real full: radioColumn.implicitHeight
@@ -786,7 +799,33 @@ Item {
 						Rectangle {
 							id: wifiRow
 							required property var modelData
-							readonly property bool connected: modelData.connected
+							readonly property real liveSignal: modelData.signalStrength || 0
+							readonly property bool liveConnected: !!modelData.connected
+							readonly property bool liveSecured: RadioState.secured(modelData)
+							readonly property string liveName: modelData.name || ""
+							property real heldSignal: 0
+							property bool heldConnected: false
+							property bool heldSecured: false
+							property string heldName: ""
+							readonly property real signal: radioPane.live ? liveSignal : heldSignal
+							readonly property bool connected: radioPane.live ? liveConnected : heldConnected
+							readonly property bool secured: radioPane.live ? liveSecured : heldSecured
+							readonly property string title: radioPane.live ? liveName : heldName
+
+							function remember() {
+								if (!radioPane.live)
+									return
+								heldSignal = liveSignal
+								heldConnected = liveConnected
+								heldSecured = liveSecured
+								heldName = liveName
+							}
+
+							Component.onCompleted: remember()
+							onLiveSignalChanged: remember()
+							onLiveConnectedChanged: remember()
+							onLiveSecuredChanged: remember()
+							onLiveNameChanged: remember()
 
 							width: root.menuWidth - Theme.inset * 2
 							x: Theme.inset
@@ -806,7 +845,7 @@ Item {
 
 								Text {
 									anchors.centerIn: parent
-									text: RadioState.strengthGlyph(wifiRow.modelData.signalStrength || 0)
+									text: RadioState.strengthGlyph(wifiRow.signal)
 									color: Theme.foreground
 									font.family: Theme.iconFont
 									font.pixelSize: Theme.glyphSize
@@ -818,7 +857,7 @@ Item {
 								anchors.left: wifiWell.right
 								anchors.leftMargin: Theme.inset
 								anchors.verticalCenter: parent.verticalCenter
-								visible: RadioState.secured(wifiRow.modelData)
+								visible: wifiRow.secured
 								text: Config.icon(Config.lock)
 								color: root.ink(Theme.iconMute)
 								font.family: Theme.iconFont
@@ -830,7 +869,7 @@ Item {
 								anchors.right: parent.right
 								anchors.rightMargin: 12
 								anchors.verticalCenter: parent.verticalCenter
-								text: wifiRow.connected ? "Connected" : Math.round((wifiRow.modelData.signalStrength || 0) * 100) + "%"
+								text: wifiRow.connected ? "Connected" : Math.round(wifiRow.signal * 100) + "%"
 								color: wifiRow.connected ? Theme.foreground : root.ink(Theme.quiet)
 								font.family: Theme.fontFamily
 								font.pixelSize: Theme.smallSize
@@ -842,7 +881,7 @@ Item {
 								anchors.right: status.left
 								anchors.rightMargin: Theme.inset
 								anchors.verticalCenter: parent.verticalCenter
-								text: wifiRow.modelData.name
+								text: wifiRow.title
 								color: Theme.foreground
 								font.family: Theme.fontFamily
 								font.pixelSize: Theme.fontSize

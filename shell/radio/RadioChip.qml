@@ -8,6 +8,7 @@ Item {
 	id: root
 
 	signal picked(string page)
+	property string openPage: ""
 
 	implicitWidth: row.implicitWidth + Theme.padding * 2
 	implicitHeight: row.implicitHeight + Theme.padding * 2
@@ -47,8 +48,8 @@ Item {
 				radius: Theme.buttonRadius
 				color: {
 					if (wifiHover.containsMouse)
-						return Theme.ink(RadioState.menuPage === "wifi" ? Theme.buttonHover : Theme.hover)
-					return RadioState.menuPage === "wifi" ? Theme.ink(Theme.selected) : "transparent"
+						return Theme.ink(root.openPage === "wifi" ? Theme.buttonHover : Theme.hover)
+					return root.openPage === "wifi" ? Theme.ink(Theme.selected) : "transparent"
 				}
 			}
 
@@ -81,8 +82,8 @@ Item {
 				radius: Theme.buttonRadius
 				color: {
 					if (btHover.containsMouse)
-						return Theme.ink(RadioState.menuPage === "bluetooth" ? Theme.buttonHover : Theme.hover)
-					return RadioState.menuPage === "bluetooth" ? Theme.ink(Theme.selected) : "transparent"
+						return Theme.ink(root.openPage === "bluetooth" ? Theme.buttonHover : Theme.hover)
+					return root.openPage === "bluetooth" ? Theme.ink(Theme.selected) : "transparent"
 				}
 			}
 
@@ -115,8 +116,8 @@ Item {
 				radius: Theme.buttonRadius
 				color: {
 					if (audioHover.containsMouse)
-						return Theme.ink(RadioState.menuPage === "audio" ? Theme.buttonHover : Theme.hover)
-					return RadioState.menuPage === "audio" ? Theme.ink(Theme.selected) : "transparent"
+						return Theme.ink(root.openPage === "audio" ? Theme.buttonHover : Theme.hover)
+					return root.openPage === "audio" ? Theme.ink(Theme.selected) : "transparent"
 				}
 			}
 
@@ -149,8 +150,8 @@ Item {
 				radius: Theme.buttonRadius
 				color: {
 					if (micHover.containsMouse)
-						return Theme.ink(RadioState.menuPage === "microphone" ? Theme.buttonHover : Theme.hover)
-					return RadioState.menuPage === "microphone" ? Theme.ink(Theme.selected) : "transparent"
+						return Theme.ink(root.openPage === "microphone" ? Theme.buttonHover : Theme.hover)
+					return root.openPage === "microphone" ? Theme.ink(Theme.selected) : "transparent"
 				}
 			}
 

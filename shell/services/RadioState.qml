@@ -214,10 +214,10 @@ Singleton {
 
 	function toggleMenu(output, page) {
 		if (menuOutput === output && menuPage === page) {
-			menuPage = ""
-			pending = null
+			beginClose()
 			return
 		}
+		closeHold.stop()
 		menuOutput = output
 		menuPage = page
 		pending = null
@@ -226,9 +226,23 @@ Singleton {
 	}
 
 	function closeMenu() {
+		beginClose()
+	}
+
+	function beginClose() {
+		if (menuPage === "")
+			return
 		menuPage = ""
+		closeHold.restart()
+	}
+
+	// Scanning stops and the password row clears once the close animation is done.
+	function releaseClose() {
+		if (menuPage !== "")
+			return
 		pending = null
 		password = ""
+		applyScan()
 	}
 
 	function toggleWifi() {
@@ -296,7 +310,18 @@ Singleton {
 		touchTimer.restart()
 	}
 
-	onMenuPageChanged: applyScan()
+	onMenuPageChanged: {
+		if (menuPage === "")
+			return
+		closeHold.stop()
+		applyScan()
+	}
+
+	Timer {
+		id: closeHold
+		interval: Theme.motion
+		onTriggered: root.releaseClose()
+	}
 	onWifiChanged: applyScan()
 	onBluetoothChanged: {
 		applyScan()
