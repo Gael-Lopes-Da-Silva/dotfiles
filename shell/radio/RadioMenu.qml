@@ -407,98 +407,6 @@ Item {
 				bottomPadding: 6
 			}
 
-			Repeater {
-				model: root.page === "audio" ? AudioState.sinkNodes : []
-
-				Rectangle {
-					id: sinkRow
-					required property var modelData
-					readonly property bool active: AudioState.sink && modelData.id === AudioState.sink.id
-
-					width: root.menuWidth - Theme.inset * 2
-					x: Theme.inset
-					height: Theme.rowInnerHeight
-					radius: Theme.rowRadius
-					color: sinkHover.containsMouse ? root.ink(active ? Theme.buttonHover : Theme.hover) : (active ? root.ink(Theme.selected) : "transparent")
-
-					Rectangle {
-						id: sinkWell
-						anchors.left: parent.left
-						anchors.leftMargin: 6
-						anchors.verticalCenter: parent.verticalCenter
-						width: Theme.well
-						height: Theme.well
-						radius: Theme.buttonRadius
-						color: root.ink(Theme.wellFill)
-
-						Text {
-							anchors.centerIn: parent
-							text: AudioState.volumeGlyph(sinkRow.modelData.audio ? sinkRow.modelData.audio.volume : 0, sinkRow.modelData.audio ? sinkRow.modelData.audio.muted : false)
-							color: Theme.foreground
-							font.family: Theme.iconFont
-							font.pixelSize: Theme.glyphSize
-						}
-					}
-
-					Text {
-						id: sinkStatus
-						anchors.right: parent.right
-						anchors.rightMargin: 12
-						anchors.verticalCenter: parent.verticalCenter
-						visible: sinkRow.active
-						text: "Active"
-						color: Theme.foreground
-						font.family: Theme.fontFamily
-						font.pixelSize: Theme.smallSize
-					}
-
-					Text {
-						anchors.left: sinkWell.right
-						anchors.leftMargin: Theme.inset
-						anchors.right: sinkStatus.left
-						anchors.rightMargin: Theme.inset
-						anchors.verticalCenter: parent.verticalCenter
-						text: AudioState.nodeLabel(sinkRow.modelData)
-						color: Theme.foreground
-						font.family: Theme.fontFamily
-						font.pixelSize: Theme.fontSize
-						elide: Text.ElideRight
-					}
-
-					MouseArea {
-						id: sinkHover
-						anchors.fill: parent
-						hoverEnabled: true
-						cursorShape: Qt.PointingHandCursor
-						onClicked: AudioState.selectSink(sinkRow.modelData)
-					}
-				}
-			}
-
-			Text {
-				visible: root.page === "audio"
-				width: parent.width
-				text: "Applications"
-				color: root.ink(Theme.dim)
-				font.family: Theme.fontFamily
-				font.pixelSize: Theme.labelSize
-				leftPadding: Theme.headerInset
-				topPadding: 10
-				bottomPadding: 2
-			}
-
-			Text {
-				visible: root.page === "audio" && AudioState.streamNodes.length === 0
-				width: parent.width
-				text: "No applications"
-				color: root.ink(Theme.muted)
-				font.family: Theme.fontFamily
-				font.pixelSize: Theme.fontSize
-				horizontalAlignment: Text.AlignHCenter
-				topPadding: 6
-				bottomPadding: 6
-			}
-
 			Item {
 				width: parent.width
 				height: root.rowHeight
@@ -592,72 +500,216 @@ Item {
 				bottomPadding: 6
 			}
 
-			Repeater {
-				model: root.page === "microphone" ? AudioState.sourceNodes : []
+		}
 
-				Rectangle {
-					id: sourceRow
-					required property var modelData
-					readonly property bool active: AudioState.source && modelData.id === AudioState.source.id
+		Item {
+			id: nodePane
+			readonly property var nodeModel: {
+				if (root.page === "audio")
+					return AudioState.sinkNodes
+				if (root.page === "microphone")
+					return AudioState.sourceNodes
+				return []
+			}
+			readonly property real rowBlock: Theme.rowInnerHeight
+			readonly property real full: nodeColumn.implicitHeight
+			readonly property real after: {
+				let reserved = 0
+				if (appHead.visible)
+					reserved += column.spacing + appHead.implicitHeight
+				if (appPane.appModel.length > 0)
+					reserved += column.spacing + Math.min(appPane.full, appPane.rowBlock)
+				return reserved
+			}
+			readonly property real cap: Math.max(0, root.room - Theme.padding - body.implicitHeight - column.spacing - after)
+			visible: nodeModel.length > 0
+			width: parent.width
+			implicitHeight: Math.min(full, Math.max(cap, Math.min(full, rowBlock)))
+			height: implicitHeight
 
-					width: root.menuWidth - Theme.inset * 2
-					x: Theme.inset
-					height: Theme.rowInnerHeight
-					radius: Theme.rowRadius
-					color: sourceHover.containsMouse ? root.ink(active ? Theme.buttonHover : Theme.hover) : (active ? root.ink(Theme.selected) : "transparent")
+			property string scrollPage: root.page
+			onScrollPageChanged: nodeFlick.contentY = 0
 
-					Rectangle {
-						id: sourceWell
-						anchors.left: parent.left
-						anchors.leftMargin: 6
-						anchors.verticalCenter: parent.verticalCenter
-						width: Theme.well
-						height: Theme.well
-						radius: Theme.buttonRadius
-						color: root.ink(Theme.wellFill)
+			Flickable {
+				id: nodeFlick
+				anchors.fill: parent
+				contentWidth: width
+				contentHeight: nodeColumn.implicitHeight
+				clip: true
+				boundsBehavior: Flickable.StopAtBounds
+				flickableDirection: Flickable.VerticalFlick
+				interactive: contentHeight > height + 1
 
-						Text {
-							anchors.centerIn: parent
-							text: AudioState.micGlyph(sourceRow.modelData.audio ? sourceRow.modelData.audio.volume : 0, sourceRow.modelData.audio ? sourceRow.modelData.audio.muted : false)
-							color: Theme.foreground
-							font.family: Theme.iconFont
-							font.pixelSize: Theme.glyphSize
+				Column {
+					id: nodeColumn
+					width: nodeFlick.width
+					spacing: Theme.menuSpacing
+
+					Repeater {
+						model: nodePane.nodeModel
+
+						Rectangle {
+							id: nodeRow
+							required property var modelData
+							readonly property bool active: {
+								const current = root.page === "microphone" ? AudioState.source : AudioState.sink
+								return current && modelData.id === current.id
+							}
+
+							width: root.menuWidth - Theme.inset * 2
+							x: Theme.inset
+							height: Theme.rowInnerHeight
+							radius: Theme.rowRadius
+							color: nodeHover.containsMouse ? root.ink(active ? Theme.buttonHover : Theme.hover) : (active ? root.ink(Theme.selected) : "transparent")
+
+							Rectangle {
+								id: nodeWell
+								anchors.left: parent.left
+								anchors.leftMargin: 6
+								anchors.verticalCenter: parent.verticalCenter
+								width: Theme.well
+								height: Theme.well
+								radius: Theme.buttonRadius
+								color: root.ink(Theme.wellFill)
+
+								Text {
+									anchors.centerIn: parent
+									text: {
+										const audio = nodeRow.modelData.audio
+										const level = audio ? audio.volume : 0
+										const muted = audio ? audio.muted : false
+										return root.page === "microphone" ? AudioState.micGlyph(level, muted) : AudioState.volumeGlyph(level, muted)
+									}
+									color: Theme.foreground
+									font.family: Theme.iconFont
+									font.pixelSize: Theme.glyphSize
+								}
+							}
+
+							Text {
+								id: nodeStatus
+								anchors.right: parent.right
+								anchors.rightMargin: 12
+								anchors.verticalCenter: parent.verticalCenter
+								visible: nodeRow.active
+								text: "Active"
+								color: Theme.foreground
+								font.family: Theme.fontFamily
+								font.pixelSize: Theme.smallSize
+							}
+
+							Text {
+								anchors.left: nodeWell.right
+								anchors.leftMargin: Theme.inset
+								anchors.right: nodeStatus.left
+								anchors.rightMargin: Theme.inset
+								anchors.verticalCenter: parent.verticalCenter
+								text: AudioState.nodeLabel(nodeRow.modelData)
+								color: Theme.foreground
+								font.family: Theme.fontFamily
+								font.pixelSize: Theme.fontSize
+								elide: Text.ElideRight
+							}
+
+							MouseArea {
+								id: nodeHover
+								anchors.fill: parent
+								hoverEnabled: true
+								cursorShape: Qt.PointingHandCursor
+								onClicked: {
+									if (root.page === "microphone")
+										AudioState.selectSource(nodeRow.modelData)
+									else
+										AudioState.selectSink(nodeRow.modelData)
+								}
+							}
 						}
 					}
+				}
+			}
 
-					Text {
-						id: sourceStatus
-						anchors.right: parent.right
-						anchors.rightMargin: 12
-						anchors.verticalCenter: parent.verticalCenter
-						visible: sourceRow.active
-						text: "Active"
-						color: Theme.foreground
-						font.family: Theme.fontFamily
-						font.pixelSize: Theme.smallSize
+			Item {
+				id: nodeScroll
+				visible: nodeFlick.contentHeight > nodeFlick.height + 1
+				anchors.top: parent.top
+				anchors.bottom: parent.bottom
+				anchors.right: parent.right
+				width: Theme.inset + Theme.noticeProgress
+
+				Rectangle {
+					id: nodeThumb
+					width: Theme.noticeProgress
+					radius: width / 2
+					anchors.horizontalCenter: parent.horizontalCenter
+					color: nodeScrollDrag.containsMouse || nodeScrollDrag.pressed ? Theme.foreground : root.ink(Theme.scroll)
+					height: Math.max(24, nodeFlick.height * nodeFlick.height / Math.max(nodeFlick.contentHeight, 1))
+					y: nodeFlick.contentY / Math.max(1, nodeFlick.contentHeight - nodeFlick.height) * Math.max(0, nodeFlick.height - height)
+				}
+
+				MouseArea {
+					id: nodeScrollDrag
+					anchors.fill: parent
+					hoverEnabled: true
+					preventStealing: true
+					cursorShape: Qt.PointingHandCursor
+					property real origin: 0
+					property real originY: 0
+
+					function scrollTo(local) {
+						const track = Math.max(1, nodeFlick.height - nodeThumb.height)
+						const span = Math.max(0, nodeFlick.contentHeight - nodeFlick.height)
+						const barY = Math.max(0, Math.min(track, local - nodeThumb.height / 2))
+						nodeFlick.contentY = barY / track * span
 					}
 
-					Text {
-						anchors.left: sourceWell.right
-						anchors.leftMargin: Theme.inset
-						anchors.right: sourceStatus.left
-						anchors.rightMargin: Theme.inset
-						anchors.verticalCenter: parent.verticalCenter
-						text: AudioState.nodeLabel(sourceRow.modelData)
-						color: Theme.foreground
-						font.family: Theme.fontFamily
-						font.pixelSize: Theme.fontSize
-						elide: Text.ElideRight
+					onPressed: mouse => {
+						const local = mapToItem(nodePane, mouse.x, mouse.y).y
+						const onThumb = local >= nodeThumb.y && local <= nodeThumb.y + nodeThumb.height
+						if (!onThumb)
+							scrollTo(local)
+						origin = local
+						originY = nodeFlick.contentY
 					}
-
-					MouseArea {
-						id: sourceHover
-						anchors.fill: parent
-						hoverEnabled: true
-						cursorShape: Qt.PointingHandCursor
-						onClicked: AudioState.selectSource(sourceRow.modelData)
+					onPositionChanged: mouse => {
+						if (!pressed)
+							return
+						const local = mapToItem(nodePane, mouse.x, mouse.y).y
+						const track = Math.max(1, nodeFlick.height - nodeThumb.height)
+						const span = Math.max(0, nodeFlick.contentHeight - nodeFlick.height)
+						nodeFlick.contentY = Math.max(0, Math.min(span, originY + (local - origin) * span / track))
 					}
 				}
+			}
+		}
+
+		Column {
+			id: appHead
+			visible: root.page === "audio" || root.page === "microphone"
+			width: parent.width
+			spacing: Theme.menuSpacing
+
+			Text {
+				visible: root.page === "audio"
+				width: parent.width
+				text: "Applications"
+				color: root.ink(Theme.dim)
+				font.family: Theme.fontFamily
+				font.pixelSize: Theme.labelSize
+				leftPadding: Theme.headerInset
+				topPadding: 10
+				bottomPadding: 2
+			}
+
+			Text {
+				visible: root.page === "audio" && AudioState.streamNodes.length === 0
+				width: parent.width
+				text: "No applications"
+				color: root.ink(Theme.muted)
+				font.family: Theme.fontFamily
+				font.pixelSize: Theme.fontSize
+				horizontalAlignment: Text.AlignHCenter
+				topPadding: 6
+				bottomPadding: 6
 			}
 
 			Text {
@@ -683,7 +735,6 @@ Item {
 				topPadding: 6
 				bottomPadding: 6
 			}
-
 		}
 
 		Item {
@@ -1014,7 +1065,15 @@ Item {
 			}
 			readonly property real rowBlock: root.rowHeight + Theme.menuSpacing + Theme.sliderSlot
 			readonly property real full: appColumn.implicitHeight
-			readonly property real budget: Math.max(0, root.room - Theme.padding - body.implicitHeight - column.spacing)
+			readonly property real budget: {
+				let lead = body.implicitHeight
+				if (nodePane.visible)
+					lead += column.spacing + nodePane.height
+				if (appHead.visible)
+					lead += column.spacing + appHead.implicitHeight
+				lead += column.spacing
+				return Math.max(0, root.room - Theme.padding - lead)
+			}
 			visible: appModel.length > 0
 			width: parent.width
 			implicitHeight: Math.min(full, Math.max(budget, Math.min(full, rowBlock)))

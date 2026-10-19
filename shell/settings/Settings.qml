@@ -137,12 +137,13 @@ Singleton {
 				property int noticeMinHeight: 180
 				property real noticeHeightRatio: 0.45
 				property real noticeCenterRatio: 0.36
+				property real audioMenuRatio: 0.48
 				property string shellName: "Quickshell"
 				property int launcherLimit: 8
 				property var iconSizes: ["512x512", "512x512@2", "256x256", "256x256@2", "128x128", "128x128@2", "64x64", "48x48", "32x32"]
 				property int networkLimit: 8
 				property int deviceLimit: 8
-				property int audioLimit: 6
+				property int audioLimit: 12
 				property int niriRetry: 1000
 				property int fullscreenSlack: 8
 				property int fullscreenMin: 100

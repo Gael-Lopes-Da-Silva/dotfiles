@@ -29,6 +29,7 @@ Singleton {
 	readonly property int noticeMinHeight: Settings.settings.noticeMinHeight
 	readonly property real noticeHeightRatio: Settings.settings.noticeHeightRatio
 	readonly property real noticeCenterRatio: Settings.settings.noticeCenterRatio
+	readonly property real audioMenuRatio: Settings.settings.audioMenuRatio
 	readonly property string shellName: Settings.settings.shellName
 
 	readonly property int launcherLimit: Settings.settings.launcherLimit

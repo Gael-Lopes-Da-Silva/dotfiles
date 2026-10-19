@@ -498,7 +498,12 @@ PanelWindow {
 			id: radioMenu
 			anchors.left: parent.left
 			anchors.bottom: radioChip.top
-			room: Math.min(root.height * Config.noticeCenterRatio, Math.max(Theme.rowHeight * 4, root.height - (root.frameThickness - root.weld) - radioChip.implicitHeight - Math.max(root.frameThickness, Theme.padding)))
+			room: {
+				const audio = RadioState.menuPage === "audio" || RadioState.menuPage === "microphone"
+				const ratio = audio ? Config.audioMenuRatio : Config.noticeCenterRatio
+				const chrome = root.height - (root.frameThickness - root.weld) - radioChip.implicitHeight - Math.max(root.frameThickness, Theme.padding)
+				return Math.min(root.height * ratio, Math.max(Theme.rowHeight * 4, chrome))
+			}
 			opacity: root.menuProgress > Config.menuReveal ? 1 : 0
 
 			Behavior on opacity {
