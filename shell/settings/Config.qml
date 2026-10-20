@@ -101,6 +101,7 @@ Singleton {
 	readonly property string lock: Settings.icons.lock
 	readonly property string search: Settings.icons.search
 	readonly property string reply: Settings.icons.reply
+	readonly property string close: Settings.icons.close
 	readonly property string wifiOff: Settings.icons.wifiOff
 	readonly property string wifiIdle: Settings.icons.wifiIdle
 	readonly property string ethernet: Settings.icons.ethernet

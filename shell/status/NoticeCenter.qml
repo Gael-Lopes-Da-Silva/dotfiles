@@ -181,6 +181,7 @@ Column {
 					Item {
 						id: row
 						required property int index
+						required property var nid
 						required property string app
 						required property string summary
 						required property string body
@@ -221,12 +222,12 @@ Column {
 
 							Item {
 								width: parent.width
-								implicitHeight: Math.max(Theme.noticeIcon, nameRow.implicitHeight, stamp.implicitHeight)
+								implicitHeight: Math.max(Theme.noticeIcon, nameRow.implicitHeight, stamp.implicitHeight, dismiss.height)
 								height: implicitHeight
 
 								Row {
 									id: nameRow
-									width: Math.max(0, parent.width - stamp.implicitWidth - 8)
+									width: Math.max(0, parent.width - stamp.implicitWidth - dismiss.width - 16)
 									spacing: 8
 									anchors.verticalCenter: parent.verticalCenter
 
@@ -261,12 +262,43 @@ Column {
 
 								Text {
 									id: stamp
-									anchors.right: parent.right
+									anchors.right: dismiss.left
+									anchors.rightMargin: 8
 									anchors.verticalCenter: parent.verticalCenter
 									text: root.when(row.at)
 									color: Theme.ink(Theme.iconMute)
 									font.family: Theme.fontFamily
 									font.pixelSize: Theme.labelSize
+								}
+
+								Item {
+									id: dismiss
+									anchors.right: parent.right
+									anchors.verticalCenter: parent.verticalCenter
+									width: Theme.noticeIcon
+									height: Theme.noticeIcon
+
+									Rectangle {
+										anchors.fill: parent
+										radius: width / 2
+										color: dismissHover.containsMouse ? Theme.ink(Theme.buttonHover) : "transparent"
+									}
+
+									Text {
+										anchors.centerIn: parent
+										text: Config.icon(Config.close)
+										color: dismissHover.containsMouse ? Theme.foreground : Theme.ink(Theme.iconMute)
+										font.family: Theme.iconFont
+										font.pixelSize: Theme.labelSize
+									}
+
+									MouseArea {
+										id: dismissHover
+										anchors.fill: parent
+										hoverEnabled: true
+										cursorShape: Qt.PointingHandCursor
+										onClicked: NoticeState.clearEntry(row.nid)
+									}
 								}
 							}
 

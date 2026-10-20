@@ -189,6 +189,7 @@
     "lock": "F033E",
     "search": "F0349",
     "reply": "F048A",
+    "close": "F0156",
     "wifiOff": "F05AA",
     "wifiIdle": "F092A",
     "ethernet": "F0200",

@@ -210,6 +210,7 @@ Singleton {
 				property string lock: "F033E"
 				property string search: "F0349"
 				property string reply: "F048A"
+				property string close: "F0156"
 				property string wifiOff: "F05AA"
 				property string wifiIdle: "F092A"
 				property string ethernet: "F0200"

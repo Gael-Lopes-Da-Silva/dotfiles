@@ -92,6 +92,15 @@ Singleton {
 		historyModel.clear()
 	}
 
+	function clearEntry(id) {
+		for (let i = 0; i < historyModel.count; i++) {
+			if (historyModel.get(i).nid === id) {
+				historyModel.remove(i)
+				return
+			}
+		}
+	}
+
 	function publish(summary, body, duration, urgent, kind) {
 		const key = summary + "\n" + body
 		const now = Date.now()
