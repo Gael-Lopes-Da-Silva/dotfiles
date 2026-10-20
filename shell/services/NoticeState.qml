@@ -101,6 +101,68 @@ Singleton {
 		}
 	}
 
+	function focusSender(notification) {
+		if (!notification)
+			return
+		const keys = []
+		const add = value => {
+			const key = String(value || "").trim().toLowerCase().replace(/\.desktop$/, "")
+			if (key && keys.indexOf(key) === -1)
+				keys.push(key)
+		}
+		add(notification.desktopEntry)
+		const entryId = String(notification.desktopEntry || "").replace(/\.desktop$/i, "")
+		const entry = entryId ? DesktopEntries.byId(entryId) : null
+		if (entry) {
+			add(entry.id)
+			add(entry.startupClass)
+		}
+		add(notification.appName)
+		if (keys.length === 0)
+			return
+		const wins = Object.values(NiriState.windows)
+		let best = null
+		let bestAt = -1
+		for (let i = 0; i < wins.length; i++) {
+			const win = wins[i]
+			const appId = String(win.app_id || "").toLowerCase()
+			if (!appId)
+				continue
+			let matched = false
+			for (let k = 0; k < keys.length; k++) {
+				const key = keys[k]
+				if (appId === key || appId.endsWith("." + key) || key.endsWith("." + appId)) {
+					matched = true
+					break
+				}
+			}
+			if (!matched)
+				continue
+			const stamp = win.focus_timestamp && win.focus_timestamp.secs ? win.focus_timestamp.secs : 0
+			if (!best || stamp >= bestAt) {
+				best = win
+				bestAt = stamp
+			}
+		}
+		if (!best)
+			return
+		Quickshell.execDetached(["niri", "msg", "action", "focus-window", "--id", String(best.id)])
+	}
+
+	function activate(notification) {
+		if (!notification)
+			return
+		focusSender(notification)
+		const actions = notification.actions || []
+		for (let i = 0; i < actions.length; i++) {
+			if (actions[i].identifier === "default") {
+				actions[i].invoke()
+				return
+			}
+		}
+		notification.dismiss()
+	}
+
 	function publish(summary, body, duration, urgent, kind) {
 		const key = summary + "\n" + body
 		const now = Date.now()

@@ -90,14 +90,15 @@ Item {
 						const note = notification
 						if (!note)
 							return
-						const actions = note.actions || []
-						for (let i = 0; i < actions.length; i++) {
-							if (actions[i].identifier === "default") {
-								actions[i].invoke()
-								return
-							}
+						NoticeState.activate(note)
+					}
+
+					function close() {
+						if (synthetic || !notification) {
+							NoticeState.removeId(nid)
+							return
 						}
-						note.dismiss()
+						notification.dismiss()
 					}
 
 					function sendReply() {
@@ -189,37 +190,76 @@ Item {
 						anchors.margins: Theme.padding
 						spacing: 8
 
-						Row {
+						Item {
 							width: parent.width
-							spacing: 8
-							visible: card.appIconSource !== "" || card.synthetic || (card.notification && (card.notification.appName || "") !== "")
+							implicitHeight: Math.max(Theme.noticeIcon, dismiss.height)
+							height: implicitHeight
 
-							Text {
-								visible: card.synthetic
-								text: card.kind === "power" ? PowerState.batteryGlyph() : Config.icon(card.critical ? Config.alert : Config.check)
-								color: card.critical ? Theme.recording : Theme.foreground
-								font.family: Theme.iconFont
-								font.pixelSize: Theme.noticeIcon
+							Row {
+								id: nameRow
+								width: Math.max(0, parent.width - dismiss.width - 8)
+								spacing: 8
+								anchors.verticalCenter: parent.verticalCenter
+								visible: card.appIconSource !== "" || card.synthetic || (card.notification && (card.notification.appName || "") !== "")
+
+								Text {
+									visible: card.synthetic
+									text: card.kind === "power" ? PowerState.batteryGlyph() : Config.icon(card.critical ? Config.alert : Config.check)
+									color: card.critical ? Theme.recording : Theme.foreground
+									font.family: Theme.iconFont
+									font.pixelSize: Theme.noticeIcon
+								}
+
+								Image {
+									width: Theme.noticeIcon
+									height: Theme.noticeIcon
+									visible: !card.synthetic && status === Image.Ready
+									source: card.appIconSource
+									sourceSize.width: Theme.noticeIcon * 2
+									sourceSize.height: Theme.noticeIcon * 2
+									fillMode: Image.PreserveAspectFit
+									asynchronous: true
+								}
+
+								Text {
+									width: Math.max(0, nameRow.width - (card.synthetic || card.appIconSource !== "" ? Theme.noticeIcon + nameRow.spacing : 0))
+									text: card.faceReady ? card.faceApp : (card.synthetic ? Config.shellName : (card.notification ? card.notification.appName : ""))
+									color: Theme.ink(Theme.iconMute)
+									font.family: Theme.fontFamily
+									font.pixelSize: Theme.labelSize
+									elide: Text.ElideRight
+								}
 							}
 
-							Image {
+							Item {
+								id: dismiss
+								anchors.right: parent.right
+								anchors.verticalCenter: parent.verticalCenter
 								width: Theme.noticeIcon
 								height: Theme.noticeIcon
-								visible: !card.synthetic && status === Image.Ready
-								source: card.appIconSource
-								sourceSize.width: Theme.noticeIcon * 2
-								sourceSize.height: Theme.noticeIcon * 2
-								fillMode: Image.PreserveAspectFit
-								asynchronous: true
-							}
 
-							Text {
-								width: Math.max(0, parent.width - (card.synthetic || card.appIconSource !== "" ? Theme.noticeIcon + 8 : 0))
-								text: card.faceReady ? card.faceApp : (card.synthetic ? Config.shellName : (card.notification ? card.notification.appName : ""))
-								color: Theme.ink(Theme.iconMute)
-								font.family: Theme.fontFamily
-								font.pixelSize: Theme.labelSize
-								elide: Text.ElideRight
+								Rectangle {
+									anchors.fill: parent
+									radius: width / 2
+									color: dismissHover.containsMouse ? Theme.ink(Theme.buttonHover) : "transparent"
+								}
+
+								Text {
+									anchors.centerIn: parent
+									text: Config.icon(Config.close)
+									color: dismissHover.containsMouse ? Theme.foreground : Theme.ink(Theme.iconMute)
+									font.family: Theme.iconFont
+									font.pixelSize: Theme.labelSize
+								}
+
+								MouseArea {
+									id: dismissHover
+									anchors.fill: parent
+									hoverEnabled: true
+									cursorShape: Qt.PointingHandCursor
+									onClicked: card.close()
+									onWheel: wheel => wheel.accepted = false
+								}
 							}
 						}
 
