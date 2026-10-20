@@ -71,8 +71,17 @@ PanelWindow {
 		return NiriState.isFullscreen(modelData.name, modelData.width, modelData.height)
 	}
 
-	property real frameThickness: chrome && !fullscreen ? Theme.frame : 0
-	property real frameRadius: chrome && !fullscreen ? Theme.screenRadius : 0
+	readonly property bool hotCorners: chrome && !fullscreen
+	property real frameThickness: hotCorners ? Theme.frame : 0
+	property real frameRadius: hotCorners ? Theme.screenRadius : 0
+
+	onHotCornersChanged: {
+		if (hotCorners)
+			return
+		statusWanted = false
+		radioWanted = false
+		sessionWanted = false
+	}
 	property bool statusWanted: false
 	property real statusProgress: statusWanted ? 1 : 0
 	readonly property string castMode: NiriState.castMode(modelData.name)
@@ -231,7 +240,7 @@ PanelWindow {
 	}
 
 	function syncStatus() {
-		if (!chrome) {
+		if (!hotCorners) {
 			statusWanted = false
 			return
 		}
@@ -244,7 +253,7 @@ PanelWindow {
 	}
 
 	function syncRadio() {
-		if (!chrome) {
+		if (!hotCorners) {
 			radioWanted = false
 			return
 		}
@@ -257,7 +266,7 @@ PanelWindow {
 	}
 
 	function syncSession() {
-		if (!chrome) {
+		if (!hotCorners) {
 			sessionWanted = false
 			return
 		}
@@ -323,11 +332,12 @@ PanelWindow {
 		z: 4
 		anchors.top: parent.top
 		anchors.right: parent.right
-		width: root.chrome ? Config.hotCorner : 0
-		height: root.chrome ? Config.hotCorner : 0
+		width: root.hotCorners ? Config.hotCorner : 0
+		height: root.hotCorners ? Config.hotCorner : 0
 
 		HoverHandler {
 			id: cornerHover
+			enabled: root.hotCorners
 			onHoveredChanged: root.syncStatus()
 		}
 	}
@@ -495,7 +505,7 @@ PanelWindow {
 		width: launcherBody.implicitWidth
 		height: root.launcherFullH * root.launcherProgress
 		x: (root.width - width) / 2
-		y: root.height - root.frameThickness - height + root.weld
+		y: root.height - root.frameThickness - height + root.weld - root.noticeGap
 		clip: true
 		visible: height > Config.clipMin
 
@@ -538,11 +548,12 @@ PanelWindow {
 		z: 2
 		anchors.left: parent.left
 		anchors.bottom: parent.bottom
-		width: root.chrome ? Config.hotCorner : 0
-		height: root.chrome ? Config.hotCorner : 0
+		width: root.hotCorners ? Config.hotCorner : 0
+		height: root.hotCorners ? Config.hotCorner : 0
 
 		HoverHandler {
 			id: radioCornerHover
+			enabled: root.hotCorners
 			onHoveredChanged: root.syncRadio()
 		}
 	}
@@ -618,11 +629,12 @@ PanelWindow {
 		z: 2
 		anchors.right: parent.right
 		anchors.bottom: parent.bottom
-		width: root.chrome ? Config.hotCorner : 0
-		height: root.chrome ? Config.hotCorner : 0
+		width: root.hotCorners ? Config.hotCorner : 0
+		height: root.hotCorners ? Config.hotCorner : 0
 
 		HoverHandler {
 			id: sessionCornerHover
+			enabled: root.hotCorners
 			onHoveredChanged: root.syncSession()
 		}
 	}
