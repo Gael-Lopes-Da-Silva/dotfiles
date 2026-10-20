@@ -193,7 +193,7 @@ Singleton {
 					{ icon: "F0904", label: "Suspend", command: ["systemctl", "suspend"] },
 					{ icon: "F0709", label: "Restart", command: ["systemctl", "reboot"] },
 					{ icon: "F0425", label: "Shut down", command: ["systemctl", "poweroff"] },
-					{ icon: "F0343", label: "Log out", command: ["niri", "msg", "action", "quit", "--skip-confirmation"] }
+					{ icon: "F0343", label: "Log out", command: ["niri", "msg", "action", "quit"] }
 				]
 				property var batterySteps: [95, 85, 75, 65, 55, 45, 35, 25, 15, 5]
 			}
