@@ -342,30 +342,37 @@ PanelWindow {
 		clip: true
 		visible: width > Config.clipMin && height > Config.clipMin
 
-		StatusChip {
+		Loader {
 			id: statusChip
 			anchors.top: parent.top
 			anchors.right: parent.right
-			activePage: root.clockPage
+			active: root.statusWanted || root.statusProgress > 0 || root.clockPage !== "" || root.clockMenuProgress > 0
+			asynchronous: false
 			opacity: root.statusProgress > Config.reveal ? 1 : 0
-			onTimeClicked: {
-				root.statusWanted = true
-				statusTimer.stop()
-				PowerState.toggleMenu(root.modelData.name, "time")
-			}
-			onBatteryClicked: {
-				root.statusWanted = true
-				statusTimer.stop()
-				PowerState.toggleMenu(root.modelData.name, "battery")
-			}
-			onNoticesClicked: {
-				root.statusWanted = true
-				statusTimer.stop()
-				PowerState.toggleMenu(root.modelData.name, "notices")
-			}
 
 			Behavior on opacity {
 				NumberAnimation { duration: Theme.fade }
+			}
+
+			sourceComponent: Component {
+				StatusChip {
+					activePage: root.clockPage
+					onTimeClicked: {
+						root.statusWanted = true
+						statusTimer.stop()
+						PowerState.toggleMenu(root.modelData.name, "time")
+					}
+					onBatteryClicked: {
+						root.statusWanted = true
+						statusTimer.stop()
+						PowerState.toggleMenu(root.modelData.name, "battery")
+					}
+					onNoticesClicked: {
+						root.statusWanted = true
+						statusTimer.stop()
+						PowerState.toggleMenu(root.modelData.name, "notices")
+					}
+				}
 			}
 		}
 
@@ -404,9 +411,22 @@ PanelWindow {
 		x: root.width - root.frameThickness - width + root.weld - root.noticeGap
 		y: root.noticeTop + root.noticeGap
 
-		Notifications {
+		Loader {
 			id: notices
-			maxHeight: Math.max(Config.noticeMinHeight, root.height * Config.noticeHeightRatio)
+			active: root.focusedHere
+			asynchronous: false
+			onActiveChanged: {
+				if (active)
+					return
+				NoticeState.paused = false
+				NoticeState.replying = false
+			}
+
+			sourceComponent: Component {
+				Notifications {
+					maxHeight: Math.max(Config.noticeMinHeight, root.height * Config.noticeHeightRatio)
+				}
+			}
 		}
 	}
 
@@ -420,16 +440,23 @@ PanelWindow {
 		clip: true
 		visible: width > Config.clipMin && height > Config.clipMin
 
-		CastIndicator {
+		Loader {
 			id: castBody
-			mode: root.castLabel
-			output: root.modelData.name
 			anchors.top: parent.top
 			anchors.left: parent.left
+			active: root.castMode !== "" || root.castProgress > 0
+			asynchronous: false
 			opacity: root.castProgress > Config.reveal ? 1 : 0
 
 			Behavior on opacity {
 				NumberAnimation { duration: Theme.fade }
+			}
+
+			sourceComponent: Component {
+				CastIndicator {
+					mode: root.castLabel
+					output: root.modelData.name
+				}
 			}
 		}
 	}
@@ -444,14 +471,20 @@ PanelWindow {
 		clip: true
 		visible: height > Config.clipMin
 
-		Osd {
+		Loader {
 			id: osdBody
 			anchors.bottom: parent.bottom
 			anchors.horizontalCenter: parent.horizontalCenter
+			active: root.osdHere || root.osdProgress > 0
+			asynchronous: false
 			opacity: root.osdProgress > Config.reveal ? 1 : 0
 
 			Behavior on opacity {
 				NumberAnimation { duration: Theme.fade }
+			}
+
+			sourceComponent: Component {
+				Osd { }
 			}
 		}
 	}
@@ -550,20 +583,27 @@ PanelWindow {
 			}
 		}
 
-		RadioChip {
+		Loader {
 			id: radioChip
 			anchors.left: parent.left
 			anchors.bottom: parent.bottom
-			openPage: root.menuProgress > 0 ? root.radioShown : RadioState.menuPage
+			active: root.radioWanted || root.radioProgress > 0 || root.radioPage !== "" || root.menuProgress > 0
+			asynchronous: false
 			opacity: root.radioProgress > Config.reveal ? 1 : 0
-			onPicked: page => {
-				root.radioWanted = true
-				radioTimer.stop()
-				RadioState.toggleMenu(root.modelData.name, page)
-			}
 
 			Behavior on opacity {
 				NumberAnimation { duration: Theme.fade }
+			}
+
+			sourceComponent: Component {
+				RadioChip {
+					openPage: root.menuProgress > 0 ? root.radioShown : RadioState.menuPage
+					onPicked: page => {
+						root.radioWanted = true
+						radioTimer.stop()
+						RadioState.toggleMenu(root.modelData.name, page)
+					}
+				}
 			}
 		}
 
@@ -619,30 +659,37 @@ PanelWindow {
 			}
 		}
 
-		SessionChip {
+		Loader {
 			id: sessionChip
 			anchors.right: parent.right
 			anchors.bottom: parent.bottom
-			powerOpen: root.sessionMenu
+			active: root.sessionWanted || root.sessionProgress > 0 || root.sessionMenu || root.sessionMenuProgress > 0
+			asynchronous: false
 			opacity: root.sessionProgress > Config.reveal ? 1 : 0
-			onPowerClicked: {
-				root.sessionWanted = true
-				sessionTimer.stop()
-				root.sessionMenu = !root.sessionMenu
-			}
-			onColorClicked: {
-				colorPick.exec(Config.pickColorCommand)
-				root.sessionMenu = false
-				root.sessionWanted = false
-			}
-			onShotClicked: {
-				Quickshell.execDetached(Config.screenshotCommand)
-				root.sessionMenu = false
-				root.sessionWanted = false
-			}
 
 			Behavior on opacity {
 				NumberAnimation { duration: Theme.fade }
+			}
+
+			sourceComponent: Component {
+				SessionChip {
+					powerOpen: root.sessionMenu
+					onPowerClicked: {
+						root.sessionWanted = true
+						sessionTimer.stop()
+						root.sessionMenu = !root.sessionMenu
+					}
+					onColorClicked: {
+						colorPick.exec(Config.pickColorCommand)
+						root.sessionMenu = false
+						root.sessionWanted = false
+					}
+					onShotClicked: {
+						Quickshell.execDetached(Config.screenshotCommand)
+						root.sessionMenu = false
+						root.sessionWanted = false
+					}
+				}
 			}
 		}
 
