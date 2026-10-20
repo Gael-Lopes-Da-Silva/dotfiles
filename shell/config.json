@@ -151,9 +151,6 @@
     "rssiFloor": -100,
     "rssiSpan": 55,
     "internalScreens": "^(eDP|LVDS|DSI|Virtual)",
-    "castGlyphScale": 0.68,
-    "castEdge": 1,
-    "castNudge": 4,
     "mutedLabel": "Muted",
     "osdPlugged": " plugged in",
     "osdUnplugged": " unplugged",
@@ -180,7 +177,7 @@
     "batterySteps": [95, 85, 75, 65, 55, 45, 35, 25, 15, 5]
   },
   "icons": {
-    "record": "F044A",
+    "record": "F03D",
     "power": "F0425",
     "screenshot": "F0E51",
     "eyedropper": "F020A",

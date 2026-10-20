@@ -69,9 +69,6 @@ Singleton {
 
 	readonly property string internalScreens: Settings.settings.internalScreens
 
-	readonly property real castGlyphScale: Settings.settings.castGlyphScale
-	readonly property int castEdge: Settings.settings.castEdge
-	readonly property int castNudge: Settings.settings.castNudge
 	readonly property string mutedLabel: Settings.settings.mutedLabel
 	readonly property string osdPlugged: Settings.settings.osdPlugged
 	readonly property string osdUnplugged: Settings.settings.osdUnplugged

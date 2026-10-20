@@ -85,14 +85,8 @@ PanelWindow {
 	property bool statusWanted: false
 	property real statusProgress: statusWanted ? 1 : 0
 	readonly property string castMode: NiriState.castMode(modelData.name)
-	property string castHold: "recording"
-	readonly property string castLabel: castMode !== "" ? castMode : castHold
 	property real castProgress: chrome && castMode !== "" ? 1 : 0
-
-	onCastModeChanged: {
-		if (castMode !== "")
-			castHold = castMode
-	}
+	readonly property real castInset: frameThickness - weld + noticeGap
 	property bool radioWanted: false
 	readonly property string radioPage: RadioState.menuOutput === modelData.name ? RadioState.menuPage : ""
 	property string radioHold: "wifi"
@@ -445,8 +439,8 @@ PanelWindow {
 		z: 3
 		width: castBody.implicitWidth * root.castProgress
 		height: castBody.implicitHeight * root.castProgress
-		x: root.frameThickness - root.weld
-		y: root.frameThickness - root.weld
+		x: root.castInset
+		y: root.castInset
 		clip: true
 		visible: width > Config.clipMin && height > Config.clipMin
 
@@ -463,10 +457,7 @@ PanelWindow {
 			}
 
 			sourceComponent: Component {
-				CastIndicator {
-					mode: root.castLabel
-					output: root.modelData.name
-				}
+				CastIndicator { }
 			}
 		}
 	}

@@ -171,9 +171,6 @@ Singleton {
 				property int rssiFloor: -100
 				property int rssiSpan: 55
 				property string internalScreens: "^(eDP|LVDS|DSI|Virtual)"
-				property real castGlyphScale: 0.68
-				property int castEdge: 1
-				property int castNudge: 4
 				property string mutedLabel: "Muted"
 				property string osdPlugged: " plugged in"
 				property string osdUnplugged: " unplugged"
@@ -201,7 +198,7 @@ Singleton {
 			}
 
 			property JsonObject icons: JsonObject {
-				property string record: "F044A"
+				property string record: "F03D"
 				property string power: "F0425"
 				property string screenshot: "F0E51"
 				property string eyedropper: "F020A"
