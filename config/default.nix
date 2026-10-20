@@ -734,6 +734,12 @@
                 { open-fullscreen = false; }
               ];
             }
+            {
+              window-rule._children = [
+              	{ match._props = { title = "^(Open|Save|Save As|Preferences|Settings)( .*)?$"; }; }
+                { open-floating = true; }
+              ];
+            }
           ];
 
           binds = {
