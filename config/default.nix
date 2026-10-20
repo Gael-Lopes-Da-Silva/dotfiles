@@ -104,6 +104,15 @@
       gnome-keyring.enable = true;
     };
 
+    logind = {
+      settings = {
+        Login = {
+          HoldoffTimeoutSec = "1s";
+          HandleLidSwitch = "suspend";
+        };
+      };
+    };
+
     displayManager.ly = {
       enable = true;
 
