@@ -294,6 +294,7 @@ Item {
 							id: bodyText
 							width: parent.width
 							visible: text !== ""
+							clip: true
 							text: card.faceReady ? card.faceBody : (card.synthetic ? card.body : (card.notification ? NoticeState.markup(card.notification.body) : ""))
 							color: Theme.ink(Theme.body)
 							linkColor: Theme.link

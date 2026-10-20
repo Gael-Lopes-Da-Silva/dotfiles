@@ -318,6 +318,7 @@ Column {
 								id: bodyText
 								width: parent.width
 								visible: text !== ""
+								clip: true
 								text: row.shell ? row.body : NoticeState.markup(row.body)
 								color: Theme.ink(Theme.body)
 								linkColor: Theme.link

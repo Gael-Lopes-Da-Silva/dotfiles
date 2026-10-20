@@ -47,6 +47,17 @@ Singleton {
 		const allowed = { b: true, i: true, u: true, a: true, img: true, br: true }
 		return String(text || "").replace(/\r\n?/g, "\n").replace(/\n/g, "<br/>").replace(/<\/?([a-zA-Z0-9:-]+)(\s[^<>]*)?\s*\/?>/g, (full, name) => {
 			return allowed[String(name).toLowerCase()] ? full : ""
+		}).replace(/<img\b([^>]*)>/gi, (_, attrs) => {
+			const pick = key => {
+				const match = new RegExp("\\s" + key + "\\s*=\\s*(?:\"([^\"]*)\"|'([^']*)'|([^\\s\"'=<>`]+))", "i").exec(attrs)
+				return match ? (match[1] || match[2] || match[3] || "") : ""
+			}
+			const source = pick("src") || pick("source")
+			if (!source)
+				return ""
+			const label = pick("alt").replace(/"/g, "")
+			const alt = label ? " alt=\"" + label + "\"" : ""
+			return "<img src=\"" + source.replace(/"/g, "") + "\"" + alt + " style=\"max-width:100%\"/>"
 		})
 	}
 
