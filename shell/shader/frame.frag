@@ -23,6 +23,8 @@ layout(std140, binding = 0) uniform buf {
 	float panel5Radius;
 	vec4 panel6;
 	float panel6Radius;
+	vec4 border;
+	float borderWidth;
 };
 
 float sdRoundBox(vec2 p, vec2 halfSize, float r) {
@@ -100,10 +102,29 @@ void main() {
 	float d = shapeDistance(p);
 	float fill = smoothstep(1.25, -0.75, d);
 
+	// Stroke on the inside of the contour. A contour that lies on the screen
+	// rectangle has the same distance as the screen edge, so that side stays bare.
+	float stroke = 0.0;
+	if (borderWidth >= 0.05 && d < 1.5 && d > -(borderWidth + 2.0)) {
+		vec2 halfSize = vec2(fieldWidth, fieldHeight) * 0.5;
+		float screen = sdRoundBox(p - halfSize, halfSize, 0.0);
+		float ud = unitDistance(p);
+		float edge = smoothstep(0.5, 0.0, ud);
+		float band = edge * smoothstep(-borderWidth - 0.5, -borderWidth, ud);
+		float inset = smoothstep(0.25, 0.75, abs(ud - screen));
+		fill = mix(fill, fill * edge, inset);
+		stroke = band * inset;
+	}
+
+	float amount = stroke * border.a;
+	vec3 borderRgb = border.a > 0.001 ? border.rgb / border.a : surface.rgb;
+	float cover = max(fill, amount);
+	vec3 rgb = mix(surface.rgb, borderRgb, amount);
+	vec4 frame = vec4(rgb, surface.a) * cover;
+
 	float shadowDistance = unitDistance(p - shadowOffset) - shadowSpread;
 	float shade = 0.5 * (1.0 - erfApprox(shadowDistance / (shadowSigma * 1.41421356)));
 
-	vec4 frame = vec4(surface.rgb, surface.a) * fill;
 	vec4 drop = shadowColor * shade * (1.0 - fill);
 	fragColor = (frame + drop * (1.0 - frame.a)) * qt_Opacity;
 	fragColor.r += qt_Matrix[3][3] * 0.0;

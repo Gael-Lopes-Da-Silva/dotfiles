@@ -45,6 +45,8 @@ Singleton {
 	readonly property int menuSpacing: Settings.theme.menuSpacing
 
 	readonly property int frame: Settings.theme.frame
+	readonly property color border: Settings.theme.border
+	readonly property int borderWidth: Settings.theme.borderWidth
 	readonly property int screenRadius: Settings.theme.screenRadius
 	readonly property int innerRadius: Settings.theme.innerRadius
 	readonly property int weld: Settings.theme.weld

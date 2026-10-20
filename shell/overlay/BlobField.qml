@@ -8,6 +8,8 @@ Item {
 	property real radius: 0
 	property real smoothing: Theme.smoothing
 	property color color: Theme.background
+	property color border: Theme.border
+	property real borderWidth: Theme.borderWidth
 	property vector4d panel0: Qt.vector4d(0, 0, 0, 0)
 	property vector4d panel1: Qt.vector4d(0, 0, 0, 0)
 	property vector4d panel2: Qt.vector4d(0, 0, 0, 0)
@@ -42,6 +44,8 @@ Item {
 		property real panel5Radius: root.panel5Radius
 		property vector4d panel6: root.panel6
 		property real panel6Radius: root.panel6Radius
+		property color border: root.border
+		property real borderWidth: root.borderWidth
 	}
 }
 

@@ -54,7 +54,9 @@ Singleton {
 				property int rowInnerHeight: 40
 				property int well: 28
 				property int menuSpacing: 4
-				property int frame: 2
+				property int frame: 6
+				property string border: "#282828"
+				property int borderWidth: 1
 				property int screenRadius: 20
 				property int innerRadius: 20
 				property int weld: 12
