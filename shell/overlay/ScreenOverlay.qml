@@ -123,7 +123,8 @@ PanelWindow {
 			RadioState.closeMenu()
 	}
 	property real launcherProgress: launcherHere ? 1 : 0
-	property real launcherFullH: launcherBody.implicitHeight
+	property real launcherFullH: launcherBody.item ? launcherBody.item.implicitHeight : 0
+	property bool launcherAnimateH: false
 
 	readonly property real weld: Math.min(Theme.weld, frameThickness)
 	readonly property real noticeTop: {
@@ -223,7 +224,7 @@ PanelWindow {
 
 	Behavior on launcherFullH {
 		NumberAnimation {
-			duration: Theme.motion
+			duration: root.launcherAnimateH ? Theme.motion : 0
 			easing.type: Easing.BezierSpline
 			easing.bezierCurve: Theme.curve
 		}
@@ -368,16 +369,23 @@ PanelWindow {
 			}
 		}
 
-		ClockMenu {
+		Loader {
 			id: clockMenu
 			anchors.top: statusChip.bottom
 			anchors.right: parent.right
-			room: Math.min(root.height * Config.noticeCenterRatio, Math.max(Theme.rowHeight * 4, root.height - (root.frameThickness - root.weld) - statusChip.implicitHeight - Math.max(root.frameThickness, Theme.padding)))
-			page: root.clockPage !== "" ? root.clockPage : root.clockHold
+			active: root.clockPage !== "" || root.clockMenuProgress > 0
+			asynchronous: false
 			opacity: root.clockMenuProgress > Config.menuReveal ? 1 : 0
 
 			Behavior on opacity {
 				NumberAnimation { duration: Theme.fade }
+			}
+
+			sourceComponent: Component {
+				ClockMenu {
+					room: Math.min(root.height * Config.noticeCenterRatio, Math.max(Theme.rowHeight * 4, root.height - (root.frameThickness - root.weld) - statusChip.implicitHeight - Math.max(root.frameThickness, Theme.padding)))
+					page: root.clockPage !== "" ? root.clockPage : root.clockHold
+				}
 			}
 		}
 
@@ -464,15 +472,30 @@ PanelWindow {
 			onClicked: mouse => mouse.accepted = true
 		}
 
-		Launcher {
+		Loader {
 			id: launcherBody
 			anchors.bottom: parent.bottom
 			anchors.horizontalCenter: parent.horizontalCenter
-			open: root.launcherHere
+			active: root.launcherHere || root.launcherProgress > 0
+			asynchronous: false
 			opacity: root.launcherProgress > Config.reveal ? 1 : 0
+			onLoaded: Qt.callLater(() => {
+				if (active)
+					root.launcherAnimateH = true
+			})
+			onActiveChanged: {
+				if (!active)
+					root.launcherAnimateH = false
+			}
 
 			Behavior on opacity {
 				NumberAnimation { duration: Theme.fade }
+			}
+
+			sourceComponent: Component {
+				Launcher {
+					open: root.launcherHere
+				}
 			}
 		}
 	}
@@ -501,22 +524,29 @@ PanelWindow {
 		clip: true
 		visible: width > Config.clipMin && height > Config.clipMin
 
-		RadioMenu {
+		Loader {
 			id: radioMenu
 			anchors.left: parent.left
 			anchors.bottom: radioChip.top
-			page: root.radioShown
-			live: root.radioPage !== ""
-			room: {
-				const audio = root.radioShown === "audio" || root.radioShown === "microphone"
-				const ratio = audio ? Config.audioMenuRatio : Config.noticeCenterRatio
-				const chrome = root.height - (root.frameThickness - root.weld) - radioChip.implicitHeight - Math.max(root.frameThickness, Theme.padding)
-				return Math.min(root.height * ratio, Math.max(Theme.rowHeight * 4, chrome))
-			}
+			active: root.radioPage !== "" || root.menuProgress > 0
+			asynchronous: false
 			opacity: root.menuProgress > Config.menuReveal ? 1 : 0
 
 			Behavior on opacity {
 				NumberAnimation { duration: Theme.fade }
+			}
+
+			sourceComponent: Component {
+				RadioMenu {
+					page: root.radioShown
+					live: root.radioPage !== ""
+					room: {
+						const audio = root.radioShown === "audio" || root.radioShown === "microphone"
+						const ratio = audio ? Config.audioMenuRatio : Config.noticeCenterRatio
+						const chrome = root.height - (root.frameThickness - root.weld) - radioChip.implicitHeight - Math.max(root.frameThickness, Theme.padding)
+						return Math.min(root.height * ratio, Math.max(Theme.rowHeight * 4, chrome))
+					}
+				}
 			}
 		}
 
@@ -567,18 +597,25 @@ PanelWindow {
 		clip: true
 		visible: width > Config.clipMin && height > Config.clipMin
 
-		SessionMenu {
+		Loader {
 			id: sessionMenuBody
 			anchors.right: parent.right
 			anchors.bottom: sessionChip.top
+			active: root.sessionMenu || root.sessionMenuProgress > 0
+			asynchronous: false
 			opacity: root.sessionMenuProgress > Config.menuReveal ? 1 : 0
-			onChosen: {
-				root.sessionMenu = false
-				root.sessionWanted = false
-			}
 
 			Behavior on opacity {
 				NumberAnimation { duration: Theme.fade }
+			}
+
+			sourceComponent: Component {
+				SessionMenu {
+					onChosen: {
+						root.sessionMenu = false
+						root.sessionWanted = false
+					}
+				}
 			}
 		}
 

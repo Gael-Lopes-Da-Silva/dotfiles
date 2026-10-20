@@ -149,7 +149,11 @@ Item {
 		printErrors: false
 	}
 
-	Component.onCompleted: resolveIcons()
+	Component.onCompleted: {
+		resolveIcons()
+		if (open)
+			Qt.callLater(() => search.forceActiveFocus())
+	}
 
 	onOpenChanged: {
 		if (!open)
