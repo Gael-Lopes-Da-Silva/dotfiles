@@ -93,23 +93,12 @@
   };
 
   services = {
-    gvfs = {
-      enable = true;
-    };
-
-    lact = {
-      enable = true;
-    };
-
-    libinput = {
-      enable = true;
-    };
-
-    power-profiles-daemon = {
-      enable = true;
-    };
-
+    gvfs.enable = true;
+    lact.enable = true;
     upower.enable = true;
+    udisks2.enable = true;
+    libinput.enable = true;
+    power-profiles-daemon.enable = true;
 
     gnome = {
       gnome-keyring.enable = true;
@@ -318,6 +307,7 @@
           nautilus
           showtime
           resources
+          typesetter
           impression
           gnome-maps
           gnome-clocks
