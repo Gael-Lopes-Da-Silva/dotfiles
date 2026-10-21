@@ -7,7 +7,7 @@ import Quickshell
 import Quickshell.Bluetooth
 import Quickshell.Io
 import Quickshell.Networking
-import qs.settings
+import qs.lib
 
 Singleton {
 	id: root

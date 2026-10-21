@@ -5,7 +5,7 @@ pragma Singleton
 import QtQuick
 import Quickshell
 import Quickshell.Services.Pipewire
-import qs.settings
+import qs.lib
 
 Singleton {
 	id: root
