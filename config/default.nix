@@ -653,7 +653,7 @@
 
           layout = {
             gaps = 15;
-            background-color = "#1C1C1C";
+            background-color = "transparent";
             center-focused-column = "never";
             empty-workspace-above-first = { };
             always-center-single-column = { };
@@ -700,7 +700,11 @@
 
           overview = {
             zoom = 0.75;
-            backdrop-color = "#0F0F0F";
+            backdrop-color = "transparent";
+
+            workspace-shadow = {
+              off = { };
+            };
           };
 
           cursor = {
@@ -710,10 +714,6 @@
 
           clipboard = {
             disable-primary = { };
-          };
-
-          gestures = {
-            hot-corners.off = { };
           };
 
           hotkey-overlay = {
@@ -736,8 +736,22 @@
             }
             {
               window-rule._children = [
-              	{ match._props = { title = "^(Open|Save|Save As|Preferences|Settings)( .*)?$"; }; }
+                {
+                  match._props = {
+                    title = "^(Open|Save|Save As|Preferences|Settings)( .*)?$";
+                  };
+                }
                 { open-floating = true; }
+              ];
+            }
+            {
+              layer-rule._children = [
+                {
+                  match._props = {
+                    namespace = "^wallpaper$";
+                  };
+                }
+                { place-within-backdrop = true; }
               ];
             }
           ];

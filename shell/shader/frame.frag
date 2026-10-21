@@ -39,8 +39,6 @@ float sdFrame(vec2 p) {
 		return 1e4;
 	vec2 halfSize = vec2(fieldWidth, fieldHeight) * 0.5;
 	vec2 innerHalf = max(halfSize - vec2(thickness), vec2(0.0));
-	// The outer edge is the screen rectangle, extended past the pixels so the
-	// antialiased fringe falls off-screen and the corners stay filled.
 	float outer = sdRoundBox(p - halfSize, halfSize + vec2(1.0), 0.0);
 	float inner = sdRoundBox(p - halfSize, innerHalf, radius);
 	return max(outer, -inner);
@@ -60,8 +58,6 @@ float smin(float a, float b, float k) {
 	return mix(b, a, h) - k * h * (1.0 - h);
 }
 
-// Niri layout.shadow: softness 4, spread 2, offset (0, 2), #00000070.
-// Sigma is softness / 2, the same conversion niri uses for CSS box-shadow.
 const float shadowSigma = 2.0;
 const float shadowSpread = 2.0;
 const vec2 shadowOffset = vec2(0.0, 2.0);
@@ -87,8 +83,6 @@ float shapeDistance(vec2 p) {
 	return d;
 }
 
-// Smooth-union distances are not Euclidean, so recover a unit distance
-// before blurring. The shadow then follows the visible outline.
 float unitDistance(vec2 p) {
 	float d = shapeDistance(p);
 	float gx = shapeDistance(p + vec2(1.0, 0.0)) - shapeDistance(p - vec2(1.0, 0.0));
@@ -102,8 +96,6 @@ void main() {
 	float d = shapeDistance(p);
 	float fill = smoothstep(1.25, -0.75, d);
 
-	// Stroke on the inside of the contour. A contour that lies on the screen
-	// rectangle has the same distance as the screen edge, so that side stays bare.
 	float stroke = 0.0;
 	if (borderWidth >= 0.05 && d < 1.5 && d > -(borderWidth + 2.0)) {
 		vec2 halfSize = vec2(fieldWidth, fieldHeight) * 0.5;
