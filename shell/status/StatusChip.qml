@@ -1,7 +1,8 @@
+// Top-right chip: battery, clock, and the notice bell. Options live in config.json "status".
 import QtQuick
 import Quickshell
-import qs.settings
 import qs.services
+import qs.settings
 
 Item {
 	id: root
@@ -11,9 +12,9 @@ Item {
 	signal noticesClicked()
 
 	property string activePage: ""
-	readonly property real buttonPadX: Theme.chipPadX
-	readonly property real buttonPadY: Theme.chipPadY
-	readonly property real buttonGap: Theme.chipGap
+	readonly property real buttonPadX: Config.status.padX
+	readonly property real buttonPadY: Config.status.padY
+	readonly property real buttonGap: Config.status.gap
 	readonly property real noticeWidth: Math.max(timeRow.implicitHeight + buttonPadY * 2, noticeRow.implicitWidth + buttonPadX * 2)
 	readonly property real contentWidth: noticeWidth + buttonGap + timeRow.implicitWidth + buttonPadX * 2 + (batteryHit.visible ? buttonGap + batteryRow.implicitWidth + buttonPadX * 2 : 0)
 	readonly property real contentHeight: Math.max(timeRow.implicitHeight, noticeRow.implicitHeight, batteryHit.visible ? batteryRow.implicitHeight : 0)
@@ -21,10 +22,10 @@ Item {
 	implicitWidth: contentWidth + Theme.padding * 2
 	implicitHeight: contentHeight + Theme.padding * 2
 
-	property string timeText: Qt.formatTime(clock.now, Config.timeFormat)
+	property string timeText: Qt.formatTime(clock.now, Config.status.timeFormat)
 
 	function clockGlyph() {
-		return Config.icon(Config.clock)
+		return Config.icon(Config.status.clockIcon)
 	}
 
 	QtObject {
@@ -33,7 +34,7 @@ Item {
 	}
 
 	Timer {
-		interval: Config.clockTick
+		interval: Config.status.tick
 		running: true
 		repeat: true
 		triggeredOnStart: true
@@ -72,7 +73,7 @@ Item {
 					text: PowerState.batteryGlyph()
 					color: Theme.foreground
 					font.family: Theme.iconFont
-					font.pixelSize: Theme.clockSize
+					font.pixelSize: Theme.chipIcon
 					anchors.verticalCenter: parent.verticalCenter
 				}
 
@@ -80,7 +81,7 @@ Item {
 					text: PowerState.percent + "%"
 					color: Theme.foreground
 					font.family: Theme.fontFamily
-					font.pixelSize: Theme.clockSize
+					font.pixelSize: Theme.chipIcon
 					anchors.verticalCenter: parent.verticalCenter
 				}
 			}
@@ -117,7 +118,7 @@ Item {
 					text: root.clockGlyph()
 					color: Theme.foreground
 					font.family: Theme.iconFont
-					font.pixelSize: Theme.clockSize
+					font.pixelSize: Theme.chipIcon
 					anchors.verticalCenter: parent.verticalCenter
 				}
 
@@ -125,7 +126,7 @@ Item {
 					text: root.timeText
 					color: Theme.foreground
 					font.family: Theme.fontFamily
-					font.pixelSize: Theme.clockSize
+					font.pixelSize: Theme.chipIcon
 					anchors.verticalCenter: parent.verticalCenter
 				}
 			}
@@ -160,10 +161,10 @@ Item {
 				spacing: Theme.gap
 
 				Text {
-					text: Config.icon(NoticeState.quiet ? Config.bellOff : Config.bell)
+					text: Config.icon(NoticeState.quiet ? Config.notices.bellOffIcon : Config.notices.bellIcon)
 					color: Theme.foreground
 					font.family: Theme.iconFont
-					font.pixelSize: Theme.clockSize
+					font.pixelSize: Theme.chipIcon
 					anchors.verticalCenter: parent.verticalCenter
 				}
 
@@ -172,7 +173,7 @@ Item {
 					text: NoticeState.historyCount
 					color: Theme.foreground
 					font.family: Theme.fontFamily
-					font.pixelSize: Theme.clockSize
+					font.pixelSize: Theme.chipIcon
 					anchors.verticalCenter: parent.verticalCenter
 				}
 			}

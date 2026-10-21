@@ -1,3 +1,4 @@
+// Bottom-right chip: color picker, screenshot, and power.
 import QtQuick
 import qs.settings
 
@@ -40,10 +41,10 @@ Item {
 			Text {
 				id: colorIcon
 				anchors.centerIn: parent
-				text: Config.icon(Config.eyedropper)
+				text: Config.icon(Config.session.colorIcon)
 				color: Theme.foreground
 				font.family: Theme.iconFont
-				font.pixelSize: Theme.clockSize
+				font.pixelSize: Theme.chipIcon
 			}
 
 			MouseArea {
@@ -70,10 +71,10 @@ Item {
 			Text {
 				id: shotIcon
 				anchors.centerIn: parent
-				text: Config.icon(Config.screenshot)
+				text: Config.icon(Config.session.screenshotIcon)
 				color: Theme.foreground
 				font.family: Theme.iconFont
-				font.pixelSize: Theme.clockSize
+				font.pixelSize: Theme.chipIcon
 			}
 
 			MouseArea {
@@ -104,10 +105,10 @@ Item {
 			Text {
 				id: powerIcon
 				anchors.centerIn: parent
-				text: Config.icon(Config.power)
+				text: Config.icon(Config.session.powerIcon)
 				color: Theme.foreground
 				font.family: Theme.iconFont
-				font.pixelSize: Theme.clockSize
+				font.pixelSize: Theme.chipIcon
 			}
 
 			MouseArea {

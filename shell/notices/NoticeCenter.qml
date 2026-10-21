@@ -1,6 +1,8 @@
+// Notice history inside the status menu. Options live in config.json "notices".
 import QtQuick
-import qs.settings
+import qs.controls
 import qs.services
+import qs.settings
 
 Column {
 	id: root
@@ -18,15 +20,15 @@ Column {
 	spacing: 2
 
 	function when(at) {
-		return Qt.formatTime(new Date(at), Config.timeFormat)
+		return Qt.formatTime(new Date(at), Config.status.timeFormat)
 	}
 
 	function glyph(local, urgent) {
 		if (Number(urgent) === 1)
-			return Config.icon(Config.alert)
+			return Config.icon(Config.notices.alertIcon)
 		if (Number(local) === 1)
-			return Config.icon(Config.check)
-		return Config.icon(Config.bell)
+			return Config.icon(Config.notices.checkIcon)
+		return Config.icon(Config.notices.bellIcon)
 	}
 
 	Item {
@@ -45,9 +47,9 @@ Column {
 		Text {
 			id: quietIcon
 			anchors.left: parent.left
-			anchors.leftMargin: Theme.headerInset
+			anchors.leftMargin: Theme.menuInset
 			anchors.verticalCenter: parent.verticalCenter
-			text: Config.icon(NoticeState.quiet ? Config.bellOff : Config.bell)
+			text: Config.icon(NoticeState.quiet ? Config.notices.bellOffIcon : Config.notices.bellIcon)
 			color: Theme.foreground
 			font.family: Theme.iconFont
 			font.pixelSize: Theme.iconSize
@@ -66,30 +68,12 @@ Column {
 			elide: Text.ElideRight
 		}
 
-		Item {
+		Toggle {
 			id: quietSwitch
 			anchors.right: parent.right
-			anchors.rightMargin: Theme.edgeInset
+			anchors.rightMargin: Theme.menuEdge
 			anchors.verticalCenter: parent.verticalCenter
-			implicitWidth: Theme.toggleWidth
-			implicitHeight: Theme.toggleHeight
-			width: Theme.toggleWidth
-			height: Theme.toggleHeight
-
-			Rectangle {
-				anchors.fill: parent
-				radius: height / 2
-				color: NoticeState.quiet ? Theme.foreground : Theme.ink(Theme.track)
-			}
-
-			Rectangle {
-				width: Theme.toggleKnob
-				height: Theme.toggleKnob
-				radius: Theme.toggleKnob / 2
-				anchors.verticalCenter: parent.verticalCenter
-				x: NoticeState.quiet ? parent.width - width - Theme.toggleInset : Theme.toggleInset
-				color: NoticeState.quiet ? Theme.background : Theme.foreground
-			}
+			on: NoticeState.quiet
 		}
 
 		MouseArea {
@@ -222,7 +206,7 @@ Column {
 
 							Item {
 								width: parent.width
-								implicitHeight: Math.max(Theme.noticeIcon, nameRow.implicitHeight, stamp.implicitHeight, dismiss.height)
+								implicitHeight: Math.max(Config.notices.iconSize, nameRow.implicitHeight, stamp.implicitHeight, dismiss.height)
 								height: implicitHeight
 
 								Row {
@@ -236,24 +220,24 @@ Column {
 										text: root.glyph(row.local, row.urgent)
 										color: row.alarm ? Theme.recording : Theme.foreground
 										font.family: Theme.iconFont
-										font.pixelSize: Theme.noticeIcon
+										font.pixelSize: Config.notices.iconSize
 									}
 
 									Image {
-										width: Theme.noticeIcon
-										height: Theme.noticeIcon
+										width: Config.notices.iconSize
+										height: Config.notices.iconSize
 										visible: !row.shell && row.icon !== "" && status === Image.Ready
 										source: row.icon
-										sourceSize.width: Theme.noticeIcon * 2
-										sourceSize.height: Theme.noticeIcon * 2
+										sourceSize.width: Config.notices.iconSize * 2
+										sourceSize.height: Config.notices.iconSize * 2
 										fillMode: Image.PreserveAspectFit
 										asynchronous: true
 									}
 
 									Text {
-										width: Math.max(0, nameRow.width - (row.marked ? Theme.noticeIcon + nameRow.spacing : 0))
+										width: Math.max(0, nameRow.width - (row.marked ? Config.notices.iconSize + nameRow.spacing : 0))
 										text: row.app
-										color: Theme.ink(Theme.iconMute)
+										color: Theme.ink(Theme.iconMuted)
 										font.family: Theme.fontFamily
 										font.pixelSize: Theme.labelSize
 										elide: Text.ElideRight
@@ -266,7 +250,7 @@ Column {
 									anchors.rightMargin: 8
 									anchors.verticalCenter: parent.verticalCenter
 									text: root.when(row.at)
-									color: Theme.ink(Theme.iconMute)
+									color: Theme.ink(Theme.iconMuted)
 									font.family: Theme.fontFamily
 									font.pixelSize: Theme.labelSize
 								}
@@ -275,8 +259,8 @@ Column {
 									id: dismiss
 									anchors.right: parent.right
 									anchors.verticalCenter: parent.verticalCenter
-									width: Theme.noticeIcon
-									height: Theme.noticeIcon
+									width: Config.notices.iconSize
+									height: Config.notices.iconSize
 
 									Rectangle {
 										anchors.fill: parent
@@ -286,8 +270,8 @@ Column {
 
 									Text {
 										anchors.centerIn: parent
-										text: Config.icon(Config.close)
-										color: dismissHover.containsMouse ? Theme.foreground : Theme.ink(Theme.iconMute)
+										text: Config.icon(Config.notices.closeIcon)
+										color: dismissHover.containsMouse ? Theme.foreground : Theme.ink(Theme.iconMuted)
 										font.family: Theme.iconFont
 										font.pixelSize: Theme.labelSize
 									}
@@ -310,7 +294,7 @@ Column {
 								font.family: Theme.fontFamily
 								font.pixelSize: Theme.fontSize
 								wrapMode: Text.WordWrap
-								maximumLineCount: Theme.noticeSummaryLines
+								maximumLineCount: Config.notices.summaryLines
 								elide: Text.ElideRight
 							}
 
@@ -325,7 +309,7 @@ Column {
 								font.family: row.kind === "reload" && row.alarm ? Theme.monoFamily : Theme.fontFamily
 								font.pixelSize: Theme.fontSize
 								wrapMode: Text.WordWrap
-								maximumLineCount: row.kind === "reload" ? Theme.noticeErrorLines : Theme.noticeBodyLines
+								maximumLineCount: row.kind === "reload" ? Config.notices.errorLines : Config.notices.bodyLines
 								elide: Text.ElideRight
 								textFormat: row.shell ? Text.PlainText : Text.RichText
 								onLinkActivated: link => NoticeState.openLink(link)
@@ -342,8 +326,8 @@ Column {
 
 		Rectangle {
 			visible: flick.contentHeight > flick.height + 1
-			width: Theme.noticeProgress
-			radius: Theme.noticeProgress / 2
+			width: Theme.scrollSize
+			radius: Theme.scrollSize / 2
 			color: Theme.ink(Theme.scroll)
 			height: Math.max(24, flick.height * flick.height / Math.max(flick.contentHeight, 1))
 			x: parent.width - width - Theme.inset

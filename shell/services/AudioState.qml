@@ -1,3 +1,5 @@
+// Speakers, microphones, and per-application streams.
+
 pragma Singleton
 
 import QtQuick
@@ -110,7 +112,7 @@ Singleton {
 	}
 
 	Timer {
-		interval: Config.audioPoll
+		interval: Config.audio.poll
 		running: true
 		onTriggered: {
 			if (root.liveVolume >= 0) {
@@ -131,7 +133,7 @@ Singleton {
 	function note() {
 		if (!primed || liveVolume < 0)
 			return
-		const changed = Math.abs(liveVolume - volume) > Config.volumeEpsilon || liveMuted !== muted
+		const changed = Math.abs(liveVolume - volume) > Config.audio.volumeEpsilon || liveMuted !== muted
 		volume = liveVolume
 		muted = liveMuted
 		if (changed && !adjusting)
@@ -142,7 +144,7 @@ Singleton {
 	function noteMic() {
 		if (!primed || !source)
 			return
-		const changed = Math.abs(sourceLevel - micVolume) > Config.volumeEpsilon || sourceMuted !== micMuted
+		const changed = Math.abs(sourceLevel - micVolume) > Config.audio.volumeEpsilon || sourceMuted !== micMuted
 		micVolume = sourceLevel
 		micMuted = sourceMuted
 		if (changed && !micAdjusting)
@@ -151,7 +153,7 @@ Singleton {
 	}
 
 	Timer {
-		interval: Config.audioPoll
+		interval: Config.audio.poll
 		repeat: true
 		running: !root.settled
 		triggeredOnStart: true
@@ -159,7 +161,7 @@ Singleton {
 	}
 
 	Timer {
-		interval: Config.audioListIdle
+		interval: Config.audio.listIdle
 		running: !root.settled
 		onTriggered: {
 			root.collect()
@@ -168,14 +170,14 @@ Singleton {
 	}
 
 	Timer {
-		interval: Config.audioListIdle
+		interval: Config.audio.listIdle
 		repeat: true
 		running: root.settled && RadioState.menuPage !== "audio" && RadioState.menuPage !== "microphone"
 		onTriggered: root.collect()
 	}
 
 	Timer {
-		interval: Config.audioListOpen
+		interval: Config.audio.listOpen
 		repeat: true
 		running: root.settled && (RadioState.menuPage === "audio" || RadioState.menuPage === "microphone")
 		triggeredOnStart: true
@@ -231,8 +233,8 @@ Singleton {
 		})
 		streams.sort((a, b) => streamLabel(a).localeCompare(streamLabel(b)))
 		captures.sort((a, b) => streamLabel(a).localeCompare(streamLabel(b)))
-		const nextSinks = sinks.slice(0, Config.audioLimit)
-		const nextSources = sources.slice(0, Config.audioLimit)
+		const nextSinks = sinks.slice(0, Config.audio.limit)
+		const nextSources = sources.slice(0, Config.audio.limit)
 		const nextStreams = streams
 		const nextCaptures = captures
 		if (!sameNodes(sinkNodes, nextSinks))
@@ -280,26 +282,26 @@ Singleton {
 	}
 
 	function volumeGlyph(level, muted) {
-		const icons = Config.volumeIcons
-		if (muted || level <= Config.muteFloor)
+		const icons = Config.audio.volumeIcons
+		if (muted || level <= Config.audio.muteFloor)
 			return Config.icon(icons[0])
-		if (level < Config.volumeLow)
+		if (level < Config.audio.volumeLow)
 			return Config.icon(icons[1])
-		if (level < Config.volumeMid)
+		if (level < Config.audio.volumeMid)
 			return Config.icon(icons[2])
 		return Config.icon(icons[3])
 	}
 
 	function micGlyph(level, muted) {
-		const icons = Config.micIcons
-		if (muted || level <= Config.muteFloor)
+		const icons = Config.audio.micIcons
+		if (muted || level <= Config.audio.muteFloor)
 			return Config.icon(icons[0])
 		return Config.icon(icons[1])
 	}
 
 	function levelText(level, muted) {
 		if (muted)
-			return Config.mutedLabel
+			return Config.audio.mutedLabel
 		return Math.round(Math.max(0, level) * 100) + "%"
 	}
 

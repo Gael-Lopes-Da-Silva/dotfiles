@@ -1,3 +1,5 @@
+// Niri events: focus, fullscreen, casts, the launcher, and the OSD timer.
+
 pragma Singleton
 
 import QtQuick
@@ -33,7 +35,7 @@ Singleton {
 	}
 
 	function isFullscreen(name, screenWidth, screenHeight) {
-		if (screenWidth < Config.fullscreenMin || screenHeight < Config.fullscreenMin)
+		if (screenWidth < Config.niri.fullscreenMin || screenHeight < Config.niri.fullscreenMin)
 			return false
 
 		let active = null
@@ -57,7 +59,7 @@ Singleton {
 			const tile = win.layout && win.layout.tile_size
 			if (!tile)
 				continue
-			if (Math.abs(tile[0] - screenWidth) <= Config.fullscreenSlack && Math.abs(tile[1] - screenHeight) <= Config.fullscreenSlack)
+			if (Math.abs(tile[0] - screenWidth) <= Config.niri.fullscreenSlack && Math.abs(tile[1] - screenHeight) <= Config.niri.fullscreenSlack)
 				return true
 		}
 		return false
@@ -252,7 +254,7 @@ Singleton {
 
 	Process {
 		id: stream
-		command: Config.niriEvent
+		command: Config.niri.eventCommand
 		running: true
 		stdout: SplitParser {
 			onRead: line => root.ingest(String(line))
@@ -262,13 +264,13 @@ Singleton {
 
 	Timer {
 		id: retry
-		interval: Config.niriRetry
+		interval: Config.niri.retry
 		onTriggered: stream.running = true
 	}
 
 	Timer {
 		id: osdTimer
-		interval: Config.osdHold
+		interval: Config.osd.hold
 		onTriggered: root.osdOpen = false
 	}
 }

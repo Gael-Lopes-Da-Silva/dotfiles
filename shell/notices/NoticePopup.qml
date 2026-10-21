@@ -1,14 +1,15 @@
+// Toast stack on the focused screen. Options live in config.json "notices".
 import QtQuick
 import Quickshell.Services.Notifications
-import qs.settings
 import qs.services
+import qs.settings
 
 Item {
 	id: root
 
 	property real maxHeight: 420
 
-	implicitWidth: Theme.notificationWidth
+	implicitWidth: Config.notices.popupWidth
 	implicitHeight: Math.min(Math.max(column.implicitHeight, 0), maxHeight)
 	width: implicitWidth
 	height: implicitHeight
@@ -25,7 +26,7 @@ Item {
 
 		Column {
 			id: column
-			width: Theme.notificationWidth
+			width: Config.notices.popupWidth
 			spacing: 0
 
 			Repeater {
@@ -125,7 +126,7 @@ Item {
 						if (synthetic) {
 							faceSummary = summary
 							faceBody = body
-							faceApp = Config.shellName
+							faceApp = Config.notices.name
 						} else if (notification) {
 							faceSummary = NoticeState.plain(notification.summary)
 							faceBody = NoticeState.markup(notification.body)
@@ -144,7 +145,7 @@ Item {
 						faceReady = true
 					}
 
-					width: Theme.notificationWidth
+					width: Config.notices.popupWidth
 					clip: true
 					height: arrived && shown && !leaving ? fullHeight : 0
 					opacity: arrived && shown && !leaving ? 1 : 0
@@ -192,7 +193,7 @@ Item {
 
 						Item {
 							width: parent.width
-							implicitHeight: Math.max(Theme.noticeIcon, dismiss.height)
+							implicitHeight: Math.max(Config.notices.iconSize, dismiss.height)
 							height: implicitHeight
 
 							Row {
@@ -204,27 +205,27 @@ Item {
 
 								Text {
 									visible: card.synthetic
-									text: card.kind === "power" ? PowerState.batteryGlyph() : Config.icon(card.critical ? Config.alert : Config.check)
+									text: card.kind === "power" ? PowerState.batteryGlyph() : Config.icon(card.critical ? Config.notices.alertIcon : Config.notices.checkIcon)
 									color: card.critical ? Theme.recording : Theme.foreground
 									font.family: Theme.iconFont
-									font.pixelSize: Theme.noticeIcon
+									font.pixelSize: Config.notices.iconSize
 								}
 
 								Image {
-									width: Theme.noticeIcon
-									height: Theme.noticeIcon
+									width: Config.notices.iconSize
+									height: Config.notices.iconSize
 									visible: !card.synthetic && status === Image.Ready
 									source: card.appIconSource
-									sourceSize.width: Theme.noticeIcon * 2
-									sourceSize.height: Theme.noticeIcon * 2
+									sourceSize.width: Config.notices.iconSize * 2
+									sourceSize.height: Config.notices.iconSize * 2
 									fillMode: Image.PreserveAspectFit
 									asynchronous: true
 								}
 
 								Text {
-									width: Math.max(0, nameRow.width - (card.synthetic || card.appIconSource !== "" ? Theme.noticeIcon + nameRow.spacing : 0))
-									text: card.faceReady ? card.faceApp : (card.synthetic ? Config.shellName : (card.notification ? card.notification.appName : ""))
-									color: Theme.ink(Theme.iconMute)
+									width: Math.max(0, nameRow.width - (card.synthetic || card.appIconSource !== "" ? Config.notices.iconSize + nameRow.spacing : 0))
+									text: card.faceReady ? card.faceApp : (card.synthetic ? Config.notices.name : (card.notification ? card.notification.appName : ""))
+									color: Theme.ink(Theme.iconMuted)
 									font.family: Theme.fontFamily
 									font.pixelSize: Theme.labelSize
 									elide: Text.ElideRight
@@ -235,8 +236,8 @@ Item {
 								id: dismiss
 								anchors.right: parent.right
 								anchors.verticalCenter: parent.verticalCenter
-								width: Theme.noticeIcon
-								height: Theme.noticeIcon
+								width: Config.notices.iconSize
+								height: Config.notices.iconSize
 
 								Rectangle {
 									anchors.fill: parent
@@ -246,8 +247,8 @@ Item {
 
 								Text {
 									anchors.centerIn: parent
-									text: Config.icon(Config.close)
-									color: dismissHover.containsMouse ? Theme.foreground : Theme.ink(Theme.iconMute)
+									text: Config.icon(Config.notices.closeIcon)
+									color: dismissHover.containsMouse ? Theme.foreground : Theme.ink(Theme.iconMuted)
 									font.family: Theme.iconFont
 									font.pixelSize: Theme.labelSize
 								}
@@ -270,12 +271,12 @@ Item {
 							source: card.pictureSource
 							fillMode: Image.PreserveAspectFit
 							asynchronous: true
-							sourceSize.width: Theme.notificationWidth
-							sourceSize.height: Theme.noticeImageSource
+							sourceSize.width: Config.notices.popupWidth
+							sourceSize.height: Config.notices.imageSource
 							height: {
 								if (!visible || implicitWidth < 1)
 									return 0
-								return Math.min(Theme.noticeImageHeight, implicitHeight * width / implicitWidth)
+								return Math.min(Config.notices.imageHeight, implicitHeight * width / implicitWidth)
 							}
 						}
 
@@ -286,7 +287,7 @@ Item {
 							font.family: Theme.fontFamily
 							font.pixelSize: Theme.fontSize
 							wrapMode: Text.WordWrap
-							maximumLineCount: Theme.noticeSummaryLines
+							maximumLineCount: Config.notices.summaryLines
 							elide: Text.ElideRight
 						}
 
@@ -301,7 +302,7 @@ Item {
 							font.family: card.kind === "reload" && card.critical ? Theme.monoFamily : Theme.fontFamily
 							font.pixelSize: Theme.fontSize
 							wrapMode: Text.WordWrap
-							maximumLineCount: card.kind === "reload" ? Theme.noticeErrorLines : Theme.noticeBodyLines
+							maximumLineCount: card.kind === "reload" ? Config.notices.errorLines : Config.notices.bodyLines
 							elide: Text.ElideRight
 							textFormat: card.synthetic ? Text.PlainText : Text.RichText
 							onLinkActivated: link => NoticeState.openLink(link)
@@ -325,7 +326,7 @@ Item {
 									readonly property string icon: card.notification && card.notification.hasActionIcons ? NoticeState.iconSource(modelData.identifier) : ""
 
 									implicitWidth: Math.min(copy.width, actionRow.implicitWidth + 16)
-									implicitHeight: Theme.noticeActionHeight
+									implicitHeight: Config.notices.actionHeight
 									width: implicitWidth
 									height: implicitHeight
 									radius: Theme.buttonRadius
@@ -383,7 +384,7 @@ Item {
 
 							Rectangle {
 								width: parent.width - replySend.width - replyRow.spacing
-								height: Theme.noticeReply
+								height: Config.notices.replyHeight
 								radius: Theme.buttonRadius
 								color: Theme.ink(Theme.field)
 
@@ -416,17 +417,17 @@ Item {
 
 							Rectangle {
 								id: replySend
-								width: Theme.noticeReply
-								height: Theme.noticeReply
+								width: Config.notices.replyHeight
+								height: Config.notices.replyHeight
 								radius: Theme.buttonRadius
 								color: Theme.ink(replySendHover.hovered ? Theme.buttonHover : Theme.field)
 
 								Text {
 									anchors.centerIn: parent
-									text: Config.icon(Config.reply)
+									text: Config.icon(Config.notices.replyIcon)
 									color: Theme.foreground
 									font.family: Theme.iconFont
-									font.pixelSize: Theme.replyIcon
+									font.pixelSize: Config.notices.replyIconSize
 								}
 
 								HoverHandler {
@@ -444,8 +445,8 @@ Item {
 
 						Rectangle {
 							width: parent.width
-							height: Theme.noticeProgress
-							radius: Theme.noticeProgress / 2
+							height: Theme.scrollSize
+							radius: Theme.scrollSize / 2
 							visible: card.duration > 0 || card.critical
 							color: Theme.ink(Theme.track)
 
@@ -464,8 +465,8 @@ Item {
 
 	Rectangle {
 		visible: flick.contentHeight > flick.height + 1
-		width: Theme.noticeProgress
-		radius: Theme.noticeProgress / 2
+		width: Theme.scrollSize
+		radius: Theme.scrollSize / 2
 		color: Theme.ink(Theme.scroll)
 		height: Math.max(24, flick.height * flick.height / Math.max(flick.contentHeight, 1))
 		x: parent.width - width

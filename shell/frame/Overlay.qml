@@ -1,8 +1,8 @@
+// Per-screen layer. Hot corners reveal the chips, and this file places every widget in the frame.
 import QtQuick
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
-import qs.settings
 import qs.cast
 import qs.launcher
 import qs.notices
@@ -10,6 +10,7 @@ import qs.osd
 import qs.radio
 import qs.services
 import qs.session
+import qs.settings
 import qs.status
 
 PanelWindow {
@@ -72,8 +73,8 @@ PanelWindow {
 	}
 
 	readonly property bool hotCorners: chrome && !fullscreen
-	property real frameThickness: hotCorners ? Theme.frame : 0
-	property real frameRadius: hotCorners ? Theme.screenRadius : 0
+	property real frameThickness: hotCorners ? Config.frame.thickness : 0
+	property real frameRadius: hotCorners ? Config.frame.radius : 0
 
 	onHotCornersChanged: {
 		if (hotCorners)
@@ -129,13 +130,13 @@ PanelWindow {
 	property real launcherFullH: launcherBody.item ? launcherBody.item.implicitHeight : 0
 	property bool launcherAnimateH: false
 
-	readonly property real weld: Math.min(Theme.weld, frameThickness)
+	readonly property real weld: Math.min(Config.frame.weld, frameThickness)
 	readonly property real noticeTop: {
 		const underClock = statusClip.y + statusClip.height - weld
 		const onFrame = frameThickness - weld
 		return Math.max(onFrame, underClock)
 	}
-	readonly property real noticeGap: Theme.padding * (1 - Math.min(1, frameThickness / Math.max(1, Theme.frame)))
+	readonly property real noticeGap: Theme.padding * (1 - Math.min(1, frameThickness / Math.max(1, Config.frame.thickness)))
 
 	Behavior on frameThickness {
 		NumberAnimation {
@@ -294,11 +295,11 @@ PanelWindow {
 		Quickshell.execDetached(["wl-copy", "--type", "text/plain", hex])
 	}
 
-	BlobField {
+	Frame {
 		anchors.fill: parent
 		thickness: root.frameThickness
 		radius: root.frameRadius
-		smoothing: Theme.smoothing
+		smoothing: Config.frame.smoothing
 		color: Theme.background
 		panel0: Qt.vector4d(statusClip.x, statusClip.y, statusClip.width, statusClip.height)
 		panel1: Qt.vector4d(osdClip.x, osdClip.y, osdClip.width, osdClip.height)
@@ -307,10 +308,10 @@ PanelWindow {
 		panel4: Qt.vector4d(radioClip.x, radioClip.y, radioClip.width, radioClip.height)
 		panel5: Qt.vector4d(noticeClip.x, noticeClip.y, noticeClip.width, noticeClip.height)
 		panel6: Qt.vector4d(sessionClip.x, sessionClip.y, sessionClip.width, sessionClip.height)
-		panelRadius: Qt.vector4d(Theme.screenRadius, Theme.screenRadius, Theme.screenRadius, Theme.screenRadius)
-		panel4Radius: Theme.screenRadius
-		panel5Radius: Theme.screenRadius
-		panel6Radius: Theme.screenRadius
+		panelRadius: Qt.vector4d(Config.frame.radius, Config.frame.radius, Config.frame.radius, Config.frame.radius)
+		panel4Radius: Config.frame.radius
+		panel5Radius: Config.frame.radius
+		panel6Radius: Config.frame.radius
 	}
 
 	MouseArea {
@@ -326,8 +327,8 @@ PanelWindow {
 		z: 4
 		anchors.top: parent.top
 		anchors.right: parent.right
-		width: root.hotCorners ? Config.hotCorner : 0
-		height: root.hotCorners ? Config.hotCorner : 0
+		width: root.hotCorners ? Config.frame.hotCorner : 0
+		height: root.hotCorners ? Config.frame.hotCorner : 0
 
 		HoverHandler {
 			id: cornerHover
@@ -337,14 +338,15 @@ PanelWindow {
 	}
 
 	Item {
-		id: statusClip
+		// Status chip and the menu under it: calendar, battery, or notices.
+	id: statusClip
 		z: 3
 		width: Math.max(statusChip.implicitWidth, clockMenu.implicitWidth * root.clockMenuProgress) * root.statusProgress
 		height: (statusChip.implicitHeight + clockMenu.implicitHeight * root.clockMenuProgress) * root.statusProgress
 		x: root.width - root.frameThickness - width + root.weld
 		y: root.frameThickness - root.weld
 		clip: true
-		visible: width > Config.clipMin && height > Config.clipMin
+		visible: width > Config.frame.clipMin && height > Config.frame.clipMin
 
 		Loader {
 			id: statusChip
@@ -352,7 +354,7 @@ PanelWindow {
 			anchors.right: parent.right
 			active: root.statusWanted || root.statusProgress > 0 || root.clockPage !== "" || root.clockMenuProgress > 0
 			asynchronous: false
-			opacity: root.statusProgress > Config.reveal ? 1 : 0
+			opacity: root.statusProgress > Config.frame.chipReveal ? 1 : 0
 
 			Behavior on opacity {
 				NumberAnimation { duration: Theme.fade }
@@ -386,15 +388,15 @@ PanelWindow {
 			anchors.right: parent.right
 			active: root.clockPage !== "" || root.clockMenuProgress > 0
 			asynchronous: false
-			opacity: root.clockMenuProgress > Config.menuReveal ? 1 : 0
+			opacity: root.clockMenuProgress > Config.frame.menuReveal ? 1 : 0
 
 			Behavior on opacity {
 				NumberAnimation { duration: Theme.fade }
 			}
 
 			sourceComponent: Component {
-				ClockMenu {
-					room: Math.min(root.height * Config.noticeCenterRatio, Math.max(Theme.rowHeight * 4, root.height - (root.frameThickness - root.weld) - statusChip.implicitHeight - Math.max(root.frameThickness, Theme.padding)))
+				StatusMenu {
+					room: Math.min(root.height * Config.status.menuRatio, Math.max(Theme.rowHeight * 4, root.height - (root.frameThickness - root.weld) - statusChip.implicitHeight - Math.max(root.frameThickness, Theme.padding)))
 					page: root.clockPage !== "" ? root.clockPage : root.clockHold
 				}
 			}
@@ -407,9 +409,10 @@ PanelWindow {
 	}
 
 	Item {
-		id: noticeClip
+		// Toast stack on the focused screen.
+	id: noticeClip
 		z: 2
-		visible: root.focusedHere && height > Config.clipMin
+		visible: root.focusedHere && height > Config.frame.clipMin
 		width: notices.implicitWidth
 		height: root.focusedHere ? notices.implicitHeight : 0
 		x: root.width - root.frameThickness - width + root.weld - root.noticeGap
@@ -427,22 +430,23 @@ PanelWindow {
 			}
 
 			sourceComponent: Component {
-				Notifications {
-					maxHeight: Math.max(Config.noticeMinHeight, root.height * Config.noticeHeightRatio)
+				NoticePopup {
+					maxHeight: Math.max(Config.notices.minHeight, root.height * Config.notices.popupRatio)
 				}
 			}
 		}
 	}
 
 	Item {
-		id: castClip
+		// Recording indicator.
+	id: castClip
 		z: 3
 		width: castBody.implicitWidth * root.castProgress
 		height: castBody.implicitHeight * root.castProgress
 		x: root.castInset
 		y: root.castInset
 		clip: true
-		visible: width > Config.clipMin && height > Config.clipMin
+		visible: width > Config.frame.clipMin && height > Config.frame.clipMin
 
 		Loader {
 			id: castBody
@@ -450,7 +454,7 @@ PanelWindow {
 			anchors.left: parent.left
 			active: root.castMode !== "" || root.castProgress > 0
 			asynchronous: false
-			opacity: root.castProgress > Config.reveal ? 1 : 0
+			opacity: root.castProgress > Config.frame.chipReveal ? 1 : 0
 
 			Behavior on opacity {
 				NumberAnimation { duration: Theme.fade }
@@ -463,14 +467,15 @@ PanelWindow {
 	}
 
 	Item {
-		id: osdClip
+		// Volume, brightness, power, USB, and screen readout.
+	id: osdClip
 		z: 3
 		width: osdBody.implicitWidth
 		height: osdBody.implicitHeight * root.osdProgress
 		x: (root.width - width) / 2
 		y: root.height - root.frameThickness - height + root.weld
 		clip: true
-		visible: height > Config.clipMin
+		visible: height > Config.frame.clipMin
 
 		Loader {
 			id: osdBody
@@ -478,7 +483,7 @@ PanelWindow {
 			anchors.horizontalCenter: parent.horizontalCenter
 			active: root.osdHere || root.osdProgress > 0
 			asynchronous: false
-			opacity: root.osdProgress > Config.reveal ? 1 : 0
+			opacity: root.osdProgress > Config.frame.chipReveal ? 1 : 0
 
 			Behavior on opacity {
 				NumberAnimation { duration: Theme.fade }
@@ -491,14 +496,15 @@ PanelWindow {
 	}
 
 	Item {
-		id: launcherClip
+		// Application search.
+	id: launcherClip
 		z: 4
 		width: launcherBody.implicitWidth
 		height: root.launcherFullH * root.launcherProgress
 		x: (root.width - width) / 2
 		y: root.height - root.frameThickness - height + root.weld - root.noticeGap
 		clip: true
-		visible: height > Config.clipMin
+		visible: height > Config.frame.clipMin
 
 		MouseArea {
 			anchors.fill: parent
@@ -512,7 +518,7 @@ PanelWindow {
 			anchors.horizontalCenter: parent.horizontalCenter
 			active: root.launcherHere || root.launcherProgress > 0
 			asynchronous: false
-			opacity: root.launcherProgress > Config.reveal ? 1 : 0
+			opacity: root.launcherProgress > Config.frame.chipReveal ? 1 : 0
 			onLoaded: Qt.callLater(() => {
 				if (active)
 					root.launcherAnimateH = true
@@ -539,8 +545,8 @@ PanelWindow {
 		z: 2
 		anchors.left: parent.left
 		anchors.bottom: parent.bottom
-		width: root.hotCorners ? Config.hotCorner : 0
-		height: root.hotCorners ? Config.hotCorner : 0
+		width: root.hotCorners ? Config.frame.hotCorner : 0
+		height: root.hotCorners ? Config.frame.hotCorner : 0
 
 		HoverHandler {
 			id: radioCornerHover
@@ -550,14 +556,15 @@ PanelWindow {
 	}
 
 	Item {
-		id: radioClip
+		// Wi-Fi, Bluetooth, audio, and microphone.
+	id: radioClip
 		z: 3
 		width: Math.max(radioChip.implicitWidth, radioMenu.implicitWidth * root.menuProgress) * root.radioProgress
 		height: (radioChip.implicitHeight + radioMenu.implicitHeight * root.menuProgress) * root.radioProgress
 		x: root.frameThickness - root.weld
 		y: root.height - root.frameThickness - height + root.weld
 		clip: true
-		visible: width > Config.clipMin && height > Config.clipMin
+		visible: width > Config.frame.clipMin && height > Config.frame.clipMin
 
 		Loader {
 			id: radioMenu
@@ -565,7 +572,7 @@ PanelWindow {
 			anchors.bottom: radioChip.top
 			active: root.radioPage !== "" || root.menuProgress > 0
 			asynchronous: false
-			opacity: root.menuProgress > Config.menuReveal ? 1 : 0
+			opacity: root.menuProgress > Config.frame.menuReveal ? 1 : 0
 
 			Behavior on opacity {
 				NumberAnimation { duration: Theme.fade }
@@ -577,7 +584,7 @@ PanelWindow {
 					live: root.radioPage !== ""
 					room: {
 						const audio = root.radioShown === "audio" || root.radioShown === "microphone"
-						const ratio = audio ? Config.audioMenuRatio : Config.noticeCenterRatio
+						const ratio = audio ? Config.audio.menuRatio : Config.radio.menuRatio
 						const chrome = root.height - (root.frameThickness - root.weld) - radioChip.implicitHeight - Math.max(root.frameThickness, Theme.padding)
 						return Math.min(root.height * ratio, Math.max(Theme.rowHeight * 4, chrome))
 					}
@@ -591,7 +598,7 @@ PanelWindow {
 			anchors.bottom: parent.bottom
 			active: root.radioWanted || root.radioProgress > 0 || root.radioPage !== "" || root.menuProgress > 0
 			asynchronous: false
-			opacity: root.radioProgress > Config.reveal ? 1 : 0
+			opacity: root.radioProgress > Config.frame.chipReveal ? 1 : 0
 
 			Behavior on opacity {
 				NumberAnimation { duration: Theme.fade }
@@ -620,8 +627,8 @@ PanelWindow {
 		z: 2
 		anchors.right: parent.right
 		anchors.bottom: parent.bottom
-		width: root.hotCorners ? Config.hotCorner : 0
-		height: root.hotCorners ? Config.hotCorner : 0
+		width: root.hotCorners ? Config.frame.hotCorner : 0
+		height: root.hotCorners ? Config.frame.hotCorner : 0
 
 		HoverHandler {
 			id: sessionCornerHover
@@ -631,14 +638,15 @@ PanelWindow {
 	}
 
 	Item {
-		id: sessionClip
+		// Color picker, screenshot, and power.
+	id: sessionClip
 		z: 3
 		width: Math.max(sessionChip.implicitWidth, sessionMenuBody.implicitWidth * root.sessionMenuProgress) * root.sessionProgress
 		height: (sessionChip.implicitHeight + sessionMenuBody.implicitHeight * root.sessionMenuProgress) * root.sessionProgress
 		x: root.width - root.frameThickness - width + root.weld
 		y: root.height - root.frameThickness - height + root.weld
 		clip: true
-		visible: width > Config.clipMin && height > Config.clipMin
+		visible: width > Config.frame.clipMin && height > Config.frame.clipMin
 
 		Loader {
 			id: sessionMenuBody
@@ -646,7 +654,7 @@ PanelWindow {
 			anchors.bottom: sessionChip.top
 			active: root.sessionMenu || root.sessionMenuProgress > 0
 			asynchronous: false
-			opacity: root.sessionMenuProgress > Config.menuReveal ? 1 : 0
+			opacity: root.sessionMenuProgress > Config.frame.menuReveal ? 1 : 0
 
 			Behavior on opacity {
 				NumberAnimation { duration: Theme.fade }
@@ -668,7 +676,7 @@ PanelWindow {
 			anchors.bottom: parent.bottom
 			active: root.sessionWanted || root.sessionProgress > 0 || root.sessionMenu || root.sessionMenuProgress > 0
 			asynchronous: false
-			opacity: root.sessionProgress > Config.reveal ? 1 : 0
+			opacity: root.sessionProgress > Config.frame.chipReveal ? 1 : 0
 
 			Behavior on opacity {
 				NumberAnimation { duration: Theme.fade }
@@ -683,12 +691,12 @@ PanelWindow {
 						root.sessionMenu = !root.sessionMenu
 					}
 					onColorClicked: {
-						colorPick.exec(Config.pickColorCommand)
+						colorPick.exec(Config.session.colorCommand)
 						root.sessionMenu = false
 						root.sessionWanted = false
 					}
 					onShotClicked: {
-						Quickshell.execDetached(Config.screenshotCommand)
+						Quickshell.execDetached(Config.session.screenshotCommand)
 						root.sessionMenu = false
 						root.sessionWanted = false
 					}
@@ -704,7 +712,7 @@ PanelWindow {
 
 	Timer {
 		id: statusTimer
-		interval: Config.hoverDelay
+		interval: Config.frame.hoverDelay
 		onTriggered: {
 			if (!cornerHover.hovered && !chipHover.hovered)
 				root.statusWanted = false
@@ -713,7 +721,7 @@ PanelWindow {
 
 	Timer {
 		id: radioTimer
-		interval: Config.hoverDelay
+		interval: Config.frame.hoverDelay
 		onTriggered: {
 			if (!radioCornerHover.hovered && !radioHover.hovered)
 				root.radioWanted = false
@@ -729,7 +737,7 @@ PanelWindow {
 
 	Timer {
 		id: sessionTimer
-		interval: Config.hoverDelay
+		interval: Config.frame.hoverDelay
 		onTriggered: {
 			if (!sessionCornerHover.hovered && !sessionHover.hovered)
 				root.sessionWanted = false

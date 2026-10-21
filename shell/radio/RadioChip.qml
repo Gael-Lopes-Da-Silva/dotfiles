@@ -1,8 +1,9 @@
+// Bottom-left chip: Wi-Fi, Bluetooth, audio, and microphone.
 import QtQuick
 import Quickshell.Bluetooth
 import Quickshell.Networking
-import qs.settings
 import qs.services
+import qs.settings
 
 Item {
 	id: root
@@ -29,7 +30,7 @@ Item {
 		const color = Theme.foreground
 		if (!enabled)
 			return Qt.rgba(color.r, color.g, color.b, Theme.dim)
-		return Qt.rgba(color.r, color.g, color.b, Math.max(Theme.signalFloor, quality))
+		return Qt.rgba(color.r, color.g, color.b, Math.max(Config.radio.signalFloor, quality))
 	}
 
 	Row {
@@ -57,9 +58,9 @@ Item {
 				id: wifiIcon
 				anchors.centerIn: parent
 				text: RadioState.linkGlyph()
-				color: root.tone(RadioState.wired !== null || Networking.wifiEnabled, RadioState.wired !== null ? 1 : (RadioState.activeWifi ? Math.max(Theme.signalFloor, RadioState.wifiSignal) : Theme.signalIdle))
+				color: root.tone(RadioState.wired !== null || Networking.wifiEnabled, RadioState.wired !== null ? 1 : (RadioState.activeWifi ? Math.max(Config.radio.signalFloor, RadioState.wifiSignal) : Config.radio.signalIdle))
 				font.family: Theme.iconFont
-				font.pixelSize: Theme.clockSize
+				font.pixelSize: Theme.chipIcon
 			}
 
 			MouseArea {
@@ -91,9 +92,9 @@ Item {
 				id: btIcon
 				anchors.centerIn: parent
 				text: RadioState.btGlyph()
-				color: root.tone(RadioState.bluetooth && RadioState.bluetooth.enabled, RadioState.connectedBt ? RadioState.btQuality : Theme.signalIdle)
+				color: root.tone(RadioState.bluetooth && RadioState.bluetooth.enabled, RadioState.connectedBt ? RadioState.btQuality : Config.radio.signalIdle)
 				font.family: Theme.iconFont
-				font.pixelSize: Theme.clockSize
+				font.pixelSize: Theme.chipIcon
 			}
 
 			MouseArea {
@@ -127,7 +128,7 @@ Item {
 				text: AudioState.volumeGlyph(AudioState.sinkLevel, AudioState.sinkMuted)
 				color: root.tone(!AudioState.sinkMuted, 1)
 				font.family: Theme.iconFont
-				font.pixelSize: Theme.clockSize
+				font.pixelSize: Theme.chipIcon
 			}
 
 			MouseArea {
@@ -161,7 +162,7 @@ Item {
 				text: AudioState.micGlyph(AudioState.sourceLevel, AudioState.sourceMuted)
 				color: root.tone(!AudioState.sourceMuted && AudioState.source !== null, 1)
 				font.family: Theme.iconFont
-				font.pixelSize: Theme.clockSize
+				font.pixelSize: Theme.chipIcon
 			}
 
 			MouseArea {

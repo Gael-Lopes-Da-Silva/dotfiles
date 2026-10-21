@@ -1,3 +1,4 @@
+// Screen frame. A shader cuts rounded panels out of the border for each open widget.
 import QtQuick
 import qs.settings
 
@@ -6,10 +7,10 @@ Item {
 
 	property real thickness: 0
 	property real radius: 0
-	property real smoothing: Theme.smoothing
+	property real smoothing: Config.frame.smoothing
 	property color color: Theme.background
-	property color border: Theme.border
-	property real borderWidth: Theme.borderWidth
+	property color border: Config.frame.border
+	property real borderWidth: Config.frame.borderWidth
 	property vector4d panel0: Qt.vector4d(0, 0, 0, 0)
 	property vector4d panel1: Qt.vector4d(0, 0, 0, 0)
 	property vector4d panel2: Qt.vector4d(0, 0, 0, 0)

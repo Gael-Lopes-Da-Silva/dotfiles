@@ -1,8 +1,9 @@
+// Application search. Options live in config.json "launcher".
 import QtQuick
 import Quickshell
 import Quickshell.Io
-import qs.settings
 import qs.services
+import qs.settings
 
 Item {
 	id: root
@@ -11,12 +12,12 @@ Item {
 	property string query: ""
 	property int selected: 0
 
-	readonly property int rowHeight: Theme.launcherRow
-	readonly property int iconSize: Theme.launcherIcon
-	readonly property int textSize: Theme.launcherText
-	readonly property int fieldWidth: Theme.launcherWidth
+	readonly property int rowHeight: Config.launcher.rowHeight
+	readonly property int iconSize: Config.launcher.iconSize
+	readonly property int textSize: Config.launcher.textSize
+	readonly property int fieldWidth: Config.launcher.width
 	property var iconFiles: ({})
-	readonly property var iconSizes: Config.iconSizes
+	readonly property var iconSizes: Config.launcher.iconSizes
 	readonly property var results: {
 		const model = DesktopEntries.applications
 		const apps = model && model.values ? model.values : []
@@ -30,7 +31,7 @@ Item {
 				matched.push(app)
 		}
 		matched.sort((a, b) => String(a.name).localeCompare(String(b.name)))
-		return matched.slice(0, Config.launcherLimit)
+		return matched.slice(0, Config.launcher.limit)
 	}
 
 	implicitWidth: column.implicitWidth + Theme.padding * 2
@@ -279,18 +280,18 @@ Item {
 
 		Rectangle {
 			width: root.fieldWidth
-			height: Theme.launcherRow
-			radius: Theme.searchRadius
+			height: Config.launcher.rowHeight
+			radius: Config.launcher.searchRadius
 			color: Theme.ink(Theme.wellFill)
 
 			Text {
 				anchors.left: parent.left
 				anchors.leftMargin: 16
 				anchors.verticalCenter: parent.verticalCenter
-				text: Config.icon(Config.search)
-				color: Theme.ink(Theme.iconMute)
+				text: Config.icon(Config.launcher.searchIcon)
+				color: Theme.ink(Theme.iconMuted)
 				font.family: Theme.iconFont
-				font.pixelSize: Theme.searchIconSize
+				font.pixelSize: Config.launcher.searchIconSize
 			}
 
 			TextInput {

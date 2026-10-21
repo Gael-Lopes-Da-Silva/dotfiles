@@ -2,7 +2,7 @@ import Quickshell
 import Quickshell.Bluetooth
 import Quickshell.Io
 import Quickshell.Networking
-import qs.overlay
+import qs.frame
 import qs.services
 
 ShellRoot {
@@ -26,7 +26,7 @@ ShellRoot {
 				screen: screenScope.modelData
 			}
 
-			ScreenOverlay {
+			Overlay {
 				modelData: screenScope.modelData
 			}
 		}

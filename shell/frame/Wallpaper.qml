@@ -1,3 +1,4 @@
+// Background layer behind the frame. Clicks pass through to the desktop.
 import QtQuick
 import Quickshell
 import Quickshell.Wayland

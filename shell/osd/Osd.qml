@@ -1,6 +1,7 @@
+// On-screen display for volume, microphone, brightness, power, USB, and screens.
 import QtQuick
-import qs.settings
 import qs.services
+import qs.settings
 
 Item {
 	id: root
@@ -21,31 +22,31 @@ Item {
 	readonly property real bar: Math.max(0, Math.min(1, amount))
 	readonly property string label: {
 		if (kind === "usb" || kind === "screen") {
-			const name = NiriState.osdText || (kind === "usb" ? Config.osdUsbName : Config.osdScreenName)
-			return name + (NiriState.osdOn ? Config.osdPlugged : Config.osdUnplugged)
+			const name = NiriState.osdText || (kind === "usb" ? Config.osd.usbName : Config.osd.screenName)
+			return name + (NiriState.osdOn ? Config.osd.plugged : Config.osd.unplugged)
 		}
 		if (kind === "power")
-			return PowerState.plugged ? Config.osdChargerOn : Config.osdChargerOff
+			return PowerState.plugged ? Config.osd.chargerOn : Config.osd.chargerOff
 		if (kind === "brightness")
 			return Math.round(amount * 100) + "%"
 		if (kind === "microphone")
-			return AudioState.micMuted ? Config.osdMicMuted : AudioState.levelText(AudioState.micVolume, false)
+			return AudioState.micMuted ? Config.osd.micMuted : AudioState.levelText(AudioState.micVolume, false)
 		if (AudioState.muted)
-			return Config.osdAudioMuted
+			return Config.osd.audioMuted
 		return Math.round(amount * 100) + "%"
 	}
 	readonly property string glyph: {
 		if (kind === "usb")
-			return Config.icon(Config.usb)
+			return Config.icon(Config.osd.usbIcon)
 		if (kind === "screen")
-			return Config.icon(NiriState.osdOn ? Config.screenOn : Config.screenOff)
+			return Config.icon(NiriState.osdOn ? Config.osd.screenOnIcon : Config.osd.screenOffIcon)
 		if (kind === "power")
-			return Config.icon(PowerState.plugged ? Config.chargerOn : Config.chargerOff)
+			return Config.icon(PowerState.plugged ? Config.osd.chargerOnIcon : Config.osd.chargerOffIcon)
 		if (kind === "brightness")
-			return Config.icon(Config.brightness)
+			return Config.icon(Config.osd.brightnessIcon)
 		if (kind === "microphone")
 			return AudioState.micGlyph(AudioState.micVolume, AudioState.micMuted)
-		return AudioState.volumeGlyph(amount, AudioState.muted || amount <= Config.muteFloor)
+		return AudioState.volumeGlyph(amount, AudioState.muted || amount <= Config.audio.muteFloor)
 	}
 
 	implicitWidth: row.implicitWidth + Theme.padding * 2
@@ -66,9 +67,9 @@ Item {
 
 		Rectangle {
 			visible: !root.discrete
-			implicitWidth: Theme.osdBarWidth
-			implicitHeight: Theme.osdBarHeight
-			radius: Theme.osdBarHeight / 2
+			implicitWidth: Config.osd.barWidth
+			implicitHeight: Config.osd.barHeight
+			radius: Config.osd.barHeight / 2
 			color: Theme.ink(Theme.buttonHover)
 			anchors.verticalCenter: parent.verticalCenter
 
@@ -86,7 +87,7 @@ Item {
 			font.family: Theme.fontFamily
 			font.pixelSize: Theme.fontSize
 			elide: Text.ElideRight
-			width: Math.min(caption.advanceWidth, Theme.osdLabelWidth)
+			width: Math.min(caption.advanceWidth, Config.osd.labelWidth)
 			anchors.verticalCenter: parent.verticalCenter
 		}
 	}

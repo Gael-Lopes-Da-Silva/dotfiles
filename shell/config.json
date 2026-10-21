@@ -1,51 +1,60 @@
+// Shell configuration.
+// This is the only place option values live. Each section is the widget it controls.
+// theme is the exception: colors, type, and spacing shared by every widget.
+// Sizes are pixels. Times are milliseconds. Fractions run from 0 to 1.
+// Icons are Symbols Nerd Font codepoints.
 {
   "theme": {
+    // Surfaces and text.
     "background": "#121212",
     "foreground": "#eeeeee",
     "recording": "#ff5c5c",
     "link": "#9ecbff",
+
+    // Type.
     "fontFamily": "Noto Sans",
     "monoFamily": "monospace",
     "iconFont": "Symbols Nerd Font",
     "fontSize": 14,
-    "clockSize": 22,
-    "titleSize": 18,
-    "monthSize": 22,
-    "yearSize": 16,
+    "smallSize": 13,
+    "labelSize": 12,
     "headingSize": 15,
     "iconSize": 20,
     "glyphSize": 16,
-    "smallSize": 13,
-    "labelSize": 12,
-    "searchIconSize": 18,
-    "noticeIcon": 18,
+    // Icon and clock size inside the status, radio, and session chips.
+    "chipIcon": 22,
+
+    // Shared padding, corners, and row sizes.
     "radius": 12,
     "rowRadius": 10,
     "buttonRadius": 8,
-    "searchRadius": 14,
     "padding": 14,
     "gap": 10,
     "inset": 8,
-    "chipPadX": 8,
-    "chipPadY": 2,
-    "chipGap": 8,
-    "headerInset": 20,
-    "edgeInset": 18,
     "rowHeight": 44,
     "rowInnerHeight": 40,
-    "well": 28,
     "menuSpacing": 4,
-    "frame": 6,
-    "border": "#282828",
-    "borderWidth": 1,
-    "screenRadius": 20,
-    "innerRadius": 20,
-    "weld": 12,
-    "smoothing": 24,
+    // Left inset of menu headers and sliders.
+    "menuInset": 20,
+    // Right inset of menu header controls.
+    "menuEdge": 18,
+    // Icon well behind a row glyph (radio lists, session actions).
+    "iconWell": 28,
+    // Toast progress bar and menu scrollbar thickness.
+    "scrollSize": 3,
+
+    // Switch used by the notice-center quiet toggle and the wifi and bluetooth headers.
+    "toggleWidth": 38,
+    "toggleHeight": 22,
+    "toggleKnob": 16,
+    "toggleInset": 3,
+
+    // Open and close motion, in milliseconds, and the shared easing curve.
     "motion": 450,
     "fade": 140,
-    "travel": 8,
     "curve": [0.38, 1.21, 0.22, 1, 1, 1],
+
+    // Foreground mixes. Passed to Theme.ink().
     "selected": 0.12,
     "hover": 0.07,
     "wash": 0.06,
@@ -56,156 +65,253 @@
     "muted": 0.45,
     "dim": 0.4,
     "quiet": 0.5,
-    "iconMute": 0.55,
-    "signalFloor": 0.55,
-    "signalIdle": 0.8,
+    "iconMuted": 0.55,
     "body": 0.82,
-    "scroll": 0.35,
-    "clockMenuWidth": 292,
-    "radioMenuWidth": 320,
-    "sessionMenuWidth": 240,
-    "launcherWidth": 440,
-    "launcherRow": 48,
-    "launcherIcon": 26,
-    "launcherText": 18,
-    "notificationWidth": 340,
-    "calendarCell": 36,
+    "scroll": 0.35
+  },
+
+  // Screen frame: the border that opens into chips.
+  "frame": {
+    "thickness": 6,
+    "border": "#282828",
+    "borderWidth": 1,
+    // Corner radius of the frame and of the panels cut out of it.
+    "radius": 20,
+    // How far a panel tucks under the frame.
+    "weld": 12,
+    // Shader antialiasing of the frame and panel corners.
+    "smoothing": 24,
+    // Corner hover target that reveals a chip.
+    "hotCorner": 16,
+    // How long the pointer can leave before a chip hides.
+    "hoverDelay": 200,
+    // A chip fades in once its open animation passes this.
+    "chipReveal": 0.72,
+    // A menu fades in once its open animation passes this.
+    "menuReveal": 0.45,
+    // Hide a clip smaller than this so the frame does not flash a sliver.
+    "clipMin": 2
+  },
+
+  // Top-right chip: battery, clock, and the notice bell.
+  "status": {
+    "menuWidth": 292,
+    // Tallest the status menu can grow, as a fraction of the screen.
+    "menuRatio": 0.36,
+    "timeFormat": "HH:mm",
+    // Clock redraw interval. Also drives the calendar.
+    "tick": 1000,
+    "padX": 8,
+    "padY": 2,
+    "gap": 8,
+    "clockIcon": "F0150"
+  },
+
+  // Calendar page of the status menu.
+  "clock": {
+    "monthSize": 22,
+    "yearSize": 16,
+    "cell": 36,
     "todaySize": 30,
     "weekdayHeight": 24,
-    "batteryHeader": 64,
-    "batteryBar": 6,
-    "toggleWidth": 38,
-    "toggleHeight": 22,
-    "toggleKnob": 16,
-    "toggleInset": 3,
-    "sliderTrack": 5,
-    "sliderThumb": 14,
-    "sliderRow": 22,
-    "sliderSlot": 28,
-    "streamRow": 64,
-    "replyIcon": 16,
-    "osdBarWidth": 148,
-    "osdBarHeight": 4,
-    "osdLabelWidth": 240,
-    "noticeImageHeight": 160,
-    "noticeImageSource": 360,
-    "noticeActionHeight": 28,
-    "noticeReply": 32,
-    "noticeProgress": 3,
-    "noticeSummaryLines": 2,
-    "noticeBodyLines": 8,
-    "noticeErrorLines": 16
-  },
-  "settings": {
-    "timeFormat": "HH:mm",
     "monthFormat": "MMMM",
     "yearFormat": "yyyy",
     "weekdayFormat": "dddd",
-    "weekdays": ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
-    "clockTick": 1000,
-    "hoverDelay": 200,
-    "hotCorner": 16,
-    "reveal": 0.72,
-    "menuReveal": 0.45,
-    "clipMin": 2,
-    "osdHold": 2000,
-    "usbPoll": 500,
-    "notificationHold": 5000,
-    "notificationTick": 50,
+    "weekdays": ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"]
+  },
+
+  // Battery page of the status menu, and the battery glyph used by the chip and OSD.
+  "battery": {
+    "headerHeight": 64,
+    "barHeight": 6,
+    "titleSize": 18,
+    // Charge at or below this is "low".
+    "lowPercent": 15,
+    // Wait this long before the first reading, so a missing battery is not announced as empty.
+    "prime": 400,
+    // Percent thresholds, highest first. Paired with chargingIcons and dischargingIcons.
+    "steps": [95, 85, 75, 65, 55, 45, 35, 25, 15, 5],
+    "chargingIcons": ["F0085", "F008B", "F008A", "F089E", "F0089", "F089D", "F0088", "F0087", "F0086", "F089C", "F0084"],
+    "dischargingIcons": ["F0079", "F0082", "F0081", "F0080", "F007F", "F007E", "F007D", "F007C", "F007B", "F007A", "F008E"],
+    "lowTitle": "Battery low",
+    "remaining": "% remaining",
+    "full": "Fully charged",
+    "lapLimit": "Limited while on your lap",
+    "hotLimit": "Limited while the laptop is hot"
+  },
+
+  // Toast stack and the notice history in the status menu.
+  "notices": {
+    "popupWidth": 340,
+    // Tallest the toast stack can grow, as a fraction of the screen.
+    "popupRatio": 0.45,
+    "minHeight": 180,
+    "iconSize": 18,
+    "imageHeight": 160,
+    "imageSource": 360,
+    "actionHeight": 28,
+    "replyHeight": 32,
+    "replyIconSize": 16,
+    "summaryLines": 2,
+    "bodyLines": 8,
+    "errorLines": 16,
+    // Default toast time. A notification can override this.
+    "hold": 5000,
+    "tick": 50,
+    // Shell reload succeeded, and shell reload failed.
     "reloadHold": 2500,
     "reloadFailHold": 8000,
-    "noticeDedupe": 800,
-    "noticeHistory": 40,
-    "noticeMinHeight": 180,
-    "noticeHeightRatio": 0.45,
-    "noticeCenterRatio": 0.36,
-    "audioMenuRatio": 0.48,
-    "shellName": "Quickshell",
-    "launcherLimit": 8,
-    "iconSizes": ["512x512", "512x512@2", "256x256", "256x256@2", "128x128", "128x128@2", "64x64", "48x48", "32x32"],
+    // Ignore a repeat of the same notice inside this window.
+    "dedupe": 800,
+    "history": 40,
+    // App name used for shell-posted notices.
+    "name": "Quickshell",
+    "bellIcon": "F009A",
+    "bellOffIcon": "F00A0",
+    "alertIcon": "F0026",
+    "checkIcon": "F012C",
+    "closeIcon": "F0156",
+    "replyIcon": "F048A"
+  },
+
+  // Recording indicator in the top-left corner.
+  "cast": {
+    "icon": "F03D"
+  },
+
+  // On-screen display for volume, microphone, brightness, power, USB, and screens.
+  "osd": {
+    // How long the OSD stays up.
+    "hold": 2000,
+    "barWidth": 148,
+    "barHeight": 4,
+    "labelWidth": 240,
+    "plugged": " plugged in",
+    "unplugged": " unplugged",
+    "chargerOn": "Charger plugged in",
+    "chargerOff": "Charger unplugged",
+    "audioMuted": "Audio muted",
+    "micMuted": "Microphone muted",
+    "usbName": "USB",
+    "screenName": "Screen",
+    "usbIcon": "F129E",
+    "screenOnIcon": "F0379",
+    "screenOffIcon": "F0D57",
+    "brightnessIcon": "F00DF",
+    "chargerOnIcon": "F06A5",
+    "chargerOffIcon": "F06A6"
+  },
+
+  // Application search.
+  "launcher": {
+    "width": 440,
+    "rowHeight": 48,
+    "iconSize": 26,
+    "textSize": 18,
+    "limit": 8,
+    "searchRadius": 14,
+    "searchIconSize": 18,
+    "searchIcon": "F0349",
+    // Icon theme sizes tried, largest first.
+    "iconSizes": ["512x512", "512x512@2", "256x256", "256x256@2", "128x128", "128x128@2", "64x64", "48x48", "32x32"]
+  },
+
+  // Wi-Fi and Bluetooth chip and menus. The audio buttons share this chip.
+  "radio": {
+    "menuWidth": 320,
+    // Tallest the wifi and bluetooth menus can grow, as a fraction of the screen.
+    "menuRatio": 0.36,
     "networkLimit": 8,
     "deviceLimit": 8,
-    "audioLimit": 12,
-    "niriRetry": 1000,
-    "fullscreenSlack": 8,
-    "fullscreenMin": 100,
-    "powerPrime": 400,
-    "screenPrime": 800,
-    "lowBattery": 15,
-    "brightnessPoll": 250,
-    "brightnessEpsilon": 0.002,
-    "audioPoll": 500,
-    "audioListOpen": 1000,
-    "audioListIdle": 3000,
-    "volumeEpsilon": 0.005,
-    "muteFloor": 0.001,
-    "volumeLow": 0.33,
-    "volumeMid": 0.66,
-    "radioRefreshOpen": 1500,
-    "radioRefreshIdle": 4000,
-    "radioWarmup": 8000,
+    "refreshOpen": 1500,
+    "refreshIdle": 4000,
+    // Give up waiting and show the lists even if a radio never answers.
+    "warmup": 8000,
+    // Redraw while a radio is still starting.
+    "warmTick": 500,
+    // Dim a connected icon no further than this. Idle is a radio that is on but unused.
+    "signalFloor": 0.55,
+    "signalIdle": 0.8,
     "rssiPoll": 2000,
     "rssiUnknown": -999,
     "rssiMin": -200,
     "rssiMax": 20,
     "rssiFloor": -100,
     "rssiSpan": 55,
-    "internalScreens": "^(eDP|LVDS|DSI|Virtual)",
+    "wifiOffIcon": "F05AA",
+    "wifiIdleIcon": "F092A",
+    "ethernetIcon": "F0200",
+    "wifiIcons": ["F091F", "F0922", "F0925", "F0928"],
+    "bluetoothOffIcon": "F00B2",
+    "bluetoothIdleIcon": "F00AF",
+    "bluetoothOnIcon": "F00B1",
+    "lockIcon": "F033E"
+  },
+
+  // Speaker and microphone pages, and the levels the OSD reads.
+  "audio": {
+    // Tallest the audio and microphone menus can grow, as a fraction of the screen.
+    "menuRatio": 0.48,
+    "limit": 12,
+    "poll": 500,
+    "listOpen": 1000,
+    "listIdle": 3000,
+    "volumeEpsilon": 0.005,
+    // Levels at or below this count as muted, including the volume OSD icon.
+    "muteFloor": 0.001,
+    // Splits the speaker glyph into low, mid, and high.
+    "volumeLow": 0.33,
+    "volumeMid": 0.66,
     "mutedLabel": "Muted",
-    "osdPlugged": " plugged in",
-    "osdUnplugged": " unplugged",
-    "osdChargerOn": "Charger plugged in",
-    "osdChargerOff": "Charger unplugged",
-    "osdAudioMuted": "Audio muted",
-    "osdMicMuted": "Microphone muted",
-    "osdUsbName": "USB",
-    "osdScreenName": "Screen",
-    "powerLap": "Limited while on your lap",
-    "powerHot": "Limited while the laptop is hot",
-    "batteryLow": "Battery low",
-    "batteryRemaining": "% remaining",
-    "batteryFull": "Fully charged",
-    "niriEvent": ["niri", "msg", "--json", "event-stream"],
+    "sliderTrack": 5,
+    "sliderThumb": 14,
+    "sliderRow": 22,
+    "sliderSlot": 28,
+    // Muted, low, mid, high.
+    "volumeIcons": ["F075F", "F057F", "F0580", "F057E"],
+    // Muted, live.
+    "micIcons": ["F036D", "F036C"]
+  },
+
+  // Bottom-right chip: color picker, screenshot, and power.
+  "session": {
+    "menuWidth": 240,
+    "colorIcon": "F020A",
+    "screenshotIcon": "F0E51",
+    "powerIcon": "F0425",
+    "colorCommand": ["niri", "msg", "--json", "pick-color"],
     "screenshotCommand": ["niri", "msg", "action", "screenshot", "--show-pointer", "false"],
-    "pickColorCommand": ["niri", "msg", "--json", "pick-color"],
-    "sessionActions": [
+    "actions": [
       { "icon": "F0904", "label": "Suspend", "command": ["systemctl", "suspend"] },
       { "icon": "F0709", "label": "Restart", "command": ["systemctl", "reboot"] },
       { "icon": "F0425", "label": "Shut down", "command": ["systemctl", "poweroff"] },
       { "icon": "F0343", "label": "Log out", "command": ["niri", "msg", "action", "quit"] }
-    ],
-    "batterySteps": [95, 85, 75, 65, 55, 45, 35, 25, 15, 5]
+    ]
   },
-  "icons": {
-    "record": "F03D",
-    "power": "F0425",
-    "screenshot": "F0E51",
-    "eyedropper": "F020A",
-    "clock": "F0150",
-    "bell": "F009A",
-    "bellOff": "F00A0",
-    "alert": "F0026",
-    "check": "F012C",
-    "lock": "F033E",
-    "search": "F0349",
-    "reply": "F048A",
-    "close": "F0156",
-    "wifiOff": "F05AA",
-    "wifiIdle": "F092A",
-    "ethernet": "F0200",
-    "btOff": "F00B2",
-    "btIdle": "F00AF",
-    "btOn": "F00B1",
-    "usb": "F129E",
-    "screenOn": "F0379",
-    "screenOff": "F0D57",
-    "brightness": "F00DF",
-    "chargerOn": "F06A5",
-    "chargerOff": "F06A6",
-    "volume": ["F075F", "F057F", "F0580", "F057E"],
-    "mic": ["F036D", "F036C"],
-    "wifiBars": ["F091F", "F0922", "F0925", "F0928"],
-    "batteryCharging": ["F0085", "F008B", "F008A", "F089E", "F0089", "F089D", "F0088", "F0087", "F0086", "F089C", "F0084"],
-    "batteryDischarging": ["F0079", "F0082", "F0081", "F0080", "F007F", "F007E", "F007D", "F007C", "F007B", "F007A", "F008E"]
+
+  // Niri event stream, fullscreen detection, and launcher retries.
+  "niri": {
+    "eventCommand": ["niri", "msg", "--json", "event-stream"],
+    "retry": 1000,
+    // A window this close to the screen size counts as fullscreen.
+    "fullscreenSlack": 8,
+    // Ignore tiny outputs when deciding fullscreen.
+    "fullscreenMin": 100
+  },
+
+  // Screen backlight.
+  "brightness": {
+    "poll": 250,
+    // Ignore backlight changes smaller than this.
+    "epsilon": 0.002
+  },
+
+  // External screens and USB devices.
+  "hotplug": {
+    "usbPoll": 500,
+    // Wait this long before the first screen snapshot, so the initial outputs are not announced.
+    "screenPrime": 800,
+    // Output names matching this are the built-in panel, not a plugged-in screen.
+    "internalScreens": "^(eDP|LVDS|DSI|Virtual)"
   }
 }

@@ -1,3 +1,5 @@
+// Screen backlight.
+
 pragma Singleton
 
 import QtQuick
@@ -23,7 +25,7 @@ Singleton {
 			return
 		available = true
 		const next = cur / max
-		const changed = Math.abs(next - level) > Config.brightnessEpsilon
+		const changed = Math.abs(next - level) > Config.brightness.epsilon
 		level = next
 		if (!primed) {
 			primed = true
@@ -45,7 +47,7 @@ Singleton {
 	}
 
 	Timer {
-		interval: Config.brightnessPoll
+		interval: Config.brightness.poll
 		running: root.watching
 		repeat: true
 		triggeredOnStart: true

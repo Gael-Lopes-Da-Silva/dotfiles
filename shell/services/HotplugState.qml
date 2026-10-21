@@ -1,3 +1,5 @@
+// External screens and USB devices, announced through the OSD.
+
 pragma Singleton
 
 import QtQuick
@@ -15,7 +17,7 @@ Singleton {
 	property bool disksPrimed: false
 
 	function external(name) {
-		return !new RegExp(Config.internalScreens).test(String(name || ""))
+		return !new RegExp(Config.hotplug.internalScreens).test(String(name || ""))
 	}
 
 	function screenLabel(screen) {
@@ -123,7 +125,7 @@ Singleton {
 	}
 
 	Timer {
-		interval: Config.screenPrime
+		interval: Config.hotplug.screenPrime
 		running: true
 		onTriggered: {
 			root.noteScreens()
@@ -144,7 +146,7 @@ Singleton {
 	}
 
 	Timer {
-		interval: Config.usbPoll
+		interval: Config.hotplug.usbPoll
 		running: true
 		repeat: true
 		triggeredOnStart: true

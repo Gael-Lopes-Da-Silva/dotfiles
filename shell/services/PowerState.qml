@@ -1,3 +1,5 @@
+// Battery, charger, and power profiles.
+
 pragma Singleton
 
 import QtQuick
@@ -65,17 +67,17 @@ Singleton {
 
 	function limitText() {
 		if (PowerProfiles.degradationReason === PerformanceDegradationReason.LapDetected)
-			return Config.powerLap
+			return Config.battery.lapLimit
 		if (PowerProfiles.degradationReason === PerformanceDegradationReason.HighTemperature)
-			return Config.powerHot
+			return Config.battery.hotLimit
 		return ""
 	}
 
 	function batteryGlyph() {
 		if (!hasBattery)
 			return ""
-		const icons = plugged ? Config.batteryCharging : Config.batteryDischarging
-		const steps = Config.batterySteps
+		const icons = plugged ? Config.battery.chargingIcons : Config.battery.dischargingIcons
+		const steps = Config.battery.steps
 		for (let i = 0; i < steps.length && i < icons.length; i++) {
 			if (percent >= steps[i])
 				return Config.icon(icons[i])
@@ -86,12 +88,12 @@ Singleton {
 	function capture() {
 		pluggedSeen = plugged
 		percentSeen = percent
-		lowSeen = hasBattery && !plugged && percent <= Config.lowBattery
+		lowSeen = hasBattery && !plugged && percent <= Config.battery.lowPercent
 		fullSeen = hasBattery && plugged && percent >= 100
 	}
 
 	function reportLow() {
-		NoticeState.powerNotice(Config.batteryLow, percent + Config.batteryRemaining, true)
+		NoticeState.powerNotice(Config.battery.lowTitle, percent + Config.battery.remaining, true)
 	}
 
 	// One notice each time charge falls to the low mark, and one when a charge reaches full.
@@ -103,7 +105,7 @@ Singleton {
 			pluggedSeen = plugged
 			NiriState.showOsd("power")
 		}
-		const low = !plugged && percent <= Config.lowBattery
+		const low = !plugged && percent <= Config.battery.lowPercent
 		const wasLow = lowSeen
 		lowSeen = low
 		if (low && !wasLow)
@@ -115,7 +117,7 @@ Singleton {
 			fullSeen = false
 		percentSeen = percent
 		if (reachedFull)
-			NoticeState.powerNotice(Config.batteryFull, "", false)
+			NoticeState.powerNotice(Config.battery.full, "", false)
 	}
 
 	onPluggedChanged: note()
@@ -123,7 +125,7 @@ Singleton {
 
 	Timer {
 		id: arm
-		interval: Config.powerPrime
+		interval: Config.battery.prime
 		onTriggered: {
 			root.capture()
 			root.primed = true

@@ -1,3 +1,4 @@
+// Power actions opened from the session chip. Options live in config.json "session".
 import QtQuick
 import Quickshell
 import qs.settings
@@ -7,7 +8,7 @@ Item {
 
 	signal chosen()
 
-	implicitWidth: Theme.sessionMenuWidth
+	implicitWidth: Config.session.menuWidth
 	implicitHeight: column.implicitHeight + Theme.padding
 	width: implicitWidth
 	height: implicitHeight
@@ -26,7 +27,7 @@ Item {
 		spacing: Theme.menuSpacing
 
 		Repeater {
-			model: Config.sessionActions
+			model: Config.session.actions
 
 			Rectangle {
 				id: actionRow
@@ -43,8 +44,8 @@ Item {
 					anchors.left: parent.left
 					anchors.leftMargin: 6
 					anchors.verticalCenter: parent.verticalCenter
-					width: Theme.well
-					height: Theme.well
+					width: Theme.iconWell
+					height: Theme.iconWell
 					radius: Theme.buttonRadius
 					color: Theme.ink(Theme.wellFill)
 

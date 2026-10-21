@@ -1,3 +1,5 @@
+// Wi-Fi and Bluetooth lists, signal glyphs, and which radio page is open.
+
 pragma Singleton
 
 import QtQuick
@@ -17,7 +19,7 @@ Singleton {
 	property string menuPage: ""
 	property var pending: null
 	property string password: ""
-	property real btRssi: Config.rssiUnknown
+	property real btRssi: Config.radio.rssiUnknown
 
 	readonly property bool wifiReady: !Networking.wifiEnabled || wifiWarm
 	readonly property bool btReady: !(bluetooth && bluetooth.enabled) || btWarm
@@ -72,7 +74,7 @@ Singleton {
 			return (b.signalStrength || 0) - (a.signalStrength || 0)
 		})
 		const out = []
-		for (let i = 0; i < list.length && out.length < Config.networkLimit; i++) {
+		for (let i = 0; i < list.length && out.length < Config.radio.networkLimit; i++) {
 			if (list[i].name)
 				out.push(list[i])
 		}
@@ -91,13 +93,13 @@ Singleton {
 		return null
 	}
 
-	readonly property bool btRssiKnown: btRssi > Config.rssiMin && btRssi < Config.rssiMax
+	readonly property bool btRssiKnown: btRssi > Config.radio.rssiMin && btRssi < Config.radio.rssiMax
 	readonly property real btQuality: {
 		if (!connectedBt)
 			return 0
 		if (!btRssiKnown)
 			return 1
-		return Math.max(0, Math.min(1, (btRssi - Config.rssiFloor) / Config.rssiSpan))
+		return Math.max(0, Math.min(1, (btRssi - Config.radio.rssiFloor) / Config.radio.rssiSpan))
 	}
 
 	readonly property var btList: {
@@ -110,7 +112,7 @@ Singleton {
 				return a.paired ? -1 : 1
 			return deviceLabel(a).localeCompare(deviceLabel(b))
 		})
-		return list.slice(0, Config.deviceLimit)
+		return list.slice(0, Config.radio.deviceLimit)
 	}
 
 	function btDevices() {
@@ -133,22 +135,22 @@ Singleton {
 	}
 
 	function strengthGlyph(strength) {
-		const bars = Config.wifiBars
+		const bars = Config.radio.wifiIcons
 		const idx = strength >= 0.75 ? 3 : strength >= 0.5 ? 2 : strength >= 0.25 ? 1 : 0
 		return Config.icon(bars[idx])
 	}
 
 	function wifiGlyph() {
 		if (!Networking.wifiEnabled)
-			return Config.icon(Config.wifiOff)
+			return Config.icon(Config.radio.wifiOffIcon)
 		if (!activeWifi)
-			return Config.icon(Config.wifiIdle)
+			return Config.icon(Config.radio.wifiIdleIcon)
 		return strengthGlyph(wifiSignal)
 	}
 
 	function linkGlyph() {
 		if (wired)
-			return Config.icon(Config.ethernet)
+			return Config.icon(Config.radio.ethernetIcon)
 		return wifiGlyph()
 	}
 
@@ -190,10 +192,10 @@ Singleton {
 	function btGlyph() {
 		const adapter = bluetooth
 		if (!adapter || !adapter.enabled)
-			return Config.icon(Config.btOff)
+			return Config.icon(Config.radio.bluetoothOffIcon)
 		if (!connectedBt)
-			return Config.icon(Config.btIdle)
-		return Config.icon(Config.btOn)
+			return Config.icon(Config.radio.bluetoothIdleIcon)
+		return Config.icon(Config.radio.bluetoothOnIcon)
 	}
 
 	function needsPsk(network) {
@@ -335,7 +337,7 @@ Singleton {
 	}
 
 	Timer {
-		interval: Config.audioPoll
+		interval: Config.radio.warmTick
 		repeat: true
 		running: !root.wifiWarm || !root.btWarm
 		triggeredOnStart: true
@@ -343,7 +345,7 @@ Singleton {
 	}
 
 	Timer {
-		interval: Config.radioWarmup
+		interval: Config.radio.warmup
 		running: !root.wifiWarm || !root.btWarm
 		onTriggered: {
 			root.wifiWarm = true
@@ -354,14 +356,14 @@ Singleton {
 	}
 
 	Timer {
-		interval: Config.radioRefreshIdle
+		interval: Config.radio.refreshIdle
 		repeat: true
 		running: root.wifiWarm && root.btWarm && root.menuPage === ""
 		onTriggered: root.revision++
 	}
 
 	Timer {
-		interval: Config.radioRefreshOpen
+		interval: Config.radio.refreshOpen
 		repeat: true
 		running: root.menuPage !== ""
 		triggeredOnStart: true
@@ -489,7 +491,7 @@ Singleton {
 	}
 
 	Timer {
-		interval: Config.rssiPoll
+		interval: Config.radio.rssiPoll
 		repeat: true
 		running: root.connectedBt !== null
 		triggeredOnStart: true
@@ -506,10 +508,10 @@ Singleton {
 		stdout: StdioCollector {
 			onStreamFinished: {
 				const match = String(this.text).match(/-?\d+/)
-				root.btRssi = match ? parseInt(match[0], 10) : Config.rssiUnknown
+				root.btRssi = match ? parseInt(match[0], 10) : Config.radio.rssiUnknown
 			}
 		}
 	}
 
-	onConnectedBtChanged: btRssi = Config.rssiUnknown
+	onConnectedBtChanged: btRssi = Config.radio.rssiUnknown
 }

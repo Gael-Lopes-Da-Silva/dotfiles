@@ -1,3 +1,5 @@
+// Notification server, toast timers, and the notice history.
+
 pragma Singleton
 
 import QtQuick
@@ -29,7 +31,7 @@ Singleton {
 			return timeout
 		if (timeout === 0)
 			return 0
-		return Config.notificationHold
+		return Config.notices.hold
 	}
 
 	function iconSource(name) {
@@ -77,7 +79,7 @@ Singleton {
 	}
 
 	function trimHistory() {
-		while (historyModel.count > Config.noticeHistory)
+		while (historyModel.count > Config.notices.history)
 			historyModel.remove(historyModel.count - 1)
 	}
 
@@ -177,7 +179,7 @@ Singleton {
 	function publish(summary, body, duration, urgent, kind) {
 		const key = summary + "\n" + body
 		const now = Date.now()
-		if (key === lastNotice && now - lastNoticeAt < Config.noticeDedupe)
+		if (key === lastNotice && now - lastNoticeAt < Config.notices.dedupe)
 			return
 		lastNotice = key
 		lastNoticeAt = now
@@ -193,7 +195,7 @@ Singleton {
 				model.setProperty(i, "kind", tone)
 				remember({
 					nid: row.nid,
-					app: Config.shellName,
+					app: Config.notices.name,
 					summary: summary,
 					body: plain(body),
 					icon: "",
@@ -219,7 +221,7 @@ Singleton {
 		})
 		remember({
 			nid: localSeq,
-			app: Config.shellName,
+			app: Config.notices.name,
 			summary: summary,
 			body: plain(body),
 			icon: "",
@@ -231,11 +233,11 @@ Singleton {
 	}
 
 	function shellNotice(summary, body, failed) {
-		publish(summary, body, failed ? Config.reloadFailHold : Config.reloadHold, failed, "reload")
+		publish(summary, body, failed ? Config.notices.reloadFailHold : Config.notices.reloadHold, failed, "reload")
 	}
 
 	function powerNotice(summary, body, urgent) {
-		publish(summary, body, Config.notificationHold, urgent, "power")
+		publish(summary, body, Config.notices.hold, urgent, "power")
 	}
 
 	function track(notification) {
@@ -329,7 +331,7 @@ Singleton {
 				continue
 			if (quiet && !criticalRow(row))
 				continue
-			const next = row.remaining - Config.notificationTick
+			const next = row.remaining - Config.notices.tick
 			if (next > 0) {
 				model.setProperty(i, "remaining", next)
 				continue
@@ -374,7 +376,7 @@ Singleton {
 	}
 
 	Timer {
-		interval: Config.notificationTick
+		interval: Config.notices.tick
 		repeat: true
 		running: root.count > 0
 		onTriggered: root.tick()
