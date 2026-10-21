@@ -347,9 +347,14 @@
       };
 
       programs = {
-        home-manager.enable = true;
-        zoxide.enable = true;
         fzf.enable = true;
+        zoxide.enable = true;
+        home-manager.enable = true;
+
+        direnv = {
+          enable = true;
+          nix-direnv.enable = true;
+        };
 
         quickshell = {
           enable = true;
