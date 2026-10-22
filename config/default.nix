@@ -545,8 +545,10 @@
             agent_buffer_font_size = 18.0;
             theme = "Yellowed";
 
-            features = {
-              edit_prediction_provider = "none";
+            agent_servers = {
+              cursor = {
+                type = "registry";
+              };
             };
 
             tabs = {
