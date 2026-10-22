@@ -725,10 +725,6 @@
             skip-at-startup = { };
           };
 
-          recent-windows = {
-            off = { };
-          };
-
           _children = [
             {
               window-rule._children = [
