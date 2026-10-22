@@ -294,7 +294,6 @@
 
           vial
           blender
-          discord
           firefox
           filezilla
           obs-studio
