@@ -4,7 +4,6 @@ import qs.lib
 
 Column {
 	id: root
-
 	spacing: 2
 
 	property date now: clock.now
@@ -45,112 +44,112 @@ Column {
 		onTriggered: clock.now = new Date()
 	}
 
-		Item {
-			width: parent.width
-			height: 52
+	Item {
+		width: parent.width
+		height: 52
 
-			Text {
-				id: monthTitle
-				anchors.left: parent.left
-				anchors.leftMargin: 18
-				anchors.top: parent.top
-				anchors.topMargin: 4
-				text: Qt.formatDate(root.now, Config.clock.monthFormat)
-				color: Theme.foreground
-				font.family: Theme.fontFamily
-				font.pixelSize: Config.clock.monthSize
-			}
-
-			Text {
-				anchors.left: monthTitle.right
-				anchors.leftMargin: 8
-				anchors.baseline: monthTitle.baseline
-				text: Qt.formatDate(root.now, Config.clock.yearFormat)
-				color: root.ink(Theme.muted)
-				font.family: Theme.fontFamily
-				font.pixelSize: Config.clock.yearSize
-			}
-
-			Text {
-				anchors.left: parent.left
-				anchors.leftMargin: 18
-				anchors.top: monthTitle.bottom
-				text: Qt.formatDate(root.now, Config.clock.weekdayFormat)
-				color: root.ink(Theme.iconMuted)
-				font.family: Theme.fontFamily
-				font.pixelSize: Theme.smallSize
-			}
+		Text {
+			id: monthTitle
+			anchors.left: parent.left
+			anchors.leftMargin: 18
+			anchors.top: parent.top
+			anchors.topMargin: 4
+			text: Qt.formatDate(root.now, Config.clock.monthFormat)
+			color: Theme.foreground
+			font.family: Theme.fontFamily
+			font.pixelSize: Config.clock.monthSize
 		}
 
-		Item {
-			width: parent.width
-			height: weekdayGrid.implicitHeight
+		Text {
+			anchors.left: monthTitle.right
+			anchors.leftMargin: 8
+			anchors.baseline: monthTitle.baseline
+			text: Qt.formatDate(root.now, Config.clock.yearFormat)
+			color: root.ink(Theme.muted)
+			font.family: Theme.fontFamily
+			font.pixelSize: Config.clock.yearSize
+		}
 
-			Grid {
-				id: weekdayGrid
-				anchors.horizontalCenter: parent.horizontalCenter
-				columns: 7
+		Text {
+			anchors.left: parent.left
+			anchors.leftMargin: 18
+			anchors.top: monthTitle.bottom
+			text: Qt.formatDate(root.now, Config.clock.weekdayFormat)
+			color: root.ink(Theme.iconMuted)
+			font.family: Theme.fontFamily
+			font.pixelSize: Theme.smallSize
+		}
+	}
 
-				Repeater {
-					model: root.weekdays
+	Item {
+		width: parent.width
+		height: weekdayGrid.implicitHeight
+
+		Grid {
+			id: weekdayGrid
+			anchors.horizontalCenter: parent.horizontalCenter
+			columns: 7
+
+			Repeater {
+				model: root.weekdays
+
+				Text {
+					required property string modelData
+					width: root.cell
+					height: Config.clock.weekdayHeight
+					text: modelData
+					color: root.ink(Theme.dim)
+					font.family: Theme.fontFamily
+					font.pixelSize: Theme.labelSize
+					font.letterSpacing: 0.4
+					horizontalAlignment: Text.AlignHCenter
+					verticalAlignment: Text.AlignVCenter
+				}
+			}
+		}
+	}
+
+	Item {
+		width: parent.width
+		height: dayGrid.implicitHeight + 8
+
+		Grid {
+			id: dayGrid
+			anchors.horizontalCenter: parent.horizontalCenter
+			anchors.top: parent.top
+			columns: 7
+
+			Repeater {
+				model: root.cells
+
+				Item {
+					id: dayCell
+					required property var modelData
+					readonly property bool current: modelData !== 0 && modelData === root.today
+
+					width: root.cell
+					height: root.cell
+
+					Rectangle {
+						anchors.centerIn: parent
+						width: Config.clock.todaySize
+						height: Config.clock.todaySize
+						radius: Config.clock.todaySize / 2
+						visible: dayCell.current
+						color: Theme.foreground
+					}
 
 					Text {
-						required property string modelData
-						width: root.cell
-						height: Config.clock.weekdayHeight
+						anchors.centerIn: parent
+						visible: modelData !== 0
 						text: modelData
-						color: root.ink(Theme.dim)
+						color: dayCell.current ? Theme.background : root.ink(Theme.body)
 						font.family: Theme.fontFamily
-						font.pixelSize: Theme.labelSize
-						font.letterSpacing: 0.4
-						horizontalAlignment: Text.AlignHCenter
-						verticalAlignment: Text.AlignVCenter
+						font.pixelSize: Theme.fontSize
+						font.bold: dayCell.current
 					}
 				}
 			}
 		}
-
-		Item {
-			width: parent.width
-			height: dayGrid.implicitHeight + 8
-
-			Grid {
-				id: dayGrid
-				anchors.horizontalCenter: parent.horizontalCenter
-				anchors.top: parent.top
-				columns: 7
-
-				Repeater {
-					model: root.cells
-
-					Item {
-						id: dayCell
-						required property var modelData
-						readonly property bool current: modelData !== 0 && modelData === root.today
-
-						width: root.cell
-						height: root.cell
-
-						Rectangle {
-							anchors.centerIn: parent
-							width: Config.clock.todaySize
-							height: Config.clock.todaySize
-							radius: Config.clock.todaySize / 2
-							visible: dayCell.current
-							color: Theme.foreground
-						}
-
-						Text {
-							anchors.centerIn: parent
-							visible: modelData !== 0
-							text: modelData
-							color: dayCell.current ? Theme.background : root.ink(Theme.body)
-							font.family: Theme.fontFamily
-							font.pixelSize: Theme.fontSize
-							font.bold: dayCell.current
-						}
-					}
-				}
-			}
-		}
+	}
 }

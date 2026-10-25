@@ -339,7 +339,7 @@ PanelWindow {
 
 	Item {
 		// Status chip and the menu under it: calendar, battery, or notices.
-	id: statusClip
+		id: statusClip
 		z: 3
 		width: Math.max(statusChip.implicitWidth, clockMenu.implicitWidth * root.clockMenuProgress) * root.statusProgress
 		height: (statusChip.implicitHeight + clockMenu.implicitHeight * root.clockMenuProgress) * root.statusProgress
@@ -410,7 +410,7 @@ PanelWindow {
 
 	Item {
 		// Toast stack on the focused screen.
-	id: noticeClip
+		id: noticeClip
 		z: 2
 		visible: root.focusedHere && height > Config.frame.clipMin
 		width: notices.implicitWidth
@@ -439,7 +439,7 @@ PanelWindow {
 
 	Item {
 		// Recording indicator.
-	id: castClip
+		id: castClip
 		z: 3
 		width: castBody.implicitWidth * root.castProgress
 		height: castBody.implicitHeight * root.castProgress
@@ -468,7 +468,7 @@ PanelWindow {
 
 	Item {
 		// Volume, brightness, power, USB, and screen readout.
-	id: osdClip
+		id: osdClip
 		z: 3
 		width: osdBody.implicitWidth
 		height: osdBody.implicitHeight * root.osdProgress
@@ -497,7 +497,7 @@ PanelWindow {
 
 	Item {
 		// Application search.
-	id: launcherClip
+		id: launcherClip
 		z: 4
 		width: launcherBody.implicitWidth
 		height: root.launcherFullH * root.launcherProgress
@@ -557,7 +557,7 @@ PanelWindow {
 
 	Item {
 		// Wi-Fi, Bluetooth, audio, and microphone.
-	id: radioClip
+		id: radioClip
 		z: 3
 		width: Math.max(radioChip.implicitWidth, radioMenu.implicitWidth * root.menuProgress) * root.radioProgress
 		height: (radioChip.implicitHeight + radioMenu.implicitHeight * root.menuProgress) * root.radioProgress
@@ -639,7 +639,7 @@ PanelWindow {
 
 	Item {
 		// Color picker, screenshot, and power.
-	id: sessionClip
+		id: sessionClip
 		z: 3
 		width: Math.max(sessionChip.implicitWidth, sessionMenuBody.implicitWidth * root.sessionMenuProgress) * root.sessionProgress
 		height: (sessionChip.implicitHeight + sessionMenuBody.implicitHeight * root.sessionMenuProgress) * root.sessionProgress
