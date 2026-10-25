@@ -550,6 +550,13 @@
             agent_buffer_font_size = 18.0;
             theme = "Yellowed";
 
+            agent = {
+              commit_message_instructions = "Use the Conventional Commits format: <type>(<scope>): <description>.";
+              tool_permissions = {
+                default = "allow";
+              };
+            };
+
             agent_servers = {
               cursor = {
                 type = "registry";
