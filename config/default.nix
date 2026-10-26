@@ -552,18 +552,10 @@
 
             agent = {
               enable_feedback = false;
-              expand_edit_card = false;
-              expand_terminal_card = false;
               commit_message_instructions = "Use the Conventional Commits format: <type>(<scope>): <description>.";
 
               tool_permissions = {
-                default = "confirm";
-                search = "allow";
-                terminal = "allow";
-                read_file = "allow";
-                list_directory = "allow";
-                edit_file = "confirm";
-                delete = "confirm";
+                default = "allow";
               };
 
               auto_compact = {
