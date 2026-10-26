@@ -271,6 +271,8 @@
         packages = with pkgs; [
           nil
           nixd
+          bash-completion
+          bash-language-server
 
           gtk3
           gtk4
@@ -289,15 +291,11 @@
           xdg-user-dirs
           xdg-user-dirs-gtk
 
-          bash-completion
-          bash-language-server
-
           vial
           blender
           firefox
           filezilla
           obs-studio
-          cursor-cli
 
           pods
           lact
@@ -348,7 +346,22 @@
       programs = {
         fzf.enable = true;
         zoxide.enable = true;
+        cursor.enable = true;
         home-manager.enable = true;
+
+        mistral-vibe = {
+          enable = true;
+
+          package = pkgs.mistral-vibe.overrideAttrs (prev: {
+            doInstallCheck = false;
+          });
+
+          settings = {
+          	theme = "auto";
+            enable_telemetry = false;
+            enable_auto_update = false;
+          };
+        };
 
         direnv = {
           enable = true;
