@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   boot = {
@@ -43,6 +48,10 @@
   hardware = {
     enableRedistributableFirmware = true;
     cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+
+    firmware = with pkgs; [
+      sof-firmware
+    ];
 
     graphics = {
       enable = true;

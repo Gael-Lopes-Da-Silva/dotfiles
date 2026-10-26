@@ -360,6 +360,7 @@
           	theme = "auto";
             enable_telemetry = false;
             enable_auto_update = false;
+            voice_mode_enabled = true;
           };
         };
 
