@@ -549,6 +549,7 @@
             agent_ui_font_size = 18.0;
             agent_buffer_font_size = 18.0;
             theme = "Yellowed";
+            disable_ai = true;
 
             tabs = {
               file_icons = true;
