@@ -550,26 +550,6 @@
             agent_buffer_font_size = 18.0;
             theme = "Yellowed";
 
-            agent = {
-              enable_feedback = false;
-              commit_message_instructions = "Use the Conventional Commits format: <type>(<scope>): <description>.";
-
-              tool_permissions = {
-                default = "allow";
-              };
-
-              auto_compact = {
-                enabled = true;
-                threshold = 0.9;
-              };
-            };
-
-            agent_servers = {
-              cursor = {
-                type = "registry";
-              };
-            };
-
             tabs = {
               file_icons = true;
               git_status = true;
