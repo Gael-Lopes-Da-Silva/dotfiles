@@ -142,7 +142,7 @@ Item {
 					width: radioFlick.width
 					spacing: Theme.menuSpacing
 
-					
+
 					Repeater {
 						model: radioPane.radioModel
 
@@ -182,8 +182,8 @@ Item {
 								anchors.rightMargin: 12
 								anchors.verticalCenter: parent.verticalCenter
 								text: {
-									if (btRow.modelData.connected && RadioState.btRssiKnown)
-										return Math.round(RadioState.btQuality * 100) + "%"
+									if (btRow.modelData.connected && btRow.modelData.batteryAvailable)
+										return Math.round(btRow.modelData.battery * 100) + "%"
 									if (btRow.modelData.connected)
 										return "Connected"
 									if (btRow.modelData.paired)
