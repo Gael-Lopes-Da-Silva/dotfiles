@@ -212,6 +212,8 @@
 
   fonts = {
     packages = with pkgs; [
+      dejavu_fonts
+
       noto-fonts
       noto-fonts-lgc-plus
       noto-fonts-cjk-sans
@@ -357,7 +359,7 @@
           });
 
           settings = {
-          	theme = "auto";
+            theme = "auto";
             enable_telemetry = false;
             enable_auto_update = false;
             voice_mode_enabled = true;
@@ -621,6 +623,10 @@
 
             session = {
               trust_all_worktrees = true;
+            };
+
+            terminal = {
+              font_fallbacks = [ "DejaVu Sans Mono" ];
             };
 
             telemetry = {
