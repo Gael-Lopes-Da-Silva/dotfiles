@@ -127,6 +127,8 @@
     "titleSize": 18,
     // Charge at or below this is "low".
     "lowPercent": 15,
+    // Bluetooth battery low threshold.
+    "btBatteryLowPercent": 15,
     // Wait this long before the first reading, so a missing battery is not announced as empty.
     "prime": 400,
     // Percent thresholds, highest first. Paired with chargingIcons and dischargingIcons.

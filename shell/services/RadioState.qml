@@ -20,6 +20,8 @@ Singleton {
 	property var pending: null
 	property string password: ""
 	property real btRssi: Config.radio.rssiUnknown
+	property bool btBatteryLowSeen: false
+	property string btBatteryLowDevice: ""
 
 	readonly property bool wifiReady: !Networking.wifiEnabled || wifiWarm
 	readonly property bool btReady: !(bluetooth && bluetooth.enabled) || btWarm
@@ -132,6 +134,45 @@ Singleton {
 		if (!device)
 			return ""
 		return device.name || device.deviceName || device.address || ""
+	}
+
+	function checkBtBattery() {
+		const devices = btDevices()
+		const lowPercent = Config.battery.btBatteryLowPercent
+		let foundLow = false
+		let lowestDevice = ""
+		let lowestLevel = 100
+
+		for (let i = 0; i < devices.length; i++) {
+			const dev = devices[i]
+			if (dev.connected && dev.batteryAvailable) {
+				const level = dev.battery * 100
+				if (level <= lowPercent && level < lowestLevel) {
+					foundLow = true
+					lowestDevice = deviceLabel(dev)
+					lowestLevel = level
+				}
+			}
+		}
+
+		if (foundLow) {
+			if (btBatteryLowDevice !== lowestDevice || !btBatteryLowSeen) {
+				reportBtLow(lowestDevice, Math.round(lowestLevel))
+			}
+			btBatteryLowDevice = lowestDevice
+			btBatteryLowSeen = true
+		} else if (btBatteryLowSeen) {
+			btBatteryLowSeen = false
+			btBatteryLowDevice = ""
+		}
+	}
+
+	function reportBtLow(deviceName, percent) {
+		NoticeState.powerNotice(
+			"Bluetooth battery low",
+			deviceName + " at " + percent + "%",
+			true
+		)
 	}
 
 	function strengthGlyph(strength) {
@@ -437,10 +478,12 @@ Singleton {
 	Component {
 		id: btWatch
 		Connections {
-			function onConnectedChanged() { root.touch() }
+			function onConnectedChanged() { root.touch(); root.checkBtBattery() }
 			function onPairedChanged() { root.touch() }
 			function onNameChanged() { root.touch() }
 			function onDeviceNameChanged() { root.touch() }
+			function onBatteryChanged() { root.touch(); root.checkBtBattery() }
+			function onBatteryAvailableChanged() { root.touch(); root.checkBtBattery() }
 		}
 	}
 
@@ -467,9 +510,12 @@ Singleton {
 		function onObjectInsertedPost(object, index) {
 			root.bindBt(object)
 			root.touch()
+			root.checkBtBattery()
 		}
 		function onObjectRemovedPre(object, index) { root.forget(root.btWires, object) }
-		function onObjectRemovedPost(object, index) { root.touch() }
+		function onObjectRemovedPost(object, index) { root.touch()
+			root.checkBtBattery()
+		}
 	}
 
 	Connections {
@@ -500,6 +546,7 @@ Singleton {
 			if (!dev || !dev.dbusPath)
 				return
 			rssi.exec(["busctl", "get-property", "org.bluez", dev.dbusPath, "org.bluez.Device1", "RSSI"])
+			root.checkBtBattery()
 		}
 	}
 
@@ -513,5 +560,8 @@ Singleton {
 		}
 	}
 
-	onConnectedBtChanged: btRssi = Config.radio.rssiUnknown
+	onConnectedBtChanged: {
+		btRssi = Config.radio.rssiUnknown
+		root.checkBtBattery()
+	}
 }
