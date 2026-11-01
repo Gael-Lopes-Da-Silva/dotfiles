@@ -315,8 +315,11 @@
           nautilus
           showtime
           resources
+          crosspipe
           typesetter
           impression
+          file-roller
+
           gnome-maps
           gnome-clocks
           gnome-weather
