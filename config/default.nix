@@ -367,6 +367,19 @@
             enable_telemetry = false;
             enable_auto_update = false;
             voice_mode_enabled = true;
+
+            models = [
+              {
+              	name = "zai-glm-5-3";
+               	provider = "mistral";
+                display_name = "GLM 5.3";
+              }
+              {
+              	name = "mistral-large-4";
+               	provider = "mistral";
+                display_name = "Mistral Large 4";
+              }
+            ];
           };
         };
 
