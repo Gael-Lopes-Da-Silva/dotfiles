@@ -34,6 +34,15 @@ Singleton {
 		return ""
 	}
 
+	function coversScreen(win, screenWidth, screenHeight) {
+		if (win.is_fullscreen === true)
+			return true
+		const tile = win.layout && win.layout.tile_size
+		if (!tile)
+			return false
+		return Math.abs(tile[0] - screenWidth) <= Config.niri.fullscreenSlack && Math.abs(tile[1] - screenHeight) <= Config.niri.fullscreenSlack
+	}
+
 	function isFullscreen(name, screenWidth, screenHeight) {
 		if (screenWidth < Config.niri.fullscreenMin || screenHeight < Config.niri.fullscreenMin)
 			return false
@@ -49,20 +58,21 @@ Singleton {
 		if (!active)
 			return false
 
+		let focused = null
+		let anyCovered = false
 		const values = Object.values(windows)
 		for (let i = 0; i < values.length; i++) {
 			const win = values[i]
 			if (win.workspace_id !== active.id)
 				continue
-			if (win.is_fullscreen === true)
-				return true
-			const tile = win.layout && win.layout.tile_size
-			if (!tile)
-				continue
-			if (Math.abs(tile[0] - screenWidth) <= Config.niri.fullscreenSlack && Math.abs(tile[1] - screenHeight) <= Config.niri.fullscreenSlack)
-				return true
+			if (win.is_focused)
+				focused = win
+			if (coversScreen(win, screenWidth, screenHeight))
+				anyCovered = true
 		}
-		return false
+		if (focused)
+			return coversScreen(focused, screenWidth, screenHeight)
+		return anyCovered
 	}
 
 	function bump() {
