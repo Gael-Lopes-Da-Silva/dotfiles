@@ -805,6 +805,10 @@
               _props.repeat = false;
               spawn = [ "firefox" ];
             };
+            "Mod+BackSlash" = {
+              _props.repeat = false;
+              spawn = [ "nautilus" ];
+            };
 
             "Mod+P" = {
               _props.repeat = false;
