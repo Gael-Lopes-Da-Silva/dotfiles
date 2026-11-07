@@ -189,6 +189,10 @@
       VDPAU_DRIVER = "va_gl";
       MOZ_ENABLE_WAYLAND = "1";
 
+      GTK_IM_MODULE = "ibus";
+      QT_IM_MODULE = "ibus";
+      XMODIFIERS = "@im=ibus";
+
       XDG_CONFIG_HOME = "$HOME/.config";
       XDG_DATA_HOME = "$HOME/.local/share";
       XDG_CACHE_HOME = "$HOME/.cache";
