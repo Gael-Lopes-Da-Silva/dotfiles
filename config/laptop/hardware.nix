@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, ... }:
 
 {
   boot = {
@@ -19,7 +14,6 @@
 
     kernelModules = [
       "kvm-intel"
-      "snd_hda_intel"
     ];
     extraModulePackages = [ ];
   };
@@ -48,10 +42,6 @@
   hardware = {
     enableRedistributableFirmware = true;
     cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
-
-    firmware = with pkgs; [
-      sof-firmware
-    ];
 
     graphics = {
       enable = true;

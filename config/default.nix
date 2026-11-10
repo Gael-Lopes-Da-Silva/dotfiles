@@ -362,10 +362,6 @@
         mistral-vibe = {
           enable = true;
 
-          package = pkgs.mistral-vibe.overrideAttrs (prev: {
-            doInstallCheck = false;
-          });
-
           settings = {
             theme = "auto";
             enable_telemetry = false;
