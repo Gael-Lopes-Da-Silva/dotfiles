@@ -370,13 +370,13 @@
 
             models = [
               {
-              	name = "zai-glm-5-3";
-               	provider = "mistral";
+                name = "zai-glm-5-3";
+                provider = "mistral";
                 display_name = "GLM 5.3";
               }
               {
-              	name = "mistral-large-4";
-               	provider = "mistral";
+                name = "mistral-large-4";
+                provider = "mistral";
                 display_name = "Mistral Large 4";
               }
             ];
@@ -399,6 +399,16 @@
           activeConfig = "shell";
           configs.shell = ../shell;
           systemd.enable = true;
+        };
+
+        nh = {
+          enable = true;
+          flake = "/home/gael/.dotfiles";
+
+          clean = {
+            enable = true;
+            extraArgs = "--keep-since 4d --keep 3";
+          };
         };
 
         bash = {
