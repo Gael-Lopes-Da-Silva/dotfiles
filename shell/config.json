@@ -178,7 +178,9 @@
 
   // Recording indicator in the top-left corner.
   "cast": {
-    "icon": "F03D"
+    "icon": "F03D",
+    // Turn do-not-disturb on while a cast or recording is active.
+    "quiet": true
   },
 
   // On-screen display for volume, microphone, brightness, power, USB, and screens.

@@ -13,6 +13,8 @@ Singleton {
 	property bool paused: false
 	property bool replying: false
 	property bool quiet: false
+	property bool castQuiet: false
+	property bool castApplying: false
 	property int localSeq: 0
 	property string lastNotice: ""
 	property real lastNoticeAt: 0
@@ -23,6 +25,14 @@ Singleton {
 	readonly property int trackedCount: {
 		const tracked = server.trackedNotifications
 		return tracked && tracked.values ? tracked.values.length : 0
+	}
+	readonly property bool castActive: {
+		const values = Object.values(NiriState.casts)
+		for (let i = 0; i < values.length; i++) {
+			if (NiriState.castIsLive(values[i]))
+				return true
+		}
+		return false
 	}
 
 	function durationOf(notification) {
@@ -344,7 +354,34 @@ Singleton {
 		}
 	}
 
+	// Do-not-disturb follows casts: quiet is forced on while a cast or recording
+	// is live, and restored afterwards only when the shell turned it on.
+	function syncCastQuiet() {
+		if (!Config.cast.quiet)
+			return
+		if (castActive) {
+			if (!quiet) {
+				castApplying = true
+				quiet = true
+				castApplying = false
+				castQuiet = true
+			}
+		} else if (castQuiet) {
+			castQuiet = false
+			castApplying = true
+			quiet = false
+			castApplying = false
+		}
+	}
+
+	onCastActiveChanged: syncCastQuiet()
+
+	Component.onCompleted: syncCastQuiet()
+
 	onQuietChanged: {
+		// The user overrode quiet during a cast, so stop managing it.
+		if (!castApplying && castActive)
+			castQuiet = castQuiet && quiet
 		if (quiet)
 			return
 		for (let i = 0; i < model.count; i++) {
