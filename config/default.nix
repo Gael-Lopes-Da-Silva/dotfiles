@@ -302,6 +302,7 @@
           firefox
           filezilla
           obs-studio
+          cursor-cli
 
           pods
           lact
@@ -356,7 +357,6 @@
       programs = {
         fzf.enable = true;
         zoxide.enable = true;
-        cursor.enable = true;
         home-manager.enable = true;
 
         mistral-vibe = {
@@ -364,9 +364,15 @@
 
           settings = {
             theme = "auto";
+            show_greeting = false;
             enable_telemetry = false;
-            enable_auto_update = false;
             voice_mode_enabled = true;
+            enable_auto_update = false;
+            enable_update_checks = false;
+            autocopy_to_clipboard = false;
+            include_commit_signature = false;
+            disable_welcome_banner_animation = true;
+            default_agent = "smart-approve";
 
             models = [
               {
