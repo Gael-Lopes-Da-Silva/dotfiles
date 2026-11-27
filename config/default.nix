@@ -302,7 +302,7 @@
           firefox
           filezilla
           obs-studio
-          cursor-cli
+          herdr-desktop
 
           pods
           lact
@@ -358,6 +358,11 @@
         fzf.enable = true;
         zoxide.enable = true;
         home-manager.enable = true;
+
+        cursor = {
+        	enable = true;
+         	package = pkgs.cursor-cli;
+        };
 
         mistral-vibe = {
           enable = true;
